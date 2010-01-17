@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
           @user.email = registration['email']
           @user.save(false)
         end
-        @current_user = @user
+#        @current_user = @user
         successful_login
       else
         failed_login result.message
@@ -39,11 +39,7 @@ class SessionsController < ApplicationController
   end
   
   def successful_login
-    if params[:remember_me] == "1"
-      self.current_user.remember_me
-      cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
-    end
-    session[:current_user] = @current_user.id
+    session[:current_user] = @user.id
     redirect_to root_path
     flash[:notice] = "Logged in successfully"
   end
