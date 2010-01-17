@@ -1,7 +1,10 @@
 class TopicsController < ApplicationController
+  before_filter :users_list, :only => [:new, :edit]
 
   def index
-    @topics = Topic.all
+#    @topics = Topic.all('subscribers.nickname' => @current_user.nickname)
+#    @topics = Topic.all(:conditions => {'$where' => "this.subscribers.nickname.match(/#{@current_user.nickname}/) || this.creator.match(/#{@current_user.nickname}/)"})
+    @topics = Topic.all(:conditions => {'$where' => "'subscribers.nickname'.match(/#{@current_user.nickname}/i) || this.creator.match(/#{@current_user.nickname}/i)"})
   end
   
   def show
@@ -42,6 +45,12 @@ class TopicsController < ApplicationController
     @topic.destroy
     flash[:notice] = "Successfully destroyed topic."
     redirect_to topics_url
+  end
+  
+  protected
+  
+  def users_list
+    @users = User.users_except_creator(@current_user.id)
   end
   
 end
