@@ -7,6 +7,8 @@ class Topic
   
   timestamps!
   
+  many :subscribers
+  
   before_validation_on_create :set_permalink
   
   protected
@@ -18,6 +20,16 @@ class Topic
   def self.new_by_params(params, user)
     topic = Topic.new(:title => params[:title],
                       :creator => user.nickname)
+    
+    params[:subscribers].each do |subscriber|
+      add_member(topic, subscriber)
+    end
+    add_member(topic, user.nickname)
+    topic
+  end
+  
+  def self.add_member(topic, member, message = 0)
+    topic.subscribers << Subscriber.new(:nickname => member)
   end
 
 end

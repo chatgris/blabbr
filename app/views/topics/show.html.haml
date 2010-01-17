@@ -12,6 +12,11 @@
     Creator:
   = h @topic.creator
 %p
+  %strong
+    Abonnées :
+  - @topic.subscribers.each do |subscriber|
+    = subscriber.nickname
+%p
   = link_to "Edit", edit_topic_path(@topic.permalink)
   |
   = link_to "Destroy", @topic, :confirm => 'Are you sure?', :method => :delete

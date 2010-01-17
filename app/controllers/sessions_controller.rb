@@ -25,7 +25,6 @@ class SessionsController < ApplicationController
           @user.email = registration['email']
           @user.save(false)
         end
-#        @current_user = @user
         successful_login
       else
         failed_login result.message

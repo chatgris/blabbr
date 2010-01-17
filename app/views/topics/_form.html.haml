@@ -4,4 +4,7 @@
     = f.label :title
     = f.text_field :title
   %p
+    = f.label :subscribers
+    = f.collection_select :subscribers, User.find(:all, :order => "nickname"), :nickname, :nickname, {}, { :multiple => true}
+  %p
     = f.submit "Submit"
