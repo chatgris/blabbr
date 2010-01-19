@@ -31,6 +31,7 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     if Topic.update_subscribers(params[:topic], @topic)
+      flash[:notice] = "Successfully updated topic."
       redirect_to topic_path(@topic.permalink)
     else
       render :action => 'edit'
