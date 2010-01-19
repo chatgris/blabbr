@@ -31,6 +31,18 @@ class Topic
   def self.add_member(topic, member, message = 0)
     topic.subscribers << Subscriber.new(:nickname => member)
   end
+  
+  def self.update_subscribers(params, topic)
+    if params[:subscribers]
+      topic.subscribers = []
+      params['subscribers'].each do |subscriber|
+        add_member(topic, subscriber)
+      end
+      add_member(topic, topic.creator)
+    end
+    topic.title = params[:title]
+    topic.save
+  end
 
 end
 

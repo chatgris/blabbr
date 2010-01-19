@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit]
 
   def index
-    @topics = Topic.all(:conditions => {'subscribers.nickname' => @current_user.nickname})
+    @topics = Topic.all('subscribers.nickname' => @current_user.nickname)
   end
   
   def show
@@ -30,8 +30,7 @@ class TopicsController < ApplicationController
   
   def update
     @topic = Topic.find(params[:id])
-    if @topic.update_attributes(params[:topic])
-      flash[:notice] = "Successfully updated topic."
+    if Topic.update_subscribers(params[:topic], @topic)
       redirect_to topic_path(@topic.permalink)
     else
       render :action => 'edit'
