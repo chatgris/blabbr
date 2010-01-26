@@ -7,4 +7,8 @@
     = f.label :subscribers
     = f.collection_select :subscribers, @users, :nickname, :nickname, {}, { :multiple => true}
   %p
+    - fields_for @post do |post|
+      = post.label :post
+      = post.text_area :content
+  %p
     = f.submit "Submit"

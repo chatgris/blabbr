@@ -8,6 +8,7 @@ class Topic
   timestamps!
   
   many :subscribers
+  many :posts
   
   before_validation_on_create :set_permalink
   

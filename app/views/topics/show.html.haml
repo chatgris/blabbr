@@ -17,6 +17,10 @@
   - @topic.subscribers.each do |subscriber|
     = subscriber.nickname
 %p
+  %strong
+    Message :
+  = @post.content
+%p
   = link_to "Edit", edit_topic_path(@topic.permalink)
   |
   = link_to "Destroy", @topic, :confirm => 'Are you sure?', :method => :delete
