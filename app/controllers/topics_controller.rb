@@ -17,8 +17,7 @@ class TopicsController < ApplicationController
   
   def create
     @topic = Topic.new_by_params(params[:topic], current_user)
-    params[:post][:creator] = current_user.nickname
-    params[:post][:user_id] = current_user.id.to_s
+    params[:post][:user_id] = current_user.id
     @topic.posts.create(params[:post])
     
     if @topic.save
