@@ -7,7 +7,7 @@ class TopicsController < ApplicationController
   
   def show
     @topic = Topic.find_by_permalink(params[:id])
-    @post = Post.first('created_at' => @topic.created_at)
+    @posts = Post.all(:topic_id => @topic.id)
   end
   
   def new
@@ -17,6 +17,7 @@ class TopicsController < ApplicationController
   
   def create
     @topic = Topic.new_by_params(params[:topic], current_user)
+    params[:post][:creator] = current_user.nickname
     @topic.posts.create(params[:post])
     
     if @topic.save

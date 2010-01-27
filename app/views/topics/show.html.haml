@@ -16,10 +16,9 @@
     Abonnées :
   - @topic.subscribers.each do |subscriber|
     = subscriber.nickname
-%p
-  %strong
-    Message :
-  = @post.content
+  = render @posts
+#addComment
+  = render 'posts/form', :collection => @post
 %p
   = link_to "Edit", edit_topic_path(@topic.permalink)
   |
