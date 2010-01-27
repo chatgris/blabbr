@@ -2,9 +2,11 @@ class User
   
   include MongoMapper::Document
  
-  key :nickname,  String , :unique => true
-  key :email,  String
+  key :nickname,  String, :required => true, :unique => true
+  key :email,  String, :required => true
   key :identity_url, String
+  
+  many :posts
   
   protected
   

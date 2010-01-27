@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_filter :users_list, :only => [:new, :edit]
+  before_filter :users_list, :only => [:new, :edit, :create]
 
   def index
     @topics = Topic.all('subscribers.nickname' => current_user.nickname)
@@ -18,13 +18,15 @@ class TopicsController < ApplicationController
   def create
     @topic = Topic.new_by_params(params[:topic], current_user)
     params[:post][:creator] = current_user.nickname
+    params[:post][:user_id] = current_user.id.to_s
     @topic.posts.create(params[:post])
     
     if @topic.save
       flash[:notice] = "Successfully created topic."
       redirect_to topic_path(@topic.permalink)
     else
-      render :action => 'new'
+      @post = Post.new(:content => params[:post][:content])
+      render :action => 'new', :collection => @post
     end
   end
   

@@ -1,9 +1,9 @@
 class Topic
   include MongoMapper::Document
   
-  key :creator, String
-  key :title, String
-  key :permalink, String
+  key :creator, String, :required => true
+  key :title, String, :required => true, :unique => true
+  key :permalink, String, :required => true
   
   timestamps!
   
@@ -21,9 +21,10 @@ class Topic
   def self.new_by_params(params, user)
     topic = Topic.new(:title => params[:title],
                       :creator => user.nickname)
-    
-    params[:subscribers].each do |subscriber|
-      add_member(topic, subscriber)
+    unless params[:subscribers].nil?
+      params[:subscribers].each do |subscriber|
+        add_member(topic, subscriber)
+      end
     end
     add_member(topic, user.nickname)
     topic

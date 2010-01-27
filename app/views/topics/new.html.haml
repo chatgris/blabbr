@@ -1,4 +1,6 @@
 - title "New Topic"
+.p
+  = current_user.id
 = render :partial => 'form'
 .p
   = link_to "Back to List", topics_path

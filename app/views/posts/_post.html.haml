@@ -1,5 +1,6 @@
 %div.post
   %h4
-    = post.creator
+    = post.user.nickname
+    = image_tag gravatar_url(post.user.email)
   %p
     = post.content
