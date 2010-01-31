@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       flash[:notice] =  "User was successfully created"
-      redirect_to edit_user_url(@user)
+      redirect_to home_url
     else
       flash[:error] = "User failed to be created"
       render :new
@@ -20,12 +20,17 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
-    return return_404 unless @user
-    if @user.update_attributes(params[:user])
-       redirect_to projects_url
+    if params[:id] == current_user.id.to_s
+        @user = User.find(params[:id])
+      return return_404 unless @user
+      if @user.update_attributes(params[:user])
+         redirect_to home_url
+      else
+        render :edit
+      end
     else
-      render :edit
+      flash[:error] = "User failed to be updated"
+      redirect_to home_url
     end
   end
 

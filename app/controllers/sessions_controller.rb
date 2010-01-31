@@ -23,9 +23,11 @@ class SessionsController < ApplicationController
         if @user.new_record?
           @user.nickname = registration['nickname']
           @user.email = registration['email']
-          @user.save(false)
+          @user.save
+          first_login
+        else
+          successful_login
         end
-        successful_login
       else
         failed_login result.message
       end
@@ -40,7 +42,13 @@ class SessionsController < ApplicationController
   def successful_login
     session[:current_user] = @user.id
     redirect_to root_path
-    flash[:notice] = "Logged in successfully"
+    flash[:notice] = "Logged in successfully" unless flash[:welcome]
+  end
+  
+  def first_login
+    session[:current_user] = @user.id
+    redirect_to home_url
+    flash[:welcome] = "Welcome on Blabber. If the nickname provide on this form is not the one you was expecting, now is the only chance you can change it."
   end
 end
 
