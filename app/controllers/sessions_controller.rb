@@ -42,7 +42,7 @@ class SessionsController < ApplicationController
   def successful_login
     session[:current_user] = @user.id
     redirect_to root_path
-    flash[:notice] = "Logged in successfully" unless flash[:welcome]
+    flash[:notice] = "Welcome back #{@user.nickname}." unless flash[:welcome]
   end
   
   def first_login
