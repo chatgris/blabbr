@@ -6,7 +6,11 @@ class TopicsController < ApplicationController
   end
   
   def show
-    @topic = Topic.find_by_permalink(params[:id])
+    @topic = Topic.first(:permalink => params[:id], 'subscribers.nickname' => current_user.nickname)
+    if @topic.nil?
+      flash[:error] = "You're not authorised to view this page"
+      redirect_to topics_path
+    end
     @posts = Post.paginate :page => params[:page], :per_page => 50, :topic_id => @topic.id
   end
   
@@ -30,8 +34,13 @@ class TopicsController < ApplicationController
   end
   
   def edit
-    @topic = Topic.find_by_permalink(params[:id])
-    @post = Post.first('created_at' => @topic.created_at)
+    @topic =Topic.first(:permalink => params[:id], 'creator' => current_user.nickname)
+    unless @topic.nil?
+      @post = Post.first('created_at' => @topic.created_at)
+    else
+      flash[:error] = "You're not authorised to view this page"
+      redirect_to topics_path
+    end
   end
   
   def update
