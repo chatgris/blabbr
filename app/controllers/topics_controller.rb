@@ -2,12 +2,12 @@ class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
 
   def index
-    @topics = Topic.all('subscribers.nickname' => current_user.nickname)
+    @topics = Topic.paginate :page => params[:page], :per_page => 10, 'subscribers.nickname' => current_user.nickname, :order => 'created_at DESC'
   end
   
   def show
     @topic = Topic.find_by_permalink(params[:id])
-    @posts = Post.all(:topic_id => @topic.id)
+    @posts = Post.paginate :page => params[:page], :per_page => 50, :topic_id => @topic.id
   end
   
   def new

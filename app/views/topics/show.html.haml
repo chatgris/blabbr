@@ -16,7 +16,14 @@
     Abonnées :
   - @topic.subscribers.each do |subscriber|
     = subscriber.nickname
-  = render @posts
+  = will_paginate @posts
+  - @posts.each do |post|
+    %div.post
+      %h4
+        = post.user.nickname
+        = image_tag gravatar_url(post.user.email, :size => 100)
+      %p
+        = post.content
 #addComment
   = render 'posts/form', :collection => @post
 %p
