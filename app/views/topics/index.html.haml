@@ -5,12 +5,16 @@
       Title
     %th
       Creator
+    %th
+      Messages
   - for topic in @topics
     %tr
       %td
         = h topic.title
       %td
         = h topic.creator
+      %td
+        = h topic.posts_count
       %td
         = link_to "Show", topic_path(topic.permalink)
       %td

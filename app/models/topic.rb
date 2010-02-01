@@ -4,6 +4,7 @@ class Topic
   key :creator, String, :required => true
   key :title, String, :required => true, :unique => true
   key :permalink, String, :required => true
+  key :posts_count, Integer
   
   timestamps!
   
