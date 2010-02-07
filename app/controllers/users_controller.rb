@@ -7,6 +7,10 @@ class UsersController < ApplicationController
   def edit
     @user = current_user
   end
+  
+  def show
+    @user = User.first(:id => params[:id])
+  end
 
   def create
     @user = User.new(params[:user])

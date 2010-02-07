@@ -7,6 +7,7 @@ class PostsController < ApplicationController
     Topic.increment(@topic.id, :posts_count => 1)
     respond_to do |format|
       format.html { redirect_to topic_path(@topic.permalink) }
+      format.mobile { redirect_to topic_path(@topic.permalink) }
       format.js 
     end
   end

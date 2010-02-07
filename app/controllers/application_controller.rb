@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   helper :all
-  helper_method :current_user, :logged_user?
+  helper_method :current_user, :logged_user?, :mobile_device?
   protect_from_forgery
-  before_filter :instantiate_controller_and_action_names, :redirect_if_no_logged, :current_user
+  before_filter :instantiate_controller_and_action_names, :redirect_if_no_logged, :current_user, :prepare_for_mobile
   
   protected
  
@@ -24,6 +24,19 @@ class ApplicationController < ActionController::Base
   def instantiate_controller_and_action_names
     @current_action = action_name
     @current_controller = controller_name
+  end
+  
+  def mobile_device?
+    if session[:mobile_param]
+      session[:mobile_param] == "1"
+    else
+      request.user_agent =~ /Mobile|webOS/
+    end
+  end
+
+  def prepare_for_mobile
+    session[:mobile_param] = params[:mobile] if params[:mobile]
+    request.format = :mobile if mobile_device?
   end
 
 end

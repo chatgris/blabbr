@@ -1,6 +1,6 @@
 %div.post
   %h4
-    = post.user.nickname
-    = image_tag gravatar_url(post.user.email, :size => 100)
+    = link_to post.user.nickname, user_path(post.user.id)
+    = link_to image_tag(gravatar_url(post.user.email, :size => 100)), user_path(post.user.id)
   %p
     = post.content

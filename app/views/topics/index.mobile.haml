@@ -1,0 +1,27 @@
+- title "Topics"
+= will_paginate @topics
+%table
+  %tr
+    %th
+      Title
+    %th
+      Creator
+    %th
+      Messages
+  - for topic in @topics
+    %tr
+      %td
+        = h topic.title
+      %td
+        = h topic.creator
+      %td
+        = h topic.posts_count
+      %td
+        = link_to "Show", topic_path(topic.permalink)
+      %td
+        = link_to "Edit", edit_topic_path(topic.permalink)
+      %td
+        = link_to "Destroy", topic, :confirm => 'Are you sure?', :method => :delete
+%p
+  = link_to "New Topic", new_topic_path
+

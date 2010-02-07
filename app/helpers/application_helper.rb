@@ -8,7 +8,7 @@ module ApplicationHelper
   end
   
   def show_title?
-    @show_title
+    "Blabber - " + @show_title
   end
   
   def stylesheet(*args)

@@ -1,0 +1,10 @@
+%h1
+  Version Mobile
+- if @current_user.nil?
+  - form_tag sessions_path do
+    .p
+      = text_field_tag :openid_url, params[:openid_url]
+    .p
+      = submit_tag 'Sign in'
+- else
+  = "Welcome #{@current_user.nickname}"
