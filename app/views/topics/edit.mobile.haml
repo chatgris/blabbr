@@ -1,5 +1,5 @@
 - title "Edit Topic"
 = render :partial => 'form'
 .p
-  = link_to "Show", @topic |
+  = link_to "Show", topic_path(@topic.permalink) |
   = link_to "View All", topics_path
