@@ -19,7 +19,7 @@
   = will_paginate @posts
   = render :partial => 'posts/post', :collection => @posts
 #addComment
-  = render :partial => 'posts/form', :collection => @post
+  = render 'posts/form', :collection => @post
 %p
   = link_to "Edit", edit_topic_path(@topic.permalink)
   |
