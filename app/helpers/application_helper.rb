@@ -6,6 +6,10 @@ module ApplicationHelper
     content_for(:title) { "Blabber - #{page_title}" }
   end
   
+  def format_text(text)
+    RedCloth.new(text).to_html(:textile, :glyphs_smilies)
+  end
+  
   def stylesheet(*args)
     content_for(:head) { stylesheet_link_tag(*args) }
   end

@@ -12,3 +12,5 @@ Rails::Initializer.run do |config|
   config.frameworks -= [:active_record]
   config.time_zone = 'UTC'
 end
+
+require 'redcloth'
