@@ -6,6 +6,7 @@ class User
   key :email,  String, :required => true
   key :identity_url, String
   key :posts_count, Integer, :default => 0
+  key :locale, String, :default => 'fr'
   
   many :posts
   

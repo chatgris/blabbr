@@ -18,6 +18,18 @@ module ApplicationHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
   
+  def available_i18n
+    dirs = Dir.entries("#{RAILS_ROOT}/config/locales/")
+    
+    locales = []
+    dirs.each do |dir|
+      unless dir == '.' || dir == '..'
+        locales << dir.gsub(File.extname(dir), '')
+      end
+    end
+    locales
+  end
+  
   def gravatar_url(email,gravatar_options={})
     gravatar_options[:size] ||= nil 
     gravatar_options[:default] ||= nil

@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :current_user, :logged_user?, :mobile_device?
   protect_from_forgery
-  before_filter :instantiate_controller_and_action_names, :redirect_if_no_logged, :current_user, :prepare_for_mobile
+  before_filter :instantiate_controller_and_action_names, :redirect_if_no_logged, :current_user, :set_locale, :prepare_for_mobile
   
   protected
  
@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
     @current_action = action_name
     @current_controller = controller_name
   end
+  
+  def set_locale 
+    I18n.locale = @current_user.locale if @current_user
+  end 
   
   def mobile_device?
     if session[:mobile_param]
