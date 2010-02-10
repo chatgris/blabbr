@@ -23,7 +23,7 @@ module ApplicationHelper
     
     locales = []
     dirs.each do |dir|
-      unless dir == '.' || dir == '..'
+      if File.extname(dir) == '.yml' && dir != '.' && dir != '..'
         locales << dir.gsub(File.extname(dir), '')
       end
     end

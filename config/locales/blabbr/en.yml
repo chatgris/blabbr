@@ -1,0 +1,6 @@
+en:
+  locale: language
+  email: email
+  nickname: nickname
+  form:
+    save: save
