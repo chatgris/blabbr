@@ -1,6 +1,7 @@
 fr:
-  locale: Langue
-  email: Email
-  nickname: Pseudo
+  locale: "Langue"
+  email: "Email"
+  nickname: "Pseudo"
+  timezone: "Fuseau horaire"
   form:
-    save: Sauvegarder
+    save: "Sauvegarder"

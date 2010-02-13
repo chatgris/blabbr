@@ -5,3 +5,4 @@ tmp/*
 public/images/smilies/*
 tmp/**/*
 config/database.yml
+config/deploy.rb

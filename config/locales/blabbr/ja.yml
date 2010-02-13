@@ -1,6 +1,7 @@
 ja:
   locale: 言語
-  email: メール
-  nickname: 名前
+  email: メールアドレス
+  nickname: ユーザー名
+  timezone: タイムゾーン
   form:
     save: 保存する
