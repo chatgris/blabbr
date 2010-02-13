@@ -6,7 +6,6 @@ if db_config[Rails.env] && db_config[Rails.env]['adapter'] == 'mongodb'
                                                  mongo['port'] || 27017,
                                                  :logger => Rails.logger)
   MongoMapper.database = mongo['database']
-  MongoMapper.ensure_indexes!
   OpenIdAuthentication.store = OpenIdAuthentication::Mongo::Store.new
 end
  
