@@ -7,7 +7,7 @@ module ApplicationHelper
   end
   
   def format_text(text)
-    RedCloth.new(text).to_html(:textile, :glyphs_smilies)
+    smilies(RedCloth.new(text.to_s).to_html(:textile))
   end
   
   def stylesheet(*args)
@@ -39,5 +39,18 @@ module ApplicationHelper
     grav_url << "&default=#{gravatar_options[:default]}" if gravatar_options[:default]
     grav_url
   end
+  
+  def smilies(text)
+    dirs = Dir.entries("#{RAILS_ROOT}/public/images/smilies")
+
+    dirs.each do |dir|
+      unless dir == '.' || dir == '..'
+        dir_name = dir.gsub(File.extname(dir), '')
+        text.gsub!(/:#{dir_name}/, "<img src=\"/images/smilies/#{dir}\" alt=\"#{dir_name}\" />")
+      end
+    end
+    text
+  end
+
 
 end
