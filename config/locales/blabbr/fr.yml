@@ -3,5 +3,6 @@ fr:
   email: "Email"
   nickname: "Pseudo"
   timezone: "Fuseau horaire"
+  subscriber: "Abonné"
   form:
     save: "Sauvegarder"

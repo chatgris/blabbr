@@ -13,7 +13,7 @@
   = h @topic.creator
 %p
   %strong
-    Abonnées :
+    = t('subscriber').pluralize
   - @topic.subscribers.each do |subscriber|
     = subscriber.nickname
   = will_paginate @posts

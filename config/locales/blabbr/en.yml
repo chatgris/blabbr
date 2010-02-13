@@ -3,5 +3,6 @@ en:
   email: email
   nickname: nickname
   timezone: timezone
+  subscriber: "Subscriber"
   form:
     save: save
