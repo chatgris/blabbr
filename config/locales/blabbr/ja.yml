@@ -3,5 +3,9 @@ ja:
   email: メールアドレス
   nickname: ユーザー名
   timezone: タイムゾーン
+  subscriber: "メンバ"
+  home: "ホーム"
+  preferences: "設定"
+  logout: "ログアウト"
   form:
     save: 保存する

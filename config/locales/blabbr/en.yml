@@ -4,5 +4,8 @@ en:
   nickname: nickname
   timezone: timezone
   subscriber: "Subscriber"
+  home: "Home"
+  preferences: "Preferences"
+  logout: "Logout"
   form:
     save: save

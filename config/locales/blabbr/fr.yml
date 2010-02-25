@@ -4,5 +4,8 @@ fr:
   nickname: "Pseudo"
   timezone: "Fuseau horaire"
   subscriber: "Abonné"
+  home: "Accueil"
+  preferences: "Préférences"
+  logout: "Déconnexion"
   form:
     save: "Sauvegarder"

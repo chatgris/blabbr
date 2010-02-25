@@ -9,4 +9,4 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 require 'inploy'
-load 'tasks/inploy.rake'
+load 'tasks/inploy.rake' 
