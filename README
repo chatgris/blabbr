@@ -2,7 +2,7 @@
 
 == What's Blabbr ?
 
-A rails/mongomapper chat application
+A forum board / chat application running on rails 3 and mongoid.
 
 == Status
 
