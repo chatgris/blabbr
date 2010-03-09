@@ -1,13 +1,13 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :sessions
-  map.resources :users
-  map.connect '/topics/page/:page', :controller => 'topics'
-  map.connect '/topics/:id/page/:page', :controller => 'topics', :action => 'show'
-  map.resources :topics, :has_many => :posts
-  map.logout 'logout', :controller => 'sessions', :action => 'destroy'
-  map.login 'login', :controller => 'sessions', :action => 'new'
-  map.home 'home', :controller => 'users', :action => 'edit'
-
-  map.root :controller => 'topics'
+Blabbr::Application.routes.draw do |map|
+  resources :sessions
+  resources :users
+  match '/topics/page/:page' => 'topics#index'
+  match '/topics/:id/page/:page' => 'topics#show'
+  resources :topics do
+    resources :posts
+  end
+  match 'logout' => 'sessions#destroy', :as => :logout
+  match 'login' => 'sessions#new', :as => :login
+  match 'home' => 'users#edit', :as => :home
+  root :to => 'topics#index'
 end
-

@@ -19,7 +19,7 @@ module ApplicationHelper
   end
   
   def available_i18n
-    dirs = Dir.entries("#{RAILS_ROOT}/config/locales/")
+    dirs = Dir.entries("#{Rails.root}/config/locales/")
     
     locales = []
     dirs.each do |dir|
@@ -41,7 +41,7 @@ module ApplicationHelper
   end
   
   def smilies(text)
-    dirs = Dir.entries("#{RAILS_ROOT}/public/images/smilies")
+    dirs = Dir.entries("#{Rails.root}/public/images/smilies")
 
     dirs.each do |dir|
       unless dir == '.' || dir == '..'

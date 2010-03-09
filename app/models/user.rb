@@ -13,10 +13,10 @@ class User
   protected
   
   def self.users_except_creator(creator)
-    User.find(:all, 
-              :order => "nickname",
-              :conditions => { 
-                :_id => {'$ne' => creator} } )
+    User.all( 
+            :order => "nickname",
+            :conditions => { 
+              :_id => {'$ne' => creator} } )
   end
 
 end

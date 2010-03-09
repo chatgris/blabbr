@@ -8,6 +8,6 @@ class Post
   belongs_to :user
   belongs_to :topic
   
-  timestamps!
+#  timestamps!
   
 end

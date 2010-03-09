@@ -5,8 +5,8 @@
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
 ActionController::Base.session = {
-  :key         => '_Blabber_session',
-  :secret      => '1f22bddf486f545ef5917469a5a6a4b5acd2427d079aa453f5f44de1aa2eedc1d2bce4009685255aed241ee59d2973c46dc9ac6a0ca6c514ae7e3bc3374548bb'
+  :key    => '_blabbr_session',
+  :secret => '575b7031b83753a7fc9621ffc51d1f086f34f865324d78052ed53463aa7efa0f19ead52bbc1832a53001ba7840d4b8976260d21d44c322e14d6cbe0d0130f70e'
 }
 
 # Use the database for sessions instead of the cookie-based default,

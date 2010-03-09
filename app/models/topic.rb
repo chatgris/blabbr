@@ -6,7 +6,7 @@ class Topic
   key :permalink, String, :required => true
   key :posts_count, Integer, :default => 1
   
-  timestamps!
+#  timestamps!
   
   many :subscribers
   many :posts
