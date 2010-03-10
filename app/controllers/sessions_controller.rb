@@ -17,9 +17,9 @@ class SessionsController < ApplicationController
   protected
   
   def open_id_authentication(identity_url)
-    authenticate_with_open_id(identity_url, :required => [ :email, '"http://axschema.org/contact/email' ]) do |result, identity_url, registration|
+    authenticate_with_open_id(identity_url, :required => [ :email, 'http://axschema.org/contact/email' ]) do |result, identity_url, registration|
       if result.successful?
-        email = registration['email'] || registration['"http://axschema.org/contact/email']
+        email = registration['email'] || registration['http://axschema.org/contact/email']
         @user = User.find_by_email(email)
         if @user.nil?
           @user = User.new(:email => email)
