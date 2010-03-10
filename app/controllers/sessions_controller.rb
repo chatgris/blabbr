@@ -16,14 +16,15 @@ class SessionsController < ApplicationController
   
   protected
   
-  def open_id_authentication(identity_url)
-    authenticate_with_open_id(identity_url, :required => [ :email, 'http://axschema.org/contact/email' ]) do |result, identity_url, registration|
+  def open_id_authentication(openid_url)
+    authenticate_with_open_id(openid_url, :required => [:nickname, :email, 'http://axschema.org/namePerson/friendly', 'http://axschema.org/contact/email']) do |result, identity_url, registration|
       if result.successful?
-        email = registration['email'] || registration['http://axschema.org/contact/email']
-        @user = User.find_by_email(email)
-        if @user.nil?
-          @user = User.new(:email => email)
-          render 'users/new'
+        @user = User.find_or_initialize_by_identity_url(identity_url)
+        if @user.new_record?
+          @user.nickname = registration['nickname'] || registration['http://axschema.org/namePerson/friendly'] || registration['http://axschema.org/contact/email']
+          @user.email = registration['email'] || registration['http://axschema.org/contact/email']
+          @user.save
+          first_login
         else
           successful_login
         end
