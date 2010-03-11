@@ -1,17 +1,18 @@
 class Topic
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
   
-  key :creator, String, :required => true
-  key :title, String, :required => true, :unique => true
-  key :permalink, String, :required => true
-  key :posts_count, Integer, :default => 1
+  field :creator, :type => String, :required => true
+  field :title, :type => String, :required => true, :unique => true
+  field :permalink, :type => String, :required => true
+  field :posts_count, :type => Integer, :default => 1
   
-  timestamps!
+#  has_many :subscribers
+  has_many :posts
   
-  many :subscribers
-  many :posts
-  
-  before_validation_on_create :set_permalink
+  validates_uniqueness_of :title, :permalink
+  validates_presence_of :title, :permalink, :creator
+  before_create :set_permalink
   
   protected
   

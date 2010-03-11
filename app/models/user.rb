@@ -1,14 +1,19 @@
 class User
-  
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
  
-  key :nickname,  String, :required => true, :unique => true
-  key :email,  String, :required => true
-  key :identity_url, String
-  key :posts_count, Integer, :default => 0
-  key :locale, String, :default => 'fr'
+  field :nickname,  :type => String
+  field :email,  :type => String
+  field :identity_url, :type => String
+  field :posts_count, :type => Integer, :default => 0
+  field :locale, :type => String, :default => 'fr'
   
-  many :posts
+  has_many :posts
+  
+#  validates_uniqueness_of :nickname, :email, :identity_url
+  validates_presence_of :email, :identity_url
+  
+  named_scope :by_identity_url, lambda { |identity_url| { :where => { :identity_url => identity_url}}}
   
   protected
   

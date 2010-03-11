@@ -1,12 +1,11 @@
 class Post
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
   
-  key :topic_id, ObjectId
-  key :user_id, ObjectId
-  key :content, String
+  field :user, String
+  field :content, String
   
-  belongs_to :user
-  belongs_to :topic
+  belongs_to :topics, :inverse_of => :posts
   
   timestamps!
   

@@ -1,7 +1,7 @@
 class Subscriber
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document
 
-  key :nickname, String
-  key :message, Integer
+  field :nickname, :type => String
+  field :message, :type => Integer
   
 end
