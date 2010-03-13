@@ -13,15 +13,6 @@ class User
 #  validates_uniqueness_of :nickname, :email, :identity_url
   validates_presence_of :email, :identity_url
   
-  named_scope :by_identity_url, lambda { |identity_url| { :where => { :identity_url => identity_url}}}
+  named_scope :users_except_creator, lambda { |creator| where(:nickname.ne => creator) }
   
-  protected
-  
-  def self.users_except_creator(creator)
-    User.all( 
-            :order => "nickname",
-            :conditions => { 
-              :_id => {'$ne' => creator} } )
-  end
-
 end

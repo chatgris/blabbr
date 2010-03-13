@@ -3,28 +3,25 @@ class TopicsController < ApplicationController
   before_filter :redirect_if_no_logged
 
   def index
-    @topics = Topic.paginate :page => params[:page], :per_page => 10, 'subscribers.nickname' => @current_user.nickname, :order => 'created_at DESC'
+    @topics = Topic.subscribed_topic(@current_user.nickname).order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 10
   end
   
   def show
-    @topic = Topic.first(:permalink => params[:id], 'subscribers.nickname' => @current_user.nickname)
+    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).flatten[0]
     if @topic.nil?
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
     else
-      @posts = Post.paginate :page => params[:page], :per_page => 50, :topic_id => @topic.id, :order => 'created_at ASC'
+      @posts = @topic.posts.all.order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 10
     end
   end
   
   def new
     @topic = Topic.new
-    @post = Post.new
   end
   
   def create
     @topic = Topic.new_by_params(params[:topic], @current_user)
-    params[:post][:user_id] = @current_user.id
-    @topic.posts.create(params[:post])
     
     if @topic.save
       flash[:notice] = "Successfully created topic."
@@ -36,9 +33,9 @@ class TopicsController < ApplicationController
   end
   
   def edit
-    @topic =Topic.first(:permalink => params[:id], 'creator' => @current_user.nickname)
+    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).flatten[0]
     unless @topic.nil?
-      @post = Post.first('created_at' => @topic.created_at)
+      @post = @topic.posts('created_at' => @topic.created_at).flatten[0]
     else
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
@@ -70,7 +67,7 @@ class TopicsController < ApplicationController
   protected
   
   def users_list
-    @users = User.users_except_creator(@current_user.id)
+    @users = User.users_except_creator(@current_user.nickname).order_by([[:created_at, :desc]]).flatten
   end
   
 end

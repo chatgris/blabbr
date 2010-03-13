@@ -19,8 +19,8 @@ class SessionsController < ApplicationController
   def open_id_authentication(openid_url)
     authenticate_with_open_id(openid_url, :required => [:nickname, :email, 'http://axschema.org/namePerson/friendly', 'http://axschema.org/contact/email']) do |result, identity_url, registration|
       if result.successful?
-        @user = User.by_identity_url(identity_url)
-        if @user.empty?
+        @user = User.first(:conditions => { :identity_url => identity_url })
+        if @user.nil?
           @user = User.new(:identity_url => identity_url)
           render 'users/new'
         else

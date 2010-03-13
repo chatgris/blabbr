@@ -2,11 +2,9 @@ class Post
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  field :user, String
-  field :content, String
+  field :nickname, :type => String
+  field :content, :type => String
   
   belongs_to :topics, :inverse_of => :posts
-  
-  timestamps!
   
 end

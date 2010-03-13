@@ -7,12 +7,17 @@ class Topic
   field :permalink, :type => String, :required => true
   field :posts_count, :type => Integer, :default => 1
   
-#  has_many :subscribers
+  has_many :subscribers
   has_many :posts
+  
+  attr_accessor :post
   
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
   before_create :set_permalink
+  
+  named_scope :subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
+  named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   
   protected
   
@@ -29,11 +34,16 @@ class Topic
       end
     end
     add_member(topic, user.nickname)
+    add_post(topic, user.nickname, params[:post])
     topic
   end
   
   def self.add_member(topic, member, message = 0)
     topic.subscribers << Subscriber.new(:nickname => member)
+  end
+  
+  def self.add_post(topic, member, content)
+    topic.posts << Post.new(:nickname => member, :content => content)
   end
   
   def self.update_subscribers(params, topic)
