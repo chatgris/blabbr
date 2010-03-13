@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
   
   def redirect_if_no_logged
-    unless @current_controller == 'sessions' || logged_user?
+    unless logged_user?
       flash[:error] = "You're not authorised to view this page"
       redirect_to login_path
     end
