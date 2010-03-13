@@ -21,12 +21,8 @@ class SessionsController < ApplicationController
       if result.successful?
         @user = User.by_identity_url(identity_url)
         if @user.empty?
-          @user = User.new
-          @user.nickname = registration['nickname'] || registration['http://axschema.org/namePerson/friendly'] || registration['http://axschema.org/contact/email']
-          @user.email = registration['email'] || registration['http://axschema.org/contact/email']
-          @user.identity_url = identity_url
-          @user.save!
-          first_login
+          @user = User.new(:identity_url => identity_url)
+          render 'users/new'
         else
           successful_login
         end

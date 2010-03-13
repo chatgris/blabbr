@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  
+  before_filter :redirect_if_no_logged
 
   def create
     @topic = Topic.find(params[:topic_id])

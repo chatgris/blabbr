@@ -1,5 +1,6 @@
 - form_for(@user) do |f|
   = f.error_messages
+  = f.hidden_field :identity_url
   .p
     = f.label t('nickname')
     .br

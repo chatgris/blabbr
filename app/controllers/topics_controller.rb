@@ -1,5 +1,6 @@
 class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
+  before_filter :redirect_if_no_logged
 
   def index
     @topics = Topic.paginate :page => params[:page], :per_page => 10, 'subscribers.nickname' => @current_user.nickname, :order => 'created_at DESC'

@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+  before_filter :redirect_if_no_logged, :except => [:new, :create]
+
   def new
     @user = User.new
   end
@@ -15,8 +17,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
+      session[:current_user] = @user.id
       flash[:notice] =  "User was successfully created"
-      redirect_to home_url
+      redirect_to root_url
     else
       flash[:error] = "User failed to be created"
       render :new
