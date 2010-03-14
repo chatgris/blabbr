@@ -19,5 +19,5 @@ class PostsController < ApplicationController
   def increment_posts_count
     User.increment(@current_user)
   end
-
+  
 end

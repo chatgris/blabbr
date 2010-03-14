@@ -1,6 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
   before_filter :redirect_if_no_logged
+  after_filter :reset_unread_posts, :only => [:show]
 
   def index
     @topics = Topic.subscribed_topic(@current_user.nickname).order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 10
@@ -68,6 +69,10 @@ class TopicsController < ApplicationController
   
   def users_list
     @users = User.users_except_creator(@current_user.nickname).order_by([[:created_at, :desc]]).flatten
+  end
+  
+  def reset_unread_posts
+    Topic.reset_unread_posts(@topic, @current_user.nickname)
   end
   
 end

@@ -54,6 +54,15 @@ class Topic
     topic
   end
   
+  def self.reset_unread_posts(topic, user)
+    topic.subscribers.each do |subscriber|
+      if subscriber.nickname == user && subscriber.message != 0
+        subscriber.message = 0 
+        topic.save
+      end
+    end
+  end
+  
   def self.update_subscribers(params, topic)
     if params[:subscribers]
       topic.subscribers = []
