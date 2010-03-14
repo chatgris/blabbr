@@ -18,6 +18,12 @@ module ApplicationHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
   
+  def unread_posts(subscribers)
+    subscribers.each do |s|
+      return s.message if s.nickname == @current_user.nickname
+    end
+  end
+  
   def available_i18n
     dirs = Dir.entries("#{Rails.root}/config/locales/")
     

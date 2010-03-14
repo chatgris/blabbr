@@ -8,14 +8,18 @@
       Creator
     %th
       Messages
+    %th
+      Unread
   - for topic in @topics
     %tr
       %td
-        = h topic.title
+        = topic.title
       %td
-        = h topic.creator
+        = topic.creator
       %td
-        = h topic.posts_count
+        = topic.posts_count
+      %td
+        = unread_posts(topic.subscribers)
       %td
         = link_to "Show", topic_path(topic.permalink)
       %td

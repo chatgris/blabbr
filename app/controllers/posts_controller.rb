@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   after_filter :increment_posts_count, :only => [:create]
 
   def create
-    @topic = Topic.find(params[:topic_id])
+    @topic = Topic.increment(Topic.find(params[:topic_id]))
     Topic.add_post(@topic, @current_user.nickname, params[:post][:content])
     @topic.save
     respond_to do |format|
@@ -17,7 +17,6 @@ class PostsController < ApplicationController
   protected
   
   def increment_posts_count
-    Topic.increment(@topic)
     User.increment(@current_user)
   end
 

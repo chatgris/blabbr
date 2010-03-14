@@ -47,7 +47,11 @@ class Topic
   end
   
   def self.increment(topic)
-    topic.update_attributes(:posts_count => topic.posts_count.to_i + 1)
+    topic.posts_count += 1
+    topic.subscribers.each do |subscriber|
+      subscriber.message += 1
+    end
+    topic
   end
   
   def self.update_subscribers(params, topic)
