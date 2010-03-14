@@ -12,7 +12,7 @@ class Topic
   
   attr_accessor :post
   
-  validates_uniqueness_of :title, :permalink
+#  validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
   before_create :set_permalink
   
@@ -44,6 +44,10 @@ class Topic
   
   def self.add_post(topic, member, content)
     topic.posts << Post.new(:nickname => member, :content => content)
+  end
+  
+  def self.increment(topic)
+    topic.update_attributes(:posts_count => topic.posts_count.to_i + 1)
   end
   
   def self.update_subscribers(params, topic)
