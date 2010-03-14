@@ -68,7 +68,7 @@ class TopicsController < ApplicationController
   protected
   
   def users_list
-    @users = User.users_except_creator(@current_user.nickname).order_by([[:created_at, :desc]]).flatten
+    @users = User.criteria.excludes(:nickname => @current_user.nickname).order_by([[:created_at, :desc]]).flatten
   end
   
   def reset_unread_posts

@@ -17,7 +17,6 @@ class User
   
   before_create :set_permalink
   
-  named_scope :users_except_creator, lambda { |creator| where(:nickname.ne => creator) }
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   
   protected
