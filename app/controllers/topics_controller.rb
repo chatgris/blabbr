@@ -13,6 +13,7 @@ class TopicsController < ApplicationController
       redirect_to topics_path
     else
       @posts = @topic.posts.all.order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 50
+    end
   end
   
   def new
