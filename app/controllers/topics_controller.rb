@@ -12,8 +12,7 @@ class TopicsController < ApplicationController
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
     else
-      @posts = @topic.posts.all.order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 10
-    end
+      @posts = @topic.posts.all.order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 50
   end
   
   def new
