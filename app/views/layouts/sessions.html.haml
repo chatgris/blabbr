@@ -5,10 +5,11 @@
       Login to blabbr
     = stylesheet_link_tag 'sessions'
   %body
-    - flash.each do |name, msg|
-      = content_tag :div, msg, :id => "flash_#{name}"
     %h1.center
       blabbr
+    - flash.each do |name, msg|
+      .center
+        = content_tag :div, msg, :id => "flash_#{name}"
     #content
       .center
         =yield

@@ -10,7 +10,6 @@ class SessionsController < ApplicationController
   def destroy
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out."
     redirect_to login_path
   end
   
