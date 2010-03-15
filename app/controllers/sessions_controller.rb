@@ -4,7 +4,13 @@ class SessionsController < ApplicationController
   end
 
   def create
-    open_id_authentication(params[:openid_url])
+    if params[:openid_url].nil?
+      open_id_authentication(params[:openid_url])
+    elsif params[:openid_url].empty?
+      failed_login "You need to privide a openid compliant url"
+    else
+      open_id_authentication(params[:openid_url])
+    end
   end
 
   def destroy
