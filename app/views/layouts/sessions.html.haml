@@ -2,9 +2,13 @@
 %html
   %head
     %title
-      = h(yield(:title) || "Blabbr")
+      Login to blabbr
     = stylesheet_link_tag 'sessions'
   %body
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
-    =yield
+    %h1.center
+      blabbr
+    #content
+      .center
+        =yield
