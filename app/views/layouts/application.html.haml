@@ -2,7 +2,7 @@
 %html
   %head
     %title
-      = h(yield(:title) || "Blabber")
+      = h(yield(:title) || "Blabbr")
   %body
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"

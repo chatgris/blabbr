@@ -3,12 +3,8 @@
   %head
     %title
       = h(yield(:title) || "Blabbr")
+    = stylesheet_link_tag 'sessions'
   %body
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
-    %p
-      - if mobile_device?
-        = link_to "Full Site", :mobile => 0
-      - else
-        = link_to "Mobile Site", :mobile => 1
     =yield
