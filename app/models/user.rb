@@ -1,3 +1,5 @@
+require 'carrierwave/orm/mongoid'
+
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -8,6 +10,9 @@ class User
   field :identity_url, :type => String
   field :posts_count, :type => Integer, :default => 0
   field :locale, :type => String, :default => 'fr'
+  field :avatar, :type => String
+  
+  mount_uploader :avatar, AvatarUploader
   
   has_many :posts
   
