@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
   before_filter :redirect_if_no_logged
-  before_filter :get_current_topic, :only => [:show, :edit]
+  before_filter :get_current_topic_for_creator, :only => [:edit, :add_subscriber]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
@@ -9,6 +9,7 @@ class TopicsController < ApplicationController
   end
   
   def show
+    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).flatten[0]
     if @topic.nil?
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
@@ -40,6 +41,15 @@ class TopicsController < ApplicationController
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
     end
+  end
+  
+  def add_subscriber
+    if @topic.add_subscriber(params[:nickname])
+      flash[:notice] = t('member.add_success', :name => params[:nickname])
+    else
+      flash[:error] = t('member.not_find')
+    end
+    redirect_to :back
   end
   
   def update
@@ -74,8 +84,8 @@ class TopicsController < ApplicationController
     Topic.reset_unread_posts(@topic, @current_user.nickname)
   end
   
-  def get_current_topic
-    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).flatten[0]
+  def get_current_topic_for_creator
+    @topic = Topic.find(params[:id])
   end
   
 end

@@ -17,13 +17,14 @@ class User
   has_many :posts
   
 #  validates_uniqueness_of :nickname, :email, :identity_url
-  validates_presence_of :nickname, :email, :identity_url
+#  validates_presence_of :nickname, :email, :identity_url
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
   
   before_create :set_permalink
   
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
-  
+  named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
+    
   protected
   
   def set_permalink

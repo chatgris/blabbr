@@ -11,6 +11,10 @@
   %strong
     Creator:
   = h @topic.creator
+- form_tag add_subscriber_topic_path(@topic), :method => 'put', :action => 'index' do
+  %p
+    = text_field_tag :nickname, params[:nickname]
+    = submit_tag "Ajouter"
 %p
   %strong
     = t('subscriber').pluralize
