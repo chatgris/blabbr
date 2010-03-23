@@ -4,6 +4,8 @@
     %title
       = h(yield(:title) || "Blabbr")
     = stylesheet_link_tag 'style'
+    = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery.rails.js"
+    = csrf_meta_tag
   %body
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"

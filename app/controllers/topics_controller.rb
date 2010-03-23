@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
   before_filter :redirect_if_no_logged
-  before_filter :get_current_topic_for_creator, :only => [:edit, :destroy, :add_subscriber]
+  before_filter :get_current_topic_for_creator, :only => [:edit, :destroy, :add_subscriber, :remove_subscriber]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
@@ -46,6 +46,15 @@ class TopicsController < ApplicationController
   def add_subscriber
     if @topic.add_subscriber(params[:nickname])
       flash[:notice] = t('member.add_success', :name => params[:nickname])
+    else
+      flash[:error] = t('member.not_find')
+    end
+    redirect_to :back
+  end
+  
+  def remove_subscriber
+    if @topic.remove_subscriber!(params[:nickname])
+      flash[:notice] = t('member.remove_success', :name => params[:nickname])
     else
       flash[:error] = t('member.not_find')
     end

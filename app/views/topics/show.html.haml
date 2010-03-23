@@ -20,6 +20,7 @@
     = t('subscriber').pluralize
   - @topic.subscribers.each do |subscriber|
     = subscriber.nickname
+    = link_to "X", remove_subscriber_topic_path(@topic, :nickname => subscriber.nickname), :method => :delete
   = will_paginate @posts
   = render :partial => 'posts/post', :collection => @posts
   = will_paginate @posts

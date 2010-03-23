@@ -13,7 +13,7 @@
   - for topic in @topics
     %tr
       %td
-        = topic.title
+        = link_to topic.title, topic_path(topic.permalink)
       %td
         = topic.creator
       %td

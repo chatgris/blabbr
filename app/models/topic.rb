@@ -29,6 +29,11 @@ class Topic
     end
   end
   
+  def remove_subscriber!(nickname)
+    subscribers.delete_if { |subscriber| subscriber.nickname == nickname }
+    save!
+  end
+  
   protected
   
   def set_permalink
