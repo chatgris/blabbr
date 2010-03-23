@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :users_list, :only => [:new, :edit, :create]
   before_filter :redirect_if_no_logged
-  before_filter :get_current_topic_for_creator, :only => [:edit, :add_subscriber]
+  before_filter :get_current_topic_for_creator, :only => [:edit, :destroy, :add_subscriber]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
@@ -85,7 +85,11 @@ class TopicsController < ApplicationController
   end
   
   def get_current_topic_for_creator
-    @topic = Topic.find(params[:id])
+    @topic = Topic.where('_id' => params[:id]).and('creator' => @current_user.nickname).flatten[0]
+    unless @topic
+      flash[:error] = "You're not authorised to view this page"
+      redirect_to :back
+    end
   end
   
 end
