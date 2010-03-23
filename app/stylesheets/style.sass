@@ -11,6 +11,9 @@ hr
   margin: 0
   border: none
   visibility: hidden
+a
+  img
+    border: 0
 html
   font: 62.5%/1.6em  Arial, sans-serif
 body
@@ -34,4 +37,47 @@ h1
     li
       display: inline-block
 #content
-  font-size: 1.6em
+  h4
+    float: left
+    margin: 0 0 .5em 0
+  p
+    margin: .2em 0 .4em 0
+    line-height: 1.4em
+    font-size: 1.4em
+.bubble 
+  position: relative
+  padding: .5em 1em
+  width: 600px
+  float: left
+  margin: 1em 0 3em 30px
+  border= !orange "3px solid"
+  color: #333
+  background: #fff
+  -moz-border-radius: 10px
+  -webkit-border-radius: 10px
+  border-radius: 10px
+  &:before
+    content: "\00a0"
+    display: block
+    position: absolute
+    width: 0
+    height: 0
+    top: 10px
+    left: -49px
+    bottom: auto  
+    border-width: 15px 24px  
+    border-style: solid  
+    border-color: transparent rgb(250,105,0) transparent transparent 
+  &:after
+    content: "\00a0"
+    display: block
+    position: absolute
+    width: 0
+    height: 0
+    border-top-color: #fff
+    top: 13px
+    left: -41px
+    bottom: auto  
+    border-width: 12px 21px  
+    border-style: solid  
+    border-color: transparent #fff transparent transparent  
