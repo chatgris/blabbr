@@ -40,14 +40,9 @@ class Topic
     self.permalink = title.parameterize.to_s
   end
   
-  def self.new_by_params(params, user)
+  def self.new_topic(params, user)
     topic = Topic.new(:title => params[:title],
                       :creator => user.nickname)
-    unless params[:subscribers].nil?
-      params[:subscribers].each do |subscriber|
-        add_member(topic, subscriber)
-      end
-    end
     add_member(topic, user.nickname)
     add_post(topic, user.nickname, params[:post])
     topic
@@ -78,17 +73,4 @@ class Topic
     end
   end
   
-  def self.update_subscribers(params, topic)
-    if params[:subscribers]
-      topic.subscribers = []
-      params['subscribers'].each do |subscriber|
-        add_member(topic, subscriber)
-      end
-      add_member(topic, topic.creator)
-    end
-    topic.title = params[:title]
-    topic.save
-  end
-
 end
-

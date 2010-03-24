@@ -1,5 +1,11 @@
 - title "Edit Topic"
-= render :partial => 'form'
+- form_for @topic do |f|
+  = f.error_messages
+  %p
+    = f.label :title
+    = f.text_field :title
+  %p
+    = f.submit "Submit"
 .p
   = link_to "Show", topic_path(@topic.permalink) |
   = link_to "View All", topics_path
