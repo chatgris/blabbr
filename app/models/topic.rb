@@ -12,9 +12,9 @@ class Topic
   
   attr_accessor :post
   
-#  validates_uniqueness_of :title, :permalink
+  validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
-  before_create :set_permalink
+  before_validate :set_permalink
   
   named_scope :subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
