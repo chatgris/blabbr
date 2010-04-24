@@ -16,16 +16,14 @@ class Topic
   validates_presence_of :title, :creator
   before_validate :set_permalink
 
-  named_scope :subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
+  named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
 
   def add_subscriber(nickname)
-    user = User.by_nickname(nickname.strip).flatten[0]
+    user = User.by_nickname(nickname.strip).first
     if user
       subscribers.build(:nickname => nickname)
       save!
-    else
-      false
     end
   end
 

@@ -9,9 +9,9 @@ class UsersController < ApplicationController
   def edit
     @user = @current_user
   end
-  
+
   def show
-    @user = User.by_permalink(params[:id]).flatten[0]
+    @user = User.by_permalink(params[:id]).first
   end
 
   def create

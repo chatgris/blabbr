@@ -5,16 +5,16 @@ class TopicsController < ApplicationController
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
-    @topics = Topic.subscribed_topic(@current_user.nickname).order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 10
+    @topics = Topic.by_subscribed_topic(@current_user.nickname).order_by([[:created_at, :desc]]).paginate :page => params[:page] || nil, :per_page => 10
   end
 
   def show
-    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).flatten[0]
+    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).first
     if @topic.nil?
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
     else
-      @posts = @topic.posts.all.order_by([[:created_at, :desc]]).flatten.paginate :page => params[:page] || nil, :per_page => 50
+      @posts = @topic.posts.all.order_by([[:created_at, :desc]]).paginate :page => params[:page] || nil, :per_page => 50
     end
   end
 
@@ -36,7 +36,7 @@ class TopicsController < ApplicationController
 
   def edit
     unless @topic.nil?
-      @post = @topic.posts('created_at' => @topic.created_at).flatten[0]
+      @post = @topic.posts('created_at' => @topic.created_at).first
     else
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
@@ -93,7 +93,7 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.where('_id' => params[:id]).and('creator' => @current_user.nickname).flatten[0]
+    @topic = Topic.where('_id' => params[:id]).and('creator' => @current_user.nickname).first
     unless @topic
       flash[:error] = "You're not authorised to view this page"
       redirect_to :back
