@@ -16,9 +16,10 @@ module Blabbr
      config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
      config.i18n.default_locale = :fr
      config.generators do |g|
-#       g.orm             :active_record
+       g.orm             :mongoid
        g.template_engine :haml
-       g.test_framework  :test_unit, :fixture => true
+       g.integration_tool :rspec
+       g.test_framework   :rspec
      end
     config.filter_parameters << :password
   end

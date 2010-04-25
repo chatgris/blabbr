@@ -13,7 +13,7 @@ class Topic
   attr_accessor :post
 
   validates_uniqueness_of :title, :permalink
-  validates_presence_of :title, :creator
+  validates_presence_of :title, :permalink, :creator
   before_validate :set_permalink
 
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
@@ -35,7 +35,7 @@ class Topic
   protected
 
   def set_permalink
-    self.permalink = title.parameterize.to_s
+    self.permalink = title.parameterize.to_s unless title.nil?
   end
 
   def self.new_topic(params, user)

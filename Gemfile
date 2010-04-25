@@ -9,3 +9,9 @@ gem "bson_ext", "0.20.1"
 gem "haml"
 gem "RedCloth"
 gem "carrierwave", :git => "git://github.com/jnicklas/carrierwave.git"
+
+group :test do
+  gem "rspec-rails", ">=2.0.0.beta.6"
+  gem "factory_girl"
+  gem "shoulda", :git => 'git://github.com/TomK32/shoulda.git'
+end

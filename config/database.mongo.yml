@@ -8,3 +8,7 @@ development:
 production:
   <<: *defaults
   database: blabbr
+
+test:
+  <<: *defaults
+  database: blabbr_test
