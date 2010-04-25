@@ -9,7 +9,7 @@ class TopicsController < ApplicationController
   end
 
   def show
-    @topic = Topic.by_permalink(params[:id]).subscribed_topic(@current_user.nickname).first
+    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(@current_user.nickname).first
     if @topic.nil?
       flash[:error] = "You're not authorised to view this page"
       redirect_to topics_path
