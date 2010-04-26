@@ -5,7 +5,7 @@ class Topic
   field :creator, :type => String
   field :title, :type => String
   field :permalink, :type => String
-  field :posts_count, :type => Integer, :default => 1
+  field :posts_count, :type => Integer, :default => 0
 
   embeds_many :subscribers
   embeds_many :posts
@@ -14,12 +14,18 @@ class Topic
 
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
+
   before_validate :set_permalink
+  after_save :update_count
 
   protected
 
   def set_permalink
     self.permalink = title.parameterize.to_s unless title.nil?
+  end
+
+  def update_count
+    self.posts_count = self.posts.size
   end
 
 end
