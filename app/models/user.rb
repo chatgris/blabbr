@@ -11,8 +11,8 @@ class User
   field :posts_count, :type => Integer, :default => 0
   field :locale, :type => String, :default => 'fr'
 
-  validates_uniqueness_of :nickname, :email, :identity_url
-  validates_presence_of :nickname, :email, :identity_url
+  validates_uniqueness_of :nickname, :permalink, :email, :identity_url
+  validates_presence_of :nickname, :permalink, :email, :identity_url
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
 
   before_validate :set_permalink
@@ -20,7 +20,7 @@ class User
   protected
 
   def set_permalink
-    self.permalink = nickname.parameterize.to_s
+    self.permalink = nickname.parameterize.to_s unless nickname.nil?
   end
 
 end
