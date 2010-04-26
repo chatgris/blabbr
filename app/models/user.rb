@@ -10,11 +10,6 @@ class User
   field :identity_url, :type => String
   field :posts_count, :type => Integer, :default => 0
   field :locale, :type => String, :default => 'fr'
-  field :avatar, :type => String
-
-  mount_uploader :avatar, AvatarUploader
-
-  embeds_many :posts
 
   validates_uniqueness_of :nickname, :email, :identity_url
   validates_presence_of :nickname, :email, :identity_url
@@ -22,17 +17,10 @@ class User
 
   before_validate :set_permalink
 
-  named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
-  named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
-
   protected
 
   def set_permalink
     self.permalink = nickname.parameterize.to_s
-  end
-
-  def self.increment(user)
-    user.update_attributes(:posts_count => user.posts_count.to_i + 1)
   end
 
 end
