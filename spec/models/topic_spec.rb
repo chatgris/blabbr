@@ -6,8 +6,7 @@ describe Topic do
     @topic = Factory.build(:topic)
     @topic.save
     @post = Factory.build(:post)
-    @user = Factory.build(:user)
-    @current_user = @user.nickname
+
   end
 
   it "should be valid" do
@@ -54,8 +53,9 @@ describe Topic do
     end
 
     it "shloud increment user.posts_count when a new post is created" do
-      @topic.posts << @post
-      @topic.save
+      @user = User.new(:nickname => "chatgris", :email => "mail@mail.com", :permalink => "chatgris", :locale => "fr", :posts_count => 12, :identity_url => "http://myopenid.com")
+      @user.save
+      @topic.posts.create(:content => "test", :nickname => @user.nickname)
       @user.posts_count.should == 13
     end
   end
