@@ -16,7 +16,7 @@ class Topic
   validates_presence_of :title, :permalink, :creator
 
   before_validate :set_permalink
-  after_save :update_count
+  before_save :update_count
 
   protected
 
