@@ -19,7 +19,11 @@ describe Topic do
   end
 
   it "should have creator as a subscriber" do
-    @topic.subscribers[0].nickname == @topic.creator
+    @topic.subscribers[0].nickname.should == @topic.creator
+  end
+
+  it "should have a post" do
+    @topic.posts[0].content.should == @post.content
   end
 
   it "should increment user.posts_count when a new post is created" do
@@ -29,18 +33,18 @@ describe Topic do
   end
 
   it "should increment topic.posts_count when a new post is created" do
-    @topic.posts_count.should == 1
-    @topic.posts << @post
-    @topic.save
     @topic.posts_count.should == 2
+    @topic.posts.create(:content => @post.content, :nickname => @post.nickname)
+    @topic.save
+    @topic.posts_count.should == 3
   end
 
 
   it "should decrement topic.posts_count when a new post is deleted" do
-    @topic.posts_count.should == 2
-    @topic.posts.delete_if { |post| post.content == "Some content" }
+    @topic.posts_count.should == 3
+    @topic.posts.delete_if { |post| post.id == @topic.posts[0].id }
     @topic.save
-    @topic.posts_count.should == 1
+    @topic.posts_count.should == 2
   end
 
   describe "validations" do

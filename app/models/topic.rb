@@ -17,7 +17,7 @@ class Topic
   validates_presence_of :title, :permalink, :creator
 
   before_save :update_count
-  before_create :creator_as_subscribers
+  before_create :creator_as_subscribers, :add_post
 
   protected
 
@@ -31,6 +31,10 @@ class Topic
 
   def creator_as_subscribers
     self.subscribers << Subscriber.new(:nickname => creator)
+  end
+
+  def add_post
+    self.posts << Post.new(:content => post, :nickname => creator)
   end
 
 end

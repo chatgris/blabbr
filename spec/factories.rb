@@ -2,6 +2,7 @@
     t.title       "One topic"
     t.permalink   "one-topic"
     t.creator     "chatgris"
+    t.post        "Some content"
     t.posts_count 0
   end
 
