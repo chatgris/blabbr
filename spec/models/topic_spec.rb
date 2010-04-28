@@ -18,6 +18,10 @@ describe Topic do
     @topic.permalink.should == @topic.title.parameterize
   end
 
+  it "should have creator as a subscriber" do
+    @topic.subscribers[0].nickname == @topic.creator
+  end
+
   it "should increment user.posts_count when a new post is created" do
     @topic.posts.create(:content => "test", :nickname => @current_user.nickname)
     @topic.save

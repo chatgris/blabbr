@@ -12,11 +12,12 @@ class Topic
 
   attr_accessor :post
 
+  before_validate :set_permalink
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
 
-  before_validate :set_permalink
   before_save :update_count
+  before_create :creator_as_subscribers
 
   protected
 
@@ -26,6 +27,10 @@ class Topic
 
   def update_count
     self.posts_count = self.posts.size
+  end
+
+  def creator_as_subscribers
+    self.subscribers << Subscriber.new(:nickname => creator)
   end
 
 end
