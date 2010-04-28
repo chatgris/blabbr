@@ -14,7 +14,7 @@ class Topic
 
   before_validate :set_permalink
   validates_uniqueness_of :title, :permalink
-  validates_presence_of :title, :permalink, :creator
+  validates_presence_of :title, :permalink, :creator, :post
 
   before_save :update_count
   before_create :creator_as_subscribers, :add_post
