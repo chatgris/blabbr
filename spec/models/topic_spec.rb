@@ -31,7 +31,7 @@ describe Topic do
     @topic.new_post(@post)
     @topic.save
     User.where(:nickname => @current_user.nickname).first.posts_count.should == 13
-    @topic.subscribers[0].unread.should == 2
+    Topic.where(:permalink => @topic.permalink).first.posts.size.should == @topic.posts.size
   end
 
   it "should increment topic.posts_count when a new post is created" do
@@ -62,6 +62,13 @@ describe Topic do
   it "should remove a subscriber from a topic" do
     @topic.rm_subscriber!(@current_user.nickname)
     @topic.subscribers.size.should == 1
+  end
+
+  it "should make unread equals to posts.size when a subscriber is invited" do
+    @topic.new_post(@post)
+    @topic.new_post(@post)
+    @topic.new_subscriber(@current_user.nickname)
+    @topic.subscribers[1].unread.should == @topic.posts.size
   end
 
   describe "validations" do

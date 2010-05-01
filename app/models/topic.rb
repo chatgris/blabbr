@@ -5,7 +5,7 @@ class Topic
   field :creator, :type => String
   field :title, :type => String
   field :permalink, :type => String
-  field :posts_count, :type => Integer, :default => 0
+  field :posts_count, :type => Integer, :default => 1
 
   embeds_many :subscribers
   embeds_many :posts
@@ -21,12 +21,13 @@ class Topic
 
   def new_post(post)
     self.posts.create(:content => post.content, :nickname => post.nickname)
-    increment_unread if self.save
+    increment_unread
+    self.save
   end
 
   def new_subscriber(nickname)
     if User.by_nickname(nickname).first
-      self.subscribers.create(:nickname => nickname)
+      self.subscribers.create(:nickname => nickname, :unread => self.posts.size)
       self.save
     end
   end
