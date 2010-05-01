@@ -7,6 +7,8 @@ class Post
 
   embedded_in :topics, :inverse_of => :posts
 
+  validates_presence_of :content, :nickname
+
   after_create :update_user_posts_count
 
   protected
