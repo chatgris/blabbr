@@ -71,6 +71,16 @@ describe Topic do
     @topic.subscribers[1].unread.should == @topic.posts.size
   end
 
+  it "should find by permalink" do
+    Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.permalink
+    Topic.by_permalink("Does not exist").first.should be_nil
+  end
+
+  it "should find by subscribed topic" do
+    Topic.by_subscribed_topic(@current_user.nickname).first.should_not be_nil
+    Topic.by_subscribed_topic("Not a user").first.should be_nil
+  end
+
   describe "validations" do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:permalink) }

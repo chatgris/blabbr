@@ -19,6 +19,9 @@ class Topic
   before_save :update_count
   before_create :creator_as_subscribers, :add_post
 
+  named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
+  named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
+
   def new_post(post)
     self.posts.create(:content => post.content, :nickname => post.nickname)
     increment_unread
