@@ -38,12 +38,17 @@ describe Topic do
     @topic.posts_count.should == 3
   end
 
-
   it "should decrement topic.posts_count when a new post is deleted" do
     @topic.posts_count.should == 3
     @topic.posts.delete_if { |post| post.id == @topic.posts[0].id }
     @topic.save
     @topic.posts_count.should == 2
+  end
+
+  it "should add a subscriber to topic" do
+    @topic.subscribers.size.should == 1
+    @topic.new_subscriber(Factory.build(:subscriber))
+    @topic.subscribers.size.should == 2
   end
 
   describe "validations" do

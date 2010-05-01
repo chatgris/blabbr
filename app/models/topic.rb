@@ -24,6 +24,11 @@ class Topic
     self.save
   end
 
+  def new_subscriber(subscriber)
+    self.subscribers.create(:nickname => subscriber.nickname)
+    self.save
+  end
+
   protected
 
   def set_permalink

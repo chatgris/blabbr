@@ -19,3 +19,7 @@
     p.nickname "One user"
     p.content  "Some content"
   end
+
+  Factory.define :subscriber do |s|
+    s.nickname "Subscriber"
+  end
