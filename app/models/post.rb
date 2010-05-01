@@ -9,17 +9,13 @@ class Post
 
   validates_presence_of :content, :nickname
 
-  after_create :update_user_posts_count, :increment_unread
+  after_create :update_user_posts_count
 
   protected
 
   def update_user_posts_count
     user = User.where(:nickname => self.nickname).first
     user.update_attributes(:posts_count => user.posts_count + 1)
-  end
-
-  def increment_unread
-
   end
 
 end
