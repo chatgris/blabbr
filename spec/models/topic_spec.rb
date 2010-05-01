@@ -27,7 +27,7 @@ describe Topic do
   end
 
   it "should increment user.posts_count when a new post is created" do
-    @topic.posts.create(:content => "test", :nickname => @current_user.nickname)
+    @topic.new_post(@post)
     @topic.save
     User.where(:nickname => @current_user.nickname).first.posts_count.should == 13
   end

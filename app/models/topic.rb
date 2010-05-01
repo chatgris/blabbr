@@ -20,7 +20,7 @@ class Topic
   before_create :creator_as_subscribers, :add_post
 
   def new_post(post)
-    self.posts << Post.new(:content => post.content, :nickname => post.nickname)
+    self.posts.create(:content => post.content, :nickname => post.nickname)
     self.save
   end
 
