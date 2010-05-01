@@ -17,6 +17,9 @@ class User
 
   before_validate :set_permalink
 
+  named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
+  named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
+
   protected
 
   def set_permalink

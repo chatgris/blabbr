@@ -8,6 +8,7 @@ describe Topic do
     @post = Factory.build(:post)
     @current_user = Factory.build(:user)
     @current_user.save
+    @subscriber = Factory.build(:subscriber)
   end
 
   it "should be valid" do
@@ -45,9 +46,15 @@ describe Topic do
     @topic.posts_count.should == 2
   end
 
-  it "should add a subscriber to topic" do
+  it "shouldn't add a unregistered user to topic" do
     @topic.subscribers.size.should == 1
-    @topic.new_subscriber(Factory.build(:subscriber))
+    @topic.new_subscriber(@subscriber.nickname)
+    @topic.subscribers.size.should == 1
+  end
+
+  it "should add a registered user to topic" do
+    @topic.subscribers.size.should == 1
+    @topic.new_subscriber(@current_user.nickname)
     @topic.subscribers.size.should == 2
   end
 

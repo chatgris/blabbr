@@ -25,8 +25,10 @@ class Topic
   end
 
   def new_subscriber(subscriber)
-    self.subscribers.create(:nickname => subscriber.nickname)
-    self.save
+    if User.by_nickname(subscriber).first
+      self.subscribers.create(:nickname => subscriber)
+      self.save
+    end
   end
 
   protected
