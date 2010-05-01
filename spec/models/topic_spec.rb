@@ -27,10 +27,11 @@ describe Topic do
     @topic.posts[0].content.should == @post.content
   end
 
-  it "should increment user.posts_count when a new post is created" do
+  it "should increment user.posts_count and unread post when a new post is created" do
     @topic.new_post(@post)
     @topic.save
     User.where(:nickname => @current_user.nickname).first.posts_count.should == 13
+    @topic.subscribers[0].unread.should == 2
   end
 
   it "should increment topic.posts_count when a new post is created" do

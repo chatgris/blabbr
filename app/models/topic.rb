@@ -21,7 +21,7 @@ class Topic
 
   def new_post(post)
     self.posts.create(:content => post.content, :nickname => post.nickname)
-    self.save
+    increment_unread if self.save
   end
 
   def new_subscriber(subscriber)
@@ -47,6 +47,12 @@ class Topic
 
   def add_post
     self.posts << Post.new(:content => post, :nickname => creator)
+  end
+
+  def increment_unread
+    self.subscribers.each do |subscriber|
+      subscriber.unread += 1
+    end
   end
 
 end
