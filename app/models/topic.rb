@@ -24,11 +24,15 @@ class Topic
     increment_unread if self.save
   end
 
-  def new_subscriber(subscriber)
-    if User.by_nickname(subscriber).first
-      self.subscribers.create(:nickname => subscriber)
+  def new_subscriber(nickname)
+    if User.by_nickname(nickname).first
+      self.subscribers.create(:nickname => nickname)
       self.save
     end
+  end
+
+  def rm_subscriber!(nickname)
+    subscribers.delete_if { |subscriber| subscriber.nickname == nickname }
   end
 
   protected

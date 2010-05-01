@@ -59,6 +59,11 @@ describe Topic do
     @topic.subscribers.size.should == 2
   end
 
+  it "should remove a subscriber from a topic" do
+    @topic.rm_subscriber!(@current_user.nickname)
+    @topic.subscribers.size.should == 1
+  end
+
   describe "validations" do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:permalink) }
