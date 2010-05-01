@@ -19,6 +19,11 @@ class Topic
   before_save :update_count
   before_create :creator_as_subscribers, :add_post
 
+  def new_post(post)
+    self.posts << Post.new(:content => post.content, :nickname => post.nickname)
+    self.save
+  end
+
   protected
 
   def set_permalink

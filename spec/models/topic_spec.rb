@@ -34,8 +34,7 @@ describe Topic do
 
   it "should increment topic.posts_count when a new post is created" do
     @topic.posts_count.should == 2
-    @topic.posts.create(:content => @post.content, :nickname => @post.nickname)
-    @topic.save
+    @topic.new_post(@post)
     @topic.posts_count.should == 3
   end
 
