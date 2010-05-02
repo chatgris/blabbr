@@ -71,6 +71,12 @@ describe Topic do
     @topic.subscribers[1].unread.should == @topic.posts.size
   end
 
+  it "should set delete status to a post" do
+    @topic.posts[0].status.should == "published"
+    @topic.posts[0].deleted!
+    @topic.posts[0].status.should == "deleted"
+  end
+
   it "should find by permalink" do
     Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.permalink
     Topic.by_permalink("Does not exist").first.should be_nil

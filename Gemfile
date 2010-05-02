@@ -9,6 +9,7 @@ gem "bson_ext", "0.20.1"
 gem "haml"
 gem "RedCloth"
 gem "carrierwave", :git => "git://github.com/jnicklas/carrierwave.git"
+gem "aasm", :git => "git://github.com/jsmestad/aasm.git"
 
 group :test do
   gem "rspec-rails", ">=2.0.0.beta.6"
