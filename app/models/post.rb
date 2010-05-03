@@ -16,8 +16,12 @@ class Post
   aasm_state :published
   aasm_state :deleted
 
-  aasm_event :deleted do
+  aasm_event :delete do
     transitions :to => :deleted, :from => [:published]
+  end
+
+  aasm_event :publish do
+    transitions :to => :published, :from => [:deleted]
   end
 
   validates_presence_of :content, :nickname

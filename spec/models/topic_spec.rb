@@ -73,8 +73,14 @@ describe Topic do
 
   it "should set delete status to a post" do
     @topic.posts[0].status.should == "published"
-    @topic.posts[0].deleted!
+    @topic.posts[0].delete!
     @topic.posts[0].status.should == "deleted"
+  end
+
+  it "should set published status to a deleted post" do
+    @topic.posts[0].status.should == "deleted"
+    @topic.posts[0].publish
+    @topic.posts[0].status.should == "published"
   end
 
   it "should find by permalink" do
