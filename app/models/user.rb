@@ -10,6 +10,9 @@ class User
   field :identity_url, :type => String
   field :posts_count, :type => Integer, :default => 0
   field :locale, :type => String, :default => 'fr'
+  field :avatar, :type => String
+
+  mount_uploader :avatar, AvatarUploader
 
   validates_uniqueness_of :nickname, :permalink, :email, :identity_url
   validates_presence_of :nickname, :permalink, :email, :identity_url
