@@ -1,22 +1,22 @@
-File.open(File.join(Rails.root, 'config/database.mongo.yml'), 'r') do |f|
-  SETTINGS = YAML.load(f)[Rails.env]
-end
-
 module Mongoid
 
+  File.open(File.join(Rails.root, 'config/database.mongo.yml'), 'r') do |f|
+    @settings = YAML.load(f)[Rails.env]
+  end
+
   Mongoid.configure do |config|
-    name = SETTINGS["database"]
-    host = SETTINGS["host"]
+    name = @settings["database"]
+    host = @settings["host"]
     config.master = Mongo::Connection.new(
       host,
-      SETTINGS["port"],
+      @settings["port"],
       {:logger => Rails.logger}).db(name)
   end
 end
 
 CarrierWave.configure do |config|
-  config.grid_fs_database = SETTINGS['database']
-  config.grid_fs_host = SETTINGS['host']
+  config.grid_fs_database = Mongoid.database.name
+  config.grid_fs_host = Mongoid.database.connection.host
   config.grid_fs_access_url = "/avatar"
   #config.storage = :grid_fs
 end

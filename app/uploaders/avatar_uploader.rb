@@ -4,8 +4,13 @@ class AvatarUploader < CarrierWave::Uploader::Base
     'images/avatars'
   end
 
+  def extension_white_list
+    %w(jpg jpeg gif png)
+  end
+
+
   def filename
-    model.permalink + '.jpg'
+    model.permalink + File.extname(super.to_s)
   end
 
 end

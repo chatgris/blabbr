@@ -16,7 +16,7 @@ describe AvatarUploader do
   context 'the thumb version' do
 
     it "should have save an correctly named avatar in images/avatars" do
-      Rails.root.join("public", "images", "avatars", "#{@user.permalink}.jpg").exist?.should be_true
+      @uploader.path.should == Rails.root.join("public", "images", "avatars", "#{@user.permalink}.jpg").to_s
     end
 
   end
