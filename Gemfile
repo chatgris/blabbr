@@ -15,5 +15,4 @@ gem "stateflow", :git => "git://github.com/ryanza/stateflow.git"
 group :test do
   gem "rspec-rails", ">=2.0.0.beta.6"
   gem "factory_girl"
-  gem "shoulda", :git => 'git://github.com/TomK32/shoulda.git'
 end
