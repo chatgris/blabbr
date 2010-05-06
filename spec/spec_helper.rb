@@ -7,8 +7,6 @@ require 'factory_girl'
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 require 'rails/test_help'
 require 'rspec/rails'
-require 'shoulda'
-require 'shoulda/active_model'
 require 'rspec/expectations'
 
 # Requires supporting files with custom matchers and macros, etc,
@@ -26,7 +24,6 @@ Rspec.configure do |config|
   end
 
   config.include Rspec::Matchers
-  config.include Shoulda::ActiveModel::Matchers
   config.mock_with :rspec
 
 end
