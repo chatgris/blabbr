@@ -14,8 +14,8 @@ class Post
 
       state :published, :deleted
 
-      event :delete! do
-        transitions :from => :published, :to => :delete
+      event :delete do
+        transitions :from => :published, :to => :deleted
       end
 
       event :publish do

@@ -17,8 +17,8 @@ end
 CarrierWave.configure do |config|
   config.grid_fs_database = Mongoid.database.name
   config.grid_fs_host = Mongoid.database.connection.host
-  config.grid_fs_access_url = "/avatar"
-  #config.storage = :grid_fs
+  config.grid_fs_access_url = "/images"
+  config.storage = :grid_fs
 end
 
 Stateflow.persistence = :mongoid

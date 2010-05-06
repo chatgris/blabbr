@@ -4,7 +4,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   process :resize_to_fit => [80, 160]
 
   def store_dir
-    'images/avatars'
+    'avatars'
   end
 
   def cache_dir

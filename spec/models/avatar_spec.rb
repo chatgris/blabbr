@@ -12,11 +12,10 @@ describe AvatarUploader do
     AvatarUploader.enable_processing = false
   end
 
-
   context 'the thumb version' do
 
     it "should have save an correctly named avatar in images/avatars" do
-      @uploader.path.should == Rails.root.join("public", "images", "avatars", "#{@user.permalink}.jpg").to_s
+      @uploader.url.should == "/images/avatars/#{@user.permalink}.jpg"
     end
 
     it "should scale down a landscape image to fit within 200 by 200 pixels" do
