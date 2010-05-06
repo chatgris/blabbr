@@ -10,7 +10,7 @@ gem "haml"
 gem "RedCloth"
 gem "carrierwave", :git => "git://github.com/jnicklas/carrierwave.git"
 gem "mini_magick"
-gem "aasm", :git => "git://github.com/jsmestad/aasm.git"
+gem "stateflow", :git => "git://github.com/ryanza/stateflow.git"
 
 group :test do
   gem "rspec-rails", ">=2.0.0.beta.6"

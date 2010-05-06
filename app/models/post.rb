@@ -1,28 +1,27 @@
 class Post
   include Mongoid::Document
   include Mongoid::Timestamps
-  include AASM
+  include Stateflow
 
   field :nickname, :type => String
   field :content, :type => String
-  field :status
-
-  aasm_column :status
+  field :state, :type => String
 
   embedded_in :topics, :inverse_of => :posts
 
-  aasm_initial_state :published
+  stateflow do
+      initial :published
 
-  aasm_state :published
-  aasm_state :deleted
+      state :published, :deleted
 
-  aasm_event :delete do
-    transitions :to => :deleted, :from => [:published]
-  end
+      event :delete! do
+        transitions :from => :published, :to => :delete
+      end
 
-  aasm_event :publish do
-    transitions :to => :published, :from => [:deleted]
-  end
+      event :publish do
+        transitions :from => :deleted, :to => :published
+      end
+    end
 
   validates_presence_of :content, :nickname
 
