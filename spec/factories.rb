@@ -23,3 +23,8 @@
   Factory.define :subscriber do |s|
     s.nickname "Subscriber"
   end
+
+  Factory.define:smiley do |s|
+    s.code     "doc"
+    s.added_by "One user"
+  end

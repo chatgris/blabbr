@@ -4,4 +4,7 @@ class Smiley
 
   field :added_by, :type => String
   field :code, :type => String
+
+  validates_presence_of :code, :added_by
+  validates_uniqueness_of :code
 end
