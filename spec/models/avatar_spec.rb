@@ -18,11 +18,6 @@ describe AvatarUploader do
       @uploader.url.should == "/images/avatars/#{@user.permalink}.jpg"
     end
 
-    it "should scale down a landscape image to fit within 200 by 200 pixels" do
-      @uploader.should be_no_larger_than(200, 200)
-    end
-
-
   end
 
 end
