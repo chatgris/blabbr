@@ -15,11 +15,11 @@ class User
 
   mount_uploader :avatar, AvatarUploader
 
+  before_validate :set_permalink
+
   validates_uniqueness_of :nickname, :permalink, :email, :identity_url
   validates_presence_of :nickname, :permalink, :email, :identity_url
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
-
-  before_validate :set_permalink
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}

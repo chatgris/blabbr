@@ -7,5 +7,4 @@ tmp/**/*
 config/database.yml
 config/deploy.rb
 .bundle
-public/stylesheets/*
 image.jpg
