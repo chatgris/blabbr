@@ -9,6 +9,7 @@ class Topic
 
   embeds_many :subscribers
   embeds_many :posts
+  embeds_many :attachments
 
   attr_accessor :post
 

@@ -189,5 +189,11 @@ describe Topic do
       association.association.should ==(Mongoid::Associations::EmbedsMany)
     end
 
+    it "should embed many attachments" do
+      association = Topic.associations['attachments']
+      association.klass.should ==(Attachment)
+      association.association.should ==(Mongoid::Associations::EmbedsMany)
+    end
+
   end
 end
