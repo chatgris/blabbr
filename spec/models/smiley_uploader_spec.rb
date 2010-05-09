@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'carrierwave/test/matchers'
 
 describe SmileyUploader do
@@ -15,7 +16,7 @@ describe SmileyUploader do
   context 'the thumb version' do
 
     it "should have save an correctly named avatar in images/avatars" do
-      @uploader.url.should == "/images/smilies/#{@smiley.code}.jpg"
+      @uploader.url.should == "/uploads/smilies/#{@smiley.code}.jpg"
     end
 
   end

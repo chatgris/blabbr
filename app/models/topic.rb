@@ -6,6 +6,7 @@ class Topic
   field :title, :type => String
   field :permalink, :type => String
   field :posts_count, :type => Integer, :default => 1
+  field :attachments_count, :type => Integer, :default => 0
 
   embeds_many :subscribers
   embeds_many :posts
@@ -36,6 +37,11 @@ class Topic
     end
   end
 
+  def new_attachment(nickname, attachment)
+    self.attachments.create(:nickname => nickname, :attachment => attachment)
+    self.save
+  end
+
   def rm_subscriber!(nickname)
     subscribers.delete_if { |subscriber| subscriber.nickname == nickname }
   end
@@ -48,6 +54,7 @@ class Topic
 
   def update_count
     self.posts_count = self.posts.size
+    self.attachments_count = self.attachments.size
   end
 
   def creator_as_subscribers

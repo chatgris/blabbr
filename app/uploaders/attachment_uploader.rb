@@ -1,10 +1,8 @@
 class AttachmentUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
-  process :resize_to_fit => [80, 160]
-
   def store_dir
-    model.permalink
+    "attachments"
   end
 
   def cache_dir

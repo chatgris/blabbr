@@ -20,8 +20,12 @@ describe Topic do
   it { Topic.fields.keys.should be_include('permalink')}
   it { Topic.fields['permalink'].type.should == String}
 
-  it { User.fields.keys.should be_include('posts_count')}
-  it { User.fields['posts_count'].type.should == Integer}
+  it { Topic.fields.keys.should be_include('posts_count')}
+  it { Topic.fields['posts_count'].type.should == Integer}
+
+  it { Topic.fields.keys.should be_include('attachments_count')}
+  it { Topic.fields['attachments_count'].type.should == Integer}
+
 
   it "should be valid" do
     @topic.should be_valid
@@ -131,7 +135,21 @@ describe Topic do
       @topic.subscribers[1].unread.should == @topic.posts.size
     end
 
-   end
+  end
+
+  describe 'attachments' do
+
+    before :all do
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+    end
+
+    it "should update attachments_count when a attachment is added or deleted" do
+      @topic.new_attachment(@current_user.nickname, File.open(Rails.root.join("image.jpg")))
+      Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 1
+    end
+
+  end
 
   describe 'stateflow' do
 

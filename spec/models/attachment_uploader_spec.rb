@@ -1,8 +1,8 @@
+require 'spec_helper'
 require 'carrierwave/test/matchers'
 
 describe AttachmentUploader do
   before do
-    @user = Factory.build(:user)
     @topic = Factory.build(:topic)
     AttachmentUploader.enable_processing = true
     @uploader = AttachmentUploader.new(@topic, :attachment)
@@ -14,7 +14,7 @@ describe AttachmentUploader do
   end
 
   it "should have save an correctly attachment in images/topic.permalink" do
-    @uploader.url.should == "/images/#{@topic.permalink}/image.jpg"
+    @uploader.url.should == "/uploads/attachments/image.jpg"
   end
 
 end
