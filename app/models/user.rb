@@ -10,6 +10,7 @@ class User
   field :identity_url, :type => String
   field :posts_count, :type => Integer, :default => 0
   field :locale, :type => String, :default => 'fr'
+  field :note, :type => String
   field :avatar, :type => String
 
   mount_uploader :avatar, AvatarUploader

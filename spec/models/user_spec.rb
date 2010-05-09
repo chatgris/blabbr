@@ -18,6 +18,9 @@ describe User do
   it { User.fields.keys.should be_include('locale')}
   it { User.fields['locale'].type.should == String}
 
+  it { User.fields.keys.should be_include('note')}
+  it { User.fields['note'].type.should == String}
+
   it { User.fields.keys.should be_include('posts_count')}
   it { User.fields['posts_count'].type.should == Integer}
 
