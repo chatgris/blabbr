@@ -4,7 +4,7 @@ require(File.dirname(__FILE__) + "/../../config/environment") unless defined?(Ra
 
 class GridfsServeImage
   def self.call(env)
-    if env["PATH_INFO"] =~ /^\/images\/(.+)$/
+    if env["PATH_INFO"] =~ /^\/uploads\/(.+)$/
       begin
         Mongo::GridFileSystem.new(Mongoid.database).open($1, 'r') do |file|
           [200, { 'Content-Type' => file.content_type }, [file.read]]
