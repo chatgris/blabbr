@@ -5,10 +5,9 @@ development:
   <<: *defaults
   database: blabbr_dev
 
-production:
-  <<: *defaults
-  database: blabbr
-
 test:
   <<: *defaults
   database: blabbr_test
+
+production:
+  uri: <%= ENV['MONGOHQ_URL'] %>
