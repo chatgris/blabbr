@@ -24,6 +24,9 @@ describe User do
   it { User.fields.keys.should be_include('posts_count')}
   it { User.fields['posts_count'].type.should == Integer}
 
+  it { User.fields.keys.should be_include('gravatar_url')}
+  it { User.fields['gravatar_url'].type.should == String}
+
   it "should be valid" do
     @user.should be_valid
   end
@@ -36,6 +39,7 @@ describe User do
     it 'should required permalink' do
       Factory.build(:user, :permalink => '', :nickname => '').should_not be_valid
     end
+
     it 'should required email' do
       Factory.build(:user, :email => '').should_not be_valid
     end
@@ -51,6 +55,10 @@ describe User do
 
     it "should have a valid permalink" do
       @user.permalink.should == @user.nickname.parameterize
+    end
+
+    it "should set a gravatar_url" do
+      @user.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size=80"
     end
   end
 
