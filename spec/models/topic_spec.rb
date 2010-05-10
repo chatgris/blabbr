@@ -144,6 +144,10 @@ describe Topic do
       @topic.subscribers[1].post_id.should == @post.id
     end
 
+    it "should add page number of the newly added post to subscriber" do
+      @topic.subscribers[1].page.should == @topic.posts.size / PER_PAGE + 1
+    end
+
   end
 
   describe 'attachments' do

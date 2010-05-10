@@ -69,6 +69,7 @@ class Topic
     self.subscribers.each do |subscriber|
       subscriber.unread += 1
       subscriber.post_id = post.id
+      subscriber.page = self.posts_count / PER_PAGE + 1
     end
   end
 
