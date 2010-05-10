@@ -55,7 +55,7 @@ class Topic
   protected
 
   def set_permalink
-    permalink = title.parameterize.to_s unless title.nil?
+    self.permalink = title.parameterize.to_s unless title.nil?
   end
 
   def update_count
