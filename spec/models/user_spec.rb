@@ -78,4 +78,13 @@ describe User do
 
   end
 
+  describe "associations" do
+
+     it "should embed many attachments" do
+      association = User.associations['attachments']
+      association.klass.should ==(Attachment)
+      association.association.should ==(Mongoid::Associations::EmbedsMany)
+    end
+  end
+
 end

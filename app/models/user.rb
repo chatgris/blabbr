@@ -4,15 +4,17 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :nickname,  :type => String
-  field :permalink, :type => String
-  field :email,  :type => String
-  field :identity_url, :type => String
+  field :nickname
+  field :permalink
+  field :email
+  field :identity_url
   field :posts_count, :type => Integer, :default => 0
-  field :locale, :type => String, :default => 'fr'
-  field :note, :type => String
-  field :avatar, :type => String
-  field :gravatar_url, :type => String
+  field :locale, :default => 'fr'
+  field :note
+  field :avatar
+  field :gravatar_url
+
+  embeds_many :attachments
 
   mount_uploader :avatar, AvatarUploader
 

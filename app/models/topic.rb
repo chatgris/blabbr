@@ -2,9 +2,9 @@ class Topic
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :creator, :type => String
-  field :title, :type => String
-  field :permalink, :type => String
+  field :creator
+  field :title
+  field :permalink
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
 

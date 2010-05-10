@@ -2,9 +2,10 @@ require 'carrierwave/orm/mongoid'
 
 class Attachment
   include Mongoid::Document
+  include Mongoid::Timestamps
 
-  field :nickname, :type => String
-  field :attachment, :type => String
+  field :nickname
+  field :attachment
 
   mount_uploader :attachment, AttachmentUploader
 

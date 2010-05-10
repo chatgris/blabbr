@@ -3,9 +3,9 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
 
-  field :nickname, :type => String
-  field :content, :type => String
-  field :state, :type => String
+  field :nickname
+  field :content
+  field :state
 
   embedded_in :topics, :inverse_of => :posts
 
