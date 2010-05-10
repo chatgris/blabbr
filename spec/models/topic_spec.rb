@@ -130,9 +130,18 @@ describe Topic do
 
     it "should make unread equals to posts.size when a subscriber is invited" do
       @topic.new_post(@post)
-      @topic.new_post(@post)
       @topic.new_subscriber(@current_user.nickname)
       @topic.subscribers[1].unread.should == @topic.posts.size
+    end
+
+     it "should increment unread count when a post is added" do
+      @topic.subscribers[1].unread.should == 2
+      @topic.new_post(@post)
+      @topic.subscribers[1].unread.should == 3
+    end
+
+    it "should add topic_id to subscriber" do
+      @topic.subscribers[1].post_id.should == @post.id
     end
 
   end
