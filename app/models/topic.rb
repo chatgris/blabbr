@@ -26,7 +26,7 @@ class Topic
 
   def new_post(post)
     self.posts.create(:content => post.content, :nickname => post.nickname)
-    increment_unread(post)
+    set_unread(post)
     self.save
   end
 
@@ -44,6 +44,10 @@ class Topic
 
   def rm_subscriber!(nickname)
     subscribers.delete_if { |subscriber| subscriber.nickname == nickname }
+  end
+
+  def reset_unread(nickname)
+    self.subscribers.each { |s| s.unread = 0 if s.nickname == nickname }
   end
 
   protected
@@ -65,11 +69,13 @@ class Topic
     self.posts << Post.new(:content => post, :nickname => creator)
   end
 
-  def increment_unread(post)
+  def set_unread(post)
     self.subscribers.each do |subscriber|
+      if subscriber.unread == 0
+        subscriber.post_id = post.id
+        subscriber.page = self.posts_count / PER_PAGE + 1
+      end
       subscriber.unread += 1
-      subscriber.post_id = post.id
-      subscriber.page = self.posts_count / PER_PAGE + 1
     end
   end
 

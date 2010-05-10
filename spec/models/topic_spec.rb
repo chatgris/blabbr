@@ -3,11 +3,9 @@ require 'spec_helper'
 describe Topic do
 
   before :all do
-    @topic = Factory.build(:topic)
-    @topic.save
+    @topic = Factory.create(:topic)
     @post = Factory.build(:post)
-    @current_user = Factory.build(:user)
-    @current_user.save
+    @current_user = Factory.create(:user)
     @subscriber = Factory.build(:subscriber)
   end
 
@@ -140,7 +138,14 @@ describe Topic do
       @topic.subscribers[1].unread.should == 3
     end
 
+    it "should reset unread post" do
+      @topic.reset_unread(@current_user.nickname)
+      @topic.subscribers[1].unread.should == 0
+      @topic.subscribers[0].unread.should_not == 0
+    end
+
     it "should add topic_id to subscriber" do
+      @topic.new_post(@post)
       @topic.subscribers[1].post_id.should == @post.id
     end
 
