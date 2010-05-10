@@ -30,7 +30,7 @@ class Post
   protected
 
   def update_user_posts_count
-    user = User.where(:nickname => nickname).first
+    user = User.by_nickname(nickname).first
     user.update_attributes(:posts_count => user.posts_count + 1)
   end
 

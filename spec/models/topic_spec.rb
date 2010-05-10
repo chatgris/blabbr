@@ -81,8 +81,8 @@ describe Topic do
     it "should increment user.posts_count and unread post when a new post is created" do
       @topic.new_post(@post)
       @topic.save
-      User.where(:nickname => @current_user.nickname).first.posts_count.should == 13
-      Topic.where(:permalink => @topic.permalink).first.posts.size.should == @topic.posts.size
+      User.by_nickname(@current_user.nickname).first.posts_count.should == 13
+      Topic.by_permalink(@topic.permalink).first.posts.size.should == @topic.posts.size
     end
 
     it "should increment topic.posts_count when a new post is created" do
