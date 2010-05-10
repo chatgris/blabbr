@@ -30,7 +30,7 @@ class User
   protected
 
   def set_permalink
-    self.permalink = nickname.parameterize.to_s unless nickname.nil?
+    permalink = nickname.parameterize.to_s unless nickname.nil?
   end
 
   def set_gravatar_url

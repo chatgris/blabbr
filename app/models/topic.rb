@@ -25,55 +25,57 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'subscribers.nickname' => current_user}}}
 
   def new_post(post)
-    self.posts.create(:content => post.content, :nickname => post.nickname)
+    posts.create(:content => post.content, :nickname => post.nickname)
     set_unread(post)
-    self.save
+    save
   end
 
   def new_subscriber(nickname)
     if User.by_nickname(nickname).first
-      self.subscribers.create(:nickname => nickname, :unread => self.posts.size)
-      self.save
+      subscribers.create(:nickname => nickname, :unread => self.posts.size)
+      save
     end
   end
 
   def new_attachment(nickname, attachment)
-    self.attachments.create(:nickname => nickname, :attachment => attachment)
-    self.save
+    attachments.create(:nickname => nickname, :attachment => attachment)
+    save
   end
 
   def rm_subscriber!(nickname)
     subscribers.delete_if { |subscriber| subscriber.nickname == nickname }
+    save
   end
 
   def reset_unread(nickname)
-    self.subscribers.each { |s| s.unread = 0 if s.nickname == nickname }
+    subscribers.each { |s| s.unread = 0 if s.nickname == nickname }
+    save
   end
 
   protected
 
   def set_permalink
-    self.permalink = title.parameterize.to_s unless title.nil?
+    permalink = title.parameterize.to_s unless title.nil?
   end
 
   def update_count
-    self.posts_count = self.posts.size
-    self.attachments_count = self.attachments.size
+    self.posts_count = posts.size
+    self.attachments_count = attachments.size
   end
 
   def creator_as_subscribers
-    self.subscribers << Subscriber.new(:nickname => creator)
+    subscribers << Subscriber.new(:nickname => creator)
   end
 
   def add_post
-    self.posts << Post.new(:content => post, :nickname => creator)
+    posts << Post.new(:content => post, :nickname => creator)
   end
 
   def set_unread(post)
-    self.subscribers.each do |subscriber|
+    subscribers.each do |subscriber|
       if subscriber.unread == 0
         subscriber.post_id = post.id
-        subscriber.page = self.posts_count / PER_PAGE + 1
+        subscriber.page = posts_count / PER_PAGE + 1
       end
       subscriber.unread += 1
     end

@@ -57,7 +57,7 @@ describe Topic do
     end
 
     it "should have a valid permalink" do
-      @topic.permalink.should == @topic.title.parameterize
+      Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.title.parameterize
     end
 
     it "should have creator as a subscriber" do
@@ -88,14 +88,14 @@ describe Topic do
     it "should increment topic.posts_count when a new post is created" do
       @topic.posts_count.should == 2
       @topic.new_post(@post)
-      @topic.posts_count.should == 3
+      Topic.by_permalink(@topic.permalink).first.posts_count.should == 3
     end
 
     it "should decrement topic.posts_count when a new post is deleted" do
       @topic.posts_count.should == 3
       @topic.posts.delete_if { |post| post.id == @topic.posts[0].id }
       @topic.save
-      @topic.posts_count.should == 2
+      Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
     end
 
   end
@@ -110,47 +110,47 @@ describe Topic do
     end
 
     it "shouldn't add a unregistered user to topic" do
-      @topic.subscribers.size.should == 1
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
       @topic.new_subscriber(@subscriber.nickname)
-      @topic.subscribers.size.should == 1
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
     end
 
     it "should add a registered user to topic" do
-      @topic.subscribers.size.should == 1
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
       @topic.new_subscriber(@current_user.nickname)
-      @topic.subscribers.size.should == 2
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 2
     end
 
     it "should remove a subscriber from a topic" do
       @topic.rm_subscriber!(@current_user.nickname)
-      @topic.subscribers.size.should == 1
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
     end
 
     it "should make unread equals to posts.size when a subscriber is invited" do
       @topic.new_post(@post)
       @topic.new_subscriber(@current_user.nickname)
-      @topic.subscribers[1].unread.should == @topic.posts.size
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == @topic.posts.size
     end
 
      it "should increment unread count when a post is added" do
       @topic.subscribers[1].unread.should == 2
       @topic.new_post(@post)
-      @topic.subscribers[1].unread.should == 3
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 3
     end
 
     it "should reset unread post" do
       @topic.reset_unread(@current_user.nickname)
-      @topic.subscribers[1].unread.should == 0
-      @topic.subscribers[0].unread.should_not == 0
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 0
+      Topic.by_permalink(@topic.permalink).first.subscribers[0].unread.should_not == 0
     end
 
     it "should add topic_id to subscriber" do
       @topic.new_post(@post)
-      @topic.subscribers[1].post_id.should == @post.id
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].post_id.should == @post.id
     end
 
     it "should add page number of the newly added post to subscriber" do
-      @topic.subscribers[1].page.should == @topic.posts.size / PER_PAGE + 1
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].page.should == @topic.posts.size / PER_PAGE + 1
     end
 
   end
@@ -182,13 +182,13 @@ describe Topic do
     it "should set delete status to a post" do
       @topic.posts[0].state.should == "published"
       @topic.posts[0].delete!
-      @topic.posts[0].state.should == "deleted"
+      Topic.by_permalink(@topic.permalink).first.posts[0].state.should == "deleted"
     end
 
     it "should set published status to a deleted post" do
       @topic.posts[0].state.should == "deleted"
       @topic.posts[0].publish!
-      @topic.posts[0].state.should == "published"
+      Topic.by_permalink(@topic.permalink).first.posts[0].state.should == "published"
     end
 
   end

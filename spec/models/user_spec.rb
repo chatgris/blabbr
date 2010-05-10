@@ -45,8 +45,8 @@ describe User do
     end
 
     it 'should not valid if login is already taken' do
-      Factory.create(:user, :nickname => 'nickname')
-      Factory.build(:user, :nickname => 'nickname').should_not be_valid
+      Factory.create(:user)
+      Factory.build(:user, :nickname => 'one_user').should_not be_valid
     end
 
     it 'should not valid if email is already taken' do
@@ -54,11 +54,11 @@ describe User do
     end
 
     it "should have a valid permalink" do
-      @user.permalink.should == @user.nickname.parameterize
+      User.by_permalink(@user.permalink).first.permalink.should == @user.nickname.parameterize
     end
 
     it "should set a gravatar_url" do
-      @user.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size=80"
+      User.by_permalink(@user.permalink).first.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size=80"
     end
   end
 
