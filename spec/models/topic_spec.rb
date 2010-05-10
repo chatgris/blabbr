@@ -121,19 +121,18 @@ describe Topic do
       Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 2
     end
 
-    it "should remove a subscriber from a topic" do
-      @topic.rm_subscriber!(@current_user.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
+    it "shouldn't add a user if this user is already invited" do
+      @topic.new_subscriber(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 2
     end
 
     it "should make unread equals to posts.size when a subscriber is invited" do
       @topic.new_post(@post)
-      @topic.new_subscriber(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == @topic.posts.size
     end
 
      it "should increment unread count when a post is added" do
-      @topic.subscribers[1].unread.should == 2
+      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 2
       @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 3
     end
@@ -151,6 +150,11 @@ describe Topic do
 
     it "should add page number of the newly added post to subscriber" do
       Topic.by_permalink(@topic.permalink).first.subscribers[1].page.should == @topic.posts.size / PER_PAGE + 1
+    end
+
+    it "should remove a subscriber from a topic" do
+      @topic.rm_subscriber!(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
     end
 
   end

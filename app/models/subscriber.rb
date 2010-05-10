@@ -9,5 +9,6 @@ class Subscriber
   embedded_in :topic, :inverse_of => :subscribers
 
   validates_presence_of :nickname
+  validates_uniqueness_of :nickname
 
 end
