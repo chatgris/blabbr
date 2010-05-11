@@ -32,7 +32,7 @@ class Topic
 
   def new_member(nickname)
     if User.by_nickname(nickname).first
-      members.create(:nickname => nickname, :unread => self.posts.size)
+      members.create(:nickname => nickname, :unread => self.posts.size) unless Topic.by_permalink(self.permalink).by_subscribed_topic(nickname).first
       save
     end
   end
@@ -43,8 +43,9 @@ class Topic
   end
 
   def rm_member!(nickname)
-    members.delete_if { |member| member.nickname == nickname }
-    save
+    members.each do |member|
+      member.delete if member.nickname == nickname
+    end
   end
 
   def reset_unread(nickname)
@@ -64,7 +65,9 @@ class Topic
   end
 
   def creator_as_members
-    members << Member.new(:nickname => creator)
+    if members.size == 0
+      members << Member.new(:nickname => creator, :page => members.size)
+    end
   end
 
   def add_post
