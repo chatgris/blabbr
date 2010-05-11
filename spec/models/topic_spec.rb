@@ -6,7 +6,7 @@ describe Topic do
     @topic = Factory.create(:topic)
     @post = Factory.build(:post)
     @current_user = Factory.create(:user)
-    @subscriber = Factory.build(:subscriber)
+    @member = Factory.build(:member)
   end
 
   it { Topic.fields.keys.should be_include('creator')}
@@ -60,8 +60,8 @@ describe Topic do
       Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.title.parameterize
     end
 
-    it "should have creator as a subscriber" do
-      @topic.subscribers[0].nickname.should == @topic.creator
+    it "should have creator as a member" do
+      @topic.members[0].nickname.should == @topic.creator
     end
 
     it "should have a post" do
@@ -75,7 +75,7 @@ describe Topic do
       @topic = Factory.create(:topic)
       @post = Factory.build(:post)
       @current_user = Factory.create(:user)
-      @subscriber = Factory.build(:subscriber)
+      @member = Factory.build(:member)
     end
 
     it "should increment user.posts_count and unread post when a new post is created" do
@@ -100,61 +100,61 @@ describe Topic do
 
   end
 
-  describe 'subscribers' do
+  describe 'members' do
 
     before :all do
       @topic = Factory.create(:topic)
       @post = Factory.build(:post)
       @current_user = Factory.create(:user)
-      @subscriber = Factory.build(:subscriber)
+      @member = Factory.build(:member)
     end
 
     it "shouldn't add a unregistered user to topic" do
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
-      @topic.new_subscriber(@subscriber.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 1
+      @topic.new_member(@member.nickname)
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 1
     end
 
     it "should add a registered user to topic" do
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
-      @topic.new_subscriber(@current_user.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 2
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 1
+      @topic.new_member(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 2
     end
 
     it "shouldn't add a user if this user is already invited" do
-      @topic.new_subscriber(@current_user.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 2
+      @topic.new_member(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 2
     end
 
-    it "should make unread equals to posts.size when a subscriber is invited" do
+    it "should make unread equals to posts.size when a member is invited" do
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == @topic.posts.size
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == @topic.posts.size
     end
 
      it "should increment unread count when a post is added" do
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 2
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 2
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 3
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 3
     end
 
     it "should reset unread post" do
       @topic.reset_unread(@current_user.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].unread.should == 0
-      Topic.by_permalink(@topic.permalink).first.subscribers[0].unread.should_not == 0
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 0
+      Topic.by_permalink(@topic.permalink).first.members[0].unread.should_not == 0
     end
 
-    it "should add topic_id to subscriber" do
+    it "should add topic_id to member" do
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].post_id.should == @post.id
+      Topic.by_permalink(@topic.permalink).first.members[1].post_id.should == @post.id
     end
 
-    it "should add page number of the newly added post to subscriber" do
-      Topic.by_permalink(@topic.permalink).first.subscribers[1].page.should == @topic.posts.size / PER_PAGE + 1
+    it "should add page number of the newly added post to member" do
+      Topic.by_permalink(@topic.permalink).first.members[1].page.should == @topic.posts.size / PER_PAGE + 1
     end
 
-    it "should remove a subscriber from a topic" do
-      @topic.rm_subscriber!(@current_user.nickname)
-      Topic.by_permalink(@topic.permalink).first.subscribers.size.should == 1
+    it "should remove a member from a topic" do
+      @topic.rm_member!(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.members.size.should == 1
     end
 
   end
@@ -200,8 +200,8 @@ describe Topic do
   describe 'named_scope' do
 
      before :all do
-      @topic = Factory.create(:topic, :creator => "One user")
       @current_user = Factory.create(:user)
+      @topic = Factory.create(:topic, :creator => "One user")
     end
 
     it "should find by permalink" do
@@ -217,9 +217,9 @@ describe Topic do
 
   describe "associations" do
 
-    it "should embed many subscribers" do
-      association = Topic.associations['subscribers']
-      association.klass.should ==(Subscriber)
+    it "should embed many members" do
+      association = Topic.associations['members']
+      association.klass.should ==(Member)
       association.association.should ==(Mongoid::Associations::EmbedsMany)
     end
 

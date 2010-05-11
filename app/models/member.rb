@@ -1,4 +1,4 @@
-class Subscriber
+class Member
   include Mongoid::Document
 
   field :nickname
@@ -6,7 +6,7 @@ class Subscriber
   field :page, :type => Integer, :default => 1
   field :post_id
 
-  embedded_in :topic, :inverse_of => :subscribers
+  embedded_in :topic, :inverse_of => :members
 
   validates_presence_of :nickname
   validates_uniqueness_of :nickname

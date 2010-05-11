@@ -20,8 +20,8 @@
     p.content  "Some content"
   end
 
-  Factory.define :subscriber do |s|
-    s.nickname "Subscriber"
+  Factory.define :member do |s|
+    s.nickname "Member"
   end
 
   Factory.define:smiley do |s|
