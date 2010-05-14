@@ -145,7 +145,7 @@ describe Topic do
 
     it "should add topic_id to member" do
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.members[1].post_id.should == @post.id
+      Topic.by_permalink(@topic.permalink).first.members[1].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[3].id
     end
 
     it "should add page number of the newly added post to member" do

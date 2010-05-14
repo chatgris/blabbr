@@ -26,7 +26,6 @@ class Topic
 
   def new_post(post)
     posts.create(:content => post.content, :nickname => post.nickname)
-    set_unread(post)
     save
   end
 
@@ -65,23 +64,11 @@ class Topic
   end
 
   def creator_as_members
-    if members.size == 0
-      members << Member.new(:nickname => creator, :page => members.size)
-    end
+    members << Member.new(:nickname => creator, :page => members.size)
   end
 
   def add_post
     posts << Post.new(:content => post, :nickname => creator)
-  end
-
-  def set_unread(post)
-    members.each do |member|
-      if member.unread == 0
-        member.post_id = post.id
-        member.page = posts_count / PER_PAGE + 1
-      end
-      member.unread += 1
-    end
   end
 
 end
