@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :authorize
 
   def edit
-    @user = User.by_permalink(params[:id]).first
+    @user = current_user
   end
 
   def show

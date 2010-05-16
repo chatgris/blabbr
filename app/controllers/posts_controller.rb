@@ -1,10 +1,8 @@
 class PostsController < ApplicationController
 
-  before_filter :authorize
-
   def create
     @topic = Topic.find(params[:topic_id])
-    @topic.new_post(Topic.new(:nickname => current_user.nickname, :content => params[:post][:content]))
+    @topic.new_post(Post.new(:nickname => current_user.nickname, :content => params[:post][:content]))
     @topic.save
     respond_to do |format|
       format.html { redirect_to topic_path(@topic.permalink) }

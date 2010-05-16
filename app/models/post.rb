@@ -25,13 +25,17 @@ class Post
 
   validates_presence_of :content, :nickname
 
-  after_create :set_unread, :update_user_posts_count
+  before_create :set_unread, :update_user_posts_count, :update_topic_posts_count
 
   protected
 
   def update_user_posts_count
     user = User.by_nickname(nickname).first
-    user.update_attributes(:posts_count => user.posts_count + 1)
+    user.update_attributes!(:posts_count => user.posts_count + 1)
+  end
+
+  def update_topic_posts_count
+    self.topics.posts_count += 1
   end
 
   def set_unread

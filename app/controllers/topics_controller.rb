@@ -1,5 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :authorize
+  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :add_member, :remove_member]
+  after_filter :reset_unread_posts, :only => [:show]
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).order_by([[:created_at, :desc]]).paginate :page => params[:page] || nil, :per_page => 10
@@ -20,7 +22,8 @@ class TopicsController < ApplicationController
   end
 
   def create
-    @topic = Topic.new_topic(params[:topic], @current_user)
+    params[:topic][:creator] = current_user.nickname
+    @topic = Topic.new(params[:topic])
 
     if @topic.save
       flash[:notice] = "Successfully created topic."
@@ -40,8 +43,8 @@ class TopicsController < ApplicationController
     end
   end
 
-  def add_subscriber
-    if @topic.add_subscriber(params[:nickname])
+  def add_member
+    if @topic.add_member(params[:nickname])
       flash[:notice] = t('member.add_success', :name => params[:nickname])
     else
       flash[:error] = t('member.not_find')
@@ -49,8 +52,8 @@ class TopicsController < ApplicationController
     redirect_to :back
   end
 
-  def remove_subscriber
-    if @topic.remove_subscriber!(params[:nickname])
+  def remove_member
+    if @topic.rm_member!(params[:nickname])
       flash[:notice] = t('member.remove_success', :name => params[:nickname])
     else
       flash[:error] = t('member.not_find')
@@ -69,7 +72,7 @@ class TopicsController < ApplicationController
   end
 
   def destroy
-    @topic =Topic.first(:permalink => params[:id], 'creator' => @current_user.nickname)
+    @topic =Topic.first(:permalink => params[:id], 'creator' => current_user.nickname)
     unless @topic.nil?
       @topic.destroy
       flash[:notice] = "Successfully destroyed topic."
@@ -82,15 +85,16 @@ class TopicsController < ApplicationController
   protected
 
   def users_list
-    @users = User.criteria.excludes(:nickname => @current_user.nickname).order_by([[:created_at, :desc]]).flatten
+    @users = User.criteria.excludes(:nickname => current_user.nickname).order_by([[:created_at, :desc]]).flatten
   end
 
   def reset_unread_posts
-    Topic.reset_unread_posts(@topic, @current_user.nickname)
+    @topic.reset_unread(current_user.nickname)
+    @topic.save
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.where('_id' => params[:id]).and('creator' => @current_user.nickname).first
+    @topic = Topic.where('_id' => params[:id]).and('creator' => current_user.nickname).first
     unless @topic
       flash[:error] = "You're not authorised to view this page"
       redirect_to :back
