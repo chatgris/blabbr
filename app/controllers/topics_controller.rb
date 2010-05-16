@@ -44,7 +44,7 @@ class TopicsController < ApplicationController
   end
 
   def add_member
-    if @topic.add_member(params[:nickname])
+    if @topic.new_member(params[:nickname])
       flash[:notice] = t('member.add_success', :name => params[:nickname])
     else
       flash[:error] = t('member.not_find')
@@ -60,6 +60,13 @@ class TopicsController < ApplicationController
     end
     redirect_to :back
   end
+
+  def add_post
+    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
+    @topic.new_post(Post.new(:nickname => current_user.nickname, :content => params[:content]))
+    redirect_to topic_path
+  end
+
 
   def update
     @topic = Topic.find(params[:id])

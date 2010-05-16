@@ -1,6 +1,4 @@
-= form_for [@topic, Post.new] do |post|
-  = post.error_messages
-  = post.label :post
-  = post.text_area :content
+= form_tag add_post_topic_path(@topic.permalink), :method => 'put' do
+  = text_area_tag :content, params[:content]
   %p
-    = post.submit "Submit"
+    = submit_tag "Submit"

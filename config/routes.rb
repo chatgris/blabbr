@@ -5,7 +5,7 @@ Blabbr::Application.routes.draw do |map|
   match '/topics/:id/page/:page' => 'topics#show'
   resources :topics do
     member do
-      put :add_member
+      put :add_member, :add_post
       delete :remove_member
     end
     resources :posts
