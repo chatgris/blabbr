@@ -1,0 +1,23 @@
+- title @topic.title
+%p
+  %strong
+    Title:
+  = h @topic.title
+%p
+  %strong
+    Permalink:
+  = h @topic.permalink
+%p
+  %strong
+    Creator:
+  = h @topic.creator
+- form_tag add_subscriber_topic_path(@topic), :method => 'put', :action => 'index' do
+  %p
+    = text_field_tag :nickname, params[:nickname]
+    = submit_tag "Ajouter"
+%p
+  %strong
+    = t('subscriber').pluralize
+  - @topic.members.each do |member|
+    = member.nickname
+    = link_to "X", remove_subscriber_topic_path(@topic, :nickname => member.nickname), :method => :delete

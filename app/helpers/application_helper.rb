@@ -14,4 +14,10 @@ module ApplicationHelper
     content_for(:head) { javascript_include_tag(*args) }
   end
 
+  def unread_posts(members)
+    members.each do |s|
+      return s.unread if s.nickname == current_user.nickname
+    end
+  end
+
 end

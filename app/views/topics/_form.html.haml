@@ -1,0 +1,10 @@
+- form_for @topic do |f|
+  = f.error_messages
+  %p
+    = f.label :title
+    = f.text_field :title
+  %p
+    = f.label :post
+    = f.text_area :post
+  %p
+    = f.submit "Submit"
