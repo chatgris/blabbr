@@ -16,7 +16,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    model.permalink + File.extname(super.to_s)
+    model.permalink + File.extname(super.to_s) unless super.nil?
   end
 
 end
