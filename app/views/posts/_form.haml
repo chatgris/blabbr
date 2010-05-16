@@ -1,0 +1,6 @@
+= form_for [@topic, Post.new] do |post|
+  = post.error_messages
+  = post.label :post
+  = post.text_area :content
+  %p
+    = post.submit "Submit"

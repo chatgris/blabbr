@@ -11,7 +11,7 @@
   %strong
     Creator:
   = h @topic.creator
-- form_tag add_subscriber_topic_path(@topic), :method => 'put', :action => 'index' do
+= form_tag add_subscriber_topic_path(@topic), :method => 'put', :action => 'index' do
   %p
     = text_field_tag :nickname, params[:nickname]
     = submit_tag "Ajouter"
@@ -21,3 +21,14 @@
   - @topic.members.each do |member|
     = member.nickname
     = link_to "X", remove_subscriber_topic_path(@topic, :nickname => member.nickname), :method => :delete
+  = will_paginate @posts
+  = render :partial => 'posts/post', :collection => @posts
+  = will_paginate @posts
+#addComment
+  = render 'posts/form', :collection => @post
+%p
+  = link_to "Edit", edit_topic_path(@topic.permalink)
+  |
+  = link_to "Destroy", @topic, :confirm => 'Are you sure?', :method => :delete
+  |
+  = link_to "View All", topics_path
