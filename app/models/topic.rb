@@ -16,7 +16,7 @@ class Topic
 
   before_validate :set_permalink
   validates_uniqueness_of :title, :permalink
-  validates_presence_of :title, :permalink, :creator, :post
+  validates_presence_of :title, :permalink, :creator
 
   before_save :update_count
   before_create :creator_as_members, :add_post
@@ -48,7 +48,10 @@ class Topic
   end
 
   def reset_unread(nickname)
-    members.each { |s| s.unread = 0 if s.nickname == nickname }
+    members.each do |s|
+      s.unread = 0 if s.nickname == nickname
+      Rails.logger.info s.nickname
+    end
     save
   end
 

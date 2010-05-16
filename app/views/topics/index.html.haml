@@ -19,7 +19,8 @@
       %td
         = topic.posts_count
       %td
-        = unread_posts(topic.members)
+        - member = unread_posts(topic.members)
+        = link_to member.unread, topic_path(topic.permalink, :anchor => member.post_id, :page => member.page)
       %td
         = link_to "Show", topic_path(topic.permalink)
       %td

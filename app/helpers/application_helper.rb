@@ -16,7 +16,7 @@ module ApplicationHelper
 
   def unread_posts(members)
     members.each do |s|
-      return s.unread if s.nickname == current_user.nickname
+      return s if s.nickname == current_user.nickname
     end
   end
 
