@@ -3,7 +3,7 @@
     t.permalink   "one-topic"
     t.creator     "chatgris"
     t.post        "Some content"
-    t.posts_count 0
+    t.posts_count 1
   end
 
   Factory.define :user do |u|

@@ -37,7 +37,6 @@ class Topic
 
   def new_attachment(nickname, attachment)
     attachments.create(:nickname => nickname, :attachment => attachment)
-    self.attachments_count += 1
     save
   end
 

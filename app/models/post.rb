@@ -35,7 +35,7 @@ class Post
   end
 
   def update_topic_posts_count
-    self.topics.posts_count = topics.posts.size
+    self.topics.posts_count += 1
   end
 
   def set_unread

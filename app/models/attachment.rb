@@ -13,4 +13,12 @@ class Attachment
 
   validates_presence_of :nickname
 
+  before_create :update_attachments_count
+
+  protected
+
+  def update_attachments_count
+    self.attachmentable.attachments_count += 1
+  end
+
 end
