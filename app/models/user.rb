@@ -13,6 +13,7 @@ class User
   field :note
   field :avatar
   field :gravatar_url
+  field :attachments_count, :type => Integer, :defalut => 0
 
   embeds_many :attachments
 

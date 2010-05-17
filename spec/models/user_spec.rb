@@ -27,6 +27,9 @@ describe User do
   it { User.fields.keys.should be_include('gravatar_url')}
   it { User.fields['gravatar_url'].type.should == String}
 
+  it { User.fields.keys.should be_include('attachments_count')}
+  it { User.fields['attachments_count'].type.should == Integer}
+
   it "should be valid" do
     @user.should be_valid
   end
