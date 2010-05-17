@@ -18,7 +18,6 @@ class Topic
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
 
-  before_save :update_count
   before_create :creator_as_members, :add_post
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
@@ -38,6 +37,7 @@ class Topic
 
   def new_attachment(nickname, attachment)
     attachments.create(:nickname => nickname, :attachment => attachment)
+    self.attachments_count += 1
     save
   end
 

@@ -80,22 +80,14 @@ describe Topic do
 
     it "should increment user.posts_count and unread post when a new post is created" do
       @topic.new_post(@post)
-      @topic.save
       User.by_nickname(@current_user.nickname).first.posts_count.should == 13
-      Topic.by_permalink(@topic.permalink).first.posts.size.should == @topic.posts.size
+      Topic.by_permalink(@topic.permalink).first.posts_count.should == @topic.posts.size
     end
 
     it "should increment topic.posts_count when a new post is created" do
-      @topic.posts_count.should == 2
+      Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
       @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.posts_count.should == 3
-    end
-
-    it "should decrement topic.posts_count when a new post is deleted" do
-      @topic.posts_count.should == 3
-      @topic.posts.delete_if { |post| post.id == @topic.posts[0].id }
-      @topic.save
-      Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
     end
 
   end
