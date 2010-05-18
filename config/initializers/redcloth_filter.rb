@@ -9,7 +9,7 @@ module RedCloth::Formatters::HTML
 
  ALLOWED_TAGS = {
      'a' => ['href', 'title'],
-     'title' => ['href', 'src', 'title'],
+     'img' => ['href', 'src', 'title'],
      'br' => [],
      'strong' => nil,
      'em' => nil,
