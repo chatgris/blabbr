@@ -75,17 +75,18 @@ describe Topic do
       @topic = Factory.create(:topic)
       @post = Factory.build(:post)
       @current_user = Factory.create(:user)
+      @chatgris = Factory.create(:chatgris)
       @member = Factory.build(:member)
     end
 
     it "should increment user.posts_count and unread post when a new post is created" do
+      User.by_nickname(@current_user.nickname).first.posts_count.should == 12
       @topic.new_post(@post)
       User.by_nickname(@current_user.nickname).first.posts_count.should == 13
     end
 
     it "should increment topic.posts_count when a new post is created" do
-      @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.posts_count.should == 3
+      Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
     end
 
   end
@@ -97,6 +98,7 @@ describe Topic do
       @post = Factory.build(:post)
       @current_user = Factory.create(:user)
       @member = Factory.build(:member)
+      @chatgris = Factory.create(:chatgris)
     end
 
     it "shouldn't add a unregistered user to topic" do
@@ -152,6 +154,7 @@ describe Topic do
   describe 'attachments' do
 
     before :all do
+      @chatgris = Factory.create(:chatgris)
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
     end
@@ -169,6 +172,7 @@ describe Topic do
       @topic = Factory.build(:topic)
       @post = Factory.build(:post)
       @current_user = Factory.create(:user)
+      @chatgris = Factory.create(:chatgris)
       @topic.new_post(@post)
       @topic.save
     end

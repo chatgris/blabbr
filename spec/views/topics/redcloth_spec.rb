@@ -32,7 +32,7 @@ describe Topic do
   end
 
   it "should allow smilies" do
-    textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\/uploads/smilies/doc.jpg\" /></p>"
+    textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\"/uploads/smilies/doc.jpg\" alt=\"doc\" /></p>"
   end
 
 end
