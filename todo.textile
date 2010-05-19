@@ -1,4 +1,10 @@
 h1. TODO
 
-* Add redcloth support
+* link_to_avatar
+* tracking those duplicates issues
 * More specs
+* html5 template
+* lastest version of sass
+* ajaxify
+* fragment cache
+* give a try to pusherapp

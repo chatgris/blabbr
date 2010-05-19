@@ -12,4 +12,8 @@ module LinkHelper
     end
   end
 
+  def link_to_avatar
+
+  end
+
 end
