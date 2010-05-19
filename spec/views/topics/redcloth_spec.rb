@@ -5,6 +5,12 @@ describe Topic do
     Textilizer.new(text).to_html
   end
 
+  before do
+    @smiley = Factory.build(:smiley)
+    @smiley.image = File.open(Rails.root.join("image.jpg"))
+    @smiley.save
+  end
+
   it "should do basic textile" do
     textilize("hello *world*").should == "<p>hello <strong>world</strong></p>"
   end
@@ -23,6 +29,10 @@ describe Topic do
 
   it "should escape javascript" do
     textilize("<script type=\"text/javascript\">alert(\"test\");</script>").should == "alert(\"test\");"
+  end
+
+  it "should allow smilies" do
+    textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\/uploads/smilies/doc.jpg\" /></p>"
   end
 
 end

@@ -4,7 +4,14 @@ class Textilizer
   end
 
   def to_html
-    RedCloth.new(@text).to_html
+    smilirize(RedCloth.new(@text).to_html)
+  end
+
+  def smilirize(text)
+    Smiley.all.flatten.each do |smiley|
+      text.gsub!(/:#{smiley.code}:/, "<img src=\"#{smiley.image.url}\" alt=\"#{smiley.code}\" />")
+    end
+    text
   end
 
 end

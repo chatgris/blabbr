@@ -6,9 +6,9 @@ class Smiley
 
   field :added_by, :type => String
   field :code, :type => String
-  field :smiley, :type => String
+  field :image, :type => String
 
-  mount_uploader :smiley, SmileyUploader
+  mount_uploader :image, SmileyUploader
 
   validates_presence_of :code, :added_by
   validates_uniqueness_of :code
