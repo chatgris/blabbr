@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize, :except => ['create']
 
   def edit
     @user = current_user

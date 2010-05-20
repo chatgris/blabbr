@@ -4,4 +4,4 @@
 %p
   = "Messages : #{@user.posts_count}"
 %p
-  = image_tag @user.avatar.url
+  = link_to_avatar @user

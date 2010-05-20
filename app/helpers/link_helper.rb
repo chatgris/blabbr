@@ -12,8 +12,8 @@ module LinkHelper
     end
   end
 
-  def link_to_avatar
-
+  def link_to_avatar(user)
+    link_to image_tag(user.avatar.url || user.gravatar_url), user_path(user.permalink)
   end
 
 end
