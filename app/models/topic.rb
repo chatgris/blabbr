@@ -24,7 +24,7 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    posts.create(:content => post.content, :nickname => post.nickname)
+    posts.create(:content => post.content, :user_id => post.user_id)
     save
   end
 

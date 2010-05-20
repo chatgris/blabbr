@@ -73,8 +73,8 @@ describe Topic do
 
     before :all do
       @topic = Factory.create(:topic)
-      @post = Factory.build(:post)
       @current_user = Factory.create(:user)
+      @post = Factory.build(:post, :user_id => @current_user.id)
       @chatgris = Factory.create(:chatgris)
       @member = Factory.build(:member)
     end
