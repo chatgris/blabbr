@@ -24,7 +24,7 @@
   end
 
   Factory.define :post do |p|
-    p.nickname "One user"
+    p.user_id "One user"
     p.content  "Some content"
   end
 

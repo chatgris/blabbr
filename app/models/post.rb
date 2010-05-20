@@ -3,7 +3,7 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
 
-  field :nickname
+  field :user_id
   field :content
   field :state
 
@@ -23,7 +23,7 @@ class Post
       end
     end
 
-  validates_presence_of :content, :nickname
+  validates_presence_of :content, :user_id
 
   before_create :set_unread, :update_topic_posts_count, :update_user_posts_count
 
