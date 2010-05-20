@@ -70,7 +70,7 @@ class Topic
   end
 
   def add_post
-    posts << Post.new(:content => post, :nickname => creator)
+    posts << Post.new(:content => post, :user_id => User.by_nickname(creator).first.id)
   end
 
 end

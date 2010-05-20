@@ -1,6 +1,6 @@
 %div{:id => post.id}
   %h4
-    = link_to post.nickname, user_path(post.nickname.parameterize.to_s)
+    = link_to_avatar post.user
   %div.bubble
     = post.content
   %hr

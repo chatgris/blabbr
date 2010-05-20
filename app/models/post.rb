@@ -8,6 +8,7 @@ class Post
   field :state
 
   embedded_in :topics, :inverse_of => :posts
+  belongs_to_related :user
 
   stateflow do
       initial :published

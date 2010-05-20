@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Topic do
 
   before :all do
+    @chatgris = Factory.create(:chatgris)
     @topic = Factory.create(:topic)
     @post = Factory.build(:post)
     @current_user = Factory.create(:user)
@@ -30,6 +31,11 @@ describe Topic do
   end
 
   describe 'validation' do
+
+    before :all do
+      @chatgris = Factory.create(:chatgris)
+    end
+
     it 'should required title' do
       Factory.build(:topic, :title => '').should_not be_valid
     end
@@ -72,11 +78,15 @@ describe Topic do
   describe "callback" do
 
     before :all do
+      @chatgris = Factory.create(:chatgris)
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
-      @chatgris = Factory.create(:chatgris)
       @member = Factory.build(:member)
+    end
+
+    it "should have a correct user_id for the first post" do
+      Topic.by_permalink(@topic.permalink).first.posts[0].user_id.should == @chatgris.id
     end
 
     it "should increment user.posts_count and unread post when a new post is created" do
@@ -94,11 +104,11 @@ describe Topic do
   describe 'members' do
 
     before :all do
-      @topic = Factory.create(:topic)
-      @post = Factory.build(:post)
-      @current_user = Factory.create(:user)
-      @member = Factory.build(:member)
       @chatgris = Factory.create(:chatgris)
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+      @post = Factory.build(:post, :user_id => @current_user.id)
+      @member = Factory.build(:member)
     end
 
     it "shouldn't add a unregistered user to topic" do
@@ -170,8 +180,8 @@ describe Topic do
 
     before :all do
       @topic = Factory.build(:topic)
-      @post = Factory.build(:post)
       @current_user = Factory.create(:user)
+      @post = Factory.build(:post, :user_id => @current_user.id)
       @chatgris = Factory.create(:chatgris)
       @topic.new_post(@post)
       @topic.save
