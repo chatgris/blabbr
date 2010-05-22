@@ -1,0 +1,17 @@
+defaults: &defaults
+  host: localhost
+
+development:
+  <<: *defaults
+  database: blabbr_dev
+
+test:
+  <<: *defaults
+  database: blabbr_test
+
+production:
+  host: <%= ENV['MONGOID_HOST'] %>
+  port: <%= ENV['MONGOID_PORT'] %>
+  username: <%= ENV['MONGOID_USERNAME'] %>
+  password: <%= ENV['MONGOID_PASSWORD'] %>
+  database: <%= ENV['MONGOID_DATABASE'] %>
