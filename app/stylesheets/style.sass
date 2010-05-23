@@ -12,6 +12,8 @@ hr
   border: none
   visibility: hidden
 a
+  text-decoration: none
+  color= !text
   img
     border: 0
 html
@@ -20,6 +22,8 @@ body
   background= !beige
   width: 95em
   margin: 0 auto
+.small
+  font-size: .75em
 h1
   float: left
   a
@@ -28,7 +32,6 @@ h1
     color= !orange
     text-shadow= !gray ".05em .05em .05em"
     padding: .4em
-    text-decoration: none
     line-height: 1.2em
 #header
   font-size: 1.6em
@@ -36,6 +39,36 @@ h1
     float: left
     li
       display: inline-block
+#topics
+  list-style: none
+  font-size: 1.4em
+  line-height: 1.4em
+  a
+    display: block
+  li
+    margin: .2em 0
+  ul
+    list-style: none
+    margin: 0 0 .7em 0
+    &:hover
+      padding: 0 0 0 .4em
+    li
+      display: inline-block
+    .unread
+      width: 3em
+      margin: 0 .4em 0 0
+      text-align: center
+      line-height: 2.5em
+      a
+        +bordures-rondes(#FFFFFF)
+      a.new
+        +bordures-rondes(!orange)
+    .title
+      width: 30em
+      vertical-align: top
+      line-height: 1em
+      em
+        color= !gray
 #content
   h4
     float: left
