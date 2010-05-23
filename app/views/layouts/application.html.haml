@@ -7,8 +7,6 @@
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery.rails.js"
     = csrf_meta_tag
   %body
-    - flash.each do |name, msg|
-      = content_tag :div, msg, :id => "flash_#{name}"
     #header
       %h1
         = link_to "blabbr", root_path
@@ -20,5 +18,7 @@
         %li
           = link_to t('logout'), logout_path
     %hr
+    - flash.each do |name, msg|
+      = content_tag :div, msg, :id => "flash_#{name}"
     #content
       =yield

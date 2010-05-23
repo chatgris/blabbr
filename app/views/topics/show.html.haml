@@ -27,7 +27,7 @@
 #addComment
   = render 'posts/form', :collection => @post
 %p
-  = link_to "Edit", edit_topic_path(@topic.permalink)
+  = link_to "Edit", edit_topic_path(@topic)
   |
   = link_to "Destroy", @topic, :confirm => 'Are you sure?', :method => :delete
   |
