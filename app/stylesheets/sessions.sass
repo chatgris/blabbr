@@ -8,13 +8,14 @@
   src: url(Floozy__.ttf)
 html
   font: 62.5%/1.6em  Arial, sans-serif
+  color: #777777
 body
-  background= !gray
+  background= !beige
 h1
   font-family: Floozy
   font-size: 12em
   color= !orange
-  text-shadow= !aoi ".05em .05em .05em"
+  text-shadow= !gray ".05em .05em .05em"
   padding: .4em .2em
   line-height: 1.1em
 .center
@@ -28,11 +29,14 @@ input, label
   font-size: 1.2em
 input[type=text], input[type=file], input[type=password]
   border= !orange "1px solid"
+  -moz-border-radius: 3px
+  -webkit-border-radius: 3px
   width: 350px
   display: inline
   height: 2.5em
 input[type=text]:focus, textarea:focus, input[type=password]:focus
-  border= !aoi "1px solid"
+  -moz-box-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
+  -moz-webkit-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
 input[type=submit]
   +bordures-rondes(!orange)
   display: inline-block
@@ -40,7 +44,6 @@ input[type=submit]
   margin: 0 .5em
   font-weight: bold
   border: 0
-  color: #000000
   cursor: pointer
   text-decoration: none
   position: relative
