@@ -1,7 +1,7 @@
 h1. TODO
 
-* link_to_avatar
 * tracking those duplicates issues
+* add some index
 * More specs
 * html5 template
 * lastest version of sass
