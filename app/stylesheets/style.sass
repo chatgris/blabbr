@@ -17,7 +17,7 @@ a
   img
     border: 0
 html
-  font: 62.5%/1.6em  Arial, sans-serif
+  font: 62.5%/1.6em  Helvetica, Arial, sans-serif
 body
   background= !beige
   width: 95em
@@ -35,10 +35,23 @@ h1
     line-height: 1.2em
 #header
   font-size: 1.6em
-  ul
-    float: left
-    li
-      display: inline-block
+#user_info
+  +bordures-rondes-bas(#eecc99)
+  float: right
+  padding: .2em .5em .1em .5em
+  font-size: .8em
+  margin: 0 1.5em 0 0
+  li
+    display: inline-block
+    vertical-align: middle
+    a
+      padding: 0 .3em 0 .4em
+      text-shadow: 1px 1px 0 #FFFFFF
+  li#avatar
+    a
+      padding: 0
+  li + li
+    border-left: 1px solid #eeddcc
 #topics
   list-style: none
   font-size: 1.4em
