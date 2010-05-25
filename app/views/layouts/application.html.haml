@@ -13,12 +13,16 @@
       %ul#user_info
         %li#avatar
           = link_to_avatar_thumb current_user
+          = link_to current_user.nickname, user_path(current_user.permalink)
         %li
           = link_to t('home'), topics_path
         %li
           = link_to t('preferences'), home_path
         %li
           = link_to t('logout'), logout_path
+      %ul#general
+        %li
+          = link_to t('topics.new'), new_topic_path
     %hr
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"

@@ -22,36 +22,65 @@ body
   background= !beige
   width: 95em
   margin: 0 auto
+  color= !text
 .small
   font-size: .75em
-h1
-  float: left
-  a
-    font-family: Floozy
-    font-size: 1.5em
-    color= !orange
-    text-shadow= !gray ".05em .05em .05em"
-    padding: .4em
-    line-height: 1.2em
 #header
-  font-size: 1.6em
-#user_info
-  +bordures-rondes-bas(#eecc99)
-  float: right
-  padding: .2em .5em .1em .5em
-  font-size: .8em
-  margin: 0 1.5em 0 0
+  h1
+    margin: .2em 0 0 0
+    float: left
+    font-size: 6em
+    line-height: 1em
+    a
+      font-family: Floozy
+      color= !orange
+      text-shadow= !gray ".05em .05em .05em"
+      padding: .4em
+      &:hover
+        text-shadow: #FFF .05em .05em .05em
+  ul
+    float: right
+    font-size: 1.2em
+    font-weight: bold
   li
     display: inline-block
-    vertical-align: middle
+    vertical-align: top
     a
-      padding: 0 .3em 0 .4em
       text-shadow: 1px 1px 0 #FFFFFF
+#user_info
+  +bordures-rondes-bas(#eecc99)
+  padding: .5em .8em
+  margin: 0 1.5em 0 0
+  li
+    padding: .2em 0 0 0
+  a
+    padding: 0 .5em 0 .6em
+    img
+      float: left
+      margin: -.5em .5em 0 0
+    &:hover
+      text-decoration: underline
   li#avatar
     a
       padding: 0
   li + li
     border-left: 1px solid #eeddcc
+#general
+  margin: 1em 1.5em 2em 0
+  clear: right
+  a
+    display: block
+    +bordures-rondes(#eecc99)
+    padding: .3em .6em
+    font-weight: bold
+    &:hover
+      background= !orange
+      color: white
+      text-shadow= !text "1px 1px 0"
+#content
+  width: 70em
+  +bordures-rondes(#FFF)
+  padding: 1em
 #topics
   list-style: none
   font-size: 1.4em
@@ -83,6 +112,15 @@ h1
       em
         color= !gray
 #content
+h2
+  font-size: 2em
+  margin: 0 0 1em 0
+  text-shadow= !gray "1px 1px 0"
+  color= !orange
+.post
+  margin: 0 0 1.5em 0
+  border-top= !beige "solid 1px"
+  padding: .5em 0 0 0
   h4
     float: left
     margin: 0 0 .5em 0
@@ -90,40 +128,13 @@ h1
     margin: .2em 0 .4em 0
     line-height: 1.4em
     font-size: 1.4em
+  .date
+    color: #888888
+    text-align: right
+    font-size: 1.1em
+    font-style: italic
+    margin: 0
 .bubble
-  position: relative
-  padding: .5em 1em
-  width: 600px
+  width: 59em
   float: left
-  margin: 1em 0 3em 30px
-  border= !orange "3px solid"
-  color: #333
-  background: #fff
-  -moz-border-radius: 10px
-  -webkit-border-radius: 10px
-  border-radius: 10px
-  &:before
-    content: "\00a0"
-    display: block
-    position: absolute
-    width: 0
-    height: 0
-    top: 10px
-    left: -49px
-    bottom: auto
-    border-width: 15px 24px
-    border-style: solid
-    border-color: transparent rgb(250,105,0) transparent transparent
-  &:after
-    content: "\00a0"
-    display: block
-    position: absolute
-    width: 0
-    height: 0
-    border-top-color: #fff
-    top: 13px
-    left: -41px
-    bottom: auto
-    border-width: 12px 21px
-    border-style: solid
-    border-color: transparent #fff transparent transparent
+  margin: 0 0 3em 2em

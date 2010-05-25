@@ -1,16 +1,5 @@
 - title @topic.title
-%p
-  %strong
-    Title:
-  = h @topic.title
-%p
-  %strong
-    Permalink:
-  = h @topic.permalink
-%p
-  %strong
-    Creator:
-  = h @topic.creator
+%h2= @topic.title
 = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
   %p
     = text_field_tag :nickname, params[:nickname]

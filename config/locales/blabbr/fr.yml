@@ -12,3 +12,5 @@ fr:
   member:
     not_find: "Utilisateur non trouvé"
     add_true: "{{name}} peut maintenant suivre ce topic"
+  topics:
+    new: "Nouveau sujet"

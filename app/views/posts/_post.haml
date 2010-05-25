@@ -1,6 +1,10 @@
-%div{:id => post.id}
+%div{:id => post.id, :class => "post"}
   %h4
     = link_to_avatar post.user
+    %br
+    = link_to post.user.nickname, user_path(post.user.permalink)
+  %p.date
+    = post.created_at
   %div.bubble
     =raw textilize post.content
   %hr
