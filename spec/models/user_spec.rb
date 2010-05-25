@@ -61,7 +61,7 @@ describe User do
     end
 
     it "should set a gravatar_url" do
-      User.by_permalink(@user.permalink).first.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size=80"
+      User.by_permalink(@user.permalink).first.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size="
     end
   end
 
