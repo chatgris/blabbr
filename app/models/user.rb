@@ -36,7 +36,7 @@ class User
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(email.downcase.strip)[0..31]
-    self.gravatar_url = "http://www.gravatar.com/avatar/#{hash}.jpg?size=80"
+    self.gravatar_url = "http://www.gravatar.com/avatar/#{hash}.jpg?size="
   end
 
 end
