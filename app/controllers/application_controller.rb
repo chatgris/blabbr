@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :current_user, :logged_in?
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :creator?
 
   protected
 
@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     session[:current_user]
+  end
+
+  def creator?(user)
+    user == current_user.nickname
   end
 
   def authorize
