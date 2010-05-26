@@ -1,11 +1,17 @@
 - title @topic.title
 %h2= @topic.title
-- if creator? @topic.creator
-  %ul#topic-admin
+%ul.topic-list
+  - if creator? @topic.creator
     %li
       = link_to t('topics.edit'), edit_topic_path(@topic)
     %li
       = link_to t('topics.destroy'), @topic, :confirm => 'Are you sure ?', :method => :delete
+  %li
+    = link_to @topic.posts_count, topic_path(@topic.permalink)
+  %li
+    = link_to @topic.members.size, topic_path(@topic.permalink)
+  %li
+    = link_to @topic.attachments_count, topic_path(@topic.permalink)
 %hr
 - if creator? @topic.creator
   = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
