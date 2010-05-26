@@ -64,7 +64,7 @@ class TopicsController < ApplicationController
   def add_post
     @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
     @topic.new_post(Post.new(:user_id => current_user.id, :content => params[:content]))
-    redirect_to topic_path
+    redirect_to :back
   end
 
 
