@@ -1,9 +1,15 @@
 - title @topic.title
 %h2= @topic.title
+%ul#topic-admin
+  %li
+    = link_to t('topics.edit'), edit_topic_path(@topic)
+  %li
+    = link_to t('topics.destroy'), @topic, :confirm => 'Are you sure ?', :method => :delete
+%hr
 = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
-  %p
-    = text_field_tag :nickname, params[:nickname]
-    = submit_tag "Ajouter"
+  = text_field_tag :nickname, params[:nickname]
+  = submit_tag "Ajouter"
+
 %p
   %strong
     = t('subscriber').pluralize
@@ -15,9 +21,3 @@
   = will_paginate @posts
 #addComment
   = render 'posts/form', :collection => @post
-%p
-  = link_to "Edit", edit_topic_path(@topic)
-  |
-  = link_to "Destroy", @topic, :confirm => 'Are you sure?', :method => :delete
-  |
-  = link_to "View All", topics_path

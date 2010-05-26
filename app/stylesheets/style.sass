@@ -55,6 +55,7 @@ body
     padding: .2em 0 0 0
   a
     padding: 0 .5em 0 .6em
+    text-transform: lowercase
     img
       float: left
       margin: -.5em .5em 0 0
@@ -73,6 +74,7 @@ body
     +bordures-rondes(#eecc99)
     padding: .3em .6em
     font-weight: bold
+    text-transform: lowercase
     &:hover
       background= !orange
       color: white
@@ -117,6 +119,18 @@ h2
   margin: 0 0 1em 0
   text-shadow= !gray "1px 1px 0"
   color= !orange
+  float: left
+#topic-admin
+  float: right
+  text-transform: lowercase
+  li
+    display: inline-block
+    a
+      +bordures-rondes(!orange)
+      padding: .3em .6em
+      font-weight: bold
+      &:hover
+        text-decoration: underline
 .post
   margin: 0 0 1.5em 0
   border-top= !beige "solid 1px"
@@ -141,15 +155,13 @@ h2
 fieldset
   padding: 1em 0
   border: 0
-  line-height: 2.5em
-input, label
-  font-size: 1.2em
+  line-height: 2em
 input[type=text], input[type=file], textarea
   border= !orange "1px solid"
   -moz-border-radius: 3px
   -webkit-border-radius: 3px
   display: inline
-  height: 2em
+  height: 1.9em
 textarea
   width: 57em
   height: 10em
