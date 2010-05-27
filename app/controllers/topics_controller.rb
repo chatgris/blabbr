@@ -79,7 +79,6 @@ class TopicsController < ApplicationController
   end
 
   def destroy
-    @topic =Topic.first(:permalink => params[:id], 'creator' => current_user.nickname)
     unless @topic.nil?
       @topic.destroy
       flash[:notice] = "Successfully destroyed topic."
