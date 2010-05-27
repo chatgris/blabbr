@@ -10,6 +10,8 @@ describe Member do
   it { Member.fields['page'].type.should == Integer}
   it { Member.fields.keys.should be_include('post_id')}
   it { Member.fields['post_id'].type.should == String}
+  it { Member.fields.keys.should be_include('posts_count')}
+  it { Member.fields['posts_count'].type.should == Integer}
 
   describe 'validation' do
     it 'should required title' do

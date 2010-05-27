@@ -5,6 +5,7 @@ class Member
   field :unread, :type => Integer, :default => 0
   field :page, :type => Integer, :default => 1
   field :post_id
+  field :posts_count, :type => Integer, :default => 0
 
   embedded_in :topic, :inverse_of => :members
 
