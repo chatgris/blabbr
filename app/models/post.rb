@@ -45,6 +45,9 @@ class Post
         member.post_id = self.id
         member.page = self.topics.posts_count / PER_PAGE + 1
       end
+      if member.nickname == self.user.nickname
+        member.posts_count += 1
+      end
       member.unread += 1
     end
   end

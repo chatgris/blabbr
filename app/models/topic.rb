@@ -66,7 +66,7 @@ class Topic
   end
 
   def creator_as_members
-    members << Member.new(:nickname => creator, :page => members.size)
+    members << Member.new(:nickname => creator, :page => members.size, :posts_count => 1)
   end
 
   def add_post

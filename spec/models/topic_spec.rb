@@ -111,6 +111,10 @@ describe Topic do
       @member = Factory.build(:member)
     end
 
+    it "should increment member.posts_count for creator" do
+      Topic.by_permalink(@topic.permalink).first.members[0].posts_count.should == 1
+    end
+
     it "shouldn't add a unregistered user to topic" do
       Topic.by_permalink(@topic.permalink).first.members.size.should == 1
       @topic.new_member(@member.nickname)
@@ -123,6 +127,10 @@ describe Topic do
       Topic.by_permalink(@topic.permalink).first.members.size.should == 2
     end
 
+    it "should have a posts_count equals to 0 when invited" do
+      Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
+    end
+
     it "shouldn't add a user if this user is already invited" do
       @topic.new_member(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members.size.should == 2
@@ -133,7 +141,15 @@ describe Topic do
       Topic.by_permalink(@topic.permalink).first.members[1].unread.should == @topic.posts.size
     end
 
-     it "should increment unread count when a post is added" do
+    it "should have increment posts_count when a new post is added by user" do
+      Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 1
+    end
+
+    it "shouldn't increment posts_count of creator in this context" do
+      Topic.by_permalink(@topic.permalink).first.members[0].posts_count.should == 1
+    end
+
+    it "should increment unread count when a post is added" do
       Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 2
       @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 3
