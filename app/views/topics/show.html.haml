@@ -7,7 +7,7 @@
     %li
       = link_to t('topics.destroy'), @topic, :confirm => 'Are you sure ?', :method => :delete
   %li
-    = link_to @topic.posts_count, topic_path(@topic.permalink)
+    = link_to post_ratio(@topic), topic_path(@topic.permalink)
   %li
     = link_to @topic.members.size, topic_path(@topic.permalink)
   %li
