@@ -12,6 +12,8 @@ describe Member do
   it { Member.fields['post_id'].type.should == String}
   it { Member.fields.keys.should be_include('posts_count')}
   it { Member.fields['posts_count'].type.should == Integer}
+  it { Member.fields.keys.should be_include('attachments_count')}
+  it { Member.fields['attachments_count'].type.should == Integer}
 
   describe 'validation' do
     it 'should required title' do

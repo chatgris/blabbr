@@ -6,6 +6,7 @@ class Member
   field :page, :type => Integer, :default => 1
   field :post_id
   field :posts_count, :type => Integer, :default => 0
+  field :attachments_count, :type => Integer, :default => 0
 
   embedded_in :topic, :inverse_of => :members
 
