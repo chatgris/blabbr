@@ -188,9 +188,19 @@ describe Topic do
       @current_user = Factory.create(:user)
     end
 
+    it "should have a member.attachments_count equals to 0" do
+      Topic.by_permalink(@topic.permalink).first.members[0].attachments_count.should == 0
+    end
+
+    it "should increment  member.attachments_count when a new attachment is added" do
+      @topic.new_attachment(@chatgris.nickname, File.open(Rails.root.join("image.jpg")))
+      # Got a duplicate member here
+      Topic.by_permalink(@topic.permalink).first.members[1].attachments_count.should == 1
+    end
+
     it "should update attachments_count when a attachment is added or deleted" do
       @topic.new_attachment(@current_user.nickname, File.open(Rails.root.join("image.jpg")))
-      Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 1
+      Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 2
     end
 
   end

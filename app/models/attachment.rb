@@ -18,6 +18,11 @@ class Attachment
   protected
 
   def update_attachments_count
+    self.attachmentable.members.each do |member|
+      if member.nickname == nickname
+        member.attachments_count += 1
+      end
+    end
     self.attachmentable.attachments_count += 1
   end
 
