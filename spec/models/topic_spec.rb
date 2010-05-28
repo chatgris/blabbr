@@ -25,6 +25,9 @@ describe Topic do
   it { Topic.fields.keys.should be_include('attachments_count')}
   it { Topic.fields['attachments_count'].type.should == Integer}
 
+  it { Topic.fields.keys.should be_include('state')}
+  it { Topic.fields['state'].type.should == String}
+
 
   it "should be valid" do
     @topic.should be_valid
@@ -193,6 +196,29 @@ describe Topic do
   end
 
   describe 'stateflow' do
+
+    before :all do
+      @current_user = Factory.create(:chatgris)
+      @topic = Factory.create(:topic)
+    end
+
+    it "should be set to published by default" do
+      Topic.by_permalink(@topic.permalink).first.state.should == "published"
+    end
+
+    it "should set a topic as deleted" do
+      @topic.delete!
+      Topic.by_permalink(@topic.permalink).first.state.should == "deleted"
+    end
+
+    it "should set a deleted topic as published" do
+      @topic.publish!
+      Topic.by_permalink(@topic.permalink).first.state.should == "published"
+    end
+
+  end
+
+  describe 'stateflow for embeddeded posts' do
 
     before :all do
       @topic = Factory.build(:topic)

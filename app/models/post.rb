@@ -11,18 +11,18 @@ class Post
   belongs_to_related :user
 
   stateflow do
-      initial :published
+    initial :published
 
-      state :published, :deleted
+    state :published, :deleted
 
-      event :delete do
-        transitions :from => :published, :to => :deleted
-      end
-
-      event :publish do
-        transitions :from => :deleted, :to => :published
-      end
+    event :delete do
+      transitions :from => :published, :to => :deleted
     end
+
+    event :publish do
+      transitions :from => :deleted, :to => :published
+    end
+  end
 
   validates_presence_of :content, :user_id
 

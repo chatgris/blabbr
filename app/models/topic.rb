@@ -1,18 +1,34 @@
 class Topic
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Stateflow
 
   field :creator
   field :title
   field :permalink
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
+  field :state
 
   embeds_many :members
   embeds_many :posts
   embeds_many :attachments
 
   attr_accessor :post
+
+  stateflow do
+    initial :published
+
+    state :published, :deleted
+
+    event :delete do
+      transitions :from => :published, :to => :deleted
+    end
+
+    event :publish do
+      transitions :from => :deleted, :to => :published
+    end
+  end
 
   before_validate :set_permalink
   validates_uniqueness_of :title, :permalink
