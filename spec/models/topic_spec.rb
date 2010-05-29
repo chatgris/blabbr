@@ -271,6 +271,23 @@ describe Topic do
     end
   end
 
+  describe 'updating a post' do
+    before :all do
+      @chatgris = Factory.create(:chatgris)
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+      @post = Factory.build(:post, :user_id => @current_user.id)
+      @topic.new_post(@post)
+    end
+
+    it "should update a post" do
+      post = Topic.by_permalink(@topic.permalink).first.posts[1]
+      @topic.update_post(post, "This post was edited")
+      Topic.by_permalink(@topic.permalink).first.posts[1].content.should == "This post was edited"
+    end
+
+  end
+
   describe "associations" do
 
     it "should embed many members" do

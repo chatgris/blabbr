@@ -44,6 +44,11 @@ class Topic
     save
   end
 
+  def update_post(post, content)
+    post.content = content
+    post.save
+  end
+
   def new_member(nickname)
     if User.by_nickname(nickname).first
       members.create(:nickname => nickname, :unread => self.posts.size) unless Topic.by_permalink(self.permalink).by_subscribed_topic(nickname).first
