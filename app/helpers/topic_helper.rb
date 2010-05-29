@@ -8,4 +8,11 @@ module TopicHelper
       return "#{member.posts_count}/#{topic.posts_count}" if member.nickname == current_user.nickname
     end
   end
+
+  def attachments_ratio(topic)
+    topic.members.each do |member|
+      return "#{member.attachments_count}/#{topic.attachments_count}" if member.nickname == current_user.nickname
+    end
+  end
+
 end
