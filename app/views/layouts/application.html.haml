@@ -4,6 +4,7 @@
     %title
       = h(yield(:title) || "Blabbr")
     = stylesheet_link_tag 'style'
+    %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery.rails.js"
     = csrf_meta_tag
   %body
