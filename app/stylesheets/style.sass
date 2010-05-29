@@ -19,7 +19,7 @@ a
 html
   font: 62.5%/1.6em  Helvetica, Arial, sans-serif
 body
-  background= !beige
+  background= !background
   width: 95em
   margin: 0 auto
   color= !text
@@ -75,20 +75,55 @@ body
 .topic-list
   float: right
   font-size: 1.2em
+  margin: 0 0 1.5em 0
+  #ratio:hover
+    background= !beige
   li
     display: inline-block
     margin: 0 0 0 .4em
-  a
-    display: block
     +bordures-rondes(#eecc99)
-    padding: .3em .6em
     font-weight: bold
     text-transform: lowercase
     text-shadow: 1px 1px 0 #FFFFFF
     &:hover
       background= !orange
-      color: white
       text-shadow= !text "1px 1px 0"
+    li
+      background: transparent
+      -moz-border-radius: 0
+      -moz-box-shadow: none
+      -webkit-border-radius: 0
+      -webkit-box-shadow: none
+      margin: 0
+      &:hover
+        background: transparent
+      a
+        &:hover
+          text-decoration: underline
+    li + li
+      border-left= !background "1px solid"
+    a
+      display: block
+      padding: .3em .6em .3em 22px
+      &:hover
+        color: white
+#posts-ratio a
+  background: url(images/post.png) no-repeat 4px center
+#members a
+  background: url(images/member.png) no-repeat 4px center
+#add-member
+  background= !beige "url(images/add-member.png) no-repeat 4px center"
+  padding: 0 0 0 22px
+  &:hover
+    background= !orange "url(images/add-member.png) no-repeat 4px center"
+#files-ratio a
+  background: url(images/file.png) no-repeat 4px center
+.edit a
+  background: url(images/edit.png) no-repeat 4px center
+.destroy a
+  background: url(images/destroy.png) no-repeat 4px center
+.new a
+  background: url(images/new.png) no-repeat 4px center
 #contents
   width: 70em
   +bordures-rondes(#FFF)
@@ -129,7 +164,7 @@ h2
   margin: 0 0 1em 0
   text-shadow= !gray "1px 1px 0"
   color= !orange
-  float: left
+  clear: both
 #topic-admin
   float: right
   text-transform: lowercase
@@ -173,7 +208,7 @@ input[type=text], input[type=file], textarea
   -moz-border-radius: 3px
   -webkit-border-radius: 3px
   display: inline
-  height: 1.9em
+  height: 1.4em
 textarea
   width: 55em
   height: 10em
@@ -188,10 +223,11 @@ input[type=text]:focus, textarea:focus, input[type=password]:focus
   -moz-box-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
   -moz-webkit-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
 input[type=submit]
-  +bordures-rondes(!orange)
-  display: inline-block
-  padding: .4em 1em
-  margin: 0 .5em
+  padding: 0 .3em 0 0
+  font: 1em/1.6em  Helvetica, Arial, sans-serif
+  text-shadow: 1px 1px 0 #FFFFFF
+  color: #444444
+  background: transparent
   font-weight: bold
   border: 0
   cursor: pointer
@@ -205,7 +241,8 @@ input[type=submit]
     left: 2px
 
   &:hover
-    text-shadow: 2px 2px 2px #888888
+    text-shadow= !text "1px 1px 0"
+    color: #FFFFFF
 
 input[type="submit"]::-moz-focus-inner
   border: none

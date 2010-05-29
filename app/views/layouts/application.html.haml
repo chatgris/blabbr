@@ -21,7 +21,7 @@
         %li
           = link_to t('logout'), logout_path
       %ul.topic-list
-        %li
+        %li.new
           = link_to t('topics.new'), new_topic_path
     %hr
     - flash.each do |name, msg|

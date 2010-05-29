@@ -1,25 +1,27 @@
 - title @topic.title
-%h2= @topic.title
 %ul.topic-list
   - if creator? @topic.creator
-    %li
+    %li#add-member
+      = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
+        = text_field_tag :nickname, params[:nickname]
+        = submit_tag "Ajouter"
+    %li.edit
       = link_to t('topics.edit'), edit_topic_path(@topic)
-    %li
+    %li.destroy
       = link_to t('topics.destroy'), @topic, :confirm => 'Are you sure ?', :method => :delete
-  %li
-    = link_to post_ratio(@topic), topic_path(@topic.permalink)
-  %li
-    = link_to @topic.members.size, topic_path(@topic.permalink)
-  %li
-    = link_to @topic.attachments_count, topic_path(@topic.permalink)
+  %li#ratio
+    %ul
+      %li#posts-ratio
+        = link_to post_ratio(@topic), topic_path(@topic.permalink)
+      %li#members
+        = link_to @topic.members.size, topic_path(@topic.permalink)
+      %li#files-ratio
+        = link_to @topic.attachments_count, topic_path(@topic.permalink)
+%h2= @topic.title
 %hr
 - if creator? @topic.creator
-  = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
-    = text_field_tag :nickname, params[:nickname]
-    = submit_tag "Ajouter"
-  %p
-    %strong
-      = t('subscriber').pluralize
+  %strong
+    = t('subscriber').pluralize
     - @topic.members.each do |member|
       = member.nickname
       = link_to "X", remove_member_topic_path(@topic, :nickname => member.nickname), :method => :delete
