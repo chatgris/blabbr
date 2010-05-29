@@ -16,7 +16,7 @@
       %li#members
         = link_to @topic.members.size, topic_path(@topic.permalink)
       %li#files-ratio
-        = link_to @topic.attachments_count, topic_path(@topic.permalink)
+        = link_to attachments_ratio(@topic), topic_path(@topic.permalink)
 %h2= @topic.title
 %hr
 - if creator? @topic.creator

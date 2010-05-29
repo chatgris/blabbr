@@ -8,3 +8,4 @@ h1. TODO
 * ajaxify
 * fragment cache
 * give a try to pusherapp
+* css (form, notice)
