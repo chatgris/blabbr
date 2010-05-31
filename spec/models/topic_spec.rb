@@ -55,6 +55,8 @@ describe Topic do
       Factory.build(:topic, :post => '').should_not be_valid
     end
 
+    it 'should validates title.size'
+
     it 'should not valid if title is already taken' do
       Factory.create(:topic, :title => 'title')
       Factory.build(:topic, :title => 'title').should_not be_valid

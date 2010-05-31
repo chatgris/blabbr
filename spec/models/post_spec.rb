@@ -16,6 +16,9 @@ describe Post do
     it 'should required permalink' do
       Factory.build(:post, :content => '').should_not be_valid
     end
+
+    it 'should validates content.size'
+
   end
 
 end
