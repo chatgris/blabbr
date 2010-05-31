@@ -29,7 +29,7 @@ class TopicsController < ApplicationController
       flash[:notice] = "Successfully created topic."
       redirect_to topic_path(@topic.permalink)
     else
-      @post = Post.new(:content => params[:topic][:post])
+      @post = Post.new(:body => params[:topic][:post])
       render :action => 'new', :collection => @post
     end
   end
@@ -63,7 +63,7 @@ class TopicsController < ApplicationController
 
   def add_post
     @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
-    @topic.new_post(Post.new(:user_id => current_user.id, :content => params[:content]))
+    @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
     redirect_to :back
   end
 
