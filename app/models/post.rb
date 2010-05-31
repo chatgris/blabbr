@@ -4,7 +4,7 @@ class Post
   include Stateflow
 
   field :user_id
-  field :content
+  field :body
   field :state
 
   embedded_in :topics, :inverse_of => :posts
@@ -24,7 +24,8 @@ class Post
     end
   end
 
-  validates_presence_of :content, :user_id
+  validates_presence_of :body, :user_id
+  validates_length_of :body, :maximum => 10000
 
   before_create :set_unread, :update_topic_posts_count, :update_user_posts_count
 

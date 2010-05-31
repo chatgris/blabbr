@@ -33,6 +33,7 @@ class Topic
   before_validate :set_permalink
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
+  validates_length_of :title, :maximum => 100
 
   before_create :creator_as_members, :add_post
 
@@ -40,12 +41,12 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    posts.create(:content => post.content, :user_id => post.user_id)
+    posts.create(:body => post.body, :user_id => post.user_id)
     save
   end
 
-  def update_post(post, content)
-    post.content = content
+  def update_post(post, body)
+    post.body = body
     post.save
   end
 
@@ -91,7 +92,9 @@ class Topic
   end
 
   def add_post
-    posts << Post.new(:content => post, :user_id => User.by_nickname(creator).first.id)
+    user = User.by_nickname(creator).first
+    posts << Post.new(:body => post, :user_id => user.id)
+    user.update_attributes!(:posts_count => user.posts_count + 1)
   end
 
 end

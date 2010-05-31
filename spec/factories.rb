@@ -25,7 +25,7 @@
 
   Factory.define :post do |p|
     p.user_id "One user"
-    p.content  "Some content"
+    p.body    "Some content"
   end
 
   Factory.define :member do |s|

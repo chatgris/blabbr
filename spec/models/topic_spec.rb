@@ -55,7 +55,9 @@ describe Topic do
       Factory.build(:topic, :post => '').should_not be_valid
     end
 
-    it 'should validates title.size'
+    it 'should validates title.size' do
+      Factory.build(:topic, :title => (0...101).map{65.+(rand(25)).chr}.join).should_not be_valid
+    end
 
     it 'should not valid if title is already taken' do
       Factory.create(:topic, :title => 'title')
@@ -76,7 +78,7 @@ describe Topic do
     end
 
     it "should have a post" do
-      @topic.posts[0].content.should == @post.content
+      @topic.posts[0].body.should == @post.body
     end
   end
 
@@ -88,6 +90,10 @@ describe Topic do
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
       @member = Factory.build(:member)
+    end
+
+    it "should increment user.posts_count" do
+      User.by_nickname(@creator.nickname).first.posts_count.should == 1
     end
 
     it "should have a correct user_id for the first post" do
@@ -285,7 +291,7 @@ describe Topic do
     it "should update a post" do
       post = Topic.by_permalink(@topic.permalink).first.posts[1]
       @topic.update_post(post, "This post was edited")
-      Topic.by_permalink(@topic.permalink).first.posts[1].content.should == "This post was edited"
+      Topic.by_permalink(@topic.permalink).first.posts[1].body.should == "This post was edited"
     end
 
   end
