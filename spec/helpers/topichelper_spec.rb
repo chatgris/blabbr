@@ -2,7 +2,7 @@ require 'spec_helper'
 
 
 def current_user(stubs = {})
-  @current_user ||= Factory.create(:chatgris)
+  @current_user ||= Factory.create(:creator)
 end
 
 describe TopicHelper do
@@ -42,7 +42,7 @@ describe TopicHelper do
   describe "ratio links" do
 
     before :all do
-      @current_user = Factory.create(:chatgris)
+      @current_user = Factory.create(:creator)
       @topic = Factory.create(:topic)
     end
 

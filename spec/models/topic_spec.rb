@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Topic do
 
   before :all do
-    @chatgris = Factory.create(:chatgris)
+    @creator  = Factory.create(:creator )
     @topic = Factory.create(:topic)
     @post = Factory.build(:post)
     @current_user = Factory.create(:user)
@@ -36,7 +36,7 @@ describe Topic do
   describe 'validation' do
 
     before :all do
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
     end
 
     it 'should required title' do
@@ -81,7 +81,7 @@ describe Topic do
   describe "callback" do
 
     before :all do
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
@@ -89,7 +89,7 @@ describe Topic do
     end
 
     it "should have a correct user_id for the first post" do
-      Topic.by_permalink(@topic.permalink).first.posts[0].user_id.should == @chatgris.id
+      Topic.by_permalink(@topic.permalink).first.posts[0].user_id.should == @creator .id
     end
 
     it "should increment user.posts_count and unread post when a new post is created" do
@@ -107,7 +107,7 @@ describe Topic do
   describe 'members' do
 
     before :all do
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
@@ -183,7 +183,7 @@ describe Topic do
   describe 'attachments' do
 
     before :all do
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
     end
@@ -193,7 +193,7 @@ describe Topic do
     end
 
     it "should increment  member.attachments_count when a new attachment is added" do
-      @topic.new_attachment(@chatgris.nickname, File.open(Rails.root.join("image.jpg")))
+      @topic.new_attachment(@creator .nickname, File.open(Rails.root.join("image.jpg")))
       # Got a duplicate member here
       Topic.by_permalink(@topic.permalink).first.members[1].attachments_count.should == 1
     end
@@ -208,7 +208,7 @@ describe Topic do
   describe 'stateflow' do
 
     before :all do
-      @current_user = Factory.create(:chatgris)
+      @current_user = Factory.create(:creator )
       @topic = Factory.create(:topic)
     end
 
@@ -234,7 +234,7 @@ describe Topic do
       @topic = Factory.build(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
       @topic.new_post(@post)
       @topic.save
     end
@@ -273,7 +273,7 @@ describe Topic do
 
   describe 'updating a post' do
     before :all do
-      @chatgris = Factory.create(:chatgris)
+      @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)

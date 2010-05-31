@@ -1,7 +1,7 @@
   Factory.define :topic do |t|
     t.title       "One topic"
     t.permalink   "one-topic"
-    t.creator     "chatgris"
+    t.creator     "creator"
     t.post        "Some content"
   end
 
@@ -14,8 +14,8 @@
     u.posts_count  12
   end
 
-  Factory.define :chatgris, :class => "user" do |u|
-    u.nickname     "chatgris"
+  Factory.define :creator, :class => "user" do |u|
+    u.nickname     "creator"
     u.email        "email@email.com"
     u.permalink    "chatgris"
     u.identity_url "http://openid.net"
