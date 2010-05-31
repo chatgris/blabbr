@@ -47,6 +47,10 @@ describe User do
       Factory.build(:user, :email => '').should_not be_valid
     end
 
+    it 'should not valid a nickname.size > 40' do
+      Factory.build(:user, :nickname => "511843606ed9fcb0d1005a7b7b4e9598b07eae20-ea502f0c5590a49d7d429d880edfbc487fe99053").should_not be_valid
+    end
+
     it 'should not valid if login is already taken' do
       Factory.create(:user)
       Factory.build(:user, :nickname => 'one_user').should_not be_valid
