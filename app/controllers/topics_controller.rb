@@ -95,8 +95,10 @@ class TopicsController < ApplicationController
   end
 
   def reset_unread_posts
-    @topic.reset_unread(current_user.nickname)
-    @topic.save
+    if logged_in?
+      @topic.reset_unread(current_user.nickname)
+      @topic.save
+    end
   end
 
   def get_current_topic_for_creator
