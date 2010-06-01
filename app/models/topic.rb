@@ -64,7 +64,10 @@ class Topic
 
   def rm_member!(nickname)
     members.each do |member|
-      member.delete if member.nickname == nickname
+      if member.nickname == nickname
+        member.delete
+        break
+      end
     end
   end
 
