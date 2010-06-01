@@ -16,3 +16,5 @@ fr:
     new: "Nouveau sujet"
     edit: "Éditer le sujet"
     destroy: "Supprimer"
+  posts:
+    new: "Ajouter un commentaire"
