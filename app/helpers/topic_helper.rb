@@ -15,4 +15,13 @@ module TopicHelper
     end
   end
 
+  def members_without_creator(topic)
+    members = []
+    topic.members.each do |member|
+      next if member.nickname == topic.creator
+      members << member.nickname
+    end
+    members
+  end
+
 end

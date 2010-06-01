@@ -22,7 +22,7 @@
 - if creator? @topic.creator
   %strong
     = t('subscriber').pluralize
-    - @topic.members.each do |member|
+    - members_without_creator(@topic).each do |member|
       = member.nickname
       = link_to "X", remove_member_topic_path(@topic, :nickname => member.nickname), :method => :delete
 = will_paginate @posts

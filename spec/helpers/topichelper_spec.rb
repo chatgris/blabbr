@@ -54,4 +54,21 @@ describe TopicHelper do
       helper.attachments_ratio(@topic).should == "0/0"
     end
   end
+
+  describe "topics various helpers" do
+
+    before :all do
+      @creator = Factory.create(:creator)
+      @user = Factory.create(:user)
+      @topic = Factory.create(:topic)
+      @topic.new_member(@user.nickname)
+    end
+
+    it "should return a array of members without the creator" do
+      helper.members_without_creator(@topic).should include(@user.nickname)
+      helper.members_without_creator(@topic).should_not include(@topic.creator)
+    end
+
+  end
+
 end
