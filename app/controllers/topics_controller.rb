@@ -95,14 +95,14 @@ class TopicsController < ApplicationController
   end
 
   def reset_unread_posts
-    if logged_in?
+    if @topic
       @topic.reset_unread(current_user.nickname)
       @topic.save
     end
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.where('_id' => params[:id]).and('creator' => current_user.nickname).first
+    @topic = Topic.where('permalink' => params[:id]).and('creator' => current_user.nickname).first
     unless @topic
       flash[:error] = "You're not authorised to view this page"
       redirect_to :back

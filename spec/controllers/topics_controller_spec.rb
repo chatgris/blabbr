@@ -7,24 +7,33 @@ describe TopicsController do
       get :index
       response.should redirect_to login_path
     end
+
     it 'should not see show' do
       get :show, :id => Factory.build(:topic).id.to_s
       response.should redirect_to login_path
     end
+
+    it 'should not see new' do
+      get :new
+      response.should redirect_to login_path
+    end
+
     it 'should not can create project' do
       post :create, :topic => { :name => 'My big project' }
       response.should redirect_to login_path
     end
+
     it 'should not can edit a project' do
       get :edit, :id => Factory.build(:topic).id.to_s
       response.should redirect_to login_path
     end
   end
 
-  describe 'with a user logged' do
+  describe 'with creator as current_user' do
 
     before :all do
-      @current_user = Factory.build(:creator)
+      @current_user = Factory.create(:creator)
+      @topic = Factory.create(:topic)
     end
 
     before :each do
@@ -37,20 +46,19 @@ describe TopicsController do
       response.should be_success
     end
 
-    describe "GET index" do
-      it "assigns all topics as @topics"
+    it 'get new should be success' do
+      get :new
+      response.should be_success
     end
 
-    describe "GET show" do
-      it "assigns the requested topic as @topic"
+    it 'should see show' do
+      get :show, :id => @topic.permalink
+      response.should be_success
     end
 
-    describe "GET new" do
-      it "assigns a new topic as @topic"
-    end
-
-    describe "GET edit" do
-      it "assigns the requested topic as @topic"
+    it 'should see edit' do
+      get :edit, :id => @topic.permalink
+      response.should be_success
     end
 
     describe "POST create" do
@@ -87,5 +95,31 @@ describe TopicsController do
 
       it "redirects to the topics list"
     end
+  end
+
+  describe 'with creator as current_user' do
+
+    before :all do
+      @creator = Factory.create(:creator)
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+    end
+
+    before :each do
+      controller.stub!(:logged_in?).and_return(true)
+      controller.stub!(:current_user).and_return(@current_user)
+    end
+
+    it 'should see show' do
+      get :show, :id => @topic.permalink
+      response.should redirect_to topics_path
+    end
+
+    it 'should see edit' do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      get :edit, :id => @topic.permalink
+      response.should redirect_to :back
+    end
+
   end
 end
