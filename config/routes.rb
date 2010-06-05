@@ -1,4 +1,5 @@
 Blabbr::Application.routes.draw do |map|
+  match "/uploads/*path" => "gridfs#serve"
   resources :sessions
   resources :users
   match '/topics/page/:page' => 'topics#index'
