@@ -49,7 +49,7 @@ class TopicsController < ApplicationController
     else
       flash[:error] = t('member.not_find')
     end
-    redirect_to :back
+    redirect_to topic_path(@topic.permalink)
   end
 
   def remove_member
@@ -58,12 +58,16 @@ class TopicsController < ApplicationController
     else
       flash[:error] = t('member.not_find')
     end
-    redirect_to :back
+    redirect_to topic_path(@topic.permalink)
   end
 
   def add_post
     @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
-    @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
+    if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
+      flash[:notice] = t('post.success')
+    else
+      flash[:error] = t('post.error')
+    end
     redirect_to :back
   end
 
@@ -102,7 +106,7 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.where('permalink' => params[:id]).and('creator' => current_user.nickname).first
+    @topic = Topic.criteria.id(params[:id]).and('creator' => current_user.nickname).first
     unless @topic
       flash[:error] = "You're not authorised to view this page"
       redirect_to :back

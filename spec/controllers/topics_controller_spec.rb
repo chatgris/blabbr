@@ -57,47 +57,84 @@ describe TopicsController do
     end
 
     it 'should see edit' do
-      get :edit, :id => @topic.permalink
+      get :edit, :id => @topic.id
       response.should be_success
     end
 
-    describe "POST create" do
-
-      describe "with valid params" do
-
-        it "redirects to the created topic"
-      end
-
-      describe "with invalid params" do
-
-        it "re-renders the 'new' template"
-      end
-
+    it 'should create a new topic, and redirect to it' do
+      lambda do
+        post :create, :topic => { :title => 'New topic' }
+      end.should change(Topic, :count)
+      response.should redirect_to(topic_path(Topic.last.permalink))
+      flash[:notice].should == 'Successfully created topic.'
     end
 
-    describe "PUT update" do
-
-      describe "with valid params" do
-        it "updates the requested topic"
-
-        it "redirects to the topic"
-      end
-
-      describe "with invalid params" do
-        it "re-renders the 'edit' template"
-      end
-
+    it 'should not create a topic with wrong params' do
+      lambda do
+        post :create, :topic => { :title => '' }
+      end.should_not change(Topic, :count)
+      response.should be_success
     end
 
-    describe "DELETE destroy" do
-
-      it "destroys the requested topic"
-
-      it "redirects to the topics list"
+    it 'should update project name if user is admin on this project' do
+      put :update, :topic => {:title => 'New title'}, :id => @topic.id
+      response.should redirect_to(topic_path("new-title"))
+      @topic.reload.title.should == 'New title'
     end
+
+    it "it should not a member if he doesn't exist" do
+      put :add_member, :nickname => 'New member', :id => @topic.id
+      response.should redirect_to(topic_path(@topic.permalink))
+      flash[:error].should == I18n.t('member.not_find')
+    end
+
+    it "it should add a member" do
+      member = Factory.create(:user)
+      put :add_member, :nickname => member.nickname, :id => @topic.id
+      response.should redirect_to topic_path(@topic.permalink)
+      flash[:notice].should == I18n.t('member.add_success')
+    end
+
+    it "should fail when removing a user who is not a member" do
+      delete :remove_member, :nickname => "New member", :id => @topic.id
+      response.should redirect_to topic_path(@topic.permalink)
+      flash[:error].should == I18n.t('member.not_find')
+    end
+
+    it "should remove a user from members" do
+      member = Factory.build(:user)
+      delete :remove_member, :nickname => member.nickname, :id => @topic.id
+      response.should redirect_to topic_path(@topic.permalink)
+      flash[:notice].should == I18n.t('member.remove_success')
+    end
+
+    it "should add a post" do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      post = Factory.build(:post)
+      put :add_post, :post => post, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:notice].should == I18n.t('post.success')
+    end
+
+    it "should not add a post if params are wrong" do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      post = Factory.build(:post, :body => '')
+      put :add_post, :post => post, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('post.error')
+    end
+
+    it 'should delete the topic' do
+      lambda do
+        delete :destroy, :id => @topic.id
+      end.should change(Topic, :count).by(-1)
+      Topic.criteria.id(@topic.id).first.should be_nil
+      response.should redirect_to topics_path
+    end
+
   end
 
-  describe 'with creator as current_user' do
+  describe 'with a logged user as current_user' do
 
     before :all do
       @creator = Factory.create(:creator)

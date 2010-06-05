@@ -41,8 +41,11 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    posts.create(:body => post.body, :user_id => post.user_id)
-    save
+    if posts.create(:body => post.body, :user_id => post.user_id)
+      save
+    else
+      return false
+    end
   end
 
   def update_post(post, body)
@@ -65,10 +68,11 @@ class Topic
   def rm_member!(nickname)
     members.each do |member|
       if member.nickname == nickname
-        member.delete
+        return true if member.delete
         break
       end
     end
+    return false
   end
 
   def reset_unread(nickname)
