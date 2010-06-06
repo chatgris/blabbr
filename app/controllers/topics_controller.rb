@@ -1,6 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :authorize
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :add_member, :remove_member]
+  before_filter :get_current_topic_for_member, :only => [:show, :add_post]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
@@ -8,9 +9,8 @@ class TopicsController < ApplicationController
   end
 
   def show
-    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
     if @topic.nil?
-      flash[:error] = "You're not authorised to view this page"
+      flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     else
       @posts = @topic.posts.all.order_by([[:created_at, :desc]]).paginate :page => params[:page] || nil, :per_page => 50
@@ -38,7 +38,7 @@ class TopicsController < ApplicationController
     unless @topic.nil?
       @post = @topic.posts('created_at' => @topic.created_at).first
     else
-      flash[:error] = "You're not authorised to view this page"
+      flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     end
   end
@@ -62,7 +62,6 @@ class TopicsController < ApplicationController
   end
 
   def add_post
-    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
     if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
       flash[:notice] = t('post.success')
     else
@@ -108,7 +107,15 @@ class TopicsController < ApplicationController
   def get_current_topic_for_creator
     @topic = Topic.criteria.id(params[:id]).and('creator' => current_user.nickname).first
     unless @topic
-      flash[:error] = "You're not authorised to view this page"
+      flash[:error] = t('topic.not_auth')
+      redirect_to :back
+    end
+  end
+
+  def get_current_topic_for_member
+    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
+    unless @topic
+      flash[:error] = t('topic.not_auth')
       redirect_to :back
     end
   end

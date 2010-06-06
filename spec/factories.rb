@@ -14,6 +14,15 @@
     u.posts_count  12
   end
 
+  Factory.define :invited, :class => "user" do |u|
+    u.nickname     "Invited member"
+    u.email        "newmail@email.com"
+    u.permalink    "invited-member"
+    u.identity_url "http://www.myopenid.com"
+    u.locale       "fr"
+    u.posts_count  0
+  end
+
   Factory.define :creator, :class => "user" do |u|
     u.nickname     "creator"
     u.email        "email@email.com"

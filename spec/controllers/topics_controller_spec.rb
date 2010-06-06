@@ -134,7 +134,7 @@ describe TopicsController do
 
   end
 
-  describe 'with a logged user as current_user' do
+  describe 'with a logged user as current_user, not a member' do
 
     before :all do
       @creator = Factory.create(:creator)
@@ -145,18 +145,91 @@ describe TopicsController do
     before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
-    end
-
-    it 'should see show' do
-      get :show, :id => @topic.permalink
-      response.should redirect_to topics_path
-    end
-
-    it 'should see edit' do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+    end
+
+    it 'should not see topic' do
+      get :show, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
+    end
+
+    it 'should not see edit' do
       get :edit, :id => @topic.permalink
       response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
+    end
+
+    it 'get new should be success' do
+      get :new
+      response.should be_success
+    end
+
+    it "should not add a post" do
+      post = Factory.build(:post)
+      put :add_post, :post => post, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
+    end
+
+    it 'should not delete the topic' do
+      lambda do
+        delete :destroy, :id => @topic.id
+      end.should_not change(Topic, :count).by(-1)
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
     end
 
   end
+
+  describe 'with a logged user as current_user, current_user is a member' do
+
+    before :all do
+      @creator = Factory.create(:creator)
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+      @topic.new_member(@current_user.nickname)
+    end
+
+    before :each do
+      controller.stub!(:logged_in?).and_return(true)
+      controller.stub!(:current_user).and_return(@current_user)
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+    end
+
+    it 'should see topic' do
+      get :show, :id => @topic.permalink
+      response.should be_success
+    end
+
+    it 'should not see edit' do
+      get :edit, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
+    end
+
+    it "should add a post" do
+      post = Factory.build(:post)
+      put :add_post, :post => post, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:notice] = t('post.success')
+    end
+
+    it "should not add a member" do
+      member = Factory.create(:invited)
+      put :add_member, :nickname => member.nickname, :id => @topic.permalink
+      response.should redirect_to :back
+      flash[:error] = t('topic.not_auth')
+    end
+
+    it 'should not delete the topic' do
+      lambda do
+        delete :destroy, :id => @topic.id
+      end.should_not change(Topic, :count).by(-1)
+      response.should redirect_to :back
+      flash[:error].should == I18n.t('topic.not_auth')
+    end
+
+  end
+
 end
