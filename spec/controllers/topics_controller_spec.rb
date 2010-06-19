@@ -63,7 +63,7 @@ describe TopicsController do
 
     it 'should create a new topic, and redirect to it' do
       lambda do
-        post :create, :topic => { :title => 'New topic' }
+        post :create, :topic => { :title => 'New topic', :post => "post content" }
       end.should change(Topic, :count)
       response.should redirect_to(topic_path(Topic.last.permalink))
       flash[:notice].should == 'Successfully created topic.'
