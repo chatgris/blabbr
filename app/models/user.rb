@@ -19,7 +19,7 @@ class User
 
   mount_uploader :avatar, AvatarUploader
 
-  before_validate :set_permalink, :set_gravatar_url
+  before_validation :set_permalink, :set_gravatar_url
 
   validates_uniqueness_of :nickname, :permalink, :email, :identity_url
   validates_presence_of :nickname, :permalink, :email, :identity_url

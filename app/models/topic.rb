@@ -30,7 +30,7 @@ class Topic
     end
   end
 
-  before_validate :set_permalink
+  before_validation :set_permalink
   validates_uniqueness_of :title, :permalink
   validates_presence_of :title, :permalink, :creator
   validates_length_of :title, :maximum => 100

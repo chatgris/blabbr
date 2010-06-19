@@ -14,5 +14,5 @@ gem "stateflow"
 
 group :test do
   gem "rspec-rails", ">=2.0.0.beta.10"
-  gem "factory_girl", :git => "git://github.com/thoughtbot/factory_girl.git", :branch => "fixes_for_rails3"
+  gem "factory_girl_rails", ">=1.0"
 end
