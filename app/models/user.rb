@@ -21,10 +21,10 @@ class User
 
   before_validation :set_permalink, :set_gravatar_url
 
-  validates_uniqueness_of :nickname, :permalink, :email, :identity_url
-  validates_presence_of :nickname, :permalink, :email, :identity_url
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
-  validates_length_of :nickname, :maximum => 40
+  validates :nickname, :presence => true, :uniqueness => true, :length => { :maximum => 40 }
+  validates :permalink, :presence => true, :uniqueness => true
+  validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
+  validates :identity_url, :presence => true, :uniqueness => true
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}

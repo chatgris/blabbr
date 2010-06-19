@@ -11,7 +11,7 @@ class Attachment
 
   embedded_in :attachmentable, :inverse_of => :attachments
 
-  validates_presence_of :nickname
+  validates :nickname, :presence => true
 
   before_create :update_attachments_count
 

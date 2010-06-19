@@ -31,9 +31,10 @@ class Topic
   end
 
   before_validation :set_permalink
-  validates_uniqueness_of :title, :permalink
-  validates_presence_of :title, :permalink, :creator
-  validates_length_of :title, :maximum => 100
+  validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
+  validates :permalink, :presence => true, :uniqueness => true
+  validates :creator, :presence => true
+  validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }, :on => :create
 
   before_create :creator_as_members, :add_post
 
