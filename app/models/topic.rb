@@ -34,7 +34,7 @@ class Topic
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
   validates :permalink, :presence => true, :uniqueness => true
   validates :creator, :presence => true
-  validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }, :on => :create
+  validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :on => :create
 
   before_create :creator_as_members, :add_post
 
