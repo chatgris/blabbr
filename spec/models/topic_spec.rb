@@ -28,6 +28,9 @@ describe Topic do
   it { Topic.fields.keys.should be_include('state')}
   it { Topic.fields['state'].type.should == String}
 
+  it { Topic.fields.keys.should be_include('posted_at')}
+  it { Topic.fields['posted_at'].type.should == Time}
+
 
   it "should be valid" do
     @topic.should be_valid
@@ -69,6 +72,10 @@ describe Topic do
       Factory.build(:topic, :permalink => 'permalink').should_not be_valid
     end
 
+    it 'should have a valid posted_add time' do
+      Topic.by_permalink(@topic.permalink).first.posted_at.should be_close(Time.now.utc, 10.seconds)
+    end
+
     it "should have a valid permalink" do
       Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.title.parameterize
     end
@@ -102,12 +109,17 @@ describe Topic do
 
     it "should increment user.posts_count and unread post when a new post is created" do
       User.by_nickname(@current_user.nickname).first.posts_count.should == 12
+      sleep(5)
       @topic.new_post(@post)
       User.by_nickname(@current_user.nickname).first.posts_count.should == 13
     end
 
     it "should increment topic.posts_count when a new post is created" do
       Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
+    end
+
+    it "should update posted_at time" do
+      Topic.by_permalink(@topic.permalink).first.posted_at.to_s.should_not == @topic.created_at.to_s
     end
 
   end

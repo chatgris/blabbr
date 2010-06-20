@@ -27,7 +27,7 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  before_create :set_unread, :update_topic_posts_count, :update_user_posts_count
+  before_create :set_unread, :update_topic_posts_count, :update_user_posts_count, :update_posted_at
 
   protected
 
@@ -38,6 +38,10 @@ class Post
 
   def update_topic_posts_count
     self.topics.posts_count += 1
+  end
+
+  def update_posted_at
+    self.topics.posted_at = Time.now.utc
   end
 
   def set_unread

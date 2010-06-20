@@ -9,6 +9,7 @@ class Topic
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
   field :state
+  field :posted_at, :type => Time
 
   embeds_many :members
   embeds_many :posts
@@ -36,7 +37,7 @@ class Topic
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :on => :create
 
-  before_create :creator_as_members, :add_post
+  before_create :creator_as_members, :add_post, :set_posted_at
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
@@ -103,6 +104,10 @@ class Topic
     user = User.by_nickname(creator).first
     posts << Post.new(:body => post, :user_id => user.id)
     user.update_attributes!(:posts_count => user.posts_count + 1)
+  end
+
+  def set_posted_at
+    self.posted_at = Time.now.utc
   end
 
 end
