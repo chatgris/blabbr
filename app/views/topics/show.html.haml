@@ -23,8 +23,8 @@
   %strong
     = t('subscriber').pluralize
     - members_without_creator(@topic).each do |member|
-      = member.nickname
-      = link_to "X", remove_member_topic_path(@topic, :nickname => member.nickname), :method => :delete
+      = member
+      = link_to "X", remove_member_topic_path(@topic, :nickname => member), :method => :delete
 = will_paginate @posts
 = render :partial => 'posts/post', :collection => @posts
 = will_paginate @posts
