@@ -1,51 +1,99 @@
 require 'spec_helper'
 
 describe UsersController do
-
-  describe "GET show" do
-    describe "auth" do
-      it "shouldn't show user to an anonymous user"
+  describe 'with an anonymous user' do
+    it 'should not see index' do
+      get :index
+      response.should redirect_to login_path
     end
 
-    it "assigns the requested user as @user"
+    it 'should not see show' do
+      get :show, :id => Factory.build(:user).id.to_s
+      response.should redirect_to login_path
+    end
+
+    it 'should not see new' do
+      get :new
+      response.should redirect_to login_path
+    end
+
+    it 'should not can edit a project' do
+      get :edit, :id => Factory.build(:user).id.to_s
+      response.should redirect_to login_path
+    end
+
+    it 'should create a user'
   end
 
-  describe "GET edit" do
-    describe "auth" do
-      it "should allow only to the current user"
+  describe 'current_user == user' do
+
+    before :all do
+      @current_user = Factory.create(:creator)
     end
 
-    it "assigns the requested user as @user"
+    before :each do
+      controller.stub!(:logged_in?).and_return(true)
+      controller.stub!(:current_user).and_return(@current_user)
+    end
+
+    it 'should be able to see index' do
+      get :index
+      response.should be_success
+    end
+
+    it 'get new should be success' do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      get :new
+      response.should redirect_to :back
+    end
+
+    it 'should see show' do
+      get :show, :id => @current_user.permalink
+      response.should be_success
+    end
+
+    it 'should see edit' do
+      get :edit
+      response.should be_success
+    end
+
+    it 'should update user if current_user is user' do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      put :update, :user => {:email => 'new@email.com'}, :id => @current_user.id
+      response.should redirect_to :back
+      @current_user.reload.email.should == 'new@email.com'
+    end
+
   end
 
-  describe "POST create" do
+  describe 'user != current_user' do
 
-    describe "with valid params" do
-
-      it "redirects to the topics index"
+    before :all do
+      @current_user = Factory.create(:creator)
+      @user = Factory.create(:user)
     end
 
-    describe "with invalid params" do
-
-      it "re-renders the 'new' template"
+    before :each do
+      controller.stub!(:logged_in?).and_return(true)
+      controller.stub!(:current_user).and_return(@current_user)
     end
 
-  end
-
-  describe "PUT update" do
-
-    describe "auth" do
-      it "should allow only to the current user"
+    it 'should be able to see index' do
+      get :index
+      response.should be_success
     end
 
-    describe "with valid params" do
-      it "updates the requested user"
-
-      it "redirects to the user"
+    it 'get new should be success' do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      get :new
+      response.should redirect_to :back
     end
 
-    describe "with invalid params" do
-      it "re-renders the 'edit' template"
+    it 'should update user if current_user is user' do
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      put :update, :user => {:email => 'new@email.com'}, :id => @user.id
+      response.should redirect_to :back
+      @user.reload.email.should_not == 'new@email.com'
     end
 
   end

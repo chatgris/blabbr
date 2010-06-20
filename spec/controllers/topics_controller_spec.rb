@@ -82,7 +82,7 @@ describe TopicsController do
       @topic.reload.title.should == 'New title'
     end
 
-    it "it should not a member if he doesn't exist" do
+    it "it should not add a member if he doesn't exist" do
       put :add_member, :nickname => 'New member', :id => @topic.id
       response.should redirect_to(topic_path(@topic.permalink))
       flash[:error].should == I18n.t('member.not_find')

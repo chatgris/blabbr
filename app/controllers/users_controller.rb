@@ -1,8 +1,16 @@
 class UsersController < ApplicationController
   before_filter :authorize, :except => ['create']
 
+  def index
+    @users = User.all.paginate :page => params[:page] || nil, :per_page => 10
+  end
+
   def edit
     @user = current_user
+  end
+
+  def new
+    redirect_to :back
   end
 
   def show
@@ -22,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = current_user
     if @user.update_attributes(params[:user])
         redirect_to :back
     else
