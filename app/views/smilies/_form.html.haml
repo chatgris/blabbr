@@ -1,0 +1,13 @@
+- form_for(@smiley, :html => { :multipart => true }) do |f|
+  = f.error_messages
+  .p
+    = f.label t('code')
+    .br
+    = f.text_field :code
+  .p
+    = f.label :image
+    = image_tag(@smiley.image_url) if @smiley.image?
+    = f.file_field :image
+    = f.hidden_field :image_cache
+  .p
+    = f.submit t('form.save')
