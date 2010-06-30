@@ -25,4 +25,16 @@ describe Smiley do
       Factory.build(:smiley).should_not be_valid
     end
   end
+
+  describe 'named_scope' do
+
+    before :all do
+      @smiley = Factory.create(:smiley)
+    end
+
+    it "should be find by added_by" do
+      Smiley.by_nickname(@smiley.added_by).first.added_by.should == @smiley.added_by
+    end
+
+  end
 end

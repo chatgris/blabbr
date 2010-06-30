@@ -12,4 +12,6 @@ class Smiley
 
   validates :code, :presence => true, :uniqueness => true
   validates :added_by, :presence => true
+
+  named_scope :by_nickname, lambda { |nickname| { :where => { :added_by => nickname}}}
 end

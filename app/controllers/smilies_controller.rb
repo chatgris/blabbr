@@ -1,12 +1,12 @@
 class SmiliesController < ApplicationController
   before_filter :authorize
+  before_filter :get_current_smiley_for_creator, :only => [:edit, :update, :destroy]
 
   def index
     @smilies = Smiley.all
   end
 
   def edit
-    @smiley = Smiley.criteria.id(params[:id]).first
   end
 
   def new
@@ -29,11 +29,30 @@ class SmiliesController < ApplicationController
   end
 
   def update
-    @smiley = Smiley.criteria.id(params[:id]).first
     if @smiley.update_attributes(params[:smiley])
       redirect_to :back
     else
       render :edit
+    end
+  end
+
+  def destroy
+    unless @smiley.nil?
+      @smiley.destroy
+      flash[:notice] = t('smilies.destroy.success')
+    else
+      flash[:error] = t('smilies.not_auth')
+    end
+    redirect_to topics_url
+  end
+
+  protected
+
+  def get_current_smiley_for_creator
+    @smiley = Smiley.criteria.id(params[:id]).by_nickname(current_user.nickname).first
+    unless @smiley
+      flash[:error] = t('smilies.not_auth')
+      redirect_to :back
     end
   end
 
