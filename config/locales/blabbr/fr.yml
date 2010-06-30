@@ -18,3 +18,5 @@ fr:
     destroy: "Supprimer"
   posts:
     new: "Ajouter un commentaire"
+  smilies:
+    new: "Nouveau smiley"
