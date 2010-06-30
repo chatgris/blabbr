@@ -1,5 +1,5 @@
 - if @current_user.nil?
-  - form_tag sessions_path do
+  = form_tag sessions_path do
     %fieldset
       .p
         = text_field_tag :openid_url, params[:openid_url]
