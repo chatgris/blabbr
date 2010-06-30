@@ -32,8 +32,7 @@ class Post
   protected
 
   def update_user_posts_count
-    user = User.find(user_id)
-    user.update_attributes!(:posts_count => user.posts_count + 1)
+    User.find(user_id).update_attributes!(:posts_count => user.posts_count + 1)
   end
 
   def update_topic_posts_count

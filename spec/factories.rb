@@ -29,7 +29,7 @@
     u.permalink    "chatgris"
     u.identity_url "http://openid.net"
     u.locale       "fr"
-    u.posts_count  0
+    u.posts_count  12
   end
 
   Factory.define :post do |p|

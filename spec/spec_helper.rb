@@ -16,11 +16,9 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 Rspec.configure do |config|
 
   config.before :all do
-    Mongoid.database.collections.each(&:drop)
-  end
-
-  config.after :all do
-    Mongoid.database.collections.each(&:drop)
+    Topic.collection.remove
+    User.collection.remove
+    Smiley.collection.remove
   end
 
   config.include Rspec::Matchers

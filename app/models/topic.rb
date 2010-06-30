@@ -43,7 +43,7 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    if posts.create(:body => post.body, :user_id => post.user_id)
+    if self.posts.create(:body => post.body, :user_id => post.user_id)
       save
     else
       return false
