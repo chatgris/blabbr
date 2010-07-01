@@ -162,6 +162,7 @@ describe Topic do
     end
 
     it "should have increment posts_count when a new post is added by user" do
+      Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
       @topic.new_post(@post)
       # Duplicate counter here
       Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 1

@@ -38,6 +38,7 @@ class Topic
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :on => :create
 
   before_create :creator_as_members, :add_post, :set_posted_at
+  before_save :update_count
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}

@@ -23,7 +23,7 @@ class Attachment
         member.attachments_count += 1
       end
     end
-    self.attachmentable.attachments_count += 1
+    #self.attachmentable.attachments_count += 1
   end
 
 end
