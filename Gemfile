@@ -13,6 +13,6 @@ gem "mini_magick"
 gem "stateflow", :git => "git://github.com/chatgris/stateflow.git"
 
 group :test do
-  gem "rspec-rails", "2.0.0.beta.15"
+  gem "rspec-rails", "2.0.0.beta.16"
   gem "factory_girl_rails", "1.0"
 end

@@ -27,7 +27,7 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  before_create :set_unread, :update_user_posts_count, :update_posted_at
+  after_validation :set_unread, :update_user_posts_count, :update_posted_at
 
   protected
 

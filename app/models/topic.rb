@@ -37,7 +37,7 @@ class Topic
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :on => :create
 
-  before_create :creator_as_members, :add_post, :set_posted_at
+  after_validation :creator_as_members, :add_post, :set_posted_at
   before_save :update_count
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
@@ -98,17 +98,23 @@ class Topic
   end
 
   def creator_as_members
-    members << Member.new(:nickname => creator, :page => members.size, :posts_count => 1)
+    if self.new_record?
+      members << Member.new(:nickname => creator, :page => members.size, :posts_count => 1)
+    end
   end
 
   def add_post
-    user = User.by_nickname(creator).first
-    posts << Post.new(:body => post, :user_id => user.id)
-    user.update_attributes!(:posts_count => user.posts_count + 1)
+    if self.new_record
+      user = User.by_nickname(creator).first
+      posts << Post.new(:body => post, :user_id => user.id)
+      user.update_attributes!(:posts_count => user.posts_count + 1)
+    end
   end
 
   def set_posted_at
-    self.posted_at = Time.now.utc
+    if self.new_record?
+      self.posted_at = Time.now.utc
+    end
   end
 
 end

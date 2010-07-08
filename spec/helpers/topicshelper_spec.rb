@@ -5,7 +5,7 @@ def current_user(stubs = {})
   @current_user ||= Factory.create(:creator)
 end
 
-describe TopicHelper do
+describe TopicsHelper do
   describe "textilize" do
 
     before do

@@ -13,7 +13,7 @@ class Attachment
 
   validates :nickname, :presence => true
 
-  before_create :update_attachments_count
+  after_validation :update_attachments_count
 
   protected
 
