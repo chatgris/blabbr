@@ -1,7 +1,2 @@
 - title @user.nickname
-%h2
-  = @user.nickname
-%p
-  = "Messages : #{@user.posts_count}"
-%p
-  = link_to_avatar @user
+= render @user

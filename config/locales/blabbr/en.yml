@@ -11,4 +11,4 @@ en:
     save: save
   member:
     not_find: "User not find"
-    add_success: "Add {{name}} to join this topic"
+    add_success: "Add %{name} to join this topic"

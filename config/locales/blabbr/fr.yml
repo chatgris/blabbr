@@ -11,7 +11,7 @@ fr:
     save: "Sauvegarder"
   member:
     not_find: "Utilisateur non trouvé"
-    add_true: "{{name}} peut maintenant suivre ce topic"
+    add_true: "%{name} peut maintenant suivre ce topic"
   topics:
     new: "Nouveau sujet"
     edit: "Éditer le sujet"
