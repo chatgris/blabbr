@@ -35,7 +35,7 @@ class Topic
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
   validates :permalink, :presence => true, :uniqueness => true
   validates :creator, :presence => true
-  validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :on => :create
+  validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
   after_validation :creator_as_members, :add_post, :set_posted_at
   before_save :update_count
@@ -104,7 +104,7 @@ class Topic
   end
 
   def add_post
-    if self.new_record
+    if self.new_record?
       user = User.by_nickname(creator).first
       posts << Post.new(:body => post, :user_id => user.id)
       user.update_attributes!(:posts_count => user.posts_count + 1)
