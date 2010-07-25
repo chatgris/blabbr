@@ -35,6 +35,11 @@ describe User do
   end
 
   describe 'validation' do
+
+    before :each do
+      Factory.create(:user)
+    end
+
     it 'should required nickname' do
       Factory.build(:user, :nickname => '').should_not be_valid
     end
@@ -52,7 +57,6 @@ describe User do
     end
 
     it 'should not valid if login is already taken' do
-      Factory.create(:user)
       Factory.build(:user, :nickname => 'one_user').should_not be_valid
     end
 
@@ -71,7 +75,7 @@ describe User do
 
   describe 'named_scope' do
 
-    before :all do
+    before :each do
       @user = Factory.create(:user)
     end
 

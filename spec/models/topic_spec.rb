@@ -2,14 +2,6 @@ require 'spec_helper'
 
 describe Topic do
 
-  before :all do
-    @creator  = Factory.create(:creator )
-    @topic = Factory.create(:topic)
-    @post = Factory.build(:post)
-    @current_user = Factory.create(:user)
-    @member = Factory.build(:member)
-  end
-
   it { Topic.fields.keys.should be_include('creator')}
   it { Topic.fields['creator'].type.should == String}
 
@@ -33,14 +25,12 @@ describe Topic do
 
 
   it "should be valid" do
+    @creator = Factory.create(:creator)
+    @topic = Factory.create(:topic)
     @topic.should be_valid
   end
 
   describe 'validation' do
-
-    before :all do
-      @creator  = Factory.create(:creator )
-    end
 
     it 'should required title' do
       Factory.build(:topic, :title => '').should_not be_valid
@@ -61,14 +51,21 @@ describe Topic do
     it 'should validates title.size' do
       Factory.build(:topic, :title => (0...101).map{65.+(rand(25)).chr}.join).should_not be_valid
     end
+  end
+
+  describe 'validation with context' do
+
+    before :each do
+      @creator = Factory.create(:creator)
+      @topic = Factory.create(:topic)
+      @post = Factory.build(:post)
+    end
 
     it 'should not valid if title is already taken' do
-      Factory.create(:topic, :title => 'title')
-      Factory.build(:topic, :title => 'title').should_not be_valid
+      Factory.build(:topic).should_not be_valid
     end
 
     it 'should not valid if permalink is already taken' do
-      Factory.create(:topic, :permalink => 'permalink')
       Factory.build(:topic, :permalink => 'permalink').should_not be_valid
     end
 
@@ -91,8 +88,8 @@ describe Topic do
 
   describe "callback" do
 
-    before :all do
-      @creator  = Factory.create(:creator )
+    before :each do
+      @creator  = Factory.create(:creator)
       @topic = Factory.create(:topic)
       @post = Factory.build(:post, :user_id => @creator.id)
     end
@@ -102,21 +99,23 @@ describe Topic do
     end
 
     it "should have a correct user_id for the first post" do
-      Topic.by_permalink(@topic.permalink).first.posts[0].user_id.should == @creator.id
+      @topic.posts[0].user_id.should == @creator.id
     end
 
     it "should increment user.posts_count and unread post when a new post is created" do
       User.by_nickname(@creator.nickname).first.posts_count.should == 13
-      sleep(2)
       @topic.new_post(@post)
       User.by_nickname(@creator.nickname).first.posts_count.should == 14
     end
 
     it "should increment topic.posts_count when a new post is created" do
+      @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.posts_count.should == 2
     end
 
     it "should update posted_at time" do
+      sleep(2)
+      @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.posted_at.to_s.should_not == @topic.created_at.to_s
     end
 
@@ -124,7 +123,7 @@ describe Topic do
 
   describe 'members' do
 
-    before :all do
+    before :each do
       @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
@@ -149,6 +148,7 @@ describe Topic do
     end
 
     it "should have a posts_count equals to 0 when invited" do
+      @topic.new_member(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
     end
 
@@ -158,10 +158,12 @@ describe Topic do
     end
 
     it "should make unread equals to posts.size when a member is invited" do
+      @topic.new_member(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members[1].unread.should == Topic.by_permalink(@topic.permalink).first.posts.size
     end
 
     it "should have increment posts_count when a new post is added by user" do
+      @topic.new_member(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
       @topic.new_post(@post)
       # Duplicate counter here
@@ -173,27 +175,33 @@ describe Topic do
     end
 
     it "should increment unread count when a post is added" do
-      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 2
+      @topic.new_member(@current_user.nickname)
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 1
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 3
+      Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 2
     end
 
     it "should reset unread post" do
+      @topic.new_member(@current_user.nickname)
       @topic.reset_unread(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 0
+      @topic.new_post(@post)
       Topic.by_permalink(@topic.permalink).first.members[0].unread.should_not == 0
     end
 
     it "should add topic_id to member" do
+      @topic.new_member(@current_user.nickname)
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.members[1].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[2].id
+      Topic.by_permalink(@topic.permalink).first.members[0].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[1].id
     end
 
     it "should add page number of the newly added post to member" do
+      @topic.new_member(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members[1].page.should == @topic.posts.size / PER_PAGE + 1
     end
 
     it "should remove a member from a topic" do
+      @topic.new_member(@current_user.nickname)
       @topic.rm_member!(@current_user.nickname)
       Topic.by_permalink(@topic.permalink).first.members.size.should == 1
     end
@@ -202,7 +210,7 @@ describe Topic do
 
   describe 'attachments' do
 
-    before :all do
+    before :each do
       @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
@@ -219,14 +227,14 @@ describe Topic do
 
     it "should update attachments_count when a attachment is added or deleted" do
       @topic.new_attachment(@current_user.nickname, File.open(Rails.root.join("image.jpg")))
-      Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 2
+      Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 1
     end
 
   end
 
   describe 'stateflow' do
 
-    before :all do
+    before :each do
       @current_user = Factory.create(:creator )
       @topic = Factory.create(:topic)
     end
@@ -241,6 +249,7 @@ describe Topic do
     end
 
     it "should set a deleted topic as published" do
+      @topic.delete!
       @topic.publish!
       Topic.by_permalink(@topic.permalink).first.state.should == "published"
     end
@@ -249,7 +258,7 @@ describe Topic do
 
   describe 'stateflow for embeddeded posts' do
 
-    before :all do
+    before :each do
       @topic = Factory.build(:topic)
       @current_user = Factory.create(:user)
       @post = Factory.build(:post, :user_id => @current_user.id)
@@ -265,7 +274,7 @@ describe Topic do
     end
 
     it "should set published status to a deleted post" do
-      @topic.posts[0].state.should == "deleted"
+      @topic.posts[0].delete!
       @topic.posts[0].publish!
       Topic.by_permalink(@topic.permalink).first.posts[0].state.should == "published"
     end
@@ -274,7 +283,7 @@ describe Topic do
 
   describe 'named_scope' do
 
-     before :all do
+     before :each do
       @current_user = Factory.create(:user)
       @topic = Factory.create(:topic, :creator => "One user")
     end
@@ -291,7 +300,7 @@ describe Topic do
   end
 
   describe 'updating a post' do
-    before :all do
+    before :each do
       @creator  = Factory.create(:creator )
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)

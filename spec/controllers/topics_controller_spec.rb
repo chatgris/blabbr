@@ -31,12 +31,9 @@ describe TopicsController do
 
   describe 'with creator as current_user' do
 
-    before :all do
+    before :each do
       @current_user = Factory.create(:creator)
       @topic = Factory.create(:topic)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
     end
@@ -102,7 +99,8 @@ describe TopicsController do
     end
 
     it "should remove a user from members" do
-      member = Factory.build(:user)
+      member = Factory.create(:user)
+      put :add_member, :nickname => member.nickname, :id => @topic.id
       delete :remove_member, :nickname => member.nickname, :id => @topic.id
       response.should redirect_to topic_path(@topic.permalink)
       flash[:notice].should == I18n.t('member.remove_success')
@@ -136,13 +134,10 @@ describe TopicsController do
 
   describe 'with a logged user as current_user, not a member' do
 
-    before :all do
+    before :each do
       @creator = Factory.create(:creator)
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
@@ -184,14 +179,11 @@ describe TopicsController do
 
   describe 'with a logged user as current_user, current_user is a member' do
 
-    before :all do
+    before :each do
       @creator = Factory.create(:creator)
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
       @topic.new_member(@current_user.nickname)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"

@@ -27,11 +27,8 @@ describe UsersController do
 
   describe 'current_user == user' do
 
-    before :all do
-      @current_user = Factory.create(:creator)
-    end
-
     before :each do
+      @current_user = Factory.create(:creator)
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
     end
@@ -68,12 +65,9 @@ describe UsersController do
 
   describe 'user != current_user' do
 
-    before :all do
+    before :each do
       @current_user = Factory.create(:creator)
       @user = Factory.create(:user)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
     end

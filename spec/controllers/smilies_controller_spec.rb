@@ -27,12 +27,9 @@ describe SmiliesController do
 
   describe 'current_user == added_by' do
 
-    before :all do
+    before :each do
       @current_user = Factory.create(:user)
       @smiley = Factory.create(:smiley)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
     end
@@ -77,12 +74,9 @@ describe SmiliesController do
 
   describe 'current_user != added_by' do
 
-    before :all do
+    before :each do
       @current_user = Factory.create(:creator)
       @smiley = Factory.create(:smiley)
-    end
-
-    before :each do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"

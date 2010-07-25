@@ -28,7 +28,7 @@ describe Smiley do
 
   describe 'named_scope' do
 
-    before :all do
+    before :each do
       @smiley = Factory.create(:smiley)
     end
 
