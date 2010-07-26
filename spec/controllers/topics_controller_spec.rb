@@ -150,7 +150,7 @@ describe TopicsController do
     end
 
     it 'should not see edit' do
-      get :edit, :id => @topic.permalink
+      get :edit, :id => @topic.id
       response.should redirect_to :back
       flash[:error].should == I18n.t('topic.not_auth')
     end
@@ -195,7 +195,7 @@ describe TopicsController do
     end
 
     it 'should not see edit' do
-      get :edit, :id => @topic.permalink
+      get :edit, :id => @topic.id
       response.should redirect_to :back
       flash[:error].should == I18n.t('topic.not_auth')
     end
@@ -209,7 +209,7 @@ describe TopicsController do
 
     it "should not add a member" do
       member = Factory.create(:invited)
-      put :add_member, :nickname => member.nickname, :id => @topic.permalink
+      put :add_member, :nickname => member.nickname, :id => @topic.id
       response.should redirect_to :back
       flash[:error] = t('topic.not_auth')
     end

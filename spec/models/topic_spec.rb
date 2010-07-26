@@ -192,7 +192,7 @@ describe Topic do
     it "should add topic_id to member" do
       @topic.new_member(@current_user.nickname)
       @topic.new_post(@post)
-      Topic.by_permalink(@topic.permalink).first.members[0].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[1].id
+      Topic.by_permalink(@topic.permalink).first.members[0].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[1].id.to_s
     end
 
     it "should add page number of the newly added post to member" do
@@ -211,7 +211,7 @@ describe Topic do
   describe 'attachments' do
 
     before :each do
-      @creator  = Factory.create(:creator )
+      @creator  = Factory.create(:creator)
       @topic = Factory.create(:topic)
       @current_user = Factory.create(:user)
     end

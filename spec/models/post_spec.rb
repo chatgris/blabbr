@@ -6,7 +6,7 @@ describe Post do
   it { Post.fields['body'].type.should == String}
 
   it { Post.fields.keys.should be_include('user_id')}
-  it { Post.fields['user_id'].type.should == String}
+  it { Post.fields['user_id'].type.should == BSON::ObjectID}
 
   describe 'validation' do
     it 'should required title' do
