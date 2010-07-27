@@ -109,7 +109,7 @@ describe TopicsController do
     it "should add a post" do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       post = Factory.build(:post)
-      put :add_post, :post => post, :id => @topic.permalink
+      put :add_post, :post => post, :id => @topic.permalink, :body => post.body
       response.should redirect_to :back
       flash[:notice].should == I18n.t('post.success')
     end

@@ -61,9 +61,14 @@ class TopicsController < ApplicationController
     redirect_to topic_path(@topic.permalink)
   end
 
+  # TODO
   def add_post
-    if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
-      flash[:notice] = t('post.success')
+    if params[:body]
+      if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
+        flash[:notice] = t('post.success')
+      else
+        flash[:error] = t('post.error')
+      end
     else
       flash[:error] = t('post.error')
     end
