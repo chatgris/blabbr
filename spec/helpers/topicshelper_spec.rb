@@ -57,7 +57,7 @@ describe TopicsHelper do
 
   describe "topics various helpers" do
 
-    before :all do
+    before :each do
       @creator = Factory.create(:creator)
       @user = Factory.create(:user)
       @topic = Factory.create(:topic)

@@ -44,11 +44,8 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    if self.posts.create(:body => post.body, :user_id => post.user_id)
-      save
-    else
-      return false
-    end
+    posts.create(:body => post.body, :user_id => post.user_id)
+    save
   end
 
   def update_post(post, body)
@@ -58,7 +55,7 @@ class Topic
 
   def new_member(nickname)
     if User.by_nickname(nickname).first
-      members.create(:nickname => nickname, :unread => self.posts.size) unless Topic.by_permalink(self.permalink).by_subscribed_topic(nickname).first
+      members.create(:nickname => nickname, :unread => self.posts.size)
       save
     end
   end
