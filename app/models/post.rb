@@ -3,12 +3,11 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
 
-  field :user_id
   field :body
   field :state
 
   embedded_in :topics, :inverse_of => :posts
-  belongs_to_related :user
+  referenced_in :user
 
   stateflow do
     initial :published

@@ -3,7 +3,7 @@ source 'http://gemcutter.org'
 gem "rails", "3.0.0.rc"
 gem "ruby-openid"
 gem "rack-openid"
-gem "mongoid", "2.0.0.beta.13"
+gem "mongoid", "2.0.0.beta.16"
 gem "bson_ext"
 gem "haml"
 gem "RedCloth"

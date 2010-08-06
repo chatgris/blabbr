@@ -33,7 +33,6 @@
   end
 
   Factory.define :post do |p|
-    p.user_id "One user"
     p.body    "Some content"
   end
 
