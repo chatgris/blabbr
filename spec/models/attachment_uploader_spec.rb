@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'carrierwave/test/matchers'
 
 describe AttachmentUploader do
   before do
