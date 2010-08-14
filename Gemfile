@@ -7,9 +7,9 @@ gem "mongoid", "2.0.0.beta.16"
 gem "bson_ext"
 gem "haml"
 gem "RedCloth"
-gem "carrierwave", :git => "git://github.com/jnicklas/carrierwave.git"
+gem "carrierwave", "0.5.0.beta2"
 gem "mini_magick"
-gem "stateflow", :git => "git://github.com/chatgris/stateflow.git"
+gem "stateflow", "0.1.0"
 
 group :test, :development do
   gem "rspec-rails", "2.0.0.beta.19"
