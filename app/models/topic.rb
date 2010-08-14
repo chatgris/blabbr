@@ -44,8 +44,12 @@ class Topic
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_post(post)
-    posts.create(:body => post.body, :user_id => post.user_id)
-    save
+    if post.body.empty?
+      false
+    else
+      posts.create(:body => post.body, :user_id => post.user_id)
+      save
+    end
   end
 
   def update_post(post, body)
@@ -95,15 +99,15 @@ class Topic
   end
 
   def creator_as_members
-    if self.new_record?
-      members << Member.new(:nickname => creator, :page => members.size, :posts_count => 1)
+    if self.new_record? && members.empty?
+      members.create(:nickname => creator, :page => members.size, :posts_count => 1)
     end
   end
 
   def add_post
-    if self.new_record?
+    if self.new_record? && posts.empty?
       user = User.by_nickname(creator).first
-      posts << Post.new(:body => post, :user_id => user.id, :created_at => Time.now.utc, :updated_at => Time.now.utc)
+      posts.create(:body => post, :user_id => user.id)
       user.update_attributes!(:posts_count => user.posts_count + 1)
     end
   end

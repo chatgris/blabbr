@@ -178,6 +178,13 @@ describe Topic do
         Topic.by_permalink(@topic.permalink).first.members[0].posts_count.should == 1
       end
 
+      it "shouldn't add a post if body is not present" do
+        Topic.by_permalink(@topic.permalink).first.posts.size.should == 1
+        @post = Factory.build(:post, :user_id => @current_user.id, :body => "")
+        @topic.new_post(@post)
+        Topic.by_permalink(@topic.permalink).first.posts.size.should == 1
+      end
+
       it "should increment unread count when a post is added" do
         @topic.new_member(@current_user.nickname)
         Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 1
