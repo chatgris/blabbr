@@ -103,7 +103,7 @@ class Topic
   def add_post
     if self.new_record?
       user = User.by_nickname(creator).first
-      posts << Post.new(:body => post, :user_id => user.id)
+      posts << Post.new(:body => post, :user_id => user.id, :created_at => Time.now.utc, :updated_at => Time.now.utc)
       user.update_attributes!(:posts_count => user.posts_count + 1)
     end
   end
