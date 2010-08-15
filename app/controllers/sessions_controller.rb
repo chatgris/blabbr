@@ -47,14 +47,18 @@ class SessionsController < ApplicationController
   end
 
   def successful_login
-    session[:current_user] = @user.id
+    set_current_user
     redirect_to root_path
     flash[:notice] = "Welcome back #{@user.nickname}." unless flash[:welcome]
   end
 
   def first_login
-    session[:current_user] = @user.id
+    set_current_user
     redirect_to home_url
     flash[:welcome] = "Welcome on Blabber. If the nickname provide on this form is not the one you was expecting, now is the only chance you can change it."
+  end
+
+  def set_current_user
+    session[:current_user] = @user.id
   end
 end
