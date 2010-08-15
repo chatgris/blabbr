@@ -1,7 +1,7 @@
 Blabbr::Application.routes.draw do |map|
   match "/uploads/*path" => "gridfs#serve"
   resources :sessions
-  resources :users
+  resources :users, :except => [:edit, :destroy]
   resources :smilies, :as => "smileys"
   match '/topics/page/:page' => 'topics#index'
   match '/topics/:id/page/:page' => 'topics#show'
@@ -14,6 +14,6 @@ Blabbr::Application.routes.draw do |map|
   end
   match 'logout' => 'sessions#destroy', :as => :logout
   match 'login' => 'sessions#new', :as => :login
-  match 'home' => 'users#edit', :as => :home
+  match 'dashboard' => 'users#edit', :as => :dashboard
   root :to => 'topics#index'
 end
