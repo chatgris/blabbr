@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
   def open_id_authentication(openid_url)
     authenticate_with_open_id(openid_url, :required => [:nickname, :email, 'http://schema.openid.net/contact/email' ]) do |result, identity_url, registration|
       if result.successful?
-        @user = User.first(:conditions => { :identity_url => identity_url })
+        @user = User.by_identity_url(identity_url).first
         if @user.nil?
           create_openid_user(registration, identity_url)
         else

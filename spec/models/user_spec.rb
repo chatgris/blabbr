@@ -100,6 +100,10 @@ describe User do
       User.by_nickname(@user.nickname).first.nickname.should == @user.nickname
     end
 
+    it "should be find by identity_url" do
+      User.by_identity_url(@user.identity_url).first.nickname.should == @user.nickname
+    end
+
   end
 
   describe "associations" do

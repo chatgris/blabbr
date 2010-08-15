@@ -28,6 +28,7 @@ class User
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
+  named_scope :by_identity_url, lambda { |identity_url| { :where => { :identity_url => identity_url}}}
 
   protected
 
