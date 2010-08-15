@@ -1,2 +1,2 @@
-- title "New Topic"
-= render :partial => 'form'
+- title t('topics.new')
+= render :partial => 'form', :locals => {:topic => @topic}

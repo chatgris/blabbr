@@ -1,4 +1,4 @@
-= form_tag add_post_topic_path(@topic.permalink), :method => 'put' do
+= form_tag add_post_topic_path(topic.permalink), :method => 'put' do
   = label :post, t('posts.new')
   = text_area_tag :body, params[:body]
   = submit_tag "Submit"

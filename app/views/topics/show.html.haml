@@ -29,4 +29,4 @@
 = render :partial => 'posts/post', :collection => @posts
 = will_paginate @posts
 #addComment
-  = render 'posts/form', :collection => @post
+  = render :partial => 'posts/form', :locals => {:topic => @topic}
