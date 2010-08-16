@@ -8,11 +8,6 @@ describe SmiliesController do
       response.should redirect_to login_path
     end
 
-    it 'should not see show' do
-      get :show, :id => Factory.build(:smiley).id.to_s
-      response.should redirect_to login_path
-    end
-
     it 'should not see new' do
       get :new
       response.should redirect_to login_path
@@ -42,11 +37,6 @@ describe SmiliesController do
     it 'get new should be success' do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       get :new
-      response.should be_success
-    end
-
-    it 'should see show' do
-      get :show, :id => @smiley.id
       response.should be_success
     end
 

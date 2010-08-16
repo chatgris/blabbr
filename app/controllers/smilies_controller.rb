@@ -13,10 +13,6 @@ class SmiliesController < ApplicationController
     @smiley = Smiley.new
   end
 
-  def show
-    @smiley = Smiley.criteria.id(params[:id]).first
-  end
-
   def create
     params[:smiley][:added_by] = current_user.nickname
     @smiley = Smiley.new(params[:smiley])
