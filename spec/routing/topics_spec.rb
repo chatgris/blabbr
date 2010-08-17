@@ -53,14 +53,6 @@ describe "routing to topics" do
       )
     end
 
-    it "routes /topics/:topic_id/posts to topics#create" do
-      { :post => "/topics/:topic_id/posts"}.should route_to(
-        :controller => "posts",
-        :action => "create",
-        :topic_id => ":topic_id"
-      )
-    end
-
   end
 
   context "put request" do
