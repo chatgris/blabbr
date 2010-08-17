@@ -17,7 +17,8 @@ fr:
     edit: "Éditer le sujet"
     destroy: "Supprimer"
   posts:
-    new: "Ajouter un commentaire"
+    title: "Message"
+    edit: "Editer le message"
   smilies:
     new: "Nouveau smiley"
     title: "Smilies"

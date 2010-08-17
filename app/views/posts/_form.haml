@@ -1,5 +1,5 @@
-= form_tag topic_posts_path(topic.permalink), :method => 'post' do
-  = label :post, t('posts.new')
-  = text_area_tag :body, params[:body]
-  = submit_tag "Submit"
-%hr
+%p
+  = form.label :body, t('posts.title')
+  = form.text_area :body
+%p
+  = form.submit t('form.save')

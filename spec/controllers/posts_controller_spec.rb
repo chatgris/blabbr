@@ -13,18 +13,23 @@ describe PostsController do
 
     it "should add a post" do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      post :create, :post => @post, :topic_id => @topic.permalink, :body => @post.body
+      post :create, :post => {"body" => @post.body}, :topic_id => @topic.permalink
       response.should redirect_to :back
       flash[:notice].should == I18n.t('post.success')
     end
 
     it "should not add a post if params are wrong" do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      @post = Factory.build(:post, :body => '')
-      post :create, :post => @post, :topic_id => @topic.permalink
+      post :create, :post => {"body" => ''}, :topic_id => @topic.permalink
       response.should redirect_to :back
       flash[:error].should == I18n.t('post.error')
     end
+
+    it 'should see edit' do
+      get :edit, :id => @post.id, :topic_id => @topic.permalink
+      response.should be_success
+    end
+
   end
 
   context "is a registred user, but not a member" do
