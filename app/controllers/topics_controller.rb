@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :authorize
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :add_member, :remove_member]
-  before_filter :get_current_topic_for_member, :only => [:show, :add_post]
+  before_filter :get_current_topic_for_member, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
@@ -60,21 +60,6 @@ class TopicsController < ApplicationController
     end
     redirect_to topic_path(@topic.permalink)
   end
-
-  # TODO
-  def add_post
-    if params[:body]
-      if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:body]))
-        flash[:notice] = t('post.success')
-      else
-        flash[:error] = t('post.error')
-      end
-    else
-      flash[:error] = t('post.error')
-    end
-    redirect_to :back
-  end
-
 
   def update
     @topic = Topic.find(params[:id])

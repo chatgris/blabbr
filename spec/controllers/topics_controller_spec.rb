@@ -106,22 +106,6 @@ describe TopicsController do
       flash[:notice].should == I18n.t('member.remove_success')
     end
 
-    it "should add a post" do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      post = Factory.build(:post)
-      put :add_post, :post => post, :id => @topic.permalink, :body => post.body
-      response.should redirect_to :back
-      flash[:notice].should == I18n.t('post.success')
-    end
-
-    it "should not add a post if params are wrong" do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      post = Factory.build(:post, :body => '')
-      put :add_post, :post => post, :id => @topic.permalink
-      response.should redirect_to :back
-      flash[:error].should == I18n.t('post.error')
-    end
-
     it 'should delete the topic' do
       lambda do
         delete :destroy, :id => @topic.id
@@ -160,13 +144,6 @@ describe TopicsController do
       response.should be_success
     end
 
-    it "should not add a post" do
-      post = Factory.build(:post)
-      put :add_post, :post => post, :id => @topic.permalink
-      response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
-    end
-
     it 'should not delete the topic' do
       lambda do
         delete :destroy, :id => @topic.id
@@ -198,13 +175,6 @@ describe TopicsController do
       get :edit, :id => @topic.id
       response.should redirect_to :back
       flash[:error].should == I18n.t('topic.not_auth')
-    end
-
-    it "should add a post" do
-      post = Factory.build(:post)
-      put :add_post, :post => post, :id => @topic.permalink
-      response.should redirect_to :back
-      flash[:notice] = t('post.success')
     end
 
     it "should not add a member" do
