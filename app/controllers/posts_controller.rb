@@ -6,6 +6,17 @@ class PostsController < ApplicationController
     @post = @topic.posts.criteria.id(params[:id]).first
   end
 
+  def update
+    @post = @topic.posts.criteria.id(params[:id]).first
+    @post.body = params[:post][:body]
+    if @post.save
+      flash[:notice] = t('posts.update.succes')
+      redirect_to :back
+    else
+      render :action => 'edit'
+    end
+  end
+
   def create
       if @topic.new_post(Post.new(:user_id => current_user.id, :body => params[:post][:body]))
         flash[:notice] = t('post.success')
