@@ -15,6 +15,10 @@ class Topic
   embeds_many :posts
   embeds_many :attachments
 
+  index :permalink
+  index :posted_at
+  index :created_at
+
   attr_accessor :post
 
   stateflow do
@@ -82,7 +86,6 @@ class Topic
   def reset_unread(nickname)
     members.each do |s|
       s.unread = 0 if s.nickname == nickname
-      Rails.logger.info s.nickname
     end
     save
   end

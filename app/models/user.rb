@@ -17,6 +17,10 @@ class User
 
   embeds_many :attachments
 
+  index :nickname
+  index :permalink
+  index :identity_url
+
   mount_uploader :avatar, AvatarUploader
 
   before_validation :set_permalink, :set_gravatar_url

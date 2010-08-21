@@ -6,7 +6,7 @@ class Post
   field :body
   field :state
 
-  embedded_in :topics, :inverse_of => :posts
+  embedded_in :topics, :inverse_of => :posts, :index => true
   referenced_in :user
 
   stateflow do

@@ -8,4 +8,4 @@ config/database.yml
 config/deploy.rb
 .bundle
 image.jpg
-Gemfile.lock
+lib/tasks/import.rake
