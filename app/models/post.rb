@@ -31,11 +31,13 @@ class Post
   protected
 
   def update_user_posts_count
-    User.find(user_id).update_attributes!(:posts_count => user.posts_count + 1)
+    if self.new_record?
+      User.find(user_id).update_attributes!(:posts_count => user.posts_count + 1)
+    end
   end
 
   def update_posted_at
-    if self.topic
+    if self.new_record? && self.topic
       t = Topic.by_permalink(self.topic.permalink).first
       if t
         t.posted_at = Time.now.utc
@@ -46,16 +48,20 @@ class Post
   end
 
   def set_unread
-    if self.topic
-      self.topic.members.each do |member|
-        if member.unread == 0
-          member.post_id = self.id
-          member.page = self.topic.posts_count / PER_PAGE + 1
+    if self.new_record? && self.topic
+      t = Topic.by_permalink(self.topic.permalink).first
+      if t
+        t.members.each do |member|
+          if member.unread == 0
+            member.post_id = self.id
+            member.page = self.topic.posts_count / PER_PAGE + 1
+          end
+          if member.nickname == self.user.nickname
+            member.posts_count += 1
+          end
+          member.unread += 1
         end
-        if member.nickname == self.user.nickname
-          member.posts_count += 1
-        end
-        member.unread += 1
+        t.save
       end
     end
   end
