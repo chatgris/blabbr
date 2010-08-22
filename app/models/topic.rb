@@ -12,8 +12,8 @@ class Topic
   field :posted_at, :type => Time
 
   embeds_many :members
-  embeds_many :posts
   embeds_many :attachments
+  references_many :posts
 
   index :permalink
   index :posted_at
@@ -41,8 +41,7 @@ class Topic
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
-  after_validation :creator_as_members, :add_post, :set_posted_at
-  before_save :update_count
+  after_validation :creator_as_members, :set_posted_at, :add_post
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
@@ -63,7 +62,7 @@ class Topic
 
   def new_member(nickname)
     if User.by_nickname(nickname).first
-      members.create(:nickname => nickname, :unread => self.posts.size)
+      members.create(:nickname => nickname, :unread => self.posts_count)
       save
     end
   end
@@ -96,23 +95,15 @@ class Topic
     self.permalink = title.parameterize.to_s unless title.nil?
   end
 
-  def update_count
-    self.posts_count = posts.size
-    self.attachments_count = attachments.size
-  end
-
   def creator_as_members
     if self.new_record? && members.empty?
-      members.create(:nickname => creator, :page => members.size, :posts_count => 1)
+      members << Member.new(:nickname => creator)
     end
   end
 
   def add_post
-    if self.new_record? && posts.empty?
-      user = User.by_nickname(creator).first
-      posts.create(:body => post, :user_id => user.id)
-      user.update_attributes!(:posts_count => user.posts_count + 1)
-    end
+    user = User.by_nickname(creator).first
+    self.posts = [Post.create(:body => post, :user_id => user.id)]
   end
 
   def set_posted_at

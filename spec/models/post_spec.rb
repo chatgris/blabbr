@@ -23,4 +23,42 @@ describe Post do
 
   end
 
+  describe "callback" do
+
+    context "When a post is created" do
+      before :each do
+        @creator  = Factory.create(:creator)
+        @topic = Factory.create(:topic)
+        @post = Factory.build(:post, :user_id => @creator.id)
+        @post.topic = @topic
+      end
+
+      it "should increment user.posts_count" do
+        @creator.reload.posts_count.should == 13
+      end
+
+      it "should increment user.posts_count when a new post is created" do
+        User.by_nickname(@creator.nickname).first.posts_count.should == 13
+        @post.save
+        User.by_nickname(@creator.nickname).first.posts_count.should == 14
+      end
+
+      it "should have a correct user_id for the first post" do
+        @post.save
+        @post.reload.user_id.should == @creator.id
+      end
+
+      it "should increment topic.posts_count when a new post is created" do
+        @post.save
+        @topic.reload.posts_count.should == 2
+      end
+
+      it "should update posted_at time" do
+        sleep(2)
+        @post.save
+        @topic.reload.posted_at.to_s.should_not == @topic.created_at.to_s
+      end
+    end
+  end
+
 end

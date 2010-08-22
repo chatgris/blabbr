@@ -6,7 +6,7 @@ class Post
   field :body
   field :state
 
-  embedded_in :topics, :inverse_of => :posts, :index => true
+  referenced_in :topic
   referenced_in :user
 
   stateflow do
@@ -26,7 +26,7 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  before_create :set_unread, :update_user_posts_count, :update_posted_at
+  after_validation :set_unread, :update_user_posts_count, :update_posted_at
 
   protected
 
@@ -35,19 +35,28 @@ class Post
   end
 
   def update_posted_at
-    self.topics.posted_at = Time.now.utc
+    if self.topic
+      t = Topic.by_permalink(self.topic.permalink).first
+      if t
+        t.posted_at = Time.now.utc
+        t.posts_count += 1
+        t.save
+      end
+    end
   end
 
   def set_unread
-    self.topics.members.each do |member|
-      if member.unread == 0
-        member.post_id = self.id
-        member.page = self.topics.posts_count / PER_PAGE + 1
+    if self.topic
+      self.topic.members.each do |member|
+        if member.unread == 0
+          member.post_id = self.id
+          member.page = self.topic.posts_count / PER_PAGE + 1
+        end
+        if member.nickname == self.user.nickname
+          member.posts_count += 1
+        end
+        member.unread += 1
       end
-      if member.nickname == self.user.nickname
-        member.posts_count += 1
-      end
-      member.unread += 1
     end
   end
 
