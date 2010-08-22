@@ -5,7 +5,7 @@ class TopicsController < ApplicationController
   after_filter :reset_unread_posts, :only => [:show]
 
   def index
-    @topics = Topic.by_subscribed_topic(current_user.nickname).order_by([[:posted_at, :desc]]).paginate :page => params[:page] || nil, :per_page => 10
+    @topics = Topic.by_subscribed_topic(current_user.nickname).order_by([[:posted_at, :desc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
   end
 
   def show
@@ -13,7 +13,7 @@ class TopicsController < ApplicationController
       flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     else
-      @posts = @topic.posts.all.order_by([[:created_at, :asc]]).paginate :page => params[:page] || nil, :per_page => 50
+      @posts = @topic.posts.all.order_by([[:created_at, :asc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE
     end
   end
 
