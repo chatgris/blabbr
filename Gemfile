@@ -15,3 +15,8 @@ group :test, :development do
   gem "rspec-rails", "2.0.0.beta.19"
   gem "factory_girl_rails", "1.0"
 end
+
+group :development do
+  gem "rbbcode"
+  gem "ClothRed"
+end
