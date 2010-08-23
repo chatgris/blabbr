@@ -22,4 +22,15 @@ describe "routing to posts" do
     end
   end
 
+  context "put request" do
+    it "routes /topics/:topic_id/posts/:id to topics#create" do
+      { :put => "/topics/:topic_id/posts/:id"}.should route_to(
+        :controller => "posts",
+        :action => "update",
+        :topic_id => ":topic_id",
+        :id => ":id"
+      )
+    end
+  end
+
 end
