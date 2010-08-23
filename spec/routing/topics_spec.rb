@@ -63,22 +63,6 @@ describe "routing to topics" do
         :id => ":id"
       )
     end
-
-    it "routes /topics/:id/add_member to topics#add_post" do
-      { :put => "/topics/:id/add_post"}.should route_to(
-        :controller => "topics",
-        :action => "add_post",
-        :id => ":id"
-      )
-    end
-
-    it "routes /topics/:id/add_member to topics#add_member" do
-      { :put => "/topics/:id/add_member"}.should route_to(
-        :controller => "topics",
-        :action => "add_member",
-        :id => ":id"
-      )
-    end
   end
 
   context "delete request" do

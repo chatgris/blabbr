@@ -79,33 +79,6 @@ describe TopicsController do
       @topic.reload.title.should == 'New title'
     end
 
-    it "it should not add a member if he doesn't exist" do
-      put :add_member, :nickname => 'New member', :id => @topic.id
-      response.should redirect_to(topic_path(@topic.permalink))
-      flash[:error].should == I18n.t('member.not_find')
-    end
-
-    it "it should add a member" do
-      member = Factory.create(:user)
-      put :add_member, :nickname => member.nickname, :id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
-      flash[:notice].should == I18n.t('member.add_success')
-    end
-
-    it "should fail when removing a user who is not a member" do
-      delete :remove_member, :nickname => "New member", :id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
-      flash[:error].should == I18n.t('member.not_find')
-    end
-
-    it "should remove a user from members" do
-      member = Factory.create(:user)
-      put :add_member, :nickname => member.nickname, :id => @topic.id
-      delete :remove_member, :nickname => member.nickname, :id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
-      flash[:notice].should == I18n.t('member.remove_success')
-    end
-
     it 'should delete the topic' do
       lambda do
         delete :destroy, :id => @topic.id
@@ -175,13 +148,6 @@ describe TopicsController do
       get :edit, :id => @topic.id
       response.should redirect_to :back
       flash[:error].should == I18n.t('topic.not_auth')
-    end
-
-    it "should not add a member" do
-      member = Factory.create(:invited)
-      put :add_member, :nickname => member.nickname, :id => @topic.id
-      response.should redirect_to :back
-      flash[:error] = t('topic.not_auth')
     end
 
     it 'should not delete the topic' do

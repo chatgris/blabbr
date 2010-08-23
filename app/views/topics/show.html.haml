@@ -2,7 +2,7 @@
 %ul.topic-list
   - if creator? @topic.creator
     %li#add-member
-      = form_tag add_member_topic_path(@topic), :method => 'put', :action => 'index' do
+      = form_tag topic_members_path(@topic), :method => 'post' do
         = text_field_tag :nickname, params[:nickname]
         = submit_tag "Ajouter"
     %li.edit
@@ -24,7 +24,7 @@
     = t('subscriber').pluralize
     - members_without_creator(@topic).each do |member|
       = member
-      = link_to "X", remove_member_topic_path(@topic, :nickname => member), :method => :delete
+      = link_to "X", topic_member_path(@topic, :id => member), :method => :delete
 = will_paginate @posts
 = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
 = will_paginate @posts

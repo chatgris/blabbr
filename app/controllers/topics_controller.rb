@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   before_filter :authorize
-  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :add_member, :remove_member]
+  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_current_topic_for_member, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
 
@@ -41,24 +41,6 @@ class TopicsController < ApplicationController
       flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     end
-  end
-
-  def add_member
-    if @topic.new_member(params[:nickname])
-      flash[:notice] = t('member.add_success', :name => params[:nickname])
-    else
-      flash[:error] = t('member.not_find')
-    end
-    redirect_to topic_path(@topic.permalink)
-  end
-
-  def remove_member
-    if @topic.rm_member!(params[:nickname])
-      flash[:notice] = t('member.remove_success', :name => params[:nickname])
-    else
-      flash[:error] = t('member.not_find')
-    end
-    redirect_to topic_path(@topic.permalink)
   end
 
   def update
