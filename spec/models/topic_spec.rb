@@ -89,44 +89,47 @@ describe Topic do
     end
   end
 
-  #describe 'members' do
+  describe 'members' do
 
-    #before :each do
-      #@creator  = Factory.create(:creator )
-      #@topic = Factory.create(:topic)
-      #@current_user = Factory.create(:user)
-      #@post = Factory.build(:post, :user_id => @current_user.id)
-      #@member = Factory.build(:member)
-    #end
+    before :each do
+      @creator  = Factory.create(:creator )
+      @topic = Factory.create(:topic)
+      @current_user = Factory.create(:user)
+      @post = Factory.build(:post, :user_id => @current_user.id)
+      @member = Factory.build(:member)
+    end
 
-    #context " Adding new members "do
-      #it "shouldn't add a unregistered user to topic" do
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 1
-        #@topic.new_member(@member.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 1
-      #end
+    context " Adding new members "do
+      it "should have one member" do
+        @topic.reload.members.size.should == 1
+      end
 
-      #it "should add a registered user to topic" do
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 1
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 2
-      #end
+      it "shouldn't add a unregistered user to topic" do
+        @topic.reload.members.size.should == 1
+        @topic.new_member(@member.nickname)
+        @topic.reload.members.size.should == 1
+      end
 
-      #it "should have a posts_count equals to 0 when invited" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
-      #end
+      it "should add a registered user to topic" do
+        @topic.new_member(@current_user.nickname)
+        @topic.reload.members.size.should == 2
+      end
 
-      #it "shouldn't add a user if this user is already invited" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 2
-      #end
+      it "should have a posts_count equals to 0 when invited" do
+        @topic.new_member(@current_user.nickname)
+        @topic.reload.members[1].posts_count.should == 0
+      end
 
-      #it "should make unread equals to posts.size when a member is invited" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].unread.should == Topic.by_permalink(@topic.permalink).first.posts.size
-      #end
-    #end
+      it "shouldn't add a user if this user is already invited" do
+        @topic.new_member(@current_user.nickname)
+        @topic.reload.members.size.should == 2
+      end
+
+      it "should make unread equals to posts.size when a member is invited" do
+        @topic.new_member(@current_user.nickname)
+        @topic.reload.members[1].unread.should == @topic.reload.posts.size
+      end
+    end
 
     #context "Adding a new post" do
       #it "should have increment posts_count when a new post is added by user" do
@@ -172,7 +175,7 @@ describe Topic do
         #@topic.new_member(@current_user.nickname)
         #Topic.by_permalink(@topic.permalink).first.members[1].page.should == @topic.posts.size / PER_PAGE + 1
       #end
-    #end
+    end
 
     #context "Removing a member" do
       #it "should remove a member from a topic" do
