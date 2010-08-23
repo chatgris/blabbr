@@ -130,51 +130,6 @@ describe Topic do
         @topic.reload.members[1].unread.should == @topic.reload.posts.size
       end
     end
-
-    #context "Adding a new post" do
-      #it "should have increment posts_count when a new post is added by user" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 0
-        #@topic.new_post(@post)
-        #Topic.by_permalink(@topic.permalink).first.members[1].posts_count.should == 1
-      #end
-
-      #it "shouldn't increment posts_count of creator in this context" do
-        #Topic.by_permalink(@topic.permalink).first.members[0].posts_count.should == 1
-      #end
-
-      #it "shouldn't add a post if body is not present" do
-        #Topic.by_permalink(@topic.permalink).first.posts.size.should == 1
-        #@post = Factory.build(:post, :user_id => @current_user.id, :body => "")
-        #@topic.new_post(@post)
-        #Topic.by_permalink(@topic.permalink).first.posts.size.should == 1
-      #end
-
-      #it "should increment unread count when a post is added" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 1
-        #@topic.new_post(@post)
-        #Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 2
-      #end
-
-      #it "should reset unread post" do
-        #@topic.new_member(@current_user.nickname)
-        #@topic.reset_unread(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].unread.should == 0
-        #@topic.new_post(@post)
-        #Topic.by_permalink(@topic.permalink).first.members[0].unread.should_not == 0
-      #end
-
-      #it "should add post_id to member" do
-        #@topic.new_member(@current_user.nickname)
-        #@topic.new_post(@post)
-        #Topic.by_permalink(@topic.permalink).first.members[0].post_id.should == Topic.by_permalink(@topic.permalink).first.posts[1].id.to_s
-      #end
-
-      #it "should add page number of the newly added post to member" do
-        #@topic.new_member(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members[1].page.should == @topic.posts.size / PER_PAGE + 1
-      #end
     end
 
     #context "Removing a member" do
