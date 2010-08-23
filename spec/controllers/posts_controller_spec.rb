@@ -37,6 +37,47 @@ describe PostsController do
 
   end
 
+  describe 'deleting a post' do
+
+    before :each do
+      @current_user = Factory.create(:creator)
+      @topic = Factory.create(:topic)
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      @post = Post.first
+    end
+
+    context 'when current_user == post.user' do
+
+      before do
+        controller.stub!(:logged_in?).and_return(true)
+        controller.stub!(:current_user).and_return(@current_user)
+      end
+
+      it 'should delete a post' do
+        delete :destroy, :id => @post.id, :topic_id => @topic.permalink
+        response.should redirect_to :back
+        flash[:notice].should == I18n.t('posts.delete_success')
+      end
+
+    end
+
+    context 'when current_user != post.user' do
+      before do
+        @user = Factory.create(:user)
+        @topic.new_member(@user.nickname)
+        controller.stub!(:logged_in?).and_return(true)
+        controller.stub!(:current_user).and_return(@user)
+      end
+
+      it "shouldn't delete a post" do
+        delete :destroy, :id => @post.id, :topic_id => @topic.permalink
+        response.should redirect_to :back
+        flash[:error].should == I18n.t('posts.delete_unsuccess')
+      end
+
+    end
+  end
+
   context "is a registred user, but not a member" do
     before :each do
       @creator = Factory.create(:creator)

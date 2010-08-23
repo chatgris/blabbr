@@ -27,6 +27,18 @@ class PostsController < ApplicationController
     redirect_to :back
   end
 
+  def destroy
+    @post = Post.criteria.id(params[:id]).and(:user_id => current_user.id).first
+    if @post
+      @post.delete!
+      redirect_to :back, :notice => t('posts.delete_success')
+    else
+      redirect_to :back
+      flash[:error] = t('posts.delete_unsuccess')
+    end
+
+  end
+
   protected
 
   def get_current_topic_for_member
