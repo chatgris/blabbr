@@ -1,4 +1,4 @@
-Blabbr::Application.routes.draw do |map|
+Blabbr::Application.routes.draw do
   match "/uploads/*path" => "gridfs#serve"
   resources :sessions, :only => [:create]
   resources :users, :except => [:edit, :destroy]
