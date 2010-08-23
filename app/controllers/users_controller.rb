@@ -6,6 +6,10 @@ class UsersController < ApplicationController
     @users = User.all.paginate :page => params[:page] || nil, :per_page => 10
   end
 
+  def autocomplete
+    @users = User.where(:nickname => /#{params[:q]}/).all
+  end
+
   def edit
   end
 

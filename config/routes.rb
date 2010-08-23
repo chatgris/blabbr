@@ -3,7 +3,9 @@ Blabbr::Application.routes.draw do
   match "/uploads/*path" => "gridfs#serve"
 
   resources :sessions, :only => [:create]
-  resources :users, :except => [:edit, :destroy]
+  resources :users, :except => [:edit, :destroy] do
+    get :autocomplete, :on => :collection
+  end
   resources :smilies, :as => "smileys", :except => [:show]
   #match '/topics/page/:page' => 'topics#index'
 

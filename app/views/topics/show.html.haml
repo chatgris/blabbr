@@ -3,7 +3,7 @@
   - if creator? @topic.creator
     %li#add-member
       = form_tag topic_members_path(@topic), :method => 'post' do
-        = text_field_tag :nickname, params[:nickname]
+        = text_field_tag :nickname, params[:nickname], 'data-autocomplete-url' => autocomplete_users_path, :class => 'autocomplete'
         = submit_tag "Ajouter"
     %li.edit
       = link_to t('topics.edit'), edit_topic_path(@topic)
