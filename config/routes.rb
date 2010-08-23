@@ -4,7 +4,7 @@ Blabbr::Application.routes.draw do
   resources :users, :except => [:edit, :destroy]
   resources :smilies, :as => "smileys", :except => [:show]
   #match '/topics/page/:page' => 'topics#index'
-  match '/topics/:id/page/:page' => 'topics#show'
+  match '/topics/:id/page/:page' => 'topics#show', :as => "page_topics"
   resources :topics do
     resources :posts
     member do
