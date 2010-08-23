@@ -46,15 +46,6 @@ class Topic
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
-  def new_post(post)
-    if post.body.empty?
-      false
-    else
-      posts.create(:body => post.body, :user_id => post.user_id)
-      save
-    end
-  end
-
   def update_post(post, body)
     post.body = body
     post.save

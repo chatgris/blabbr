@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   before_filter :authorize
-  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :add_member, :remove_member]
+  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy, :remove_member]
   before_filter :get_current_topic_for_member, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
 
