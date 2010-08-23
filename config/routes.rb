@@ -7,6 +7,7 @@ Blabbr::Application.routes.draw do
   match '/topics/:id/page/:page' => 'topics#show', :as => "page_topics"
   resources :topics do
     resources :posts
+    resources :members, :only => [:create, :destroy]
     member do
       put :add_member, :add_post
       delete :remove_member
