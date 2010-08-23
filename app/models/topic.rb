@@ -94,7 +94,7 @@ class Topic
 
   def creator_as_members
     if self.new_record? && members.empty?
-      members << Member.new(:nickname => creator)
+      members << Member.new(:nickname => creator, :posts_count => 1)
     end
   end
 
