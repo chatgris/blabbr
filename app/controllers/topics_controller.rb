@@ -56,11 +56,10 @@ class TopicsController < ApplicationController
   def destroy
     unless @topic.nil?
       @topic.destroy
-      flash[:notice] = "Successfully destroyed topic."
+      redirect_to :back, :notice => t('topic.deleted')
     else
-      flash[:error] = "You're not authorised to view this page"
+      redirect_to :back, :alert => t('topic.not_auth')
     end
-    redirect_to topics_url
   end
 
   protected
@@ -78,16 +77,14 @@ class TopicsController < ApplicationController
   def get_current_topic_for_creator
     @topic = Topic.criteria.id(params[:id]).and('creator' => current_user.nickname).first
     unless @topic
-      flash[:error] = t('topic.not_auth')
-      redirect_to :back
+      redirect_to :back, :alert => t('topic.not_auth')
     end
   end
 
   def get_current_topic_for_member
     @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
-      flash[:error] = t('topic.not_auth')
-      redirect_to :back
+      redirect_to :back, :alert => t('topic.not_auth')
     end
   end
 

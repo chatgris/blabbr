@@ -36,6 +36,7 @@ describe TopicsController do
       @topic = Factory.create(:topic)
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
+      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
     end
 
     it 'should show an empty topics index' do
@@ -84,7 +85,7 @@ describe TopicsController do
         delete :destroy, :id => @topic.id
       end.should change(Topic, :count).by(-1)
       Topic.criteria.id(@topic.id).first.should be_nil
-      response.should redirect_to topics_path
+      response.should redirect_to :back
     end
 
   end
@@ -103,13 +104,13 @@ describe TopicsController do
     it 'should not see topic' do
       get :show, :id => @topic.permalink
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
 
     it 'should not see edit' do
       get :edit, :id => @topic.id
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
 
     it 'get new should be success' do
@@ -122,7 +123,7 @@ describe TopicsController do
         delete :destroy, :id => @topic.id
       end.should_not change(Topic, :count).by(-1)
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
 
   end
@@ -147,7 +148,7 @@ describe TopicsController do
     it 'should not see edit' do
       get :edit, :id => @topic.id
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
 
     it 'should not delete the topic' do
@@ -155,7 +156,7 @@ describe TopicsController do
         delete :destroy, :id => @topic.id
       end.should_not change(Topic, :count).by(-1)
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
 
   end
