@@ -9,7 +9,7 @@ Blabbr::Application.routes.draw do
   resources :smilies, :as => "smileys", :except => [:show]
   #match '/topics/page/:page' => 'topics#index'
 
-  match '/topics/:id/page/:page' => 'topics#show', :as => "page_topics"
+  match '/topics/:id/page/:page' => 'topics#show', :as => "page_topic"
 
   resources :topics do
     resources :posts

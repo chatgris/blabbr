@@ -26,8 +26,9 @@
       = member
       = link_to "X", topic_member_path(@topic, :id => member), :method => :delete
 = will_paginate @posts
-= render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
+#posts
+  = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
 = will_paginate @posts
 #addComment
-  = form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink) ) do |form|
+  = form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink), :remote => true ) do |form|
     = render :partial => 'posts/form', :locals => {:form => form}

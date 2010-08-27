@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
 
   before_filter :get_current_topic_for_member
+  respond_to :html, :js
 
   def edit
     @post = @topic.posts.criteria.id(params[:id]).first
@@ -19,10 +20,11 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      redirect_to :back, :notice => t('post.success')
+      flash[:notice] = t('post.success')
     else
-      redirect_to :back, :alert => t('post.error')
+      flash[:alert] = t('post.error')
     end
+    respond_with(@post, :location => page_topic_path(:id => @topic.permalink, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
   end
 
   def destroy

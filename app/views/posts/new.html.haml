@@ -1,0 +1,3 @@
+= t('posts.new')
+= form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink) ) do |form|
+  = render form

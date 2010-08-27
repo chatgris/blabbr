@@ -14,13 +14,13 @@ describe PostsController do
 
     it "should add a post" do
       post :create, :post => {"body" => @post.body}, :topic_id => @topic.permalink
-      response.should redirect_to :back
+      response.should redirect_to "/topics/#{@topic.permalink}/page/1##{Post.last.id.to_s}"
       flash[:notice].should == I18n.t('post.success')
     end
 
     it "should not add a post if params are wrong" do
       post :create, :post => {"body" => ''}, :topic_id => @topic.permalink
-      response.should redirect_to :back
+      response.should render_template("new")
       flash[:alert].should == I18n.t('post.error')
     end
 
