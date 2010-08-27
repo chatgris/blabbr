@@ -17,8 +17,7 @@ class SmiliesController < ApplicationController
     params[:smiley][:added_by] = current_user.nickname
     @smiley = Smiley.new(params[:smiley])
     if @smiley.save
-      flash[:notice] = "Smiley ajouté"
-      redirect_to root_path
+      redirect_to root_path, :notice => t('smilies.created')
     else
       render :action => 'new'
     end
@@ -26,7 +25,7 @@ class SmiliesController < ApplicationController
 
   def update
     if @smiley.update_attributes(params[:smiley])
-      redirect_to :back
+      redirect_to :back, :notice => t('smilies.updated')
     else
       render :edit
     end
@@ -35,11 +34,10 @@ class SmiliesController < ApplicationController
   def destroy
     unless @smiley.nil?
       @smiley.destroy
-      flash[:notice] = t('smilies.destroy.success')
+      redirect_to topics_url, :notice => t('smilies.destroy.success')
     else
-      flash[:error] = t('smilies.not_auth')
+      redirect_to topics_url, :alert => t('smilies.not_auth')
     end
-    redirect_to topics_url
   end
 
   protected
@@ -47,8 +45,7 @@ class SmiliesController < ApplicationController
   def get_current_smiley_for_creator
     @smiley = Smiley.criteria.id(params[:id]).by_nickname(current_user.nickname).first
     unless @smiley
-      flash[:error] = t('smilies.not_auth')
-      redirect_to :back
+      redirect_to :back, :alert => t('smilies.not_auth')
     end
   end
 

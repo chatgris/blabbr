@@ -75,7 +75,7 @@ describe SmiliesController do
     it 'should not see edit' do
       get :edit, :id => @smiley.id
       response.should redirect_to :back
-      flash[:error].should == I18n.t('smilies.not_auth')
+      flash[:alert].should == I18n.t('smilies.not_auth')
     end
 
     it 'should not update smiley' do
@@ -83,7 +83,7 @@ describe SmiliesController do
       put :update, :smiley => {:code => 'code'}, :id => @smiley.id
       response.should redirect_to :back
       @smiley.reload.code.should_not == 'code'
-      flash[:error].should == I18n.t('smilies.not_auth')
+      flash[:alert].should == I18n.t('smilies.not_auth')
     end
 
     it 'should not delete the smiley' do
@@ -91,7 +91,7 @@ describe SmiliesController do
         delete :destroy, :id => @smiley.id
       end.should_not change(Smiley, :count).by(-1)
       response.should redirect_to :back
-      flash[:error].should == I18n.t('smilies.not_auth')
+      flash[:alert].should == I18n.t('smilies.not_auth')
     end
 
   end
