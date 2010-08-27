@@ -21,7 +21,7 @@ describe PostsController do
     it "should not add a post if params are wrong" do
       post :create, :post => {"body" => ''}, :topic_id => @topic.permalink
       response.should redirect_to :back
-      flash[:error].should == I18n.t('post.error')
+      flash[:alert].should == I18n.t('post.error')
     end
 
     it 'should see edit' do
@@ -72,7 +72,7 @@ describe PostsController do
       it "shouldn't delete a post" do
         delete :destroy, :id => @post.id, :topic_id => @topic.permalink
         response.should redirect_to :back
-        flash[:error].should == I18n.t('posts.delete_unsuccess')
+        flash[:alert].should == I18n.t('posts.delete_unsuccess')
       end
 
     end
@@ -92,7 +92,7 @@ describe PostsController do
       @post = Factory.build(:post)
       post :create, :post => @post, :topic_id => @topic.permalink
       response.should redirect_to :back
-      flash[:error].should == I18n.t('topic.not_auth')
+      flash[:alert].should == I18n.t('topic.not_auth')
     end
   end
 

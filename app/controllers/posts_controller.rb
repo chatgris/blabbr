@@ -9,8 +9,7 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     if @post.update_attributes(params[:post])
-      flash[:notice] = t('posts.update.success')
-      redirect_to :back
+      redirect_to :back, :notice => t('posts.update.success')
     else
       render :action => 'edit'
     end
@@ -20,11 +19,10 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      flash[:notice] = t('post.success')
+      redirect_to :back, :notice => t('post.success')
     else
-      flash[:error] = t('post.error')
+      redirect_to :back, :alert => t('post.error')
     end
-    redirect_to :back
   end
 
   def destroy
@@ -33,8 +31,7 @@ class PostsController < ApplicationController
       @post.delete!
       redirect_to :back, :notice => t('posts.delete_success')
     else
-      redirect_to :back
-      flash[:error] = t('posts.delete_unsuccess')
+      redirect_to :back, :alert => t('posts.delete_unsuccess')
     end
 
   end
@@ -44,8 +41,7 @@ class PostsController < ApplicationController
   def get_current_topic_for_member
     @topic = Topic.by_permalink(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
-      flash[:error] = t('topic.not_auth')
-      redirect_to :back
+      redirect_to :back, :alert => t('topic.not_auth')
     end
   end
 
