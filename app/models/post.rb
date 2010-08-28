@@ -58,8 +58,9 @@ class Post
           end
           if member.nickname == self.user.nickname
             member.posts_count += 1
+          else
+            member.unread += 1
           end
-          member.unread += 1
         end
         t.save
       end

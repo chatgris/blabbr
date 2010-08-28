@@ -13,7 +13,15 @@ class TopicsController < ApplicationController
       flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     else
-      @posts = @topic.posts.all.order_by([[:created_at, :asc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE
+      if request.xhr?
+        unread_posts_size = @topic.members.where(:nickname => current_user.nickname).first.unread
+        if unread_posts_size > 0
+          @posts = @topic.posts.desc(:created_at).excludes(:nickname => current_user.nickname).limit(unread_posts_size)
+        end
+        logger.info unread_posts_size
+      else
+        @posts = @topic.posts.all.order_by([[:created_at, :asc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE
+      end
     end
   end
 

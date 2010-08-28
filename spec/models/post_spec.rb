@@ -87,12 +87,19 @@ describe Post do
         @topic.reload.members[0].posts_count.should == 1
       end
 
+      it "shouldn't increment unread count when a post is added by the same user" do
+        @topic.reload.members[1].unread.should == 1
+      end
+
       it "should increment unread count when a post is added" do
-        @topic.reload.members[1].unread.should == 2
+        @post = Factory.build(:post)
+        @post.topic = @topic
+        @post.save
+        @topic.reload.members[1].unread.should == 1
       end
 
       it "should reset unread post" do
-        @topic.reload.members[1].unread.should == 2
+        @topic.reload.members[1].unread.should == 1
         @topic.reset_unread(@member.nickname)
         @topic.reload.members[1].unread.should == 0
         @topic.reload.members[0].unread.should_not == 0
