@@ -92,10 +92,10 @@ describe Post do
       end
 
       it "should increment unread count when a post is added" do
-        @post = Factory.build(:post)
+        @post = Factory.build(:post, :user_id => @creator.id)
         @post.topic = @topic
         @post.save
-        @topic.reload.members[1].unread.should == 1
+        @topic.reload.members[1].unread.should == 2
       end
 
       it "should reset unread post" do

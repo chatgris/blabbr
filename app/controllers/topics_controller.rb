@@ -18,7 +18,6 @@ class TopicsController < ApplicationController
         if unread_posts_size > 0
           @posts = @topic.posts.desc(:created_at).excludes(:nickname => current_user.nickname).limit(unread_posts_size)
         end
-        logger.info unread_posts_size
       else
         @posts = @topic.posts.all.order_by([[:created_at, :asc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE
       end
