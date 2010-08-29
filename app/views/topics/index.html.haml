@@ -4,7 +4,7 @@
   - @topics.each do |topic|
     %article
       %p.unread
-        = link_to_unread topic
+        %mark=link_to_unread topic
       %header
         %h3
           = link_to topic.title, topic_path(topic.permalink)

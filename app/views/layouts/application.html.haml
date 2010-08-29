@@ -2,7 +2,7 @@
 %html
   %head
     %title
-      = h(yield(:title) || "Blabbr")
+      = h("Blabbr - #{yield(:title)}")
     = stylesheet_link_tag 'style'
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery.rails.js", "jquery.autocomplete.js", "application.js"
@@ -31,5 +31,7 @@
     %hr
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
+    %h2
+      = yield(:title)
     %section#contents
       =yield

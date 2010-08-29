@@ -1,10 +1,10 @@
-%div{:id => post.id, :class => "post"}
+%article{:id => post.id, :class => "post"}
   %h4
     = link_to_avatar post.user
     %br
     = link_to post.user.nickname, user_path(post.user.permalink)
   = link_to t('posts.edit'), edit_topic_post_path(topic.permalink, post.id)
-  %p.date
+  %time
     = post.created_at
   %div.bubble
     =raw textilize post.body

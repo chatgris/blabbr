@@ -3,7 +3,7 @@ require 'digest/md5'
 module ApplicationHelper
 
   def title(page_title)
-    content_for(:title) { "Blabbr - #{page_title}" }
+    content_for(:title) { page_title }
   end
 
   def stylesheet(*args)

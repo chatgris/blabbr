@@ -33,7 +33,7 @@ header
   h1
     margin: .2em 0 0 0
     float: left
-    font-size: 6em
+    font-size: 6.5em
     line-height: 1em
     a
       font-family: Floozy
@@ -90,17 +90,27 @@ header
       padding: .3em .6em .3em 22px
       &:hover
         text-decoration: underline
+    li
+      background: transparent
+      -moz-border-radius: 0
+      -moz-box-shadow: none
+      -webkit-border-radius: 0
+      -webkit-box-shadow: none
+      margin: 0
+    li + li
+      border-left= !background "1px solid"
 #posts-ratio a
   background: url(images/post.png) no-repeat 4px center
 #members a
   background: url(images/member.png) no-repeat 4px center
 #add-member
   background= !beige "url(images/add-member.png) no-repeat 4px center"
-  padding: 0 0 0 22px
-  &:hover
-    background= !orange "url(images/add-member.png) no-repeat 4px center"
+  padding: 0 2px 0 22px
   input[type="text"]
     display: inline
+  input[type=submit]
+    &:hover
+      text-decoration: underline
 #files-ratio a
   background: url(images/file.png) no-repeat 4px center
 .edit a
@@ -147,10 +157,10 @@ header
         color= !gray
         font-style: italic
         font-weight: normal
-#content
 h2
-  font-size: 2em
-  margin: 0 0 1em 0
+  font-size: 2.5em
+  margin: 1em 235px 0 0
+  text-align: right
   text-shadow= !gray "1px 1px 0"
   color= !orange
   clear: both
@@ -178,9 +188,9 @@ h2
     margin: .2em 0 .4em 0
     line-height: 1.4em
     font-size: 1.3em
-  .date
+  time
     color: #888888
-    text-align: right
+    float: right
     font-size: 1.1em
     font-style: italic
     margin: 0
@@ -227,10 +237,6 @@ input[type=submit]
   &:active
     top: 2px
     left: 2px
-
-  &:hover
-    text-shadow= !text "1px 1px 0"
-    color: #FFFFFF
 
 input[type="submit"]::-moz-focus-inner
   border: none
