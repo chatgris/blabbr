@@ -5,12 +5,11 @@
       blabbr
     = stylesheet_link_tag 'sessions'
   %body
-    .center
+    %header.center
       %h1
         blabbr
     - flash.each do |name, msg|
       .center
         = content_tag :div, msg, :id => "flash_#{name}"
-    #content
-      .center
-        =yield
+    %section#content.center
+      =yield
