@@ -85,28 +85,11 @@ header
     font-weight: bold
     text-transform: lowercase
     text-shadow: 1px 1px 0 #FFFFFF
-    &:hover
-      background= !orange
-      text-shadow= !text "1px 1px 0"
-    li
-      background: transparent
-      -moz-border-radius: 0
-      -moz-box-shadow: none
-      -webkit-border-radius: 0
-      -webkit-box-shadow: none
-      margin: 0
-      &:hover
-        background: transparent
-      a
-        &:hover
-          text-decoration: underline
-    li + li
-      border-left= !background "1px solid"
     a
       display: block
       padding: .3em .6em .3em 22px
       &:hover
-        color: white
+        text-decoration: underline
 #posts-ratio a
   background: url(images/post.png) no-repeat 4px center
 #members a
@@ -136,30 +119,34 @@ header
   line-height: 1.4em
   a
     display: block
-  li
-    margin: .2em 0
-  ul
-    list-style: none
+  article
     margin: 0 0 .7em 0
     &:hover
       padding: 0 0 0 .4em
-    li
-      display: inline-block
     .unread
       width: 3em
       margin: 0 .4em 0 0
       text-align: center
       line-height: 2.5em
+      float: left
       a
         +bordures-rondes(#FFFFFF)
       a.new
         +bordures-rondes(!orange)
-    .title
-      width: 30em
+    header
+      width: 40em
+      margin: .2em 0 0 .2em
       vertical-align: top
       line-height: 1em
-      em
+      float: left
+      h3
+        font-size: 1em
+        margin: 0 0 .1em 0
+      h4
+        font-size: .8em
         color= !gray
+        font-style: italic
+        font-weight: normal
 #content
 h2
   font-size: 2em

@@ -1,14 +1,14 @@
 - title "Topics"
 = will_paginate @topics
-%ul#topics
-  - for topic in @topics
-    %li
-      %ul
-        %li.unread
-          = link_to_unread topic
-        %li.title
-          %strong
-            = link_to topic.title, topic_path(topic.permalink)
-          %em.small
-            = "by #{topic.creator} le #{topic.created_at}"
+%section#topics
+  - @topics.each do |topic|
+    %article
+      %p.unread
+        = link_to_unread topic
+      %header
+        %h3
+          = link_to topic.title, topic_path(topic.permalink)
+        %h4
+          = "by #{topic.creator} le #{topic.created_at}"
+      %hr
 = will_paginate @topics
