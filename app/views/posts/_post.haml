@@ -3,7 +3,7 @@
     = link_to_avatar post.user
     %br
     = link_to post.user.nickname, user_path(post.user.permalink)
-  = link_to t('posts.edit'), edit_topic_post_path(topic.permalink, post.id)
+  = link_to_edit_post(post, topic)
   %time
     = post.created_at
   %div.bubble

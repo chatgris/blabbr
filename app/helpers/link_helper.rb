@@ -20,4 +20,8 @@ module LinkHelper
     link_to image_tag(user.avatar.thumb.url || user.gravatar_url + "25"), user_path(user.permalink)
   end
 
+  def link_to_edit_post(post, topic)
+    link_to t('posts.edit'), edit_topic_post_path(topic.permalink, post.id) if post.user_id == current_user.id
+  end
+
 end
