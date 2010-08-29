@@ -8,26 +8,28 @@
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery.rails.js", "jquery.autocomplete.js", "application.js"
     = csrf_meta_tag
   %body
-    #header
+    %header
       %h1
         = link_to "blabbr", root_path
-      %ul#user_info
-        %li#avatar
-          = link_to_avatar_thumb current_user
-          = link_to current_user.nickname, user_path(current_user.permalink)
-        %li
-          = link_to t('home'), topics_path
-        %li
-          = link_to t('preferences'), dashboard_path
-        %li
-          = link_to t('logout'), logout_path
-      %ul.topic-list
-        %li.new
-          = link_to t('topics.new'), new_topic_path
-        %li.new
-          = link_to t('smilies.new'), new_smiley_path
+      %nav
+        %ul#user_info
+          %li#avatar
+            = link_to_avatar_thumb current_user
+            = link_to current_user.nickname, user_path(current_user.permalink)
+          %li
+            = link_to t('home'), topics_path
+          %li
+            = link_to t('preferences'), dashboard_path
+          %li
+            = link_to t('logout'), logout_path
+      %aside
+        %ul.topic-list
+          %li.new
+            = link_to t('topics.new'), new_topic_path
+          %li.new
+            = link_to t('smilies.new'), new_smiley_path
     %hr
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
-    #contents
+    %section#contents
       =yield
