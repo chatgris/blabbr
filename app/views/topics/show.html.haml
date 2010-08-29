@@ -32,3 +32,4 @@
 = will_paginate @posts
 = form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink), :remote => true ) do |form|
   = render :partial => 'posts/form', :locals => {:form => form}
+%audio{:id => 'player', :src => '/sound.mp3'}

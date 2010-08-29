@@ -8,7 +8,8 @@ jQuery(function($){//on document ready
 function updatePosts(url){
   $.get(url,function(data){
       if (data) {
-        $(data).hide().appendTo("#posts").show('slow')
+        $(data).hide().appendTo("#posts").show('slow');
+        document.getElementById('player').play();
       }
   },'js');
 }
