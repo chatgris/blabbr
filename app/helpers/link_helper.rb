@@ -4,7 +4,7 @@ module LinkHelper
     topic.members.each do |m|
       if m.nickname == current_user.nickname
         if m.unread == 0
-          return link_to m.unread, page_topic_path(topic.permalink, :anchor => "addComment", :page => (topic.posts_count / PER_PAGE + 1))
+          return link_to m.unread, page_topic_path(topic.permalink, :anchor => "new_post", :page => (topic.posts_count / PER_PAGE + 1))
         else
           return link_to m.unread, page_topic_path(topic.permalink, :anchor => m.post_id, :page => m.page), :class => "new"
         end
