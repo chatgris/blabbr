@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :authorize, :except => ['create']
   before_filter :edit_user, :only => ['edit', 'update']
+  after_filter :reset_cache, :only => ['update']
 
   def index
     @users = User.all.paginate :page => params[:page] || nil, :per_page => 10
@@ -45,6 +46,10 @@ class UsersController < ApplicationController
 
   def edit_user
     @user = current_user
+  end
+
+  def reset_cache
+    expire_fragment "topics-#{@user.nickname}"
   end
 
 end

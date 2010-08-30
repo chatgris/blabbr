@@ -1,8 +1,9 @@
 %article{:id => post.id, :class => "post"}
-  %h4
-    = link_to_avatar post.user
-    %br
-    = link_to post.user.nickname, user_path(post.user.permalink)
+  - cache("topics-#{post.user.nickname}") do
+    %h4
+      = link_to_avatar post.user
+      %br
+      = link_to post.user.nickname, user_path(post.user.permalink)
   = link_to_edit_post(post, topic)
   %time
     = post.created_at
