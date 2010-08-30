@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   end
 
   def reset_cache
-    expire_fragment "topics-#{@user.nickname}"
+    expire_fragment "topics-#{@user.id}"
   end
 
 end

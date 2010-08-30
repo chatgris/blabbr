@@ -1,7 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :authorize
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
-  before_filter :get_current_topic_for_member, :only => [:show]
+  before_filter :get_current_topic_for_member, :get_smilies, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
 
   def index

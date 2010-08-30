@@ -1,6 +1,6 @@
 module TopicsHelper
   def textilize(text)
-    Textilizer.new(text).to_html unless text.blank?
+    Textilizer.new(text, @smilies).to_html unless text.blank?
   end
 
   def post_ratio(topic)

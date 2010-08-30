@@ -1,5 +1,5 @@
 %article{:id => post.id, :class => "post"}
-  - cache("topics-#{post.user.nickname}") do
+  - cache("topics-#{post.user_id}") do
     %h4
       = link_to_avatar post.user
       %br

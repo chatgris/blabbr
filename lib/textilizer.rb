@@ -1,6 +1,6 @@
 class Textilizer
-  def initialize(text)
-    @text = text
+  def initialize(text, smilies)
+    @text, @smilies = text, smilies
   end
 
   def to_html
@@ -8,7 +8,7 @@ class Textilizer
   end
 
   def smilirize(text)
-    Smiley.all.flatten.each do |smiley|
+    @smilies.each do |smiley|
       text.gsub!(/:#{smiley.code}:/, "<img src=\"#{smiley.image.url}\" alt=\"#{smiley.code}\" />")
     end
     text

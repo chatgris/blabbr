@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
 
   before_filter :get_current_topic_for_member
+  before_filter :get_smilies, :only => [:create]
   respond_to :html, :js
 
   def edit
