@@ -1,9 +1,6 @@
 = form_for(@user, :html => { :multipart => true }) do |f|
   = f.error_messages
   .p
-    = f.label t('nickname')
-    .br
-    = f.text_field :nickname
   .p
     = f.label t('email')
     .br
