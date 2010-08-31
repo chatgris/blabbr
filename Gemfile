@@ -21,3 +21,7 @@ group :development do
   gem "rbbcode"
   gem "ClothRed"
 end
+
+group :production do
+  gem "dalli", "0.9.2"
+end
