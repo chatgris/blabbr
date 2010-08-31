@@ -1,11 +1,6 @@
 h1. TODO
 
-* tracking those duplicates issues
-* add some index
-* More specs
-* html5 template
-* lastest version of sass
-* ajaxify
-* fragment cache
 * give a try to pusherapp
+* create a branch for devise
 * css (form, notice)
+* attachments
