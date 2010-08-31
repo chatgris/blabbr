@@ -30,4 +30,7 @@ Blabbr::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
+
+  # Depreciation notice
+  config.active_support.deprecation = :notify
 end
