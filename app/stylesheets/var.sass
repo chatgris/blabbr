@@ -1,23 +1,23 @@
-!orange = rgb(255,123,34)
-!gray = rgb(153,136,136)
-!background = rgb(238,218,204)
-!text = #444444
-!beige = #eecc99
+$orange: rgb(255, 123, 34)
+$gray: rgb(153, 136, 136)
+$background: rgb(238, 218, 204)
+$text: #444444
+$beige: #eecc99
 
-=bordures-rondes(!couleur)
+=bordures-rondes($couleur)
   border-radius: 5px
   -moz-border-radius: 5px
   -webkit-border-radius: 5px
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  background= !couleur
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  background: $couleur
 
-=bordures-rondes-bas(!couleur)
+=bordures-rondes-bas($couleur)
   border-radius: 5px
   -moz-border-radius: 0 0 5px 5px
   -webkit-border-radius: 0 0 5px 5px
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  background= !couleur
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5)
+  background: $couleur

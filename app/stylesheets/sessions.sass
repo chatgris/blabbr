@@ -1,4 +1,5 @@
 @import var.sass
+
 *
   margin: 0
   padding: 0
@@ -6,46 +7,57 @@
 @font-face
   font-family: "Floozy"
   src: url(Floozy__.ttf)
+
+
 html
-  font: 62.5%/1.6em  Arial, sans-serif
+  font: 62.5% / 1.6em Arial, sans-serif
   color: #777777
+
 body
-  background= !background
+  background: $background
+
 section, article, header, footer, nav, aside, hgroup
   display: block
+
 h1
   font-family: Floozy
   font-size: 12em
-  color= !orange
-  text-shadow= !gray ".05em .05em .05em"
-  padding: .4em .2em
+  color: $orange
+  text-shadow: $gray unquote(".05em .05em .05em")
+  padding: 0.4em 0.2em
   line-height: 1.1em
+
 .center
   margin: 0 auto
   width: 50em
+
 fieldset
   padding: 1em 0
   border: 0
   line-height: 2.5em
+
 input, label
   font-size: 1.2em
+
 input[type=url], input[type=file], input[type=password]
-  border= !orange "1px solid"
+  border: $orange unquote("1px solid")
   -moz-border-radius: 3px
   -webkit-border-radius: 3px
   width: 350px
   display: inline
   height: 2.5em
-  background: #FFFFFF url(images/openid.png) 2px center no-repeat
+  background: white url(images/openid.png) 2px center no-repeat
   padding: 0 0 0 24px
+
 input[type=text]:focus, textarea:focus, input[type=password]:focus
-  -moz-box-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
-  -moz-webkit-shadow= !gray "0 1px 3px", !gray "0 -1px 3px"
+  -moz-box-shadow: $gray unquote("0 1px 3px"), $gray unquote("0 -1px 3px")
+  -moz-webkit-shadow: $gray unquote("0 1px 3px"), $gray unquote("0 -1px 3px")
+
 input[type=submit]
-  +bordures-rondes(!orange)
+  +bordures-rondes($orange)
   display: inline-block
-  padding: .4em 1em
-  margin: 0 .5em
+  padding: 0.4em 1em
+  margin: 0 0.5em
   font-weight: bold
   border: 0
   cursor: pointer
@@ -53,18 +65,17 @@ input[type=submit]
   position: relative
   outline: none
   height: 2.5em
-
   &:active
     top: 2px
     left: 2px
-
   &:hover
     text-shadow: 2px 2px 2px #888888
 
 input[type="submit"]::-moz-focus-inner
   border: none
+
 #flash_error
-  border: 1px solid #fbb
-  +bordures-rondes(#fdd)
+  border: 1px solid #ffbbbb
+  +bordures-rondes(#ffdddd)
   padding: 1em
   margin: 1em 0
