@@ -12,6 +12,7 @@ describe TopicsHelper do
       @smiley = Factory.build(:smiley)
       @smiley.image = File.open(Rails.root.join("image.jpg"))
       @smiley.save
+      @smilies = Smiley.all.flatten
     end
 
     it "should do basic textile" do
@@ -35,7 +36,7 @@ describe TopicsHelper do
     end
 
     it "should allow smilies" do
-      helper.textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\"/uploads/smilies/doc.jpg\" alt=\"doc\" /></p>"
+      helper.textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\"/uploads/smilies/doc.jpg?#{@smiley.updated_at.to_i.to_s}\" alt=\"doc\" /></p>"
     end
   end
 

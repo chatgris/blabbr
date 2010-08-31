@@ -42,9 +42,7 @@ class TopicsController < ApplicationController
   end
 
   def edit
-    unless @topic.nil?
-      @post = @topic.posts('created_at' => @topic.created_at).first
-    else
+    if @topic.nil?
       flash[:error] = t('topic.not_auth')
       redirect_to topics_path
     end
