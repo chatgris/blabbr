@@ -32,7 +32,9 @@ class Post
 
   def update_user_posts_count
     if self.new_record?
-      User.find(user_id).update_attributes!(:posts_count => user.posts_count + 1)
+      u = User.find(user_id)
+      u.posts_count += 1
+      u.save
     end
   end
 

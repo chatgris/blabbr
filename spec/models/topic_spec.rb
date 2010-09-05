@@ -27,7 +27,8 @@ describe Topic do
 
   context "Validations" do
     it "should be valid" do
-      @creator = Factory.create(:creator)
+      @creator = Factory.build(:creator)
+      @creator.save!
       @topic = Factory.create(:topic)
       @topic.should be_valid
     end
@@ -172,7 +173,7 @@ describe Topic do
   describe 'stateflow' do
 
     before :each do
-      @current_user = Factory.create(:creator )
+      @current_user = Factory.create(:creator)
       @topic = Factory.create(:topic)
     end
 
@@ -200,41 +201,6 @@ describe Topic do
 
   end
 
-  #describe 'stateflow for embeddeded posts' do
-
-    #before :each do
-      #@topic = Factory.build(:topic)
-      #@current_user = Factory.create(:user)
-      #@post = Factory.build(:post, :user_id => @current_user.id)
-      #@creator  = Factory.create(:creator )
-      #@topic.new_post(@post)
-      #@topic.save
-    #end
-
-    #context "Default state" do
-      #it "a post should be published by default" do
-        #@topic.posts[0].state.should == "published"
-      #end
-
-      #it "should set delete status to a post" do
-        #@topic.posts[0].delete!
-        #Topic.by_permalink(@topic.permalink).first.posts[0].state.should == "deleted"
-      #end
-    #end
-
-    #context "When a post is deleted" do
-      #before(:each) do
-        #@topic.posts[0].delete!
-      #end
-
-      #it "should set published status to a deleted post" do
-        #@topic.posts[0].publish!
-        #Topic.by_permalink(@topic.permalink).first.posts[0].state.should == "published"
-      #end
-    #end
-
-  #end
-
   describe 'named_scope' do
 
      before :each do
@@ -252,23 +218,6 @@ describe Topic do
       Topic.by_subscribed_topic("Not a user").first.should be_nil
     end
   end
-
-  #describe 'updating a post' do
-    #before :each do
-      #@creator  = Factory.create(:creator )
-      #@topic = Factory.create(:topic)
-      #@current_user = Factory.create(:user)
-      #@post = Factory.build(:post, :user_id => @current_user.id)
-      #@topic.new_post(@post)
-    #end
-
-    #it "should update a post" do
-      #post = Topic.by_permalink(@topic.permalink).first.posts[1]
-      #@topic.update_post(post, "This post was edited")
-      #Topic.by_permalink(@topic.permalink).first.posts[1].body.should == "This post was edited"
-    #end
-
-  #end
 
   describe "associations" do
 

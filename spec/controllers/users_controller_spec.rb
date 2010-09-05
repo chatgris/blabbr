@@ -4,25 +4,24 @@ describe UsersController do
   describe 'with an anonymous user' do
     it 'should not see index' do
       get :index
-      response.should redirect_to login_path
+      response.should redirect_to new_user_session_path
     end
 
     it 'should not see show' do
       get :show, :id => Factory.build(:user).id.to_s
-      response.should redirect_to login_path
+      response.should redirect_to new_user_session_path
     end
 
     it 'should not see new' do
       get :new
-      response.should redirect_to login_path
+      response.should redirect_to new_user_session_path
     end
 
     it 'should not can edit a project' do
       get :edit, :id => Factory.build(:user).id.to_s
-      response.should redirect_to login_path
+      response.should redirect_to new_user_session_path
     end
 
-    it 'should create a user'
   end
 
   describe 'current_user == user' do

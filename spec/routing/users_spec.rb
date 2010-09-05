@@ -39,7 +39,7 @@ describe "routing to users" do
   context "post request" do
     it "routes /users to users#create" do
       { :post => "/users" }.should route_to(
-        :controller => "users",
+        :controller => "devise/registrations",
         :action => "create"
       )
     end
