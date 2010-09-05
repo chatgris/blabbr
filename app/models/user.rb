@@ -4,6 +4,9 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
   field :nickname
   field :permalink
   field :email
@@ -13,7 +16,7 @@ class User
   field :note
   field :avatar
   field :gravatar_url
-  field :attachments_count, :type => Integer, :defalut => 0
+  field :attachments_count, :type => Integer, :default => 0
 
   embeds_many :attachments
 
@@ -21,14 +24,14 @@ class User
   index :permalink
   index :identity_url
 
+  attr_accessible :nickname, :email, :password, :password_confirmation
+
   mount_uploader :avatar, AvatarUploader
 
   before_validation :set_permalink, :set_gravatar_url
 
   validates :nickname, :presence => true, :uniqueness => true, :length => { :maximum => 40 }
-  validates :permalink, :presence => true, :uniqueness => true
   validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
-  validates :identity_url, :presence => true, :uniqueness => true
 
   named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
