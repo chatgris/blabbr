@@ -20,8 +20,9 @@ end
 group :development do
   gem "rbbcode"
   gem "ClothRed"
+  gem "nokogiri"
 end
 
 group :production do
-  gem "dalli", "0.9.2"
+  gem "dalli", "0.9.3"
 end
