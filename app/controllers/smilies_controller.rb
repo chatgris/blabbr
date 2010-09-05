@@ -1,5 +1,4 @@
 class SmiliesController < ApplicationController
-  before_filter :authorize
   before_filter :get_current_smiley_for_creator, :only => [:edit, :update, :destroy]
 
   def index

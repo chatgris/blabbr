@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  before_filter :authorize, :except => ['create']
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
 
