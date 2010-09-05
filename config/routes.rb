@@ -1,24 +1,26 @@
 Blabbr::Application.routes.draw do
 
-  match "/uploads/*path" => "gridfs#serve"
+  devise_for :users
 
-  resources :sessions, :only => [:create]
-  resources :users, :except => [:edit, :destroy] do
-    get :autocomplete, :on => :collection
+  authenticate :user do
+    match "/uploads/*path" => "gridfs#serve"
+
+    resources :users, :except => [:edit, :destroy] do
+      get :autocomplete, :on => :collection
+    end
+
+    resources :smilies, :as => "smileys", :except => [:show]
+
+    match '/topics/:id/page/:page' => 'topics#show', :as => "page_topic"
+
+    resources :topics do
+      resources :posts
+      resources :members, :only => [:create, :destroy]
+    end
+
+    match 'dashboard' => 'users#edit', :as => :dashboard
+
+    root :to => 'topics#index'
   end
-  resources :smilies, :as => "smileys", :except => [:show]
-  #match '/topics/page/:page' => 'topics#index'
 
-  match '/topics/:id/page/:page' => 'topics#show', :as => "page_topic"
-
-  resources :topics do
-    resources :posts
-    resources :members, :only => [:create, :destroy]
-  end
-
-  match 'logout' => 'sessions#destroy', :as => :logout
-  match 'login' => 'sessions#new', :as => :login
-  match 'dashboard' => 'users#edit', :as => :dashboard
-
-  root :to => 'topics#index'
 end

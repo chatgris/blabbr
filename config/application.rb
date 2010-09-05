@@ -21,6 +21,6 @@ module Blabbr
        g.integration_tool :rspec
        g.test_framework   :rspec
      end
-    config.filter_parameters << :password
+    config.filter_parameters += [:password, :password_confirmation]
   end
 end
