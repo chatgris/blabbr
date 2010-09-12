@@ -1,6 +1,10 @@
 - title @topic.title
 :javascript
-  setInterval( "updatePosts('#{topic_path(@topic.permalink)}.js')", 10000 );
+  var pusher = new Pusher("#{ENV['PUSHER_KEY']}", "#{@topic.permalink}");
+  pusher.bind('new-post', function(data) {
+    var url = "/topics/#{@topic.permalink}/posts/"+data+".js"
+    showPost(url);
+  });
 %ul.topic-list
   - if creator? @topic.creator
     %li#add-member

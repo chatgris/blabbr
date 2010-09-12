@@ -24,6 +24,17 @@ function updatePosts(url){
   },'js');
 }
 
+function showPost(url){
+  $.get(url,function(data){
+      if (data) {
+        $(data).hide().appendTo("#posts").show('slow');
+        lostFocus();
+        blinkTitle(1);
+        document.getElementById('player').play();
+      }
+  },'js');
+}
+
 function blinkTitle(state) {
   if (windowIsActive != true) {
     if (state == 1) {

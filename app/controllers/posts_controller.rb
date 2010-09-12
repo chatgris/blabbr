@@ -1,8 +1,12 @@
 class PostsController < ApplicationController
 
   before_filter :get_current_topic_for_member
-  before_filter :get_smilies, :only => [:create]
+  before_filter :get_smilies, :only => [:create, :show]
   respond_to :html, :js
+
+  def show
+    @post = @topic.posts.criteria.id(params[:id]).first
+  end
 
   def edit
     @post = @topic.posts.criteria.id(params[:id]).first
@@ -21,6 +25,7 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
+      Pusher[@topic.permalink].trigger('new-post', @post.id)
       flash[:notice] = t('post.success')
     else
       flash[:alert] = t('post.error')
