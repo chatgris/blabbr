@@ -2,6 +2,7 @@ class PostsController < ApplicationController
 
   before_filter :get_current_topic_for_member
   before_filter :get_smilies, :only => [:create, :show]
+  after_filter :reset_unread_posts, :only => [:show]
   respond_to :html, :js
 
   def show
@@ -51,6 +52,10 @@ class PostsController < ApplicationController
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end
+  end
+
+  def reset_unread_posts
+    @topic.reset_unread(current_user.nickname)
   end
 
 end
