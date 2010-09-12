@@ -26,28 +26,36 @@ h1
   text-shadow: $gray unquote(".05em .05em .05em")
   padding: 0.4em 0.2em
   line-height: 1.1em
+  text-align: center
 
 .center
   margin: 0 auto
-  width: 50em
+  width: 37em
+
+.right
+  text-align: right
+  margin: 2em 0 0 0
 
 fieldset
   padding: 1em 0
   border: 0
   line-height: 2.5em
 
+p
+  margin: 1em 0 0 0
+
 input, label
   font-size: 1.2em
 
-input[type=url], input[type=file], input[type=password]
+input[type=url], input[type=file], input[type=password], input[type=email], input[type=text]
   border: $orange unquote("1px solid")
   -moz-border-radius: 3px
   -webkit-border-radius: 3px
   width: 350px
   display: inline
   height: 2.5em
-  background: white url(images/openid.png) 2px center no-repeat
-  padding: 0 0 0 24px
+  background: white
+  padding: 0 0 0 4px
 
 input[type=text]:focus, textarea:focus, input[type=password]:focus
   -moz-box-shadow: $gray unquote("0 1px 3px"), $gray unquote("0 -1px 3px")
