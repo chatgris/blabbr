@@ -26,7 +26,7 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  after_validation :set_unread, :update_user_posts_count, :update_posted_at
+  after_validation :update_user_posts_count, :update_topic_infos
 
   protected
 
@@ -38,21 +38,12 @@ class Post
     end
   end
 
-  def update_posted_at
+  def update_topic_infos
     if self.new_record? && self.topic
       t = Topic.by_permalink(self.topic.permalink).first
       if t
         t.posted_at = Time.now.utc
         t.posts_count += 1
-        t.save
-      end
-    end
-  end
-
-  def set_unread
-    if self.new_record? && self.topic
-      t = Topic.by_permalink(self.topic.permalink).first
-      if t
         t.members.each do |member|
           if member.unread == 0
             member.post_id = self.id
