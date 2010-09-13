@@ -13,7 +13,7 @@ gem "devise",               "~>1.1.2"
 gem "pusher",               "~>0.6.0"
 
 group :test, :development do
-  gem "rspec-rails",        "~>2.0.0.beta.20"
+  gem "rspec-rails",        "~>2.0.0.beta.22"
   gem "factory_girl_rails", "~>1.0"
 end
 
