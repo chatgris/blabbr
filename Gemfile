@@ -23,6 +23,6 @@ group :development do
   gem "nokogiri",           "~>1.4.3.1"
 end
 
-group :production do
-  gem "dalli",              "~>0.9.3"
+group :production, :development do
+  gem "dalli",              "~>0.9.7"
 end

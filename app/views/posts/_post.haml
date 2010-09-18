@@ -8,5 +8,6 @@
   %time
     = post.created_at
   %div.bubble
-    =raw textilize post.body
+    - cache("post-#{post.id}") do
+      =raw textilize post.body
   %hr
