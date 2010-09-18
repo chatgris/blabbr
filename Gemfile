@@ -1,9 +1,8 @@
 source "http://rubygems.org"
 
 gem "rails",                "~>3.0.0"
-gem "mongoid",              "~>2.0.0.beta.17"
-gem "bson",                 "~>1.0.4"
-gem "bson_ext",             "~>1.0.4"
+gem "mongoid",              "~>2.0.0.beta.18"
+gem "bson_ext",             "1.0.4"
 gem "haml",                 "~>3.0.18"
 gem "RedCloth",             "~>4.2.3"
 gem "carrierwave",          "~>0.5.0.beta2"
