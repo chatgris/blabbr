@@ -3,7 +3,6 @@
 log/*
 tmp/*
 public/images/**/*
-public/sound.mp3
 tmp/**/*
 config/database.yml
 config/deploy.rb

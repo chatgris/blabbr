@@ -12,11 +12,11 @@ jQuery(function($){//on document ready
   });
 
   $('a[data-remote=true]')
-  .bind("ajax:success", function(data, status, xhr) {
+  .live("ajax:success", function(data, status, xhr) {
     showEdit(status, this.getAttribute("message"));
   });
 
-  $('form[data-remote=true]')
+  $('.edit_post')
   .live("ajax:success", function(data, status, xhr) {
     var id = $(this).attr('id');
     $("#" + id).hide().html(status).show('slow');
@@ -35,19 +35,26 @@ function updatePosts(url){
   },'js');
 }
 
-function showPost(url){
+function showPost(url, userID){
   $.get(url,function(data){
       if (data) {
         $(data).hide().appendTo("#posts").show('slow');
-        lostFocus();
-        blinkTitle(1);
-        document.getElementById('player').play();
+        if (userID != user_id)
+        {
+          notify();
+        }
       }
   },'js');
 }
 
 function showEdit(status, id){
   $("#" + id).find('div').hide().html(status).show('slow');
+}
+
+function notify() {
+  lostFocus();
+  blinkTitle(1);
+  audioNotification();
 }
 
 function blinkTitle(state) {
@@ -64,6 +71,10 @@ function blinkTitle(state) {
   } else {
     document.title = titleHolder;
   }
+}
+
+function audioNotification() {
+  document.getElementById('player').play();
 }
 
 function lostFocus() {

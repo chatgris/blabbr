@@ -28,7 +28,7 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      Pusher[@topic.permalink].trigger('new-post', @post.id)
+      Pusher[@topic.permalink].trigger('new-post', {:id => @post.id, :user_id => @post.user_id})
       flash[:notice] = t('post.success')
     else
       flash[:alert] = t('post.error')
