@@ -21,7 +21,7 @@ module LinkHelper
   end
 
   def link_to_edit_post(post, topic)
-    link_to t('posts.edit'), edit_topic_post_path(topic.permalink, post.id) if post.user_id == current_user.id
+    link_to t('posts.edit'), edit_topic_post_path(topic.permalink, post.id), :class => "edit", :remote => true, :message => post.id if post.user_id == current_user.id
   end
 
 end

@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
 
   before_filter :get_current_topic_for_member
-  before_filter :get_smilies, :only => [:create, :show]
+  before_filter :get_smilies, :only => [:create, :show, :update]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
   respond_to :html, :js
@@ -17,10 +17,11 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     if @post.update_attributes(params[:post])
-      redirect_to :back, :notice => t('posts.update.success')
+      flash[:notice] = t('posts.update.success')
     else
-      render :action => 'edit'
+      flash[:alert] = t('posts.update.fail')
     end
+    respond_with(@post, :location => :back)
   end
 
   def create

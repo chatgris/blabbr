@@ -11,6 +11,17 @@ jQuery(function($){//on document ready
     gainedFocus();
   });
 
+  $('a[data-remote=true]')
+  .bind("ajax:success", function(data, status, xhr) {
+    showEdit(status, this.getAttribute("message"));
+  });
+
+  $('form[data-remote=true]')
+  .live("ajax:success", function(data, status, xhr) {
+    var id = $(this).attr('id');
+    $("#" + id).hide().html(status).show('slow');
+  });
+
 });
 
 function updatePosts(url){
@@ -33,6 +44,10 @@ function showPost(url){
         document.getElementById('player').play();
       }
   },'js');
+}
+
+function showEdit(status, id){
+  $("#" + id).find('div').hide().html(status).show('slow');
 }
 
 function blinkTitle(state) {
