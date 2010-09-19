@@ -24,6 +24,11 @@ module RedCloth::Formatters::HTML
 
   include RedCloth::Formatters::Base
 
+  def bq_close(opts)
+    cite = opts[:cite] ? "<cite>#{ escape_attribute opts[:cite] }</cite>" : ''
+    "#{cite}</blockquote>"
+  end
+
   def before_transform(text)
     clean_html(text, ALLOWED_TAGS)
   end
@@ -40,6 +45,7 @@ module RedCloth::Formatters::HTML
     'ul' => nil,
     'li' => nil,
     'p' => nil,
+    'cite' => nil,
     'blockquote' => ['cite'],
     'qq' => ['cite'],
   }
