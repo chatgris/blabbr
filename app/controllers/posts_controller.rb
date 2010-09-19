@@ -3,6 +3,7 @@ class PostsController < ApplicationController
   before_filter :get_current_topic_for_member
   before_filter :get_smilies, :only => [:create, :show]
   after_filter :reset_unread_posts, :only => [:show]
+  after_filter :reset_cache, :only => ['update']
   respond_to :html, :js
 
   def show
@@ -56,6 +57,10 @@ class PostsController < ApplicationController
 
   def reset_unread_posts
     @topic.reset_unread(current_user.nickname)
+  end
+
+  def reset_cache
+    expire_fragment "post-#{@post.id}"
   end
 
 end
