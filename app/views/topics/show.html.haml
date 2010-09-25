@@ -1,9 +1,5 @@
 - title @topic.title
 :javascript
-  Pusher.log = function() {
-      if (window.console) window.console.log.apply(window.console, arguments);
-  };
-  WEB_SOCKET_DEBUG = true;
   var user_id = "#{current_user.id}";
   var pusher = new Pusher("#{ENV['PUSHER_KEY']}", "#{@topic.permalink}");
   pusher.bind('new-post', function(data) {
