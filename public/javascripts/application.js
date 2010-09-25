@@ -22,7 +22,21 @@ jQuery(function($){//on document ready
     $("#" + id).hide().html(status).show('slow');
   });
 
+  $('.bubble p, .bubble ul')
+  .live('click', function(e) {
+      if (!$(e.target).is('a'))
+      {
+        var user = $(this).parent().get(0).getAttribute("data_user");
+        insertQuote($(this).text(), user)
+      }
+  });
+
 });
+
+
+function insertQuote(content, user) {
+  $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
+}
 
 function updatePosts(url){
   $.get(url,function(data){
