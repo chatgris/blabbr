@@ -1,0 +1,7 @@
+javascript_compressor: closure
+
+javascripts:
+  application:
+    - public/javascripts/jquery.rails.js
+    - public/javascripts/jquery.autocomplete.js
+    - public/javascripts/application.js

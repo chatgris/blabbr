@@ -10,6 +10,7 @@ gem "mini_magick",          "~>2.1"
 gem "stateflow",            "~>0.1.2"
 gem "devise",               "~>1.1.2"
 gem "pusher",               "~>0.6.0"
+gem "jammit",               "~>0.5.3"
 
 group :test, :development do
   gem "rspec-rails",        "~>2.0.0.beta.22"
