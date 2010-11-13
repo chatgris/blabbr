@@ -6,7 +6,7 @@
     = stylesheet_link_tag 'style'
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
-    = javascript_include_tag "http://js.pusherapp.com/1.5/pusher.min.js"
+    = javascript_include_tag "http://js.pusherapp.com/1.6/pusher.min.js"
     = include_javascripts :application
     = csrf_meta_tag
   %body
@@ -37,3 +37,4 @@
       = yield(:title)
     %section#contents
       =yield
+    #pusher

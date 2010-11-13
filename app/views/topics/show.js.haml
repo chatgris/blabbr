@@ -1,10 +1,15 @@
 :javascript
-  var user_id = "#{current_user.id}";
-  var pusher = new Pusher("#{ENV['PUSHER_KEY']}", "#{@topic.permalink}");
-  pusher.bind('new-post', function(data) {
-    var url = "/topics/#{@topic.permalink}/posts/"+data.id+".js";
-    showPost(url, data.user_id);
-  });
+  if ($('#pusher').html() != "#{@topic.permalink}")
+  {
+      var user_id = "#{current_user.id}";
+      var pusher = new Pusher("#{ENV['PUSHER_KEY']}");
+      var channel = pusher.subscribe("#{@topic.permalink}");
+      $('#pusher').html(channel.name);
+      channel.bind('new-post', function(data) {
+        var url = "/topics/#{@topic.permalink}/posts/"+data.id+".js";
+        showPost(url, data.user_id);
+      });
+  }
 %ul.topic-list
   - if creator? @topic.creator
     %li#add-member
