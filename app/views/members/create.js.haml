@@ -4,11 +4,10 @@
     title: '#{t("gritter.success")}',
     text: '#{flash[:notice]}'
     });
-    $('#post_body').val('').focus();
+    $('#nickname').val('').focus();
 - else
   :javascript
     $.gritter.add({
     title: '#{t("gritter.fail")}',
     text: '#{flash[:alert]}'
     });
-=raw textilize @post.body

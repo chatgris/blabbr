@@ -1,0 +1,6 @@
+:javascript
+  window.location="/##{topic_path(@topic.permalink)}"
+  $.gritter.add({
+  title: '#{t("gritter.success")}',
+  text: '#{flash[:notice]}'
+  });

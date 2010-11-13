@@ -1,0 +1,39 @@
+:javascript
+  var user_id = "#{current_user.id}";
+  var pusher = new Pusher("#{ENV['PUSHER_KEY']}", "#{@topic.permalink}");
+  pusher.bind('new-post', function(data) {
+    var url = "/topics/#{@topic.permalink}/posts/"+data.id+".js";
+    showPost(url, data.user_id);
+  });
+%ul.topic-list
+  - if creator? @topic.creator
+    %li#add-member
+      = form_tag topic_members_path(@topic), :method => 'post' do
+        = text_field_tag :nickname, params[:nickname], 'data-autocomplete-url' => autocomplete_users_path, :class => 'autocomplete'
+        = submit_tag "Ajouter"
+    %li.edit
+      = link_to t('topics.edit'), edit_topic_path(@topic)
+    %li.destroy
+      = link_to t('topics.destroy'), @topic, :confirm => 'Are you sure ?', :method => :delete
+  %li#ratio
+    %ul
+      %li#posts-ratio
+        = link_to post_ratio(@topic), topic_path(@topic.permalink)
+      %li#members
+        = link_to @topic.members.size, topic_path(@topic.permalink)
+      %li#files-ratio
+        = link_to attachments_ratio(@topic), topic_path(@topic.permalink)
+%hr
+- if creator? @topic.creator
+  %strong
+    = t('subscriber').pluralize
+    - members_without_creator(@topic).each do |member|
+      = member
+      = link_to "X", topic_member_path(@topic, :id => member), :method => :delete
+= will_paginate @posts
+%section#posts
+  = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
+= will_paginate @posts
+= form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink), :remote => true ) do |form|
+  = render :partial => 'posts/form', :locals => {:form => form}
+%audio{:id => 'player', :src => '/sound.mp3', :src => '/sound.ogg'}

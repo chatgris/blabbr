@@ -2,6 +2,7 @@ class TopicsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_current_topic_for_member, :get_smilies, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
+  respond_to :html, :js
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).order_by([[:posted_at, :desc]]).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
@@ -25,8 +26,8 @@ class TopicsController < ApplicationController
     @topic = Topic.new(params[:topic])
 
     if @topic.save
-      flash[:notice] = "Successfully created topic."
-      redirect_to topic_path(@topic.permalink)
+      flash[:notice] = t('topics.create.success')
+      redirect_to topic_path(@topic.permalink) unless request.xhr?
     else
       @post = Post.new(:body => params[:topic][:post])
       render :action => 'new', :collection => @post
@@ -66,7 +67,7 @@ class TopicsController < ApplicationController
   end
 
   def reset_unread_posts
-    @topic.reset_unread(current_user.nickname)
+    @topic.reset_unread(current_user.nickname) if @topic
   end
 
   def get_current_topic_for_creator

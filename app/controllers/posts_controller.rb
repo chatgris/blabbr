@@ -28,10 +28,10 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      Pusher[@topic.permalink].trigger('new-post', {:id => @post.id, :user_id => @post.user_id})
-      flash[:notice] = t('post.success')
+      Pusher[@topic.permalink].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
+      flash[:notice] = t('posts.create.success')
     else
-      flash[:alert] = t('post.error')
+      flash[:alert] = t('posts.create.error')
     end
     respond_with(@post, :location => page_topic_path(:id => @topic.permalink, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
   end

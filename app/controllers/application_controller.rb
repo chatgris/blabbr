@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   protect_from_forgery
   helper_method :creator?
+  after_filter :flash_to_headers
 
   protected
 
@@ -19,6 +20,10 @@ class ApplicationController < ActionController::Base
     else
       "application"
     end
+  end
+
+  def flash_to_headers
+    flash.discard if request.xhr?
   end
 
 end

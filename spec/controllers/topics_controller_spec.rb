@@ -2,33 +2,6 @@ require 'spec_helper'
 
 describe TopicsController do
 
-  describe 'with an anonymous user' do
-    it 'should not see index' do
-      get :index
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not see show' do
-      get :show, :id => Factory.build(:topic).id.to_s
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not see new' do
-      get :new
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not can create project' do
-      post :create, :topic => { :name => 'My big project' }
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not can edit a project' do
-      get :edit, :id => Factory.build(:topic).id.to_s
-      response.should redirect_to new_user_session_path
-    end
-  end
-
   describe 'with creator as current_user' do
 
     before :each do
@@ -64,7 +37,7 @@ describe TopicsController do
         post :create, :topic => { :title => 'New topic', :post => "post content" }
       end.should change(Topic, :count)
       response.should redirect_to(topic_path(Topic.last.permalink))
-      flash[:notice].should == 'Successfully created topic.'
+      flash[:notice].should == I18n.t('topics.create.success')
     end
 
     it 'should not create a topic with wrong params' do

@@ -1,4 +1,4 @@
-- form_for(smiley, :html => { :multipart => true }) do |f|
+= form_for(smiley, :html => { :multipart => true }) do |f|
   = f.error_messages
   .p
     = f.label t('code')
@@ -11,3 +11,4 @@
     = f.hidden_field :image_cache
   .p
     = f.submit t('form.save')
+#status

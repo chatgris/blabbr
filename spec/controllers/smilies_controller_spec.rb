@@ -2,24 +2,6 @@ require 'spec_helper'
 
 describe SmiliesController do
 
- describe 'with an anonymous user' do
-    it 'should not see index' do
-      get :index
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not see new' do
-      get :new
-      response.should redirect_to new_user_session_path
-    end
-
-    it 'should not can edit a smiley' do
-      get :edit, :id => Factory.build(:smiley).id.to_s
-      response.should redirect_to new_user_session_path
-    end
-
-  end
-
   describe 'current_user == added_by' do
 
     before :each do

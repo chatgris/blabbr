@@ -19,11 +19,11 @@
             = link_to_avatar_thumb current_user
             = link_to current_user.nickname, user_path(current_user.permalink)
           %li
-            = link_to t('home'), topics_path
+            = link_to t('home'), root_path
           %li
             = link_to t('preferences'), dashboard_path
           %li
-            = link_to t('logout'), destroy_user_session_path
+            = link_to t('logout'), destroy_user_session_path, :class => 'no-ajax'
       %aside
         %ul.topic-list
           %li.new

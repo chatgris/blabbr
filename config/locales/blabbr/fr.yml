@@ -18,7 +18,13 @@ fr:
     destroy: "Supprimer"
   posts:
     title: "Message"
-    edit: "Editer le message"
+    edit: "Éditer le message"
+    create:
+      success: "Le message ajouté"
+      error: "Message en erreur"
   smilies:
     new: "Nouveau smiley"
     title: "Smilies"
+  gritter:
+    success: "Succès !!"
+    fail: "Fail !!"

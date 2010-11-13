@@ -1,13 +1,15 @@
 class MembersController < ApplicationController
 
   before_filter :get_current_topic_for_creator
+  respond_to :html, :js
 
   def create
     if @topic.new_member(params[:nickname])
-      redirect_to topic_path(@topic.permalink), :notice => t('member.add_success', :name => params[:nickname])
+      flash[:notice] = t('member.add_success', :name => params[:nickname])
     else
-      redirect_to topic_path(@topic.permalink), :alert => t('member.not_find')
+      flash[:alert] = t('member.not_find')
     end
+    respond_with(@topic, :location => topic_path(@topic.permalink))
   end
 
   def destroy

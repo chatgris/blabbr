@@ -26,7 +26,7 @@ html
 
 body
   background: $background
-  width: 95em
+  width: 100em
   margin: 0 auto
   color: $text
 
@@ -41,6 +41,14 @@ section, article, header, footer, nav, aside, hgroup
 
 .right
   float: right
+
+.loading
+  height: 23px
+  width: 120px
+  position: fixed
+  left: 415px
+  top: 50%
+  +bordures-rondes(url(images/loading.gif) no-repeat center right)
 
 header
   h1
@@ -146,6 +154,7 @@ header
   width: 70em
   +bordures-rondes(white)
   padding: 1em
+  margin: 0 0 2em 0
 
 #topics
   list-style: none
@@ -184,7 +193,7 @@ header
 
 h2
   font-size: 2.5em
-  margin: 1em 235px 0 0
+  margin: 1em 265px 0 0
   text-align: right
   text-shadow: $gray unquote("1px 1px 0")
   color: $orange
@@ -226,7 +235,8 @@ blockquote
     font-size: 1.1em
     font-style: italic
     margin: 0
-
+.post.anchor
+  border-top: $orange unquote("solid 3px")
 .bubble
   width: 59em
   float: left
@@ -285,3 +295,20 @@ input[type=submit]
 
 input[type="submit"]::-moz-focus-inner
   border: none
+
+#gritter-notice-wrapper
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  z-index: 9999
+
+.gritter-item-wrapper
+  position: relative
+  padding: .4em 0 .2em 0
+  text-align: center
+  font-size: 1.4em
+  line-height: 1.4em
+  text-shadow: 0 1px 1px #FFFFFF
+  +box-shadow($gray)
+

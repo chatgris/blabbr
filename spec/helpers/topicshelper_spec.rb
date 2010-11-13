@@ -20,11 +20,11 @@ describe TopicsHelper do
     end
 
     it "should allow img tag" do
-      helper.textilize("!http://www.example.com/image.jpg!").should == "<p><img src=\"http://www.example.com/image.jpg\" /></p>"
+      helper.textilize("!http://www.example.com/image.jpg(Alt)!").should == "<p><img src=\"http://www.example.com/image.jpg\" title=\"Alt\" alt=\"Alt\" /></p>"
     end
 
     it "should allow link on images" do
-      helper.textilize("!http://www.example.com/image.jpg!:http://example.com/link").should == "<p><a href=\"http://example.com/link\"><img src=\"http://www.example.com/image.jpg\" /></a></p>"
+      helper.textilize("!http://www.example.com/image.jpg!:http://example.com/link").should == "<p><a href=\"http://example.com/link\"><img src=\"http://www.example.com/image.jpg\" alt=\"\" /></a></p>"
     end
 
     it "should allow link tag" do
@@ -32,11 +32,11 @@ describe TopicsHelper do
     end
 
     it "should escape javascript" do
-      helper.textilize("<script type=\"text/javascript\">alert(\"test\");</script>").should == "alert(\"test\");"
+      helper.textilize("<script type=\"text/javascript\">alert(\"test\");</script>").should == "<p>alert(&#8220;test&#8221;);</p>"
     end
 
     it "should allow smilies" do
-      helper.textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\"/uploads/smilies/doc.jpg?#{@smiley.updated_at.to_i.to_s}\" alt=\"doc\" /></p>"
+      helper.textilize("Test de smiley :doc:").should == "<p>Test de smiley <img src=\"/uploads/smilies/doc.jpg?#{@smiley.updated_at.to_i.to_s}\" title=\"doc\" alt=\"doc\" /></p>"
     end
   end
 

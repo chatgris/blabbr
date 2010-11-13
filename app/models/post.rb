@@ -47,7 +47,7 @@ class Post
         t.members.each do |member|
           if member.unread == 0
             member.post_id = self.id
-            member.page = self.topic.posts_count / PER_PAGE + 1
+            member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
           end
           if member.nickname == self.user.nickname
             member.posts_count += 1

@@ -1,0 +1,13 @@
+= will_paginate @topics
+%section#topics
+  - @topics.each do |topic|
+    %article
+      %p.unread
+        %mark=link_to_unread topic
+      %header
+        %h3
+          = link_to topic.title, "#" + topic_path(topic.permalink)
+        %h4
+          = "by #{topic.creator} le #{topic.created_at}"
+      %hr
+= will_paginate @topics

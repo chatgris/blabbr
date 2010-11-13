@@ -1,101 +1,155 @@
 var titleHolder = document.title;
 
-jQuery(function($){//on document ready
-  //autocomplete
-  $('input.autocomplete').each(function(){
-    var $input = $(this);
-    $input.autocomplete($input.attr('data-autocomplete-url'));
-  });
+jQuery(function($){
 
-  $('html').mouseover(function() {
-    gainedFocus();
-  });
+    $('input.autocomplete').livequery(function()
+    {
+        $(this).each(function()
+        {
+            var $input = $(this);
+            $input.autocomplete($input.attr('data-autocomplete-url'));
+        });
+    });
 
-  $('a[data-remote=true]')
-  .live("ajax:success", function(data, status, xhr) {
-    showEdit(status, this.getAttribute("message"));
-  });
+    $("#new_smiley").livequery(function()
+    {
+        $(this).sexyPost({
+            onprogress: function(event, completed, loaded, total) {
+              $("#status").text("Uploading: " + (completed * 100).toFixed(2) + "% complete...");
+            },
+            oncomplete: function(event, responseText) {
+              $("#status").text("Upload complete.")
+            }
+        });
+    });
 
-  $('.edit_post')
-  .live("ajax:success", function(data, status, xhr) {
-    var id = $(this).attr('id');
-    $("#" + id).hide().html(status).show('slow');
-  });
+    $('html').mouseover(function()
+    {
+        gainedFocus();
+    });
 
-  $('.bubble p, .bubble ul')
-  .live('click', function(e) {
-      if (!$(e.target).is('a'))
-      {
-        var user = $(this).parent().get(0).getAttribute("data_user");
-        insertQuote($(this).text(), user)
-      }
-  });
+    $("a[href^=/][class!='no-ajax']").livequery(function()
+    {
+        var href= $(this).attr('href');
+        if (href.substr(- 3 ) == '.js')
+        {
+            href= href.substring(0, href.length-3);
+        }
+        $(this).attr('href', '#'+href.replace('#', '/'));
+    });
+
+    $('.bubble p, .bubble ul')
+    .live('click', function(e) {
+        if ($(e.target).is('p, ul'))
+        {
+          var user = $(this).parent().get(0).getAttribute("data_user");
+          insertQuote($(this).text(), user)
+        }
+    });
 
 });
 
 
 function insertQuote(content, user) {
-  $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
+    $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 }
 
 function updatePosts(url){
-  $.get(url,function(data){
-      if (data) {
-        $(data).hide().appendTo("#posts").show('slow');
-        lostFocus();
-        blinkTitle(1);
-        document.getElementById('player').play();
-      }
-  },'js');
+    $.get(url,function(data){
+        if (data) {
+          $(data).hide().appendTo("#posts").show('slow');
+          lostFocus();
+          blinkTitle(1);
+          document.getElementById('player').play();
+        }
+    },'js');
+}
+
+function ajaxPath(path) {
+    return path.substr(1)+'.js';
 }
 
 function showPost(url, userID){
-  $.get(url,function(data){
-      if (data) {
-        $(data).hide().appendTo("#posts").show('slow');
-        if (userID != user_id)
-        {
-          notify();
+    $.get(url,function(data){
+        if (data) {
+          $(data).hide().appendTo("#posts").show('slow');
+          if (userID != user_id)
+          {
+            notify();
+          }
+          hideLoadingNotification();
         }
-      }
-  },'js');
+    },'js');
 }
 
-function showEdit(status, id){
-  $("#" + id).find('div').hide().html(status).show('slow');
+function showEdit(data, id){
+    $("#" + id).find('div').html(data);
+    hideLoadingNotification()
+}
+
+function showContent(data){
+    $("#contents").html(data);
+    hideLoadingNotification()
+}
+
+function replaceContent(data, id){
+    $("#"+id+" .bubble").html(data);
+    hideLoadingNotification()
+}
+
+function addContent(data){
+    $("#contents").append(data);
+    hideLoadingNotification();
 }
 
 function notify() {
-  lostFocus();
-  blinkTitle(1);
-  audioNotification();
+    lostFocus();
+    blinkTitle(1);
+    audioNotification();
 }
 
 function blinkTitle(state) {
-  if (windowIsActive != true) {
-    if (state == 1) {
-      document.title = "[new!] - " + titleHolder;
-      state = 0;
-    } else {
-      document.title = "" + titleHolder;
-      state = 1;
-    }
+    if (windowIsActive != true) {
+      if (state == 1) {
+        document.title = "[new!] - " + titleHolder;
+        state = 0;
+      } else {
+        document.title = "" + titleHolder;
+        state = 1;
+      }
 
-    setTimeout("blinkTitle(" + state + ")", 1600);
-  } else {
-    document.title = titleHolder;
-  }
+      setTimeout("blinkTitle(" + state + ")", 1600);
+    } else {
+      document.title = titleHolder;
+    }
 }
 
 function audioNotification() {
-  document.getElementById('player').play();
+    document.getElementById('player').play();
 }
 
 function lostFocus() {
-  windowIsActive = false;
+    windowIsActive = false;
 }
 
 function gainedFocus() {
-  windowIsActive = true;
+    windowIsActive = true;
+}
+
+function loadingNotification() {
+    $("#contents").append('<p class="loading"></p>');
+}
+
+function hideLoadingNotification() {
+    $('.loading').hide();
+}
+
+function goToByScroll(id){
+    $("#"+id).livequery(function()
+    {
+        $(this).addClass('anchor');
+        $('html,body').animate({scrollTop: $(this).offset().top},'slow');
+        $("#"+id).livequery().expire();
+    });
 }
 
