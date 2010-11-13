@@ -24,6 +24,7 @@
         });
 
         this.get('#/topics/:id', function() {
+            subscribeToPusher(params['id']);
             getAndShow(path);
         });
 
@@ -36,10 +37,12 @@
         });
 
         this.get('#/topics/:id/page/:page_id', function() {
+            subscribeToPusher(this.params['id']);
             getAndShow(path);
         });
 
         this.get('#/topics/:id/page/:page_id/:anchor', function() {
+            subscribeToPusher(this.params['id']);
             params = this.params;
             getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js");
             goToByScroll(params['anchor']);
@@ -122,15 +125,19 @@
         });
     }
 
-    function upload() {
-        $("#uploader").livequery(function()
+    function subscribeToPusher(id) {
+        if (!pusher)
         {
-            var uploader = new qq.FileUploader({
-            element: document.getElementById('uploader'),
-            action: '/smilies'
-        });
-        $("#new_smiley").hide();
-    });
-}
+            pusher = new Pusher($('body').attr('id'));
+        }
+        if (!pusher.channels.channels[id])
+        {
+            var channel = pusher.subscribe(id);
+            channel.bind('new-post', function(data) {
+                var url = "/topics/"+id+"/posts/"+data.id+".js";
+                showPost(url, data.user_id);
+            });
+        }
+    }
 
 })(jQuery);

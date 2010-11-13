@@ -9,7 +9,7 @@
     = javascript_include_tag "http://js.pusherapp.com/1.6/pusher.min.js"
     = include_javascripts :application
     = csrf_meta_tag
-  %body
+  %body{:id => ENV['PUSHER_KEY']}
     %header
       %h1
         = link_to "blabbr", root_path
@@ -37,4 +37,6 @@
       = yield(:title)
     %section#contents
       =yield
-    #pusher
+    :javascript
+      pusher = new Pusher($('body').attr('id'));
+
