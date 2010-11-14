@@ -24,8 +24,16 @@
         });
 
         this.get('#/topics/:id', function() {
-            subscribeToPusher(params['id']);
+            subscribeToPusher(this.params['id']);
             getAndShow(path);
+        });
+
+        this.get('#/topics/:id/edit', function() {
+            getAndShow(path);
+        });
+
+        this.put('/topics/:id', function() {
+            postAndAdd(path, this.params);
         });
 
         this.post('/topics/:id/posts', function() {

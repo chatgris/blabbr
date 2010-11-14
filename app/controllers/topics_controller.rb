@@ -44,11 +44,11 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     if @topic.update_attributes(params[:topic])
-      flash[:notice] = "Successfully updated topic."
-      redirect_to topic_path(@topic.permalink)
+      flash[:notice] = t('topics.update.success')
     else
-      render :action => 'edit'
+      flash[:alert] = t('topics.update.fail')
     end
+    respond_with(@topic, :location => topic_path(@topic.permalink))
   end
 
   def destroy
