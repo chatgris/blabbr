@@ -7,6 +7,12 @@
             loadingNotification();
         });
 
+        this.after(function(){
+            if (_gaq) {
+                _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
+            }
+        });
+
         this.get('#/', function() {
             getAndShow(path);
         });
