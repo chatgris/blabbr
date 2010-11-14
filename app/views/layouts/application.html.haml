@@ -9,7 +9,7 @@
     = javascript_include_tag "http://js.pusherapp.com/1.6/pusher.min.js"
     = include_javascripts :application
     = csrf_meta_tag
-  %body{:id => ENV['PUSHER_KEY']}
+  %body
     %header
       %h1
         = link_to "blabbr", root_path
@@ -39,5 +39,5 @@
       =yield
     = render(:partial => "shared/ga")
     :javascript
-      pusher = new Pusher($('body').attr('id'));
+      pusher = new Pusher("#{ENV['PUSHER_KEY']}");
 
