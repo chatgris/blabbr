@@ -18,7 +18,7 @@ jQuery(function($){
               $("#status").text("Uploading: " + (completed * 100).toFixed(2) + "% complete...");
             },
             oncomplete: function(event, responseText) {
-              $("#status").text("Upload complete.")
+              $("#status").text("Upload complete.");
             }
         });
     });

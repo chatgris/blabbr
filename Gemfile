@@ -13,6 +13,13 @@ gem "rails",                "~>3.0.1"
 gem "RedCloth",             "~>4.2.3"
 gem "stateflow",            "~>0.1.2"
 
+# async wrappers
+gem 'eventmachine',         "0.12.10"
+gem 'rack-fiber_pool',  :require => 'rack/fiber_pool'
+gem 'em-synchrony',     :git => 'git://github.com/igrigorik/em-synchrony.git', :require => [
+  'em-synchrony'
+  ]
+
 group :test, :development do
   gem "factory_girl_rails", "~>1.0"
   gem "rspec-rails",        "~>2.0.1"
@@ -23,6 +30,7 @@ group :development do
   gem "nokogiri",           "~>1.4.3.1"
   gem "rbbcode",            "~>0.1.8"
   gem "jammit",             "~>0.5.3"
+  gem 'thin',
 end
 
 group :production, :development do
