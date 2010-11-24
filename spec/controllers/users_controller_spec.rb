@@ -22,7 +22,7 @@ describe UsersController do
     end
 
     it 'should see show' do
-      get :show, :id => @current_user.permalink
+      get :show, :id => @current_user.slug
       response.should be_success
     end
 

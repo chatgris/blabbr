@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AvatarUploader do
   before do
-    @user = Factory.build(:user)
+    @user = Factory.create(:user)
     AvatarUploader.enable_processing = true
     @uploader = AvatarUploader.new(@user, :avatar)
     @uploader.store!(File.open(Rails.root.join("image.jpg")))
@@ -13,7 +13,7 @@ describe AvatarUploader do
   end
 
   it "should have save an correctly named avatar in images/avatars" do
-    @uploader.url.should == "/uploads/avatars/#{@user.permalink}.jpg"
+    @uploader.url.should == "/uploads/avatars/#{@user.slug}.jpg"
   end
 
 end

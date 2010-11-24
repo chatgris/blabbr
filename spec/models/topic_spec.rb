@@ -9,9 +9,6 @@ describe Topic do
     it { Topic.fields.keys.should be_include('title')}
     it { Topic.fields['title'].type.should == String}
 
-    it { Topic.fields.keys.should be_include('permalink')}
-    it { Topic.fields['permalink'].type.should == String}
-
     it { Topic.fields.keys.should be_include('posts_count')}
     it { Topic.fields['posts_count'].type.should == Integer}
 
@@ -39,10 +36,6 @@ describe Topic do
         Factory.build(:topic, :title => '').should_not be_valid
       end
 
-      it 'should required permalink' do
-        Factory.build(:topic, :title => '', :permalink => '').should_not be_valid
-      end
-
       it 'should required creator' do
         Factory.build(:topic, :creator => '').should_not be_valid
       end
@@ -64,20 +57,17 @@ describe Topic do
         @post = Factory.build(:post)
       end
 
+      it "should have a valid slug" do
+        @topic.reload.slug.should == @topic.title.parameterize
+      end
+
       it 'should not valid if title is already taken' do
         Factory.build(:topic).should_not be_valid
       end
 
-      it 'should not valid if permalink is already taken' do
-        Factory.build(:topic, :permalink => 'permalink').should_not be_valid
-      end
 
       it 'should have a valid posted_add time' do
         @topic.reload.posted_at.should be_close(Time.now.utc, 10.seconds)
-      end
-
-      it "should have a valid permalink" do
-        @topic.reload.permalink.should == @topic.title.parameterize
       end
 
       it "should have creator as a member" do
@@ -133,15 +123,6 @@ describe Topic do
     end
     end
 
-    #context "Removing a member" do
-      #it "should remove a member from a topic" do
-        #@topic.new_member(@current_user.nickname)
-        #@topic.rm_member!(@current_user.nickname)
-        #Topic.by_permalink(@topic.permalink).first.members.size.should == 1
-      #end
-    #end
-  #end
-
   describe 'attachments' do
 
     before :each do
@@ -152,19 +133,19 @@ describe Topic do
 
     context "Default status" do
       it "should have a member.attachments_count equals to 0" do
-        Topic.by_permalink(@topic.permalink).first.members[0].attachments_count.should == 0
+        @topic.reload.members[0].attachments_count.should == 0
       end
     end
 
     context "Topic related callbacks" do
       it "should increment member.attachments_count when a new attachment is added" do
         @topic.new_attachment(@creator.nickname, File.open(Rails.root.join("image.jpg")))
-        Topic.by_permalink(@topic.permalink).first.members[0].attachments_count.should == 1
+        @topic.reload.members[0].attachments_count.should == 1
       end
 
       it "should update attachments_count when a attachment is added or deleted" do
         @topic.new_attachment(@current_user.nickname, File.open(Rails.root.join("image.jpg")))
-        Topic.where(:permalink => @topic.permalink).first.attachments_count.should == 1
+        @topic.reload.attachments_count.should == 1
       end
     end
 
@@ -179,12 +160,12 @@ describe Topic do
 
     context "By default" do
       it "should be set to published by default" do
-        Topic.by_permalink(@topic.permalink).first.state.should == "published"
+        @topic.reload.state.should == "published"
       end
 
       it "should set a topic as deleted" do
         @topic.delete!
-        Topic.by_permalink(@topic.permalink).first.state.should == "deleted"
+        @topic.reload.state.should == "deleted"
       end
     end
 
@@ -195,7 +176,7 @@ describe Topic do
 
       it "should set a deleted topic as published" do
         @topic.publish!
-        Topic.by_permalink(@topic.permalink).first.state.should == "published"
+        @topic.reload.state.should == "published"
       end
     end
 
@@ -208,9 +189,9 @@ describe Topic do
       @topic = Factory.create(:topic, :creator => "One user")
     end
 
-    it "should find by permalink" do
-      Topic.by_permalink(@topic.permalink).first.permalink.should == @topic.permalink
-      Topic.by_permalink("Does not exist").first.should be_nil
+    it "should find by slug" do
+      Topic.by_slug(@topic.reload.slug).first.title.should == @topic.title
+      Topic.by_slug("Does not exist").first.should be_nil
     end
 
     it "should find by subscribed topic" do

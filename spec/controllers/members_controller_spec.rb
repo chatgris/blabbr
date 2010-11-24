@@ -14,25 +14,25 @@ describe MembersController do
 
     it "it should not add a member if he doesn't exist" do
       post :create, :nickname => 'New member', :topic_id => @topic.id
-      response.should redirect_to(topic_path(@topic.permalink))
+      response.should redirect_to(topic_path(@topic.slug))
       flash[:alert].should == I18n.t('member.not_find')
     end
 
     it "it should add a member" do
       post :create, :nickname => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
+      response.should redirect_to topic_path(@topic.slug)
       flash[:notice].should == I18n.t('member.add_success')
     end
 
     it "should fail when removing a user who is not a member" do
       delete :destroy, :id => "New member", :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
+      response.should redirect_to topic_path(@topic.slug)
       flash[:alert].should == I18n.t('member.not_find')
     end
 
     it "should remove a user from members" do
       delete :destroy, :id => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.permalink)
+      response.should redirect_to topic_path(@topic.slug)
       flash[:notice].should == I18n.t('member.remove_success')
     end
 

@@ -13,11 +13,11 @@
   %li#ratio
     %ul
       %li#posts-ratio
-        = link_to post_ratio(@topic), topic_path(@topic.permalink)
+        = link_to post_ratio(@topic), topic_path(@topic.slug)
       %li#members
-        = link_to @topic.members.size, topic_path(@topic.permalink)
+        = link_to @topic.members.size, topic_path(@topic.slug)
       %li#files-ratio
-        = link_to attachments_ratio(@topic), topic_path(@topic.permalink)
+        = link_to attachments_ratio(@topic), topic_path(@topic.slug)
 %hr
 - if creator? @topic.creator
   %strong
@@ -29,6 +29,6 @@
 %section#posts
   = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
 = will_paginate @posts
-= form_for([@topic, Post.new], :url => topic_posts_path(@topic.permalink), :remote => true ) do |form|
+= form_for([@topic, Post.new], :url => topic_posts_path(@topic.slug), :remote => true ) do |form|
   = render :partial => 'posts/form', :locals => {:form => form}
 %audio{:id => 'player', :src => '/sound.mp3', :src => '/sound.ogg'}

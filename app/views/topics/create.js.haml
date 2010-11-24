@@ -1,5 +1,5 @@
 :javascript
-  window.location="/##{topic_path(@topic.permalink)}"
+  window.location="/##{topic_path(@topic.slug)}"
   $.gritter.add({
   title: '#{t("gritter.success")}',
   text: '#{flash[:notice]}'

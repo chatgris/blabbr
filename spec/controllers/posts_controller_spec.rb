@@ -13,24 +13,24 @@ describe PostsController do
     end
 
     it "should add a post" do
-      post :create, :post => {"body" => @post.body}, :topic_id => @topic.permalink
-      response.should redirect_to "/topics/#{@topic.permalink}/page/1##{Post.last.id.to_s}"
+      post :create, :post => {"body" => @post.body}, :topic_id => @topic.slug
+      response.should redirect_to "/topics/#{@topic.slug}/page/1##{Post.last.id.to_s}"
       flash[:notice].should == I18n.t('posts.create.success')
     end
 
     it "should not add a post if params are wrong" do
-      post :create, :post => {"body" => ''}, :topic_id => @topic.permalink
+      post :create, :post => {"body" => ''}, :topic_id => @topic.slug
       response.should render_template("new")
       flash[:alert].should == I18n.t('posts.create.error')
     end
 
     it 'should see edit' do
-      get :edit, :id => @post.id, :topic_id => @topic.permalink
+      get :edit, :id => @post.id, :topic_id => @topic.slug
       response.should be_success
     end
 
     it 'should update message' do
-      put :update, :id => @topic.posts.first.id, :topic_id => @topic.permalink,  :post => {"body" => 'New message'}
+      put :update, :id => @topic.posts.first.id, :topic_id => @topic.slug,  :post => {"body" => 'New message'}
       response.should redirect_to :back
       @topic.reload.posts.first.body.should == 'New message'
     end
@@ -54,7 +54,7 @@ describe PostsController do
       end
 
       it 'should delete a post' do
-        delete :destroy, :id => @post.id, :topic_id => @topic.permalink
+        delete :destroy, :id => @post.id, :topic_id => @topic.slug
         response.should redirect_to :back
         flash[:notice].should == I18n.t('posts.delete_success')
       end
@@ -70,7 +70,7 @@ describe PostsController do
       end
 
       it "shouldn't delete a post" do
-        delete :destroy, :id => @post.id, :topic_id => @topic.permalink
+        delete :destroy, :id => @post.id, :topic_id => @topic.slug
         response.should redirect_to :back
         flash[:alert].should == I18n.t('posts.delete_unsuccess')
       end
@@ -90,7 +90,7 @@ describe PostsController do
 
     it "should not add a post" do
       @post = Factory.build(:post)
-      post :create, :post => @post, :topic_id => @topic.permalink
+      post :create, :post => @post, :topic_id => @topic.slug
       response.should redirect_to :back
       flash[:alert].should == I18n.t('topic.not_auth')
     end

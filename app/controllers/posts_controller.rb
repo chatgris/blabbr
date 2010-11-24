@@ -28,12 +28,12 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      Pusher[@topic.permalink].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
+      Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
       flash[:notice] = t('posts.create.success')
     else
       flash[:alert] = t('posts.create.error')
     end
-    respond_with(@post, :location => page_topic_path(:id => @topic.permalink, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
+    respond_with(@post, :location => page_topic_path(:id => @topic.slug, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
   end
 
   def destroy
@@ -50,7 +50,7 @@ class PostsController < ApplicationController
   protected
 
   def get_current_topic_for_member
-    @topic = Topic.by_permalink(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
+    @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end

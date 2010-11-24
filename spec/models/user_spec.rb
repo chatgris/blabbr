@@ -13,9 +13,6 @@ describe User do
     it { User.fields.keys.should be_include('email')}
     it { User.fields['email'].type.should == String}
 
-    it { User.fields.keys.should be_include('permalink')}
-    it { User.fields['permalink'].type.should == String}
-
     it { User.fields.keys.should be_include('locale')}
     it { User.fields['locale'].type.should == String}
 
@@ -50,10 +47,6 @@ describe User do
         Factory.build(:user, :nickname => '').should_not be_valid
       end
 
-      it 'should required permalink' do
-        Factory.build(:user, :permalink => '', :nickname => '').should_not be_valid
-      end
-
       it 'should required email' do
         Factory.build(:user, :email => '').should_not be_valid
       end
@@ -73,15 +66,15 @@ describe User do
 
     describe "Callbacks validations" do
       before :each do
-        Factory.create(:user)
+        @user = Factory.create(:user)
       end
 
-      it "should have a valid permalink" do
-        User.by_permalink(@user.permalink).first.permalink.should == @user.nickname.parameterize
+      it "should have a slug" do
+        @user.reload.slug.should == @user.nickname.parameterize
       end
 
       it "should set a gravatar_url" do
-        User.by_permalink(@user.permalink).first.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size="
+        @user.reload.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size="
       end
     end
   end
@@ -92,16 +85,12 @@ describe User do
       @user = Factory.create(:user)
     end
 
-    it "should be find by permalink" do
-      User.by_permalink(@user.permalink).first.permalink.should == @user.permalink
+    it "should be find by slug" do
+      User.by_slug(@user.nickname.parameterize).first.nickname.should == @user.nickname
     end
 
     it "should be find by nickname" do
       User.by_nickname(@user.nickname).first.nickname.should == @user.nickname
-    end
-
-    it "should be find by identity_url" do
-      User.by_identity_url(@user.identity_url).first.nickname.should == @user.nickname
     end
 
   end

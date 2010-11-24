@@ -1,3 +1,3 @@
 = t('posts.edit')
-= form_for([@topic, @post], :url => {:controller => "posts", :action => :update, :topic_id =>@topic.permalink, :id => @post.id}, :html => {:method => :put}) do |form|
+= form_for([@topic, @post], :url => {:controller => "posts", :action => :update, :topic_id =>@topic.slug, :id => @post.id}, :html => {:method => :put}) do |form|
   = render form

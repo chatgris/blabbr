@@ -40,7 +40,7 @@ class Post
 
   def update_topic_infos
     if self.new_record? && self.topic
-      t = Topic.by_permalink(self.topic.permalink).first
+      t = Topic.by_slug(self.topic.slug).first
       if t
         t.posted_at = Time.now.utc
         t.posts_count += 1

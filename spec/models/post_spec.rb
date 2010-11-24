@@ -13,7 +13,7 @@ describe Post do
       Factory.build(:post, :user_id => '').should_not be_valid
     end
 
-    it 'should required permalink' do
+    it 'should required body' do
       Factory.build(:post, :body => '').should_not be_valid
     end
 

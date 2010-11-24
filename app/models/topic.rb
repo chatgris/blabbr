@@ -1,11 +1,11 @@
 class Topic
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Slug
   include Stateflow
 
   field :creator
   field :title
-  field :permalink
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
   field :state
@@ -15,7 +15,8 @@ class Topic
   embeds_many :attachments
   references_many :posts
 
-  index :permalink
+  slug_field :title
+
   index :posted_at
   index :created_at
 
@@ -35,15 +36,13 @@ class Topic
     end
   end
 
-  before_validation :set_permalink
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
-  validates :permalink, :presence => true, :uniqueness => true
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
   after_validation :creator_as_members, :set_posted_at, :add_post
 
-  named_scope :by_permalink, lambda { |permalink| { :where => { :permalink => permalink}}}
+  named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def update_post(post, body)
@@ -79,10 +78,6 @@ class Topic
   end
 
   protected
-
-  def set_permalink
-    self.permalink = title.parameterize.to_s unless title.nil?
-  end
 
   def creator_as_members
     if self.new_record? && members.empty?

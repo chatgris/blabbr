@@ -23,7 +23,7 @@ describe TopicsController do
     end
 
     it 'should see show' do
-      get :show, :id => @topic.permalink
+      get :show, :id => @topic.slug
       response.should be_success
     end
 
@@ -36,7 +36,7 @@ describe TopicsController do
       lambda do
         post :create, :topic => { :title => 'New topic', :post => "post content" }
       end.should change(Topic, :count)
-      response.should redirect_to(topic_path(Topic.last.permalink))
+      response.should redirect_to(topic_path(Topic.last.slug))
       flash[:notice].should == I18n.t('topics.create.success')
     end
 
@@ -49,7 +49,7 @@ describe TopicsController do
 
     it 'should update project name if user is admin on this project' do
       put :update, :topic => {:title => 'New title'}, :id => @topic.id
-      response.should redirect_to(topic_path("new-title"))
+      response.should redirect_to(topic_path("one-topic"))
       @topic.reload.title.should == 'New title'
     end
 
@@ -75,7 +75,7 @@ describe TopicsController do
     end
 
     it 'should not see topic' do
-      get :show, :id => @topic.permalink
+      get :show, :id => @topic.slug
       response.should redirect_to :back
       flash[:alert].should == I18n.t('topic.not_auth')
     end
@@ -114,7 +114,7 @@ describe TopicsController do
     end
 
     it 'should see topic' do
-      get :show, :id => @topic.permalink
+      get :show, :id => @topic.slug
       response.should be_success
     end
 

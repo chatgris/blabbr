@@ -1,12 +1,12 @@
 GIT
   remote: git://github.com/chatgris/jammit_lite.git
-  revision: 17b1005
+  revision: 17b1005e27e9939e67afaa0a781edf3bd6a1d2c7
   specs:
     jammit_lite (0.1.2)
 
 GIT
   remote: git://github.com/igrigorik/em-synchrony.git
-  revision: 842c96b
+  revision: 842c96b5e2006448a648ab822439bd1b059d02b3
   specs:
     em-synchrony (0.2.0)
       eventmachine (>= 0.12.9)
@@ -137,7 +137,7 @@ GEM
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
-    thor (0.14.4)
+    thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)

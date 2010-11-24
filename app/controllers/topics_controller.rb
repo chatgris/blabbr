@@ -27,7 +27,7 @@ class TopicsController < ApplicationController
 
     if @topic.save
       flash[:notice] = t('topics.create.success')
-      redirect_to topic_path(@topic.permalink) unless request.xhr?
+      redirect_to topic_path(@topic.slug) unless request.xhr?
     else
       @post = Post.new(:body => params[:topic][:post])
       render :action => 'new', :collection => @post
@@ -48,7 +48,7 @@ class TopicsController < ApplicationController
     else
       flash[:alert] = t('topics.update.fail')
     end
-    respond_with(@topic, :location => topic_path(@topic.permalink))
+    respond_with(@topic, :location => topic_path(@topic.slug))
   end
 
   def destroy
@@ -78,7 +78,7 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_member
-    @topic = Topic.by_permalink(params[:id]).by_subscribed_topic(current_user.nickname).first
+    @topic = Topic.by_slug(params[:id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end

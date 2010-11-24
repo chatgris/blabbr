@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.by_permalink(params[:id]).first
+    @user = User.by_slug(params[:id]).first
   end
 
   def create

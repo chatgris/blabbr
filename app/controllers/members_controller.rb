@@ -9,14 +9,14 @@ class MembersController < ApplicationController
     else
       flash[:alert] = t('member.not_find')
     end
-    respond_with(@topic, :location => topic_path(@topic.permalink))
+    respond_with(@topic, :location => topic_path(@topic.slug))
   end
 
   def destroy
     if @topic.rm_member!(params[:id])
-      redirect_to topic_path(@topic.permalink), :notice => t('member.remove_success', :name => params[:id])
+      redirect_to topic_path(@topic.slug), :notice => t('member.remove_success', :name => params[:id])
     else
-      redirect_to topic_path(@topic.permalink), :alert => t('member.not_find')
+      redirect_to topic_path(@topic.slug), :alert => t('member.not_find')
     end
   end
 

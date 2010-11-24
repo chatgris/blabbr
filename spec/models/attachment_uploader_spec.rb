@@ -12,7 +12,7 @@ describe AttachmentUploader do
     AttachmentUploader.enable_processing = false
   end
 
-  it "should have save an correctly attachment in images/topic.permalink" do
+  it "should have save an correctly attachment in images/topic.slug" do
     @uploader.url.should == "/uploads/attachments/image.jpg"
   end
 
