@@ -1,6 +1,0 @@
-h1. TODO
-
-* give a try to pusherapp
-* create a branch for devise
-* css (form, notice)
-* attachments
