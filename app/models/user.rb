@@ -32,7 +32,6 @@ class User
   validates :nickname, :presence => true, :uniqueness => true, :length => { :maximum => 40 }
   validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
 
-  named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
 
   protected

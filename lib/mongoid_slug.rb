@@ -5,6 +5,7 @@ module Mongoid
 
     included do
       cattr_accessor :slug, :slugged
+      named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
     end
 
     module ClassMethods

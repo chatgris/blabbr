@@ -42,7 +42,6 @@ class Topic
 
   after_validation :creator_as_members, :set_posted_at, :add_post
 
-  named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def update_post(post, body)
