@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem "bson",                 "1.1.1"
 gem "bson_ext",             "1.1.1"
 gem "carrierwave",          "~>0.5.0"
-gem "devise",               "~>1.1.3"
+gem "devise",               "~>1.1.5"
 gem "haml",                 "~>3.0.24"
 gem "jammit_lite",          :git => "git://github.com/chatgris/jammit_lite.git"
 gem "mini_magick",          "~>3.1"
@@ -14,11 +14,9 @@ gem "RedCloth",             "~>4.2.3"
 gem "stateflow",            "~>0.2.3"
 
 # async wrappers
-gem 'eventmachine',         "0.12.10"
-gem 'rack-fiber_pool',  :require => 'rack/fiber_pool'
-gem 'em-synchrony',     :git => 'git://github.com/igrigorik/em-synchrony.git', :require => [
-  'em-synchrony'
-  ]
+gem 'eventmachine',         "1.0.0.beta.2"
+gem 'rack-fiber_pool',      :require => 'rack/fiber_pool'
+gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git', :require => ['em-synchrony', 'em-synchrony/iterator']
 
 group :test, :development do
   gem "factory_girl_rails", "~>1.0"
