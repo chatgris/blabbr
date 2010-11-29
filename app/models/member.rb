@@ -10,8 +10,6 @@ class Member
 
   embedded_in :topic, :inverse_of => :members
 
-  index :nickname
-
   validates :nickname, :presence => true, :uniqueness => true
 
 end

@@ -19,6 +19,7 @@ class Topic
 
   index :posted_at
   index :created_at
+  index 'members.nickname'
 
   attr_accessor :post
 
