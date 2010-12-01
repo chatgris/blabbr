@@ -8,7 +8,7 @@
         });
 
         this.after(function(){
-            if (_gaq) {
+            if(typeof(_gaq) !== 'undefined'){
                 _gaq.push(['_trackPageview']);
                 _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
             }
@@ -100,10 +100,14 @@
     });
 
     function getAndShow(path) {
-        $.get(path,function(data){
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "html",
+            success: function(data){
             if (data) {
-                showContent(data);
-            }
+                showContent(data)
+            }}
         });
     }
 
@@ -111,6 +115,7 @@
         $.ajax({
             type: "POST",
             url: path,
+            dataType: "html",
             data: $.param(params.toHash()),
             success: function(msg){
                 showContent(msg)
@@ -122,6 +127,7 @@
         $.ajax({
             type: "POST",
             url: path,
+            dataType: "html",
             data: $.param(params.toHash()),
             success: function(msg){
                 replaceContent(msg, params['post_id'])
@@ -133,6 +139,7 @@
         $.ajax({
             type: "POST",
             url: path,
+            dataType: "html",
             data: $.param(params.toHash()),
             success: function(msg){
                 addContent(msg)
