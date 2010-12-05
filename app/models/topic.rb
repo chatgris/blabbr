@@ -73,8 +73,11 @@ class Topic
   end
 
   def reset_unread(nickname)
-    members.where(:nickname => nickname).first.unread = 0
-    save
+    member = members.where(:nickname => nickname).first
+    unless member.unread == 0
+      member.unread = 0
+      save
+    end
   end
 
   protected
