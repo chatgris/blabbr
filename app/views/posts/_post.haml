@@ -8,6 +8,5 @@
   %time
     = post.created_at
   %div.bubble{:data_user => post.user.nickname}
-    - cache("post-#{post.id}") do
-      =raw textilize post.body
+    =raw textilize post.body
   %hr
