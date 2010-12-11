@@ -1,12 +1,20 @@
 GIT
   remote: git://github.com/chatgris/jammit_lite.git
-  revision: 17b1005
+  revision: 17b1005e27e9939e67afaa0a781edf3bd6a1d2c7
   specs:
     jammit_lite (0.1.2)
 
 GIT
+  remote: git://github.com/igrigorik/em-http-request.git
+  revision: 080110994343dcf54efeeec37af04e5d870d50ca
+  specs:
+    em-http-request (0.2.15)
+      addressable (>= 2.0.0)
+      eventmachine (>= 0.12.9)
+
+GIT
   remote: git://github.com/igrigorik/em-synchrony.git
-  revision: f803e5d
+  revision: f803e5da06afa47cef1339bbe95426554db7e924
   specs:
     em-synchrony (0.2.0)
       eventmachine (>= 0.12.9)
@@ -43,6 +51,7 @@ GEM
       activemodel (= 3.0.3)
       activesupport (= 3.0.3)
     activesupport (3.0.3)
+    addressable (2.2.2)
     arel (2.0.6)
     bcrypt-ruby (2.1.2)
     bson (1.1.1)
@@ -141,7 +150,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
-    warden (1.0.2)
+    warden (1.0.3)
       rack (>= 1.0.0)
     will_paginate (3.0.pre2)
     yui-compressor (0.9.1)
@@ -157,6 +166,7 @@ DEPENDENCIES
   carrierwave (~> 0.5.0)
   dalli (~> 0.9.7)
   devise (~> 1.1.5)
+  em-http-request!
   em-synchrony!
   eventmachine (= 1.0.0.beta.2)
   factory_girl_rails (~> 1.0)

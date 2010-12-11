@@ -17,7 +17,8 @@ gem "stateflow",            "~>0.2.3"
 # async wrappers
 gem 'eventmachine',         "1.0.0.beta.2"
 gem 'rack-fiber_pool',      :require => 'rack/fiber_pool'
-gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git', :require => ['em-synchrony', 'em-synchrony/iterator']
+gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git', :require => ['em-synchrony', 'em-synchrony/em-http', 'em-synchrony/iterator']
+gem 'em-http-request',      :git => 'git://github.com/igrigorik/em-http-request.git', :require => 'em-http'
 
 group :test, :development do
   gem "factory_girl_rails", "~>1.0"

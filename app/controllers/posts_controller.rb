@@ -28,8 +28,8 @@ class PostsController < ApplicationController
     @post = Post.new(:user_id => current_user.id, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
-      Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
       flash[:notice] = t('posts.create.success')
+      Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
     else
       flash[:alert] = t('posts.create.error')
     end
