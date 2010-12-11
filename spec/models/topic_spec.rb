@@ -67,7 +67,7 @@ describe Topic do
 
 
       it 'should have a valid posted_add time' do
-        @topic.reload.posted_at.should be_close(Time.now.utc, 10.seconds)
+        @topic.reload.posted_at.should be_within(Time.now.to_i - 10).of(Time.now.utc + 10)
       end
 
       it "should have creator as a member" do
