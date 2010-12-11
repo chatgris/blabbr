@@ -1,6 +1,6 @@
 module TopicsHelper
   def textilize(text)
-    RedCloth.new(text, @smilies).to_html(:textile, :refs_smiley) unless text.blank?
+    auto_link(RedCloth.new(text, @smilies).to_html(:textile, :refs_smiley)) unless text.blank?
   end
 
   def post_ratio(topic)
