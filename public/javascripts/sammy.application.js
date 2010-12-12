@@ -64,8 +64,7 @@
         this.get('#/topics/:id/page/:page_id/:anchor', function() {
             subscribeToPusher(this.params['id']);
             params = this.params;
-            getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents");
-            goToByScroll(params['anchor']);
+            getAndScroll("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents", params['anchor']);
         });
 
         this.get('#/topics/:id/posts/:post_id/edit', function() {
@@ -113,6 +112,20 @@
             if (data) {
                 showContent(data, place);
                 setTitle($('.page-title').attr('title'));
+            }}
+        });
+    }
+
+    function getAndScroll(path, place, anchor) {
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "html",
+            success: function(data){
+            if (data) {
+                showContent(data, place);
+                setTitle($('.page-title').attr('title'));
+                goToByScroll(params['anchor']);
             }}
         });
     }
