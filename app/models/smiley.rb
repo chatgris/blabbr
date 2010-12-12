@@ -10,6 +10,7 @@ class Smiley
 
   mount_uploader :image, SmileyUploader
 
+  validates :image, :presence => true
   validates :code, :presence => true, :uniqueness => true
   validates :added_by, :presence => true
 
