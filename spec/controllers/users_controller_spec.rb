@@ -32,9 +32,10 @@ describe UsersController do
     end
 
     it 'should update user if current_user is user' do
-      put :update, :user => {:email => 'new@email.com'}, :id => @current_user.id
+      put :update, :user => {:email => 'new@email.com', :avatar => File.open(Rails.root.join("image.jpg")) }, :id => @current_user.id
       response.should redirect_to 'http://test.host/users/creator'
       @current_user.reload.email.should == 'new@email.com'
+      @current_user.reload.avatar.url.should == '/uploads/avatar/creator.jpg'
     end
 
   end

@@ -16,6 +16,13 @@ describe SmiliesController do
       response.should be_success
     end
 
+    it 'should create a smiley' do
+      post :create, :smiley => {:code => 'test', :image => File.open(Rails.root.join("image.jpg"))}
+      response.should redirect_to root_path
+      Smiley.all.size.should == 2
+      Smiley.last.image.url.should == "/uploads/smilies/test.jpg"
+    end
+
     it 'get new should be success' do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       get :new
@@ -29,9 +36,10 @@ describe SmiliesController do
 
     it 'should update smiley if current_user is user' do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      put :update, :smiley => {:code => 'code'}, :id => @smiley.id
+      put :update, :smiley => {:code => 'code', :image => File.open(Rails.root.join("image.jpg"))}, :id => @smiley.id
       response.should redirect_to :back
       @smiley.reload.code.should == 'code'
+      @smiley.reload.image.url.should == "/uploads*:smilies/code.jpg"
     end
 
     it 'should delete the smiley' do
