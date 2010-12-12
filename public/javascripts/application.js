@@ -87,9 +87,14 @@ function showEdit(data, id){
     hideLoadingNotification()
 }
 
-function showContent(data){
-    $("#contents").html(data);
+function showContent(data, place){
+    $(place).html(data);
     hideLoadingNotification()
+}
+
+function setTitle(title) {
+    $("#page-title").html(title);
+    document.title = "Blabbr - " + title;
 }
 
 function replaceContent(data, id){

@@ -1,5 +1,6 @@
 :javascript
-  user_id = "#{current_user.id}";
+  var user_id = "#{current_user.id}";
+  var page_title = "#{@topic.title}";
 %ul.topic-list
   - if creator? @topic.creator
     %li#add-member
@@ -26,7 +27,7 @@
       = member
       = link_to "X", topic_member_path(@topic, :id => member), :method => :delete
 = will_paginate @posts
-%section#posts
+%section#posts{:class => 'page-title', :title => @topic.title}
   = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => @topic}
 = will_paginate @posts
 = form_for([@topic, Post.new], :url => topic_posts_path(@topic.slug), :remote => true ) do |form|

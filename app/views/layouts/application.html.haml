@@ -19,24 +19,26 @@
             = link_to_avatar_thumb current_user
             = link_to current_user.nickname, user_path(current_user.slug)
           %li
-            = link_to t('home'), root_path
+            = link_to t('home'), topics_path
           %li
             = link_to t('preferences'), dashboard_path
           %li
             = link_to t('logout'), destroy_user_session_path, :class => 'no-ajax'
-      %aside
-        %ul.topic-list
-          %li.new
-            = link_to t('topics.new'), new_topic_path
-          %li.new
-            = link_to t('smilies.new'), new_smiley_path
+      %ul.topic-list
+        %li.new
+          = link_to t('topics.new'), new_topic_path
+        %li.new
+          = link_to t('smilies.new'), new_smiley_path
     %hr
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
-    %h2
+    %h2#page-title
       = yield(:title)
-    %section#contents
-      =yield
+    #container
+      %section#contents
+        =yield
+      %aside
+      %hr
     = render(:partial => "shared/ga")
     :javascript
       pusher = new Pusher("#{ENV['PUSHER_KEY']}");

@@ -1,6 +1,6 @@
 (function($) {
 
-    var app = $.sammy("#contents", function() {
+    var app = $.sammy(function() {
 
         this.before(function(){
             path = ajaxPath(this.path);
@@ -15,11 +15,15 @@
         });
 
         this.get('#/', function() {
-            getAndShow(path);
+            getAndShow(path, "#contents");
+        });
+
+        this.get('#/topics', function() {
+            getAndShow(path, "aside");
         });
 
         this.get('#/topics/new', function() {
-            getAndShow(path);
+            getAndShow(path, "aside");
         });
 
         this.post('/topics', function() {
@@ -27,20 +31,21 @@
         });
 
         this.get('#/topics/page/:page_id', function() {
-            getAndShow(path);
+            getAndShow(path, "#contents");
         });
 
         this.get('#/topics/:id', function() {
             subscribeToPusher(this.params['id']);
-            getAndShow(path);
+            getAndShow(path, "#contents");
         });
 
         this.get('#/topics/:id/edit', function() {
-            getAndShow(path);
+            getAndShow(path, "aside");
         });
 
         this.put('/topics/:id', function() {
             postAndAdd(path, this.params);
+            getAndShow(path, "#contents");
         });
 
         this.post('/topics/:id/posts', function() {
@@ -53,13 +58,13 @@
 
         this.get('#/topics/:id/page/:page_id', function() {
             subscribeToPusher(this.params['id']);
-            getAndShow(path);
+            getAndShow(path, "#contents");
         });
 
         this.get('#/topics/:id/page/:page_id/:anchor', function() {
             subscribeToPusher(this.params['id']);
             params = this.params;
-            getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js");
+            getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents");
             goToByScroll(params['anchor']);
         });
 
@@ -77,11 +82,11 @@
         });
 
         this.get('#/users/:id', function() {
-            getAndShow(path);
+            getAndShow(path, 'aside');
         });
 
         this.get('#/dashboard', function() {
-            getAndShow(path);
+            getAndShow(path, 'aside');
         });
 
         this.get('#/smilies', function() {
@@ -89,7 +94,7 @@
         });
 
         this.get('#/smilies/new', function() {
-            getAndShow(path);
+            getAndShow(path, 'aside');
         });
 
     });
@@ -99,14 +104,15 @@
         app.run('#/');
     });
 
-    function getAndShow(path) {
+    function getAndShow(path, place) {
         $.ajax({
             type: "GET",
             url: path,
             dataType: "html",
             success: function(data){
             if (data) {
-                showContent(data)
+                showContent(data, place);
+                setTitle($('.page-title').attr('title'));
             }}
         });
     }
@@ -118,7 +124,7 @@
             dataType: "html",
             data: $.param(params.toHash()),
             success: function(msg){
-                showContent(msg)
+                showContent(msg, "#contents")
             }
         });
     }
