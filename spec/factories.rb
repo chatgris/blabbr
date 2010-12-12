@@ -42,4 +42,5 @@ end
 Factory.define:smiley do |s|
   s.code     "doc"
   s.added_by "One user"
+  s.image    File.open(Rails.root.join("image.jpg"))
 end

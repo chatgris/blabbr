@@ -32,9 +32,8 @@ describe UsersController do
     end
 
     it 'should update user if current_user is user' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       put :update, :user => {:email => 'new@email.com'}, :id => @current_user.id
-      response.should redirect_to :back
+      response.should redirect_to 'http://test.host/users/creator'
       @current_user.reload.email.should == 'new@email.com'
     end
 
@@ -61,9 +60,8 @@ describe UsersController do
     end
 
     it 'should update user if current_user is user' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       put :update, :user => {:email => 'new@email.com'}, :id => @user.id
-      response.should redirect_to :back
+      response.should redirect_to 'http://test.host/users/creator'
       @user.reload.email.should_not == 'new@email.com'
     end
 
