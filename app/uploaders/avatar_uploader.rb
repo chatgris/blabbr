@@ -20,6 +20,10 @@ class AvatarUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
+  def max_file_size
+    512000
+  end
+
   def filename
     model.slug + File.extname(super.to_s) unless super.nil?
   end

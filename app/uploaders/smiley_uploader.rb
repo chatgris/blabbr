@@ -12,6 +12,10 @@ class SmileyUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
+  def max_file_size
+    51200
+  end
+
   def filename
     model.code + File.extname(super.to_s)
   end

@@ -6,7 +6,6 @@ class Smiley
 
   field :added_by, :type => String
   field :code, :type => String
-  field :image, :type => String
 
   mount_uploader :image, SmileyUploader
 

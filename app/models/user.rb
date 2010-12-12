@@ -13,10 +13,10 @@ class User
   field :posts_count, :type => Integer, :default => 0
   field :locale, :default => 'fr'
   field :note
-  field :avatar
   field :gravatar_url
   field :attachments_count, :type => Integer, :default => 0
 
+  mount_uploader :avatar, AvatarUploader
   embeds_many :attachments
 
   slug_field :nickname
@@ -24,8 +24,6 @@ class User
   index :nickname
 
   attr_accessible :nickname, :email, :password, :password_confirmation
-
-  mount_uploader :avatar, AvatarUploader
 
   before_validation :set_gravatar_url
 
