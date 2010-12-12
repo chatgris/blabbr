@@ -34,12 +34,13 @@ describe SmiliesController do
       response.should be_success
     end
 
+    #TODO
     it 'should update smiley if current_user is user' do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       put :update, :smiley => {:code => 'code', :image => File.open(Rails.root.join("image.jpg"))}, :id => @smiley.id
       response.should redirect_to :back
       @smiley.reload.code.should == 'code'
-      @smiley.reload.image.url.should == "/uploads*:smilies/code.jpg"
+      @smiley.reload.image.url.should == "/uploads/smilies/code.jpg"
     end
 
     it 'should delete the smiley' do

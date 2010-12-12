@@ -31,11 +31,12 @@ describe UsersController do
       response.should be_success
     end
 
+    # TODO
     it 'should update user if current_user is user' do
       put :update, :user => {:email => 'new@email.com', :avatar => File.open(Rails.root.join("image.jpg")) }, :id => @current_user.id
       response.should redirect_to 'http://test.host/users/creator'
       @current_user.reload.email.should == 'new@email.com'
-      @current_user.reload.avatar.url.should == '/uploads/avatar/creator.jpg'
+      @current_user.reload.avatar.url.should == '/uploads/avatars/creator.jpg'
     end
 
   end
@@ -66,6 +67,15 @@ describe UsersController do
       @user.reload.email.should_not == 'new@email.com'
     end
 
+  end
+
+  # TODO
+  describe 'create a user with an avatar' do
+    it 'should have an avatar' do
+      post :create, :user => {:email => 'new@email.com', :nickname => 'creator', :locale => 'fr', :password => 'password', :password_confirmation => 'password', :avatar => File.open(Rails.root.join("image.jpg")) }
+      User.first.email.should == 'new@email.com'
+      User.first.avatar.url.should == '/uploads/avatars/creator.jpg'
+    end
   end
 
 end
