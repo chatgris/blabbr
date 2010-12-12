@@ -1,12 +1,9 @@
 = form_for(@user, :html => { :multipart => true }) do |f|
   = f.error_messages
   .p
-  .p
     = f.label t('email')
     .br
     = f.text_field :email
-  .p
-    = f.label t('locale')
   .p
     = f.label :avatar
     = image_tag(@user.avatar_url) if @user.avatar?

@@ -23,6 +23,18 @@ jQuery(function($){
         });
     });
 
+    $(".edit_user").livequery(function()
+    {
+        $(this).sexyPost({
+            onprogress: function(event, completed, loaded, total) {
+              $("#status").text("Uploading: " + (completed * 100).toFixed(2) + "% complete...");
+            },
+            oncomplete: function(event, responseText) {
+              $("#status").text("Upload complete.");
+            }
+        });
+    });
+
     $('html').mouseover(function()
     {
         gainedFocus();
