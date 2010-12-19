@@ -12,6 +12,7 @@ gem "mongoid",              "~>2.0.0.beta.20"
 gem "pusher",               "~>0.7.0"
 gem "rails",                "~>3.0.3"
 gem "RedCloth",             "~>4.2.3"
+gem "simple_form",          "~>1.3.0"
 gem "stateflow",            "~>0.4.0"
 
 # async wrappers

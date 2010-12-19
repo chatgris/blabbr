@@ -31,12 +31,18 @@ describe UsersController do
       response.should be_success
     end
 
-    # TODO
     it 'should update user if current_user is user' do
       put :update, :user => {:email => 'new@email.com', :avatar => File.open(Rails.root.join("image.jpg")) }, :id => @current_user.id
       response.should redirect_to 'http://test.host/users/creator'
       @current_user.reload.email.should == 'new@email.com'
       @current_user.reload.avatar.url.should == '/uploads/avatars/creator.jpg'
+    end
+
+    it 'should update time_zone if current_user is user' do
+      put :update, :user => {:email => 'new@email.com', :time_zone => 'Paris' }, :id => @current_user.id
+      response.should redirect_to 'http://test.host/users/creator'
+      @current_user.reload.email.should == 'new@email.com'
+      @current_user.reload.time_zone.should == 'Paris'
     end
 
   end

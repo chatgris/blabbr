@@ -23,7 +23,7 @@ jQuery(function($){
         });
     });
 
-    $(".edit_user").livequery(function()
+    $(".simple_form.user").livequery(function()
     {
         $(this).sexyPost({
             onprogress: function(event, completed, loaded, total) {
@@ -64,17 +64,6 @@ jQuery(function($){
 
 function insertQuote(content, user) {
     $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
-}
-
-function updatePosts(url){
-    $.get(url,function(data){
-        if (data) {
-          $(data).hide().appendTo("#posts").show('slow');
-          lostFocus();
-          blinkTitle(1);
-          document.getElementById('player').play();
-        }
-    },'js');
 }
 
 function ajaxPath(path) {
@@ -122,7 +111,10 @@ function addContent(data){
 function notify() {
     lostFocus();
     blinkTitle(1);
-    audioNotification();
+    if (user_audio)
+    {
+        audioNotification();
+    }
 }
 
 function blinkTitle(state) {
@@ -142,7 +134,12 @@ function blinkTitle(state) {
 }
 
 function audioNotification() {
-    document.getElementById('player').play();
+    $('body').append('<audio id="player" src="/sound.mp3" autoplay />');
+    var audio = $('#player');
+    $(audio).bind('ended', function()
+    {
+        $(this).remove;
+    });
 }
 
 function lostFocus() {

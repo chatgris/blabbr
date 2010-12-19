@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'carrierwave/orm/mongoid'
 
 class User
@@ -13,6 +14,8 @@ class User
   field :posts_count, :type => Integer, :default => 0
   field :locale, :default => 'fr'
   field :note
+  field :time_zone, :type  => String
+  field :audio, :type => Boolean, :default => true
   field :gravatar_url
   field :attachments_count, :type => Integer, :default => 0
 
@@ -23,7 +26,7 @@ class User
 
   index :nickname
 
-  attr_accessible :nickname, :email, :password, :password_confirmation
+  attr_accessible :nickname, :email, :password, :password_confirmation, :locale, :note, :time_zone, :avatar
 
   before_validation :set_gravatar_url
 

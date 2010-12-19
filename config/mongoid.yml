@@ -1,5 +1,6 @@
 defaults: &defaults
   host: localhost
+  persist_in_safe_mode: false
 
 development:
   <<: *defaults

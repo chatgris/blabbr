@@ -19,6 +19,12 @@ describe User do
     it { User.fields.keys.should be_include('note')}
     it { User.fields['note'].type.should == String}
 
+    it { User.fields.keys.should be_include('time_zone')}
+    it { User.fields['time_zone'].type.should == String}
+
+    it { User.fields.keys.should be_include('audio')}
+    it { User.fields['audio'].type.should == Boolean}
+
     it { User.fields.keys.should be_include('posts_count')}
     it { User.fields['posts_count'].type.should == Integer}
 
@@ -91,6 +97,25 @@ describe User do
 
     it "should be find by nickname" do
       User.by_nickname(@user.nickname).first.nickname.should == @user.nickname
+    end
+
+  end
+
+  describe "User preferences" do
+    before :each do
+      @user = Factory.create(:user)
+    end
+
+    it "should update time_zone" do
+      @user.time_zone = 'Paris'
+      @user.save
+      @user.reload.time_zone.should == 'Paris'
+    end
+
+    it 'should update audio preference' do
+      @user.audio.should == true
+      @user.audio = false
+      @user.reload.audio == false
     end
 
   end

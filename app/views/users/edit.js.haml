@@ -1,14 +1,6 @@
-= form_for(@user, :html => { :multipart => true }) do |f|
-  = f.error_messages
-  .p
-    = f.label t('email')
-    .br
-    = f.text_field :email
-  .p
-    = f.label :avatar
-    = image_tag(@user.avatar_url) if @user.avatar?
-    = f.file_field :avatar
-    = f.hidden_field :avatar_cache
-  .p
-    = f.submit t('form.save')
+= simple_form_for(@user, :html => { :multipart => true }) do |f|
+  = f.input :email
+  = f.input :time_zone, :priority => /US/
+  = f.input  :avatar, :as => :file
+  = f.button :submit
 #status

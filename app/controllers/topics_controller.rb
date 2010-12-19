@@ -1,3 +1,4 @@
+# encoding: utf-8
 class TopicsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_current_topic_for_member, :get_smilies, :only => [:show]

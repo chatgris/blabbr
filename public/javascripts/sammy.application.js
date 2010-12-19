@@ -84,6 +84,10 @@
             getAndShow(path, 'aside');
         });
 
+        this.put('/users/:id', function() {
+            postAndShow(path, this.params);
+        });
+
         this.get('#/dashboard', function() {
             getAndShow(path, 'aside');
         });
