@@ -43,10 +43,6 @@ jQuery(function($){
     $("a[href^=/][class!='no-ajax']").livequery(function()
     {
         var href= $(this).attr('href');
-        if (href.substr(- 3 ) == '.js')
-        {
-            href= href.substring(0, href.length-3);
-        }
         $(this).attr('href', '#'+href.replace('#', '/'));
     });
 
