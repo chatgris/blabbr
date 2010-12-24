@@ -120,12 +120,12 @@ describe User do
 
   end
 
-  describe "associations" do
+  describe "relations" do
 
      it "should embed many attachments" do
-      association = User.associations['attachments']
-      association.klass.should ==(Attachment)
-      association.association.should ==(Mongoid::Associations::EmbedsMany)
+      relation = User.relations['attachments']
+      relation.klass.should ==(Attachment)
+      relation.relation.should ==(Mongoid::Relations::Embedded::Many)
     end
   end
 

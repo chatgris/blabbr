@@ -7,7 +7,7 @@ class Smiley
   field :added_by, :type => String
   field :code, :type => String
 
-  mount_uploader :image, SmileyUploader
+  #mount_uploader :image, SmileyUploader
 
   validates :image, :presence => true
   validates :code, :presence => true, :uniqueness => true

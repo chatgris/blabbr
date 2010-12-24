@@ -4,11 +4,11 @@ class Topic
   include Mongoid::Slug
   include Stateflow
 
-  field :creator
-  field :title
+  field :creator, :type => String
+  field :title, :type => String
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
-  field :state
+  field :state, :type => String
   field :posted_at, :type => Time
 
   embeds_many :members

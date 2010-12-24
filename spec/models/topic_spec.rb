@@ -200,24 +200,24 @@ describe Topic do
     end
   end
 
-  describe "associations" do
+  describe "relations" do
 
     it "should embed many members" do
-      association = Topic.associations['members']
-      association.klass.should ==(Member)
-      association.association.should ==(Mongoid::Associations::EmbedsMany)
+      relation = Topic.relations['members']
+      relation.klass.should ==(Member)
+      relation.relation.should ==(Mongoid::Relations::Embedded::Many)
     end
 
     it "should embed many attachments" do
-      association = Topic.associations['attachments']
-      association.klass.should ==(Attachment)
-      association.association.should ==(Mongoid::Associations::EmbedsMany)
+      relation = Topic.relations['attachments']
+      relation.klass.should ==(Attachment)
+      relation.relation.should ==(Mongoid::Relations::Embedded::Many)
     end
 
     it "should embed many posts" do
-      association = Topic.associations['posts']
-      association.klass.should ==(Post)
-      association.association.should ==(Mongoid::Associations::ReferencesMany)
+      relation = Topic.relations['posts']
+      relation.klass.should ==(Post)
+      relation.relation.should ==(Mongoid::Relations::Referenced::Many)
     end
 
   end

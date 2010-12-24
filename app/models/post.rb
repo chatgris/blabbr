@@ -3,8 +3,8 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
 
-  field :body
-  field :state
+  field :body, :type => String
+  field :state, :type => String
 
   referenced_in :topic
   referenced_in :user

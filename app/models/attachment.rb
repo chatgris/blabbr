@@ -4,12 +4,11 @@ class Attachment
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :nickname
-  field :attachment
+  field :nickname, :type => String
 
-  mount_uploader :attachment, AttachmentUploader
+  #mount_uploader :attachment, AttachmentUploader
 
-  embedded_in :attachmentable, :inverse_of => :attachments
+  embedded_in :attachmentable, :polymorphic => true
 
   validates :nickname, :presence => true
 
