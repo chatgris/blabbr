@@ -28,20 +28,18 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  after_validation :update_user_posts_count, :update_topic_infos
+  after_create :update_user_posts_count, :update_topic_infos
 
   protected
 
   def update_user_posts_count
-    if self.new_record?
       u = User.find(user_id)
       u.posts_count += 1
       u.save
-    end
   end
 
   def update_topic_infos
-    if self.new_record? && self.new_topic.nil?
+    if self.new_topic.nil?
       t = Topic.by_slug(self.topic.slug).first
       if t
         t.posted_at = Time.now.utc

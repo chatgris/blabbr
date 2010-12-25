@@ -9,7 +9,7 @@ class Topic
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
   field :state, :type => String
-  field :posted_at, :type => Time
+  field :posted_at, :type => Time, :default => Time.now.utc
 
   embeds_many :members
   embeds_many :attachments
@@ -41,7 +41,8 @@ class Topic
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
-  after_validation :creator_as_members, :set_posted_at, :add_post
+  before_create :creator_as_members, :add_post
+  #after_create :add_post
 
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
@@ -83,21 +84,12 @@ class Topic
   protected
 
   def creator_as_members
-    if self.new_record? && members.empty?
-      members << Member.new(:nickname => creator, :posts_count => 1)
-    end
+    self.members << Member.new(:nickname => self.creator, :posts_count => 1)
   end
 
   def add_post
-    if self.new_record?
-      self.posts = [Post.create(:body => self.post, :content => self.post, :user_id => User.by_nickname(creator).first.id, :topic_id => self.id, :new_topic => true)]
-    end
-  end
-
-  def set_posted_at
-    if self.new_record?
-      self.posted_at = Time.now.utc
-    end
+    # TODO callback should not be before_create on this
+    self.posts << Post.create(:body => self.post, :content => self.post, :user_id => User.by_nickname(creator).first.id, :topic_id => self.id, :new_topic => true)
   end
 
 end
