@@ -75,6 +75,10 @@ describe Topic do
       end
 
       it "should have a post" do
+        @topic.reload.members.count.should == 1
+        @topic.reload.posts_count.should == 1
+        @topic.reload.posts.all.count.should == 1
+        @topic.reload.posts.first.content.should == @post.body
         @topic.reload.posts.first.body.should == @post.body
       end
     end
@@ -118,7 +122,7 @@ describe Topic do
 
       it "should make unread equals to posts.size when a member is invited" do
         @topic.new_member(@current_user.nickname)
-        @topic.reload.members[1].unread.should == @topic.reload.posts.size
+        @topic.reload.members[1].unread.should == @topic.reload.posts.count
       end
     end
     end

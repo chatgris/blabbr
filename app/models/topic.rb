@@ -89,8 +89,9 @@ class Topic
   end
 
   def add_post
-    user = User.by_nickname(creator).first
-    self.posts = [Post.create(:body => post, :user_id => user.id)]
+    if self.new_record?
+      self.posts = [Post.create(:body => self.post, :content => self.post, :user_id => User.by_nickname(creator).first.id, :topic_id => self.id, :new_topic => true)]
+    end
   end
 
   def set_posted_at

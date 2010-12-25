@@ -9,6 +9,8 @@ class Post
   referenced_in :topic
   referenced_in :user
 
+  attr_accessor :new_topic
+
   stateflow do
     initial :published
 
@@ -39,7 +41,7 @@ class Post
   end
 
   def update_topic_infos
-    if self.new_record? && self.topic
+    if self.new_record? && self.new_topic.nil?
       t = Topic.by_slug(self.topic.slug).first
       if t
         t.posted_at = Time.now.utc
