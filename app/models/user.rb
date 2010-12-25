@@ -21,6 +21,7 @@ class User
 
   #mount_uploader :avatar, AvatarUploader
   embeds_many :attachments
+  references_many :posts
 
   slug_field :nickname
 
