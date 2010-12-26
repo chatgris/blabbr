@@ -6,7 +6,7 @@ class Attachment
 
   field :nickname, :type => String
 
-  #mount_uploader :attachment, AttachmentUploader
+  mount_uploader :attachment, ::AttachmentUploader
 
   embedded_in :attachmentable, :polymorphic => true
 

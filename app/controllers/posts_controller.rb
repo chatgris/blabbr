@@ -1,5 +1,4 @@
 class PostsController < ApplicationController
-
   before_filter :get_current_topic_for_member
   before_filter :get_smilies, :only => [:create, :show, :update]
   after_filter :reset_unread_posts, :only => [:show]
@@ -7,15 +6,15 @@ class PostsController < ApplicationController
   respond_to :html, :js
 
   def show
-    @post = @topic.posts.criteria.id(params[:id]).first
+    @post = @topic.posts.find(params[:id])
   end
 
   def edit
-    @post = @topic.posts.criteria.id(params[:id]).first
+    @post = @topic.posts.find(params[:id])
   end
 
   def update
-    @post = Post.find(params[:id])
+    @post = @topic.posts.find(params[:id])
     if @post.update_attributes(params[:post])
       flash[:notice] = t('posts.update.success')
     else

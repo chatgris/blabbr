@@ -19,7 +19,7 @@ class User
   field :gravatar_url, :type  => String
   field :attachments_count, :type => Integer, :default => 0
 
-  #mount_uploader :avatar, AvatarUploader
+  mount_uploader :avatar, ::AvatarUploader
   embeds_many :attachments
   references_many :posts
 
