@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 0f602f31a3a24f2186faaebc2cbca2417fbb63bb
+  revision: 8da3e96573edf1979eefd89d1c0aebde0c32747e
   branch: refactor
   specs:
     mongoid (2.0.0.rc.1)
