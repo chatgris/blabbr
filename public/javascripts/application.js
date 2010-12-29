@@ -23,6 +23,16 @@ jQuery(function($){
         });
     });
 
+    if (!history.pushState)
+    {
+        console.log(history.pushState);
+        $("a[href^=/][class!='no-ajax']").livequery(function()
+        {
+            var href= $(this).attr('href');
+            $(this).attr('href', '#'+href.replace('#', '/'));
+        });
+    }
+
     $(".simple_form.user").livequery(function()
     {
         $(this).sexyPost({
@@ -38,12 +48,6 @@ jQuery(function($){
     $('html').mouseover(function()
     {
         gainedFocus();
-    });
-
-    $("a[href^=/][class!='no-ajax']").livequery(function()
-    {
-        var href= $(this).attr('href');
-        $(this).attr('href', '#'+href.replace('#', '/'));
     });
 
     $('.bubble p, .bubble ul')
@@ -63,7 +67,7 @@ function insertQuote(content, user) {
 }
 
 function ajaxPath(path) {
-    return path.substr(1)+'.js';
+    return (history.pushState) ? '/'+path.substr(1)+'.js' :  path.substr(1)+'.js';
 }
 
 function showPost(url, userID){
@@ -155,11 +159,11 @@ function hideLoadingNotification() {
 }
 
 function goToByScroll(id){
-    $("#"+id).livequery(function()
+    $(id).livequery(function()
     {
         $(this).addClass('anchor');
         $('html,body').animate({scrollTop: $(this).offset().top},'slow');
-        $("#"+id).livequery().expire();
+        $(id).livequery().expire();
     });
 }
 

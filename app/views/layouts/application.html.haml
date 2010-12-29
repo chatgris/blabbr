@@ -23,7 +23,7 @@
           %li
             = link_to t('preferences'), dashboard_path
           %li
-            = link_to t('logout'), destroy_user_session_path, :class => 'no-ajax'
+            = link_to t('logout'), logout_path
       %ul.topic-list
         %li.new
           = link_to t('topics.new'), new_topic_path

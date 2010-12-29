@@ -6,7 +6,7 @@
         %mark=link_to_unread topic
       %header
         %h3
-          = link_to topic.title, "#" + topic_path(topic.slug)
+          = link_to topic.title, topic_path(topic.slug)
         %h4
           = "by #{topic.creator} le #{topic.created_at}"
       %hr
