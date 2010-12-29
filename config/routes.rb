@@ -1,6 +1,8 @@
 Blabbr::Application.routes.draw do
 
-  devise_for :users
+  devise_for :users do
+    get "/logout" => "devise/sessions#destroy", :as => :logout
+  end
 
   authenticate :user do
     match "/uploads/*path" => "gridfs#serve"
