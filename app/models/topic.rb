@@ -41,8 +41,8 @@ class Topic
   validates :creator, :presence => true
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
-  before_create :creator_as_members, :add_post
-  #after_create :add_post
+  before_create :creator_as_members
+  after_validation :add_post, :if => "self.new_record?"
 
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
@@ -88,7 +88,6 @@ class Topic
   end
 
   def add_post
-    # TODO callback should not be before_create on this
     self.posts << Post.create(:body => self.post, :content => self.post, :user_id => User.by_nickname(creator).first.id, :topic_id => self.id, :new_topic => true)
   end
 
