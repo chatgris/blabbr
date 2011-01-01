@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = @topic.posts.find(params[:id])
+    @post = @topic.posts.criteria.id(params[:id]).first
   end
 
   def update
