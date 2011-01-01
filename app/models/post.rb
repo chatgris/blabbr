@@ -34,8 +34,7 @@ class Post
 
   def update_user_posts_count
       u = User.find(user_id)
-      u.posts_count += 1
-      u.save
+      u.inc(:posts_count, 1)
   end
 
   def update_topic_infos
@@ -43,18 +42,18 @@ class Post
       t = Topic.by_slug(self.topic.slug).first
       if t
         t.posted_at = Time.now.utc
-        t.posts_count += 1
         t.members.each do |member|
           if member.unread == 0
             member.post_id = self.id
             member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
           end
           if member.nickname == self.user.nickname
-            member.posts_count += 1
+            member.inc(:posts_count, 1)
           else
-            member.unread += 1
+            member.inc('unread', 1)
           end
         end
+        t.inc('posts_count', 1)
         t.save
       end
     end
