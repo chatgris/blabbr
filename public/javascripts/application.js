@@ -25,7 +25,6 @@ jQuery(function($){
 
     if (!history.pushState)
     {
-        console.log(history.pushState);
         $("a[href^=/][class!='no-ajax']").livequery(function()
         {
             var href= $(this).attr('href');
