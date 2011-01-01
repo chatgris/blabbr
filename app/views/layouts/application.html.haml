@@ -10,9 +10,7 @@
     = include_javascripts :application
     = csrf_meta_tag
   %body
-    %header
-      %h1
-        = link_to "blabbr", root_path
+    %header#top
       %nav
         %ul#user_info
           %li#avatar
@@ -34,11 +32,10 @@
       = content_tag :div, msg, :id => "flash_#{name}"
     %h2#page-title
       = yield(:title)
-    #container
-      %section#contents
-        =yield
-      %aside
-      %hr
+    %section#contents
+      =yield
+    %aside
+    %hr
     = render(:partial => "shared/ga")
     :javascript
       pusher = new Pusher("#{ENV['PUSHER_KEY']}");

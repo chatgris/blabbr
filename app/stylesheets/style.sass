@@ -27,7 +27,6 @@ html
 body
   background: $background
   width: 1000px
-  margin: 0 auto
   color: $text
 
 section, article, header, footer, nav, aside, hgroup
@@ -50,26 +49,17 @@ section, article, header, footer, nav, aside, hgroup
   top: 50%
   +border-curve(url(images/loading.gif) no-repeat center right)
 
-header
-  h1
-    margin: 0.2em 0 0 0
-    float: left
-    font-size: 5em
-    line-height: 1em
-    a
-      font-family: Floozy
-      color: $orange
-      text-shadow: $gray unquote(".05em .05em .05em")
-      padding: 0.4em
-      &:hover
-        text-shadow: white 0.05em 0.05em 0.05em
+#top
+  position: fixed
+  width: 1000px
+  z-index: 20
   ul
     float: right
-    font-size: 1.2em
+    font-size: 11px
     font-weight: bold
   .topic-list
     clear: right
-    margin: 1em 0 2em 0
+    margin: 1em 0
   li
     display: inline-block
     vertical-align: top
@@ -147,24 +137,24 @@ header
 .new a
   background: url(images/new.png) no-repeat 4px center
 
-#container
-  background: $beige
-  +border-curve($beige)
-  overflow: visible
-  margin: 15px 0 .5em 0
-
 #contents
   width: 650px
   +border-curve(white)
   padding: 10px
-  float: left
+  margin: 0 0 0 10px
   position: relative
-  top: -15px
+  top: 48px
+  z-index: 10
 
 aside
-  width: 320px
-  float: left
-  padding: 10px 5px
+  position: fixed
+  left: 680px
+  top: 120px
+  background: $beige
+  +border-curve-right($beige)
+  overflow: visible
+  width: 310px
+  padding: 0 5px
 
   input[type=text], input[type=file], input[type=email]
     width: 310px
@@ -173,7 +163,8 @@ aside
   .pagination
     display: none
   #topics
-    font-size: 1.1em
+    font-size: 9px
+    margin: .5em 0
     article
       header
         width: 275px
@@ -214,14 +205,15 @@ aside
         font-weight: normal
 
 h2
-  font-size: 2.5em
-  width: 670px
+  font-size: 22px
+  width: 680px
   text-align: right
   text-shadow: $gray unquote("1px 1px 0")
   color: $orange
   clear: both
-  z-index: 10
+  z-index: 20
   position: relative
+  top: 47px
 
 blockquote
   margin: 1em
