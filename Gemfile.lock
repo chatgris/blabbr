@@ -6,14 +6,14 @@ GIT
 
 GIT
   remote: git://github.com/igrigorik/em-synchrony.git
-  revision: f803e5da06afa47cef1339bbe95426554db7e924
+  revision: f59169c5c8f893336802f1de2970ee9dd8755158
   specs:
     em-synchrony (0.2.0)
       eventmachine (>= 0.12.9)
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 8da3e96573edf1979eefd89d1c0aebde0c32747e
+  revision: c9e6a8d6ae2d146b9d00fab87d4556c277aadc3b
   branch: refactor
   specs:
     mongoid (2.0.0.rc.1)
