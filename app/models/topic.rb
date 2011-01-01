@@ -54,13 +54,11 @@ class Topic
   def new_member(nickname)
     if User.by_nickname(nickname).first
       members.create(:nickname => nickname, :unread => self.posts_count)
-      save
     end
   end
 
   def new_attachment(nickname, attachment)
     attachments.create(:nickname => nickname, :attachment => attachment)
-    save
   end
 
   def rm_member!(nickname)
@@ -77,7 +75,7 @@ class Topic
     member = members.where(:nickname => nickname).first
     unless member.unread == 0
       member.unread = 0
-      save
+      member.save
     end
   end
 
