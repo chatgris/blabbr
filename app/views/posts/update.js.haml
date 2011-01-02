@@ -1,14 +1,8 @@
 - if flash[:notice]
   :javascript
-    $.gritter.add({
-    title: '#{t("gritter.success")}',
-    text: '#{flash[:notice]}'
-    });
+    $.blabbrNotify('success','#{flash[:notice]}');
     $('#post_body').val('').focus();
 - else
   :javascript
-    $.gritter.add({
-    title: '#{t("gritter.fail")}',
-    text: '#{flash[:alert]}'
-    });
+    $.blabbrNotify('fail','#{flash[:alert]}');
 =raw textilize @post.body

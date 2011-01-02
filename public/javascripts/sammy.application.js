@@ -148,78 +148,8 @@ var root = (history.pushState) ? "/" : "#/";
 
     });
 
-
     $(function() {
          app.run(root);
     });
-
-    function getAndShow(path, place) {
-        $.ajax({
-            type: "GET",
-            url: path,
-            dataType: "html",
-            success: function(data){
-            if (data) {
-                showContent(data, place);
-                setTitle($('.page-title').attr('title'));
-                if (window.location.hash)
-                {
-                  goToByScroll(window.location.hash);
-                }
-            }}
-        });
-    }
-
-
-    function postAndShow(path, params) {
-        $.ajax({
-            type: "POST",
-            url: path,
-            dataType: "html",
-            data: $.param(params.toHash()),
-            success: function(msg){
-                showContent(msg, "#contents")
-            }
-        });
-    }
-
-    function postAndReplace(path, params) {
-        $.ajax({
-            type: "POST",
-            url: path,
-            dataType: "html",
-            data: $.param(params.toHash()),
-            success: function(msg){
-                replaceContent(msg, params['post_id'])
-            }
-        });
-    }
-
-    function postAndAdd(path, params) {
-        $.ajax({
-            type: "POST",
-            url: path,
-            dataType: "html",
-            data: $.param(params.toHash()),
-            success: function(msg){
-                addContent(msg)
-            }
-        });
-    }
-
-    function subscribeToPusher(id) {
-        if (!pusher)
-        {
-            pusher = new Pusher($('body').attr('id'));
-        }
-        if (!pusher.channels.channels[id])
-        {
-            var channel = pusher.subscribe(id);
-            channel.bind('new-post', function(data) {
-                var url = "/topics/"+id+"/posts/"+data.id+".js";
-                showPost(url, data.user_id);
-            });
-        }
-    }
 
 })(jQuery);

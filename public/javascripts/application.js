@@ -60,7 +60,6 @@ jQuery(function($){
 
 });
 
-
 function insertQuote(content, user) {
     $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 }
@@ -87,8 +86,77 @@ function showEdit(data, id){
     hideLoadingNotification()
 }
 
+function getAndShow(path, place) {
+    $.ajax({
+        type: "GET",
+        url: path,
+        dataType: "html",
+        success: function(data){
+        if (data) {
+            showContent(data, place);
+            setTitle($('.page-title').attr('title'));
+            if (window.location.hash)
+            {
+              goToByScroll(window.location.hash);
+            }
+        }}
+    });
+}
+
+
+function postAndShow(path, params) {
+    $.ajax({
+        type: "POST",
+        url: path,
+        dataType: "html",
+        data: $.param(params.toHash()),
+        success: function(msg){
+            showContent(msg, "#contents")
+        }
+    });
+}
+
+function postAndReplace(path, params) {
+    $.ajax({
+        type: "POST",
+        url: path,
+        dataType: "html",
+        data: $.param(params.toHash()),
+        success: function(msg){
+            replaceContent(msg, params['post_id'])
+        }
+    });
+}
+
+function postAndAdd(path, params) {
+    $.ajax({
+        type: "POST",
+        url: path,
+        dataType: "html",
+        data: $.param(params.toHash()),
+        success: function(msg){
+            addContent(msg)
+        }
+    });
+}
+
+function subscribeToPusher(id) {
+    if (!pusher)
+    {
+        pusher = new Pusher($('body').attr('id'));
+    }
+    if (!pusher.channels.channels[id])
+    {
+        var channel = pusher.subscribe(id);
+        channel.bind('new-post', function(data) {
+            var url = "/topics/"+id+"/posts/"+data.id+".js";
+            showPost(url, data.user_id);
+        });
+    }
+}
+
 function showContent(data, place){
-    $(place).html(data);
+    $(place).show().html(data);
     hideLoadingNotification()
 }
 

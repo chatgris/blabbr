@@ -128,6 +128,7 @@ GEM
     rake (0.8.7)
     rbbcode (0.1.8)
       sanitize-url (>= 0.1.3)
+    rcov (0.9.9)
     rspec (2.2.0)
       rspec-core (~> 2.2)
       rspec-expectations (~> 2.2)
@@ -189,6 +190,7 @@ DEPENDENCIES
   rack-fiber_pool
   rails (~> 3.0.3)
   rbbcode (~> 0.1.8)
+  rcov
   rspec-rails (~> 2.2.0)
   simple_form (~> 1.3.0)
   stateflow (~> 0.4.0)
