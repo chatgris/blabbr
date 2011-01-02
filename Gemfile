@@ -24,6 +24,7 @@ gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git
 group :test, :development do
   gem "factory_girl_rails", "~>1.0"
   gem "rspec-rails",        "~>2.2.0"
+  gem "rcov"
   gem "autotest"
 end
 

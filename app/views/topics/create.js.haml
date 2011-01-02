@@ -1,6 +1,3 @@
 :javascript
-  history.pushState('path', '', '#{topic_path(@topic.slug)}}
-  $.gritter.add({
-  title: '#{t("gritter.success")}',
-  text: '#{flash[:notice]}'
-  });
+  $.redirectTo('#{topic_path(@topic.slug)}');
+  $.blabbrNotify('success','#{flash[:notice]}');

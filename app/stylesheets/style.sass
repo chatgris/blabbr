@@ -146,11 +146,22 @@ section, article, header, footer, nav, aside, hgroup
   top: 48px
   z-index: 10
 
+#notify
+  position: fixed
+  top: 80px
+  left: 680px
+  width: 320px
+  p
+    padding: 5px
+  .success
+    +border-curve-right($green)
+  .fail
+    +border-curve-right($red)
+
 aside
   position: fixed
   left: 680px
   top: 120px
-  background: $beige
   +border-curve-right($beige)
   overflow: visible
   width: 310px
@@ -166,12 +177,14 @@ aside
     font-size: 9px
     margin: .5em 0
     article
+      .unread
+        width: 30px
       header
-        width: 275px
+        width: 270px
 
 #topics
   list-style: none
-  font-size: 1.4em
+  font-size: 12px
   line-height: 1.4em
   a
     display: block
@@ -180,7 +193,7 @@ aside
     &:hover
       padding: 0 0 0 0.4em
     .unread
-      width: 3em
+      width: 36px
       margin: 0 0.4em 0 0
       text-align: center
       line-height: 2.5em
@@ -190,16 +203,16 @@ aside
       a.new
         +border-curve($orange)
     header
-      width: 40em
+      width: 600px
       margin: 0.2em 0 0 0.2em
       vertical-align: top
       line-height: 1em
       float: left
       h3
-        font-size: 1em
+        font-size: 12px
         margin: 0 0 0.1em 0
       h4
-        font-size: 0.8em
+        font-size: 10px
         color: $gray
         font-style: italic
         font-weight: normal
@@ -211,7 +224,7 @@ h2
   text-shadow: $gray unquote("1px 1px 0")
   color: $orange
   clear: both
-  z-index: 20
+  z-index: 15
   position: relative
   top: 47px
 
@@ -239,16 +252,16 @@ blockquote
   h4
     float: left
     margin: 0 0 0.5em 0
-    width: 8em
+    width: 70px
     line-height: 1em
   p
     margin: 0.2em 0 0.4em 0
     line-height: 1.4em
-    font-size: 1.3em
+    font-size: 11px
   time
     color: #888888
     float: right
-    font-size: 1.1em
+    font-size: 10px
     font-style: italic
     margin: 0
 .post.anchor
@@ -275,12 +288,12 @@ input[type=email], input[type=text], input[type=file], textarea
   -moz-border-radius: 3px
   -webkit-border-radius: 3px
   display: block
-  height: 1.4em
+  height: 18px
 
 textarea
   width: 540px
   height: 10em
-  font-size: 1.4em
+  font-size: 11px
   padding: 5px
   margin: 0 0 1em 0
 
@@ -294,7 +307,7 @@ input[type=text]:focus, textarea:focus, input[type=password]:focus
 
 input[type=submit]
   padding: 0 0.3em 0 0
-  font: 1em / 1.6em Helvetica, Arial, sans-serif
+  font: 1Opx / 1.6em Helvetica, Arial, sans-serif
   text-shadow: 1px 1px 0 white
   color: #444444
   background: transparent
@@ -304,29 +317,13 @@ input[type=submit]
   text-decoration: none
   position: relative
   outline: none
-  height: 2em
+  height: 18px
   &:active
     top: 2px
     left: 2px
 
 input[type="submit"]::-moz-focus-inner
   border: none
-
-#gritter-notice-wrapper
-  position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  z-index: 9999
-
-.gritter-item-wrapper
-  position: relative
-  padding: .4em 0 .2em 0
-  text-align: center
-  font-size: 1.4em
-  line-height: 1.4em
-  text-shadow: 0 1px 1px #FFFFFF
-  +box-shadow($gray)
 
 #pusher
   display: none

@@ -4,9 +4,9 @@ package_assets: on
 javascripts:
   application:
     - public/javascripts/jquery.autocomplete.js
-    - public/javascripts/jquery.gritter.min.js
     - public/javascripts/jquery.livequery.js
     - public/javascripts/jquery.sexypost.js
     - public/javascripts/sammy-0.6.2.min.js
+    - public/javascripts/blabbr.notify.js
     - public/javascripts/sammy.application.js
     - public/javascripts/application.js
