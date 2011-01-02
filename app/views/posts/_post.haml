@@ -7,7 +7,7 @@
   = link_to_edit_post(post, topic)
   %time
     = post.created_at
-  %div.bubble{:data_user => post.user.nickname}
-    - cache("post-#{post.id}") do
+  - cache("post-#{post.id}") do
+    %div.bubble{:data_user => post.user.nickname}
       =raw textilize post.body
   %hr
