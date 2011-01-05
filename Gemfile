@@ -1,14 +1,14 @@
 source "http://rubygems.org"
 
-gem "bson",                 "1.1.1"
-gem "bson_ext",             "1.1.1"
+gem "bson",                 "1.1.5"
+gem "bson_ext",             "1.1.5"
 gem "carrierwave",          "~>0.5.1"
 gem "devise",               "~>1.1.5"
 gem "haml",                 "~>3.0.24"
 gem "jammit_lite",          :git => "git://github.com/chatgris/jammit_lite.git"
 gem "mini_magick",          "~>3.1"
-gem "mongo",             "1.1.1"
-gem "mongoid",              :git => "git://github.com/mongoid/mongoid.git", :branch => "refactor"
+gem "mongo",                "1.1.5"
+gem "mongoid",              :git => "git://github.com/mongoid/mongoid.git"
 gem "pusher",               "~>0.7.0"
 gem "rails",                "~>3.0.3"
 gem "RedCloth",             "~>4.2.3"
@@ -23,7 +23,7 @@ gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git
 
 group :test, :development do
   gem "factory_girl_rails", "~>1.0"
-  gem "rspec-rails",        "~>2.2.0"
+  gem "rspec-rails",        "~>2.4.0"
   gem "rcov"
   gem "autotest"
 end
