@@ -32,10 +32,10 @@ describe Post do
         @topic = Factory.create(:topic)
         @post = Factory.build(:post, :user_id => @creator.id)
         @post.topic = @topic
+        @post.save
       end
 
       it "should increment creator.posts_count at creation" do
-        @creator.reload.posts.all.count.should == 2
         @creator.reload.posts_count.should == 14
       end
 
