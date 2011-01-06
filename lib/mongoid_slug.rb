@@ -1,25 +1,28 @@
 # encoding: utf-8
 module Mongoid
+
   module Slug
     extend ActiveSupport::Concern
 
     included do
-      cattr_accessor :slug, :slugged
+      field :slug, :type => String
+      set_callback :create, :before, :set_slug
       named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
-    end
-
-    module ClassMethods
-
-      def slug_field(slug_field)
-        self.slugged = slug_field
-        field :slug, :type => String
-        before_create :set_slug
-        index :slug
-      end
+      delegate :slugged, :to => "self.class"
     end
 
     def set_slug
       self.slug = self.send(slugged).parameterize.to_s
     end
+
+    module ClassMethods
+      attr_accessor :slugged
+
+      def slug_field(slug_field)
+        self.slugged = slug_field
+      end
+
+    end
+
   end
 end
