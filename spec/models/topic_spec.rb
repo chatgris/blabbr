@@ -25,7 +25,7 @@ describe Topic do
   context "Validations" do
     it "should be valid" do
       @creator = Factory.build(:creator)
-      @creator.save!
+      @creator.save
       @topic = Factory.create(:topic)
       @topic.should be_valid
     end
@@ -37,7 +37,7 @@ describe Topic do
       end
 
       it 'should required creator' do
-        Factory.build(:topic, :creator => '').should_not be_valid
+        Factory.build(:topic, :user => '').should_not be_valid
       end
 
       it "should required post" do
@@ -190,7 +190,7 @@ describe Topic do
 
      before :each do
       @current_user = Factory.create(:user)
-      @topic = Factory.create(:topic, :creator => "One user")
+      @topic = Factory.create(:topic, :user => @current_user)
     end
 
     it "should find by slug" do

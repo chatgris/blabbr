@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 25ed11525c7cf12936f4b1714f855f99d4666a5d
+  revision: 9306894e3944fdbc7e1250be157c4cc4dc80ca39
   specs:
     mongoid (2.0.0.rc.1)
       activemodel (~> 3.0)
@@ -58,7 +58,7 @@ GEM
     arel (2.0.6)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
-    bcrypt-ruby (2.1.3)
+    bcrypt-ruby (2.1.4)
     bson (1.1.5)
     bson_ext (1.1.5)
     builder (2.1.2)

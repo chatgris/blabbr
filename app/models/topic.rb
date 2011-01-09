@@ -21,7 +21,7 @@ class Topic
   index :created_at
   index 'members.nickname'
 
-  attr_accessor :post
+  attr_accessor :post, :user
 
   stateflow do
     initial :published
@@ -38,11 +38,11 @@ class Topic
   end
 
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
-  validates :creator, :presence => true
+  validates :user, :presence => true, :on => :create
   validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
-  before_create :creator_as_members
-  after_validation :add_post, :if => "self.new_record?"
+  before_create :creator_as_members, :set_creator
+  after_create :add_post
 
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
@@ -81,12 +81,18 @@ class Topic
 
   protected
 
+  def set_creator
+    self.creator = self.user.nickname unless self.user == ''
+  end
+
   def creator_as_members
-    self.members << Member.new(:nickname => self.creator, :posts_count => 1)
+    self.members << Member.new(:nickname => self.user.nickname, :posts_count => 1)
   end
 
   def add_post
-    self.posts << Post.create(:body => self.post, :content => self.post, :user_id => User.by_nickname(creator).first.id, :topic_id => self.id, :new_topic => true)
+    post = Post.new(:body => self.post, :content => self.post, :creator => self.user, :new_topic => true)
+    post.topic = self
+    post.save
   end
 
 end

@@ -23,7 +23,7 @@ class TopicsController < ApplicationController
   end
 
   def create
-    params[:topic][:creator] = current_user.nickname
+    params[:topic][:user] = current_user
     @topic = Topic.new(params[:topic])
 
     if @topic.save

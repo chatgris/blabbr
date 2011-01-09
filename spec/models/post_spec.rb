@@ -9,16 +9,16 @@ describe Post do
   it { Post.fields['state'].type.should == String}
 
   describe 'validation' do
-    it 'should required title' do
-      Factory.build(:post, :user_id => '').should_not be_valid
+    before :each do
+      @creator  = Factory.create(:creator)
     end
 
     it 'should required body' do
-      Factory.build(:post, :body => '').should_not be_valid
+      Factory.build(:post, :body => '', :creator => @creator).should_not be_valid
     end
 
     it 'should validates body.size' do
-      Factory.build(:post, :body => (0...10100).map{65.+(rand(25)).chr}.join).should_not be_valid
+      Factory.build(:post, :creator => @creator, :body => (0...10100).map{65.+(rand(25)).chr}.join).should_not be_valid
     end
 
   end
@@ -30,7 +30,7 @@ describe Post do
         @creator  = Factory.create(:creator)
         @member = Factory.create(:user)
         @topic = Factory.create(:topic)
-        @post = Factory.build(:post, :user_id => @creator.id)
+        @post = Factory.build(:post, :creator => @creator)
         @post.topic = @topic
         @post.save
       end
@@ -65,7 +65,7 @@ describe Post do
       end
 
       it "should update posted_at time" do
-        sleep(2)
+        sleep(1)
         @post = Factory.build(:post, :user_id => @creator.id)
         @post.topic = @topic
         @topic.reload.posted_at.to_s.should_not == @topic.created_at.to_s
@@ -85,7 +85,9 @@ describe Post do
         @member = Factory.create(:user)
         @topic = Factory.create(:topic)
         @topic.new_member(@member.nickname)
-        @topic.posts << Factory.create(:post, :user_id => @member.id, :topic_id => @topic.id)
+        @post = Factory.build(:post, :creator => @member, :topic_id => @topic.id)
+        @post.topic
+        @post.save
       end
 
       it "should have 2 members" do
@@ -105,7 +107,8 @@ describe Post do
       end
 
       it "should increment unread count when a post is added" do
-        @post = Factory.build(:post, :user_id => @creator.id)
+        @topic.reload.members[1].unread.should == 1
+        @post = Factory.build(:post, :body => "new post", :creator => @creator)
         @post.topic = @topic
         @post.save
         @topic.reload.members[1].unread.should == 2
