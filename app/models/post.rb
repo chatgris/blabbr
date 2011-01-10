@@ -52,12 +52,12 @@ class Post
             member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
           end
           if member.nickname == self.creator.nickname
-            member.inc(:posts_count, 1)
+            member.posts_count += 1
           else
-            member.inc('unread', 1)
+            member.unread += 1
           end
         end
-        t.inc('posts_count', 1)
+        t.posts_count += 1
         t.save
       end
     end

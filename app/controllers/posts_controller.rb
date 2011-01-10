@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_filter :get_current_topic_for_member
-  before_filter :get_smilies, :only => [:create, :show, :update]
+  before_filter :get_smilies, :only => [:show, :update]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
   respond_to :html, :js
