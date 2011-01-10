@@ -36,10 +36,6 @@ describe Topic do
         Factory.build(:topic, :title => '').should_not be_valid
       end
 
-      it 'should required creator' do
-        Factory.build(:topic, :user => '').should_not be_valid
-      end
-
       it "should required post" do
         Factory.build(:topic, :post => '').should_not be_valid
       end

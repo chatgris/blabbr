@@ -29,7 +29,7 @@ describe Post do
       before :each do
         @creator  = Factory.create(:creator)
         @member = Factory.create(:user)
-        @topic = Factory.create(:topic)
+        @topic = Factory.create(:topic, :user => @creator)
         @post = Factory.build(:post, :creator => @creator)
         @post.topic = @topic
         @post.save

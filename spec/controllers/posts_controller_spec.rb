@@ -41,7 +41,7 @@ describe PostsController do
 
     before :each do
       @current_user = Factory.create(:creator)
-      @topic = Factory.create(:topic)
+      @topic = Factory.create(:topic, :user => @current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       @post = Post.first
     end
