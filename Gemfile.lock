@@ -11,16 +11,6 @@ GIT
     em-synchrony (0.2.0)
       eventmachine (>= 0.12.9)
 
-GIT
-  remote: git://github.com/mongoid/mongoid.git
-  revision: 9306894e3944fdbc7e1250be157c4cc4dc80ca39
-  specs:
-    mongoid (2.0.0.rc.1)
-      activemodel (~> 3.0)
-      mongo (~> 1.1.5)
-      tzinfo (~> 0.3.22)
-      will_paginate (~> 3.0.pre)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -98,6 +88,11 @@ GEM
       subexec (~> 0.0.4)
     mongo (1.1.5)
       bson (>= 1.1.5)
+    mongoid (2.0.0.rc.3)
+      activemodel (~> 3.0)
+      mongo (~> 1.1.5)
+      tzinfo (~> 0.3.22)
+      will_paginate (~> 3.0.pre)
     nokogiri (1.4.3.1)
     polyglot (0.3.1)
     pusher (0.7.0)
@@ -183,7 +178,7 @@ DEPENDENCIES
   jammit_lite!
   mini_magick (~> 3.1)
   mongo (= 1.1.5)
-  mongoid!
+  mongoid (= 2.0.0.rc.3)
   nokogiri (~> 1.4.3.1)
   pusher (~> 0.7.0)
   rack-fiber_pool
