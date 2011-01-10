@@ -1,3 +1,4 @@
 :javascript
   $.redirectTo('#{topic_path(@topic.slug)}');
   $.blabbrNotify('success','#{flash[:notice]}');
+  subscribeToPusher('#{@topic.slug}');
