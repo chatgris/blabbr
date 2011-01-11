@@ -30,7 +30,7 @@ describe Post do
         @creator  = Factory.create(:creator)
         @member = Factory.create(:user)
         @topic = Factory.create(:topic, :user => @creator)
-        @post = Factory.build(:post, :creator => @creator)
+        @post = Factory.build(:post, :creator => @creator, :t => @topic)
         @post.topic = @topic
         @post.save
       end
@@ -66,7 +66,7 @@ describe Post do
 
       it "should update posted_at time" do
         sleep(1)
-        @post = Factory.build(:post, :user_id => @creator.id)
+        @post = Factory.build(:post, :user_id => @creator.id, :t => @topic)
         @post.topic = @topic
         @topic.reload.posted_at.to_s.should_not == @topic.created_at.to_s
       end
@@ -85,7 +85,7 @@ describe Post do
         @member = Factory.create(:user)
         @topic = Factory.create(:topic)
         @topic.new_member(@member.nickname)
-        @post = Factory.build(:post, :creator => @member, :topic_id => @topic.id)
+        @post = Factory.build(:post, :creator => @member, :topic_id => @topic.id, :t => @topic)
         @post.topic
         @post.save
       end
@@ -108,7 +108,7 @@ describe Post do
 
       it "should increment unread count when a post is added" do
         @topic.reload.members[1].unread.should == 1
-        @post = Factory.build(:post, :body => "new post", :creator => @creator)
+        @post = Factory.build(:post, :body => "new post", :creator => @creator, :t => @topic)
         @post.topic = @topic
         @post.save
         @topic.reload.members[1].unread.should == 2

@@ -9,7 +9,7 @@ class Post
   referenced_in :topic
   referenced_in :user
 
-  attr_accessor :new_topic, :creator
+  attr_accessor :new_topic, :creator, :t
 
   stateflow do
     initial :published
@@ -43,23 +43,17 @@ class Post
 
   def update_topic_infos
     if self.new_topic.nil?
-      t = Topic.by_slug(self.topic.slug).first
-      if t
-        t.posted_at = Time.now.utc
-        t.members.each do |member|
-          if member.unread == 0
-            member.post_id = self.id
-            member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
-          end
-          if member.nickname == self.creator.nickname
-            member.posts_count += 1
-          else
-            member.unread += 1
-          end
+      t = self.t
+      t.members.each do |member|
+        if member.unread == 0
+          member.post_id = self.id
+          member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
         end
-        t.posts_count += 1
-        t.save
+        member.nickname == self.creator.nickname ? member.posts_count += 1 : member.unread += 1
       end
+      t.posted_at = Time.now.utc
+      t.posts_count += 1
+      t.save
     end
   end
 

@@ -8,7 +8,7 @@ gem "haml",                 "~>3.0.24"
 gem "jammit_lite",          :git => "git://github.com/chatgris/jammit_lite.git"
 gem "mini_magick",          "~>3.1"
 gem "mongo",                "1.1.5"
-gem "mongoid",              "2.0.0.rc.3"
+gem "mongoid",              :git => 'git://github.com/mongoid/mongoid.git', :branch => 'double_callbacks'
 gem "pusher",               "~>0.7.0"
 gem "rails",                "~>3.0.3"
 gem "RedCloth",             "~>4.2.3"

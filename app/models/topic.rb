@@ -13,7 +13,7 @@ class Topic
 
   embeds_many :members
   embeds_many :attachments
-  references_many :posts
+  references_many :posts, :validate => false
 
   slug_field :title
 

@@ -24,7 +24,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(:creator => current_user, :body => params[:post][:body])
+    @post = Post.new(:creator => current_user, :t => @topic, :body => params[:post][:body])
     @post.topic = @topic
     if @post.save
       flash[:notice] = t('posts.create.success')
