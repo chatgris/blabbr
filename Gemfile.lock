@@ -13,10 +13,9 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: d651c663a817fbe55d66698c5741acbae2acab21
-  branch: double_callbacks
+  revision: 5f5beefecd637b0fc021d84ebaaa9440b682dba5
   specs:
-    mongoid (2.0.0.rc.1)
+    mongoid (2.0.0.rc.3)
       activemodel (~> 3.0)
       mongo (~> 1.1.5)
       tzinfo (~> 0.3.22)
