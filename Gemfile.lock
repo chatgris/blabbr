@@ -13,9 +13,9 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 5f5beefecd637b0fc021d84ebaaa9440b682dba5
+  revision: 3098aa41c6243ecb8b420cb3db85aa3eaa0f6a41
   specs:
-    mongoid (2.0.0.rc.3)
+    mongoid (2.0.0.rc.4)
       activemodel (~> 3.0)
       mongo (~> 1.1.5)
       tzinfo (~> 0.3.22)
@@ -55,7 +55,7 @@ GEM
       activesupport (= 3.0.3)
     activesupport (3.0.3)
     addressable (2.2.2)
-    arel (2.0.6)
+    arel (2.0.7)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     bcrypt-ruby (2.1.4)
@@ -106,7 +106,7 @@ GEM
       ruby-hmac (~> 0.4.0)
       signature (~> 0.1.2)
     rack (1.2.1)
-    rack-fiber_pool (0.9.0)
+    rack-fiber_pool (0.9.1)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
     rack-test (0.5.7)
@@ -156,7 +156,7 @@ GEM
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.23)
+    tzinfo (0.3.24)
     warden (1.0.3)
       rack (>= 1.0.0)
     will_paginate (3.0.pre2)
