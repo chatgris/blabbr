@@ -38,7 +38,7 @@ class Topic
   end
 
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
-  validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
+  validates :post, :presence => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
   before_create :creator_as_members, :set_creator
   after_create :add_post

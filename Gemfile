@@ -22,6 +22,7 @@ gem 'em-http-request',      '0.2.15'
 gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git', :require => ['em-synchrony', 'em-synchrony/em-http', 'em-synchrony/iterator']
 
 group :test, :development do
+  gem "mongoid-rspec",      :git => "git://github.com/durran/mongoid-rspec.git"
   gem "factory_girl_rails", "~>1.0"
   gem "rspec-rails",        "~>2.4.0"
   gem "rcov"

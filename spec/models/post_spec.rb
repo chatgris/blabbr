@@ -2,25 +2,19 @@ require 'spec_helper'
 
 describe Post do
 
-  it { Post.fields.keys.should be_include('body')}
-  it { Post.fields['body'].type.should == String}
+  describe 'relations' do
+    it { should be_referenced_in(:user) }
+    it { should be_referenced_in(:topic) }
+  end
 
-  it { Post.fields.keys.should be_include('state')}
-  it { Post.fields['state'].type.should == String}
+  describe 'fields' do
+    it { should have_fields(:body, :state).of_type(String) }
+  end
 
   describe 'validation' do
-    before :each do
-      @creator  = Factory.create(:creator)
-    end
-
-    it 'should required body' do
-      Factory.build(:post, :body => '', :creator => @creator).should_not be_valid
-    end
-
-    it 'should validates body.size' do
-      Factory.build(:post, :creator => @creator, :body => (0...10100).map{65.+(rand(25)).chr}.join).should_not be_valid
-    end
-
+    it { should validate_presence_of(:body) }
+    it { should validate_presence_of(:user_id) }
+    it { should validate_length_of(:body) }
   end
 
   describe "callback" do

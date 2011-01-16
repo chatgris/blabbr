@@ -5,6 +5,14 @@ GIT
     jammit_lite (0.1.2)
 
 GIT
+  remote: git://github.com/durran/mongoid-rspec.git
+  revision: d60faa47d4a7a17b279fda48e8f16b4973bb15d7
+  specs:
+    mongoid-rspec (1.3.2)
+      mongoid (~> 2.0.0)
+      rspec (~> 2)
+
+GIT
   remote: git://github.com/igrigorik/em-synchrony.git
   revision: f59169c5c8f893336802f1de2970ee9dd8755158
   specs:
@@ -13,9 +21,9 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 3098aa41c6243ecb8b420cb3db85aa3eaa0f6a41
+  revision: a08e7bc5902c63bee9e11d0c9b59dc027f12dedc
   specs:
-    mongoid (2.0.0.rc.4)
+    mongoid (2.0.0.rc.5)
       activemodel (~> 3.0)
       mongo (~> 1.1.5)
       tzinfo (~> 0.3.22)
@@ -184,6 +192,7 @@ DEPENDENCIES
   mini_magick (~> 3.1)
   mongo (= 1.1.5)
   mongoid!
+  mongoid-rspec!
   nokogiri (~> 1.4.3.1)
   pusher (~> 0.7.0)
   rack-fiber_pool

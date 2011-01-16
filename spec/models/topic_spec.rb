@@ -2,24 +2,25 @@ require 'spec_helper'
 
 describe Topic do
 
-  context "Fields" do
-    it { Topic.fields.keys.should be_include('creator')}
-    it { Topic.fields['creator'].type.should == String}
+  describe 'relation' do
+    it {should reference_many(:posts)}
+    it {should embed_many(:members)}
+    it {should embed_many(:attachments)}
+  end
 
-    it { Topic.fields.keys.should be_include('title')}
-    it { Topic.fields['title'].type.should == String}
+  describe 'fields' do
+    it { should have_fields(:creator, :title, :state).of_type(String) }
+    it { should have_fields(:posts_count).of_type(Integer).with_default_value_of(1)}
+    it { should have_fields(:attachments_count).of_type(Integer).with_default_value_of(0)}
+    it { should have_fields(:posted_at).of_type(Time) }
+  end
 
-    it { Topic.fields.keys.should be_include('posts_count')}
-    it { Topic.fields['posts_count'].type.should == Integer}
-
-    it { Topic.fields.keys.should be_include('attachments_count')}
-    it { Topic.fields['attachments_count'].type.should == Integer}
-
-    it { Topic.fields.keys.should be_include('state')}
-    it { Topic.fields['state'].type.should == String}
-
-    it { Topic.fields.keys.should be_include('posted_at')}
-    it { Topic.fields['posted_at'].type.should == Time}
+  describe 'validations' do
+    it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:post) }
+    it { should validate_uniqueness_of(:title) }
+    it { should validate_length_of(:title) }
+    it { should validate_length_of(:post) }
   end
 
   context "Validations" do
@@ -28,21 +29,6 @@ describe Topic do
       @creator.save
       @topic = Factory.create(:topic)
       @topic.should be_valid
-    end
-
-    describe 'validation' do
-
-      it 'should required title' do
-        Factory.build(:topic, :title => '').should_not be_valid
-      end
-
-      it "should required post" do
-        Factory.build(:topic, :post => '').should_not be_valid
-      end
-
-      it 'should validates title.size' do
-        Factory.build(:topic, :title => (0...101).map{65.+(rand(25)).chr}.join).should_not be_valid
-      end
     end
 
     describe 'validation with context' do
@@ -200,25 +186,4 @@ describe Topic do
     end
   end
 
-  describe "relations" do
-
-    it "should embed many members" do
-      relation = Topic.relations['members']
-      relation.klass.should ==(Member)
-      relation.relation.should ==(Mongoid::Relations::Embedded::Many)
-    end
-
-    it "should embed many attachments" do
-      relation = Topic.relations['attachments']
-      relation.klass.should ==(Attachment)
-      relation.relation.should ==(Mongoid::Relations::Embedded::Many)
-    end
-
-    it "should embed many posts" do
-      relation = Topic.relations['posts']
-      relation.klass.should ==(Post)
-      relation.relation.should ==(Mongoid::Relations::Referenced::Many)
-    end
-
-  end
 end
