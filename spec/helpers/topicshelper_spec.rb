@@ -2,14 +2,14 @@ require 'spec_helper'
 
 
 def current_user(stubs = {})
-  @current_user ||= Factory.create(:creator)
+  @current_user ||= Fabricate(:creator)
 end
 
 describe TopicsHelper do
   describe "textilize" do
 
     before do
-      @smiley = Factory.build(:smiley)
+      @smiley = Fabricate.build(:smiley)
       @smiley.image = File.open(Rails.root.join("image.jpg"))
       @smiley.save
       @smilies = Smiley.all.flatten
@@ -43,8 +43,8 @@ describe TopicsHelper do
   describe "ratio links" do
 
     before :all do
-      @current_user = Factory.create(:creator)
-      @topic = Factory.create(:topic)
+      @current_user = Fabricate(:creator)
+      @topic = Fabricate(:topic)
     end
 
     it "should display posts ratio" do
@@ -59,9 +59,9 @@ describe TopicsHelper do
   describe "topics various helpers" do
 
     before :each do
-      @creator = Factory.create(:creator)
-      @user = Factory.create(:user)
-      @topic = Factory.create(:topic)
+      @creator = Fabricate(:creator)
+      @user = Fabricate(:user)
+      @topic = Fabricate(:topic)
       @topic.new_member(@user.nickname)
     end
 

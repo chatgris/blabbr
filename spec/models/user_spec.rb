@@ -24,7 +24,7 @@ describe User do
 
   context 'with a user' do
     let(:user) do
-      Factory.create(:user)
+      Fabricate(:user)
     end
 
     describe 'validation' do

@@ -5,8 +5,8 @@ describe SmiliesController do
   describe 'current_user == added_by' do
 
     before :each do
-      @current_user = Factory.create(:user)
-      @smiley = Factory.create(:smiley)
+      @current_user = Fabricate(:user)
+      @smiley = Fabricate(:smiley)
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
     end
@@ -55,8 +55,8 @@ describe SmiliesController do
   describe 'current_user != added_by' do
 
     before :each do
-      @current_user = Factory.create(:creator)
-      @smiley = Factory.create(:smiley)
+      @current_user = Fabricate(:creator)
+      @smiley = Fabricate(:smiley)
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(@current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"

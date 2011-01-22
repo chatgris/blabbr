@@ -26,19 +26,19 @@ describe Topic do
   context 'set up : topic and user created' do
 
     let(:creator) do
-      Factory.create(:creator)
+      Fabricate(:creator)
     end
 
     let(:topic) do
-      Factory.create(:topic)
+      Fabricate(:topic)
     end
 
     let(:post) do
-      Factory.build(:post)
+      Fabricate.build(:post)
     end
 
     let(:current_user) do
-      Factory.create(:user)
+      Fabricate(:user)
     end
 
     context "Validations" do
@@ -50,8 +50,8 @@ describe Topic do
         end
 
         it 'should not valid if title is already taken' do
-          Factory.create(:topic).should be_valid
-          Factory.build(:topic).should_not be_valid
+          Fabricate(:topic).should be_valid
+          Fabricate.build(:topic).should_not be_valid
         end
 
         it 'should have a valid posted_add time' do
@@ -77,11 +77,11 @@ describe Topic do
     describe 'members' do
 
       let(:post) do
-        Factory.build(:post, :user_id => current_user.id)
+        Fabricate.build(:post, :user_id => current_user.id)
       end
 
       let(:member) do
-        Factory.build(:member)
+        Fabricate.build(:member)
       end
 
       context " Adding new members "do
@@ -139,7 +139,7 @@ describe Topic do
     describe 'stateflow' do
 
       let(:current_user) do
-        Factory.create(:creator)
+        Fabricate(:creator)
       end
 
       context "By default" do
@@ -174,7 +174,7 @@ describe Topic do
       end
 
       it "should find by subscribed topic" do
-        Factory.create(:topic)
+        Fabricate(:topic)
         Topic.by_subscribed_topic(creator.nickname).first.should_not be_nil
         Topic.by_subscribed_topic("Not a user").first.should be_nil
       end

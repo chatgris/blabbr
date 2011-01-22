@@ -23,7 +23,7 @@ gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git
 
 group :test, :development do
   gem "mongoid-rspec",      :git => "git://github.com/durran/mongoid-rspec.git"
-  gem "factory_girl_rails", "~>1.0"
+  gem "fabrication"
   gem "rspec-rails",        "~>2.4.0"
   gem "rcov"
   gem "autotest"

@@ -20,19 +20,19 @@ describe Post do
   context "Setup : topic, user, and cretor created" do
 
     let(:creator) do
-      Factory.create(:creator)
+      Fabricate(:creator)
     end
 
     let(:member) do
-      Factory.create(:user)
+      Fabricate(:user)
     end
 
     let(:topic) do
-      Factory.create(:topic, :user => creator)
+      Fabricate(:topic, :user => creator)
     end
 
     let(:post) do
-      Factory.build(:post, :creator => creator, :t => topic)
+      Fabricate.build(:post, :creator => creator, :t => topic)
     end
 
     describe "callback" do
@@ -82,7 +82,7 @@ describe Post do
       context "when a post is added by a member" do
 
         let(:new_post) do
-          Factory.build(:post, :creator => member, :t => topic)
+          Fabricate.build(:post, :creator => member, :t => topic)
         end
 
         before :each do

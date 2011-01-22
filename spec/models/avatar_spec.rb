@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AvatarUploader do
   before do
-    @user = Factory.create(:user)
+    @user = Fabricate(:user)
     AvatarUploader.enable_processing = true
     @uploader = AvatarUploader.new(@user, :avatar)
     @uploader.store!(File.open(Rails.root.join("image.jpg")))

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AttachmentUploader do
   before do
-    @topic = Factory.build(:topic)
+    @topic = Fabricate(:topic)
     AttachmentUploader.enable_processing = true
     @uploader = AttachmentUploader.new(@topic, :attachment)
     @uploader.store!(File.open(Rails.root.join("image.jpg")))

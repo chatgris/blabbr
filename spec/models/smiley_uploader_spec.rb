@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SmileyUploader do
   before do
-    @smiley = Factory.build(:smiley)
+    @smiley = Fabricate.build(:smiley)
     SmileyUploader.enable_processing = true
     @uploader = SmileyUploader.new(@smiley, :smiley)
     @uploader.store!(File.open(Rails.root.join("image.jpg")))
