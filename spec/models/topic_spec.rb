@@ -36,7 +36,7 @@ describe Topic do
     let(:post) do
       Factory.build(:post)
     end
-    
+
     let(:current_user) do
       Factory.create(:user)
     end
@@ -79,7 +79,7 @@ describe Topic do
       let(:post) do
         Factory.build(:post, :user_id => current_user.id)
       end
-      
+
       let(:member) do
         Factory.build(:member)
       end
