@@ -22,54 +22,47 @@ describe User do
     it { should validate_format_of(:email).to_allow("valid@mail.com").not_to_allow("invalidmail") }
   end
 
-  describe 'validation' do
+  context 'with a user' do
+    let(:user) do
+      Factory.create(:user)
+    end
 
-    describe "Callbacks validations" do
-      before :each do
-        @user = Factory.create(:user)
+    describe 'validation' do
+
+      describe "Callbacks validations" do
+        it "should have a slug" do
+          user.reload.slug.should == user.nickname.parameterize
+        end
+
+        it "should set a gravatar_url" do
+          user.reload.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(user.email.downcase.strip)}.jpg?size="
+        end
       end
 
-      it "should have a slug" do
-        @user.reload.slug.should == @user.nickname.parameterize
+    end
+
+    describe 'named_scope' do
+      it "should be find by slug" do
+        User.by_slug(user.nickname.parameterize).first.nickname.should == user.nickname
       end
 
-      it "should set a gravatar_url" do
-        @user.reload.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@user.email.downcase.strip)}.jpg?size="
+      it "should be find by nickname" do
+        User.by_nickname(user.nickname).first.nickname.should == user.nickname
       end
     end
-  end
 
-  describe 'named_scope' do
+    describe "User preferences" do
+      it "should update time_zone" do
+        user.time_zone = 'Paris'
+        user.save
+        user.reload.time_zone.should == 'Paris'
+      end
 
-    before :each do
-      @user = Factory.create(:user)
-    end
-
-    it "should be find by slug" do
-      User.by_slug(@user.nickname.parameterize).first.nickname.should == @user.nickname
-    end
-
-    it "should be find by nickname" do
-      User.by_nickname(@user.nickname).first.nickname.should == @user.nickname
-    end
-
-  end
-
-  describe "User preferences" do
-    before :each do
-      @user = Factory.create(:user)
-    end
-
-    it "should update time_zone" do
-      @user.time_zone = 'Paris'
-      @user.save
-      @user.reload.time_zone.should == 'Paris'
-    end
-
-    it 'should update audio preference' do
-      @user.audio.should == true
-      @user.audio = false
-      @user.reload.audio == false
+      it 'should update audio preference' do
+        user.audio.should == true
+        user.audio = false
+        user.reload.audio == false
+      end
     end
 
   end

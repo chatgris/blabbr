@@ -8,7 +8,7 @@ class Attachment
 
   mount_uploader :attachment, ::AttachmentUploader
 
-  embedded_in :attachmentable, :polymorphic => true
+  embedded_in :topic
 
   validates :nickname, :presence => true
 
@@ -17,12 +17,13 @@ class Attachment
   protected
 
   def update_attachments_count
-    self.attachmentable.members.each do |member|
+    self.topic.members.each do |member|
       if member.nickname == nickname
-        member.inc(:attachments_count, 1)
+        member.attachments_count += 1
       end
     end
-    self.attachmentable.inc(:attachments_count, 1)
+    self.topic.attachments_count =+ 1
+    self.topic.save
   end
 
 end
