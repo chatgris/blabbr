@@ -21,11 +21,11 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: 89e3d8ab20932e3da41eee4bc396d9fc38d8c723
+  revision: 90a8680e72b32a17cb0209292baa5d1277d0bf38
   specs:
-    mongoid (2.0.0.rc.5)
+    mongoid (2.0.0.rc.6)
       activemodel (~> 3.0)
-      mongo (~> 1.1.5)
+      mongo (~> 1.2)
       tzinfo (~> 0.3.22)
       will_paginate (~> 3.0.pre)
 
@@ -62,17 +62,17 @@ GEM
       activemodel (= 3.0.3)
       activesupport (= 3.0.3)
     activesupport (3.0.3)
-    addressable (2.2.2)
+    addressable (2.2.3)
     arel (2.0.7)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     bcrypt-ruby (2.1.4)
-    bson (1.1.5)
-    bson_ext (1.1.5)
+    bson (1.2.0)
+    bson_ext (1.2.0)
     builder (2.1.2)
     carrierwave (0.5.1)
       activesupport (~> 3.0)
-    closure-compiler (0.3.3)
+    closure-compiler (1.0.0)
     crack (0.1.8)
     daemons (1.1.0)
     dalli (1.0.1)
@@ -104,8 +104,8 @@ GEM
     mime-types (1.16)
     mini_magick (3.2)
       subexec (~> 0.0.4)
-    mongo (1.1.5)
-      bson (>= 1.1.5)
+    mongo (1.2.0)
+      bson (>= 1.2.0)
     nokogiri (1.4.3.1)
     polyglot (0.3.1)
     pusher (0.7.0)
@@ -168,7 +168,7 @@ GEM
     warden (1.0.3)
       rack (>= 1.0.0)
     will_paginate (3.0.pre2)
-    yui-compressor (0.9.1)
+    yui-compressor (0.9.3)
 
 PLATFORMS
   ruby
@@ -177,8 +177,8 @@ DEPENDENCIES
   ClothRed (~> 0.4.1)
   RedCloth (~> 4.2.3)
   autotest
-  bson (= 1.1.5)
-  bson_ext (= 1.1.5)
+  bson (= 1.2)
+  bson_ext (= 1.2)
   carrierwave (~> 0.5.1)
   dalli (~> 1.0.0)
   devise (~> 1.1.5)
@@ -190,7 +190,7 @@ DEPENDENCIES
   jammit (~> 0.5.3)
   jammit_lite!
   mini_magick (~> 3.1)
-  mongo (= 1.1.5)
+  mongo (= 1.2)
   mongoid!
   mongoid-rspec!
   nokogiri (~> 1.4.3.1)
