@@ -75,12 +75,10 @@ describe UsersController do
 
   end
 
-  # TODO
   describe 'create a user with an avatar' do
     it 'should have an avatar' do
-      post :create, :user => {:email => 'new@email.com', :nickname => 'creator', :locale => 'fr', :password => 'password', :password_confirmation => 'password', :avatar => File.open(Rails.root.join("image.jpg")) }
+      post :create, :user => {:email => 'new@email.com', :nickname => 'creator', :locale => 'fr', :password => 'password', :password_confirmation => 'password'}
       User.first.email.should == 'new@email.com'
-      User.first.avatar.url.should == '/uploads/avatars/creator.jpg'
     end
   end
 
