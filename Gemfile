@@ -10,7 +10,7 @@ gem "mini_magick",          "~>3.1"
 gem "mongo",                "1.2"
 gem "mongoid",              :git => 'git://github.com/mongoid/mongoid.git'
 gem "pusher",               "~>0.7.0"
-gem "rails",                "~>3.0.3"
+gem "rails",                "~>3.0.4"
 gem "RedCloth",             "~>4.2.3"
 gem "simple_form",          "~>1.3.0"
 gem "stateflow",            "~>0.4.0"
