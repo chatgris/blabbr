@@ -42,8 +42,10 @@ describe TopicsHelper do
 
   describe "ratio links" do
 
-    before :all do
+    before :each do
       @current_user = Fabricate(:creator)
+      helper.stub!(:logged_in?).and_return(true)
+      helper.stub!(:current_user).and_return(@current_user)
       @topic = Fabricate(:topic)
     end
 
