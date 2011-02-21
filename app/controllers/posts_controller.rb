@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_filter :get_current_topic_for_member
+  before_filter :get_current_topic_for_creator, :only => [:destroy]
+  before_filter :get_current_topic_for_member, :except => [:destroy]
   before_filter :get_smilies, :only => [:show, :update]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
@@ -39,10 +40,11 @@ class PostsController < ApplicationController
     @post = Post.criteria.id(params[:id]).and(:user_id => current_user.id).first
     if @post
       @post.delete!
-      redirect_to :back, :notice => t('posts.delete_success')
+      flash[ :notice] = t('posts.delete_success')
     else
-      redirect_to :back, :alert => t('posts.delete_unsuccess')
+      flash[:alert] = t('posts.delete_unsuccess')
     end
+    respond_with(@post, :location => :back)
 
   end
 
@@ -50,6 +52,13 @@ class PostsController < ApplicationController
 
   def get_current_topic_for_member
     @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
+    unless @topic
+      redirect_to :back, :alert => t('topic.not_auth')
+    end
+  end
+
+  def get_current_topic_for_creator
+    @topic = Topic.criteria.id(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end

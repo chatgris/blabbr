@@ -255,12 +255,23 @@ blockquote
   h4
     float: left
     margin: 0 0 0.5em 0
-    width: 70px
+    width: 90px
     line-height: 1em
   p
     margin: 0.2em 0 0.4em 0
     line-height: 1.4em
     font-size: 11px
+  .edit
+    display: inline-block
+    line-height: 18px
+    text-shadow: 1px 1px 0 white
+  .simple_form
+    display: inline
+    border: 0
+  input[type=submit], .edit
+    margin: 0 0 0 0.5em
+    padding: 0 .5em
+    +border-curve($beige)
   time
     color: #888888
     float: right
@@ -270,9 +281,9 @@ blockquote
 .post.anchor
   border-top: $orange unquote("solid 3px")
 .bubble
-  width: 550px
+  width: 540px
   float: left
-  margin: 0 0 3em 2em
+  margin: .7em 0 3em 1em
 
   a
     color: $gray
