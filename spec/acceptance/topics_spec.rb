@@ -29,7 +29,6 @@ feature "Topics index", %q{
       fill_in 'post[body]', :with => "New message"
     end
     click_on('Sauvegarder')
-    save_and_open_page
     page.should have_content('New message')
   end
 
