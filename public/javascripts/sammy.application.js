@@ -115,10 +115,14 @@ var root = (history.pushState) ? "/" : "#/";
 
         this.get(root +'topics/:id/posts/:post_id/edit', function() {
             var post_id = this.params['post_id'];
-            $.get(path,function(data){
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "html",
+                success: function(data){
                 if (data) {
                     showEdit(data, post_id);
-                }
+                }}
             });
         });
 

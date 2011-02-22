@@ -98,7 +98,7 @@ function showPost(url, userID){
 }
 
 function showEdit(data, id){
-    $("#" + id).find('div').html(data);
+    $("#" + id).find('.bubble').html(data);
     hideLoadingNotification()
 }
 

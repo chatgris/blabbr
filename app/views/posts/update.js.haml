@@ -1,7 +1,6 @@
 - if flash[:notice]
   :javascript
     $.blabbrNotify('success','#{flash[:notice]}');
-    $('#post_body').val('').focus();
 - else
   :javascript
     $.blabbrNotify('fail','#{flash[:alert]}');
