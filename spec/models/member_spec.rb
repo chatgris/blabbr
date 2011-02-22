@@ -2,23 +2,21 @@ require 'spec_helper'
 
 describe Member do
 
-  it { Member.fields.keys.should be_include('nickname')}
-  it { Member.fields['nickname'].type.should == String}
-  it { Member.fields.keys.should be_include('unread')}
-  it { Member.fields['unread'].type.should == Integer}
-  it { Member.fields.keys.should be_include('page')}
-  it { Member.fields['page'].type.should == Integer}
-  it { Member.fields.keys.should be_include('post_id')}
-  it { Member.fields['post_id'].type.should == String}
-  it { Member.fields.keys.should be_include('posts_count')}
-  it { Member.fields['posts_count'].type.should == Integer}
-  it { Member.fields.keys.should be_include('attachments_count')}
-  it { Member.fields['attachments_count'].type.should == Integer}
+  describe 'relation' do
+    it {should be_embedded_in(:topic)}
+  end
 
-  describe 'validation' do
-    it 'should required title' do
-      Factory.build(:member, :nickname => '').should_not be_valid
-    end
+  describe 'fields' do
+    it { should have_fields(:nickname, :post_id).of_type(String) }
+    it { should have_fields(:page).of_type(Integer).with_default_value_of(1)}
+    it { should have_fields(:unread).of_type(Integer).with_default_value_of(0)}
+    it { should have_fields(:posts_count).of_type(Integer).with_default_value_of(0)}
+    it { should have_fields(:attachments_count).of_type(Integer).with_default_value_of(0)}
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of(:nickname) }
+    it { should validate_uniqueness_of(:nickname) }
   end
 
 end

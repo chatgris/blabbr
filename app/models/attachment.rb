@@ -4,12 +4,11 @@ class Attachment
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :nickname
-  field :attachment
+  field :nickname, :type => String
 
-  mount_uploader :attachment, AttachmentUploader
+  mount_uploader :attachment, ::AttachmentUploader
 
-  embedded_in :attachmentable, :inverse_of => :attachments
+  embedded_in :topic
 
   validates :nickname, :presence => true
 
@@ -18,12 +17,13 @@ class Attachment
   protected
 
   def update_attachments_count
-    self.attachmentable.members.each do |member|
+    self.topic.members.each do |member|
       if member.nickname == nickname
         member.attachments_count += 1
       end
     end
-    self.attachmentable.attachments_count += 1
+    self.topic.attachments_count =+ 1
+    self.topic.save
   end
 
 end

@@ -1,9 +1,3 @@
-Factory.define :topic do |t|
-  t.title       "One topic"
-  t.creator     "creator"
-  t.post        "Some content"
-end
-
 Factory.define :user do |u|
   u.nickname     "One user"
   u.email        "mail@email.com"
@@ -29,6 +23,13 @@ Factory.define :creator, :class => "user" do |u|
   u.password     "password"
   u.password_confirmation "password"
   u.posts_count  12
+end
+
+Factory.define :topic do |t|
+  t.title       "One topic"
+  t.creator     "creator"
+  t.user        Factory.build(:creator)
+  t.post        "Some content"
 end
 
 Factory.define :post do |p|

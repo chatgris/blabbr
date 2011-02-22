@@ -1,11 +1,8 @@
 - title @topic.title
 :javascript
   var user_id = "#{current_user.id}";
-  var pusher = new Pusher("#{ENV['PUSHER_KEY']}", "#{@topic.slug}");
-  pusher.bind('new-post', function(data) {
-    var url = "/topics/#{@topic.slug}/posts/"+data.id+".js";
-    showPost(url, data.user_id);
-  });
+  var user_audio = #{current_user.audio};
+  var page_title = "#{@topic.title}";
 %ul.topic-list
   - if creator? @topic.creator
     %li#add-member

@@ -126,6 +126,10 @@ var root = (history.pushState) ? "/" : "#/";
             postAndReplace(path, this.params);
         });
 
+        this.del('/topics/:id/posts/:post_id', function() {
+            deletePost(path, this.params);
+        });
+
         this.get(root +'users/:id', function() {
             getAndShow(path, 'aside');
         });

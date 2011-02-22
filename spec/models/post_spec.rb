@@ -2,115 +2,132 @@ require 'spec_helper'
 
 describe Post do
 
-  it { Post.fields.keys.should be_include('body')}
-  it { Post.fields['body'].type.should == String}
-
-  it { Post.fields.keys.should be_include('state')}
-  it { Post.fields['state'].type.should == String}
-
-  describe 'validation' do
-    it 'should required title' do
-      Factory.build(:post, :user_id => '').should_not be_valid
-    end
-
-    it 'should required body' do
-      Factory.build(:post, :body => '').should_not be_valid
-    end
-
-    it 'should validates body.size' do
-      Factory.build(:post, :body => (0...10100).map{65.+(rand(25)).chr}.join).should_not be_valid
-    end
-
+  describe 'relations' do
+    it { should be_referenced_in(:user) }
+    it { should be_referenced_in(:topic) }
   end
 
-  describe "callback" do
+  describe 'fields' do
+    it { should have_fields(:body, :state).of_type(String) }
+  end
 
-    context "When a post is created" do
-      before :each do
-        @creator  = Factory.create(:creator)
-        @member = Factory.create(:user)
-        @topic = Factory.create(:topic)
-        @post = Factory.build(:post, :user_id => @creator.id)
-        @post.topic = @topic
-      end
+  describe 'validation' do
+    it { should validate_presence_of(:body) }
+    it { should validate_presence_of(:user_id) }
+    it { should validate_length_of(:body) }
+  end
 
-      it "should increment creator.posts_count at creation" do
-        @creator.reload.posts_count.should == 13
-      end
+  context "Setup : topic, user, and cretor created" do
 
-      it "should increment user.posts_count when a new post is created" do
-        @post.save
-        User.by_nickname(@creator.nickname).first.posts_count.should == 14
-      end
-
-      it "should have a correct user_id for the first post" do
-        @post.save
-        @post.reload.user_id.should == @creator.id
-      end
-
-      it "should increment topic.posts_count when a new post is created" do
-        @post.save
-        @topic.reload.posts_count.should == 2
-      end
-
-      it "should update posted_at time" do
-        sleep(2)
-        @post.save
-        @topic.reload.posted_at.to_s.should_not == @topic.created_at.to_s
-      end
-
-      it "shouldn't add a post if body is not present" do
-        @topic.reload.posts.size.should == 1
-        @post = Factory.build(:post, :user_id => @creator.id, :body => "")
-        @post.save
-        @topic.reload.posts.size.should == 1
-      end
+    let(:creator) do
+      Factory.create(:creator)
     end
 
-    context "when a post is added by a member" do
+    let(:member) do
+      Factory.create(:user)
+    end
 
-      before :each do
-        @creator  = Factory.create(:creator)
-        @member = Factory.create(:user)
-        @topic = Factory.create(:topic)
-        @post = Factory.build(:post, :user_id => @member.id)
-        @post.topic = @topic
-        @topic.new_member(@member.nickname)
-        @post.save
+    let(:topic) do
+      Factory.create(:topic, :user => creator)
+    end
+
+    let(:post) do
+      Factory.build(:post, :creator => creator, :t => topic)
+    end
+
+    describe "callback" do
+      context "When a post is created" do
+        before :each do
+          post.topic = topic
+          post.save
+        end
+
+        it "should increment creator.posts_count at creation" do
+          creator.reload.posts_count.should == 14
+        end
+
+        it "should increment topic.posts.count when a new post is created" do
+          topic.reload.posts.count.should == 2
+        end
+
+        it "should increment user.posts_count when a new post is created" do
+          creator.reload.posts_count.should == 14
+        end
+
+        it "should have a correct user_id for the first post" do
+          post.reload.user_id.should == creator.id
+        end
+
+        it "should increment topic.posts_count when a new post is created" do
+          topic.reload.posts_count.should == 2
+        end
+
       end
 
-      it "should have increment posts_count when a new post is added by user" do
-        @topic.reload.members[1].posts_count.should == 1
+      context "When a post is created, next" do
+
+        it "should update posted_at time" do
+          sleep(1)
+          post.topic = topic
+          topic.reload.posted_at.to_s.should_not == topic.created_at.to_s
+        end
+
+        it "shouldn't add a post if body is not present" do
+          post.body = ''
+          post.topic = topic
+          topic.reload.posts.size.should == 1
+        end
       end
 
-      it "shouldn't increment posts_count of creator in this context" do
-        @topic.reload.members[0].posts_count.should == 1
-      end
+      context "when a post is added by a member" do
 
-      it "shouldn't increment unread count when a post is added by the same user" do
-        @topic.reload.members[1].unread.should == 1
-      end
+        let(:new_post) do
+          Factory.build(:post, :creator => member, :t => topic)
+        end
 
-      it "should increment unread count when a post is added" do
-        @post = Factory.build(:post, :user_id => @creator.id)
-        @post.topic = @topic
-        @post.save
-        @topic.reload.members[1].unread.should == 2
-      end
+        before :each do
+          topic.new_member(member.nickname)
+          new_post.topic = topic
+          new_post.save
+        end
 
-      it "should reset unread post" do
-        @topic.reload.members[1].unread.should == 1
-        @topic.reset_unread(@member.nickname)
-        @topic.reload.members[1].unread.should == 0
-        @topic.reload.members[0].unread.should_not == 0
-      end
+        it "should have 2 members" do
+          topic.reload.members.count.should == 2
+        end
 
-      it "should add post_id to member" do
-        @topic.reload.members[0].post_id.should == @topic.reload.posts[1].id.to_s
-      end
+        it "should have increment posts_count when a new post is added by user" do
+          topic.reload.members[1].posts_count.should == 1
+        end
 
-      it "should add page number of the newly added post to member" do
-        @topic.reload.members[1].page.should == @topic.reload.posts_count / PER_PAGE + 1
+        it "shouldn't increment posts_count of creator in this context" do
+          topic.reload.members[0].posts_count.should == 1
+        end
+
+        it "shouldn't increment unread count when a post is added by the same user" do
+          topic.reload.members[1].unread.should == 1
+        end
+
+        it "should increment unread count when a post is added" do
+          topic.reload.members[1].unread.should == 1
+          post.topic = topic
+          post.save
+          topic.reload.members[1].unread.should == 2
+        end
+
+        it "should reset unread post" do
+          topic.reload.members[1].unread.should == 1
+          topic.reset_unread(member.nickname)
+          topic.reload.members[1].unread.should == 0
+          topic.reload.members[0].unread.should_not == 0
+        end
+
+        it "should add post_id to member" do
+          topic.reload.members[0].post_id.should == topic.reload.posts[1].id.to_s
+        end
+
+        it "should add page number of the newly added post to member" do
+          topic.reload.members[1].page.should == topic.reload.posts_count / PER_PAGE + 1
+        end
       end
     end
   end

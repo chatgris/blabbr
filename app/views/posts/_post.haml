@@ -5,9 +5,15 @@
       %br
       = link_to post.user.nickname, user_path(post.user.slug)
   = link_to_edit_post(post, topic)
+  - if post.user_id == current_user.id
+    = simple_form_for [topic, post], :html =>{:method => :delete } do |f|
+      = f.submit t('posts.delete')
   %time
     = post.created_at
   - cache("post-#{post.id}") do
     %div.bubble{:data_user => post.user.nickname}
-      =raw textilize post.body
+      - if post.state == 'published'
+        =raw textilize post.body
+      - else
+        = t('posts.deleted')
   %hr

@@ -1,16 +1,16 @@
 source :rubygems
 
-gem "bson",                 "1.1.1"
-gem "bson_ext",             "1.1.1"
+gem "bson",                 "1.2"
+gem "bson_ext",             "1.2"
 gem "carrierwave",          "~>0.5.1"
 gem "devise",               "~>1.1.5"
 gem "haml",                 "~>3.0.24"
 gem "jammit_lite",          :git => "git://github.com/chatgris/jammit_lite.git"
 gem "mini_magick",          "~>3.1"
-gem "mongo",                "1.1.1"
-gem "mongoid",              "~>2.0.0.beta.20"
-gem "pusher",               "~>0.7.0"
-gem "rails",                "~>3.0.3"
+gem "mongo",                "1.2"
+gem "mongoid",              "2.0.0.rc.7"
+gem "pusher",               "~>0.8.0"
+gem "rails",                "~>3.0.4"
 gem "RedCloth",             "~>4.2.3"
 gem "simple_form",          "~>1.3.0"
 gem "stateflow",            "~>0.4.0"
@@ -18,12 +18,15 @@ gem "stateflow",            "~>0.4.0"
 # async wrappers
 gem 'eventmachine',         "1.0.0.beta.2"
 gem 'rack-fiber_pool',      :require => 'rack/fiber_pool'
-gem 'em-http-request',      '0.2.15'
 gem 'em-synchrony',         :git => 'git://github.com/igrigorik/em-synchrony.git', :require => ['em-synchrony', 'em-synchrony/em-http', 'em-synchrony/iterator']
+gem 'em-http-request',      :git => 'git://github.com/igrigorik/em-http-request'
 
 group :test, :development do
+  gem "mongoid-rspec",      :git => "git://github.com/durran/mongoid-rspec.git"
+  gem 'steak'
+  gem 'capybara'
+  gem "rspec-rails",        "~>2.5.0"
   gem "factory_girl_rails", "~>1.0"
-  gem "rspec-rails",        "~>2.2.0"
   gem "rcov"
   gem "autotest"
 end

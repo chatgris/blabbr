@@ -3,11 +3,13 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
 
-  field :body
-  field :state
+  field :body, :type => String
+  field :state, :type => String
 
-  referenced_in :topic
-  referenced_in :user
+  referenced_in :topic, :validate => false
+  referenced_in :user, :validate => false
+
+  attr_accessor :new_topic, :creator, :t
 
   stateflow do
     initial :published
@@ -26,37 +28,32 @@ class Post
   validates :body, :presence => true, :length => {:maximum => 10000}
   validates :user_id, :presence => true
 
-  after_validation :update_user_posts_count, :update_topic_infos
+  before_validation :set_creator_id, :if => "self.new_record?"
+  after_create :update_user_posts_count, :update_topic_infos
 
   protected
 
+  def set_creator_id
+    self.user_id = self.creator.id
+  end
+
   def update_user_posts_count
-    if self.new_record?
-      u = User.find(user_id)
-      u.posts_count += 1
-      u.save
-    end
+    self.creator.inc(:posts_count, 1)
   end
 
   def update_topic_infos
-    if self.new_record? && self.topic
-      t = Topic.by_slug(self.topic.slug).first
-      if t
-        t.posted_at = Time.now.utc
-        t.posts_count += 1
-        t.members.each do |member|
-          if member.unread == 0
-            member.post_id = self.id
-            member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
-          end
-          if member.nickname == self.user.nickname
-            member.posts_count += 1
-          else
-            member.unread += 1
-          end
+    if self.new_topic.nil?
+      t = self.t
+      t.members.each do |member|
+        if member.unread == 0
+          member.post_id = self.id
+          member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
         end
-        t.save
+        member.nickname == self.creator.nickname ? member.posts_count += 1 : member.unread += 1
       end
+      t.posted_at = Time.now.utc
+      t.posts_count += 1
+      t.save
     end
   end
 

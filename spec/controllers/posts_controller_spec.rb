@@ -41,7 +41,7 @@ describe PostsController do
 
     before :each do
       @current_user = Factory.create(:creator)
-      @topic = Factory.create(:topic)
+      @topic = Factory.create(:topic, :user => @current_user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       @post = Post.first
     end
@@ -54,7 +54,7 @@ describe PostsController do
       end
 
       it 'should delete a post' do
-        delete :destroy, :id => @post.id, :topic_id => @topic.slug
+        delete :destroy, :id => @post.id, :topic_id => @topic.id
         response.should redirect_to :back
         flash[:notice].should == I18n.t('posts.delete_success')
       end
@@ -70,7 +70,7 @@ describe PostsController do
       end
 
       it "shouldn't delete a post" do
-        delete :destroy, :id => @post.id, :topic_id => @topic.slug
+        delete :destroy, :id => @post.id, :topic_id => @topic.id
         response.should redirect_to :back
         flash[:alert].should == I18n.t('posts.delete_unsuccess')
       end

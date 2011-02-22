@@ -103,6 +103,18 @@ function getAndShow(path, place) {
     });
 }
 
+function deletePost(path, params) {
+    $.ajax({
+        type: "DELETE",
+        url: path,
+        data: $.param(params.toHash()),
+        dataType: "html",
+        success: function(msg){
+            replaceContent(msg, params['post_id']);
+            $('#edit_post_'+params['post_id']).remove()
+        }
+    });
+}
 
 function postAndShow(path, params) {
     $.ajax({

@@ -42,9 +42,11 @@ describe TopicsHelper do
 
   describe "ratio links" do
 
-    before :all do
+    before do
       @current_user = Factory.create(:creator)
       @topic = Factory.create(:topic)
+      helper.stub!(:logged_in?).and_return(true)
+      helper.stub!(:current_user).and_return(@current_user)
     end
 
     it "should display posts ratio" do

@@ -9,17 +9,17 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  field :nickname
-  field :email
+  field :nickname, :type  => String
+  field :email, :type  => String
   field :posts_count, :type => Integer, :default => 0
-  field :locale, :default => 'fr'
-  field :note
+  field :locale, :default => 'fr', :type  => String
+  field :note, :type  => String
   field :time_zone, :type  => String
   field :audio, :type => Boolean, :default => true
-  field :gravatar_url
+  field :gravatar_url, :type  => String
   field :attachments_count, :type => Integer, :default => 0
 
-  mount_uploader :avatar, AvatarUploader
+  mount_uploader :avatar, ::AvatarUploader
   embeds_many :attachments
 
   slug_field :nickname

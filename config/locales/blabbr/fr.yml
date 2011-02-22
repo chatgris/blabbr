@@ -19,6 +19,7 @@ fr:
   posts:
     title: "Message"
     edit: "Éditer le message"
+    delete: "Effacer"
     create:
       success: "Le message ajouté"
       error: "Message en erreur"

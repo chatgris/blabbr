@@ -4,16 +4,16 @@ class Topic
   include Mongoid::Slug
   include Stateflow
 
-  field :creator
-  field :title
+  field :creator, :type => String
+  field :title, :type => String
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
-  field :state
-  field :posted_at, :type => Time
+  field :state, :type => String
+  field :posted_at, :type => Time, :default => Time.now.utc
 
   embeds_many :members
   embeds_many :attachments
-  references_many :posts
+  references_many :posts, :validate => false
 
   slug_field :title
 
@@ -21,7 +21,7 @@ class Topic
   index :created_at
   index 'members.nickname'
 
-  attr_accessor :post
+  attr_accessor :post, :user
 
   stateflow do
     initial :published
@@ -38,10 +38,10 @@ class Topic
   end
 
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
-  validates :creator, :presence => true
-  validates :post, :presence => true, :uniqueness => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
+  validates :post, :presence => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
 
-  after_validation :creator_as_members, :set_posted_at, :add_post
+  before_create :creator_as_members, :set_creator
+  after_create :add_post
 
   named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
@@ -53,13 +53,11 @@ class Topic
   def new_member(nickname)
     if User.by_nickname(nickname).first
       members.create(:nickname => nickname, :unread => self.posts_count)
-      save
     end
   end
 
   def new_attachment(nickname, attachment)
     attachments.create(:nickname => nickname, :attachment => attachment)
-    save
   end
 
   def rm_member!(nickname)
@@ -76,27 +74,24 @@ class Topic
     member = members.where(:nickname => nickname).first
     unless member.unread == 0
       member.unread = 0
-      save
+      member.save
     end
   end
 
   protected
 
+  def set_creator
+    self.creator = self.user.nickname unless self.user == ''
+  end
+
   def creator_as_members
-    if self.new_record? && members.empty?
-      members << Member.new(:nickname => creator, :posts_count => 1)
-    end
+    self.members << Member.new(:nickname => self.user.nickname, :posts_count => 1)
   end
 
   def add_post
-    user = User.by_nickname(creator).first
-    self.posts = [Post.create(:body => post, :user_id => user.id)]
-  end
-
-  def set_posted_at
-    if self.new_record?
-      self.posted_at = Time.now.utc
-    end
+    post = Post.new(:body => self.post, :content => self.post, :creator => self.user, :new_topic => true)
+    post.topic = self
+    post.save
   end
 
 end
