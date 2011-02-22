@@ -102,7 +102,7 @@ function showEdit(data, id){
     hideLoadingNotification()
 }
 
-function getAndShow(path, place) {
+function getAndShow(path, place, hash) {
     $.ajax({
         type: "GET",
         url: path,
@@ -111,10 +111,13 @@ function getAndShow(path, place) {
         if (data) {
             showContent(data, place);
             setTitle($('.page-title').attr('title'));
-            if (window.location.hash)
-            {
-              goToByScroll(window.location.hash);
-            }
+            $.each([window.location.hash, hash], function(index, value) {
+                if (value)
+                {
+                    goToByScroll(value);
+                    return false;
+                }
+            });
         }}
     });
 }

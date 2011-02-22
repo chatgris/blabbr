@@ -77,12 +77,12 @@ var root = (history.pushState) ? "/" : "#/";
         });
 
         this.get(root +'topics/page/:page_id', function() {
-            getAndShow(path, "#contents");
+            getAndShow(path, "#contents", '#contents');
         });
 
         this.get(root +'topics/:id', function() {
             subscribeToPusher(this.params['id']);
-            getAndShow(path, "#contents");
+            getAndShow(path, "#contents", '#contents');
         });
 
         this.get(root +'topics/:id/edit', function() {
@@ -91,7 +91,7 @@ var root = (history.pushState) ? "/" : "#/";
 
         this.put('/topics/:id', function() {
             postAndAdd(path, this.params);
-            getAndShow(path, "#contents");
+            getAndShow(path, "#contents", '#contents');
         });
 
         this.post('/topics/:id/posts', function() {
@@ -104,13 +104,13 @@ var root = (history.pushState) ? "/" : "#/";
 
         this.get(root +'topics/:id/page/:page_id', function() {
             subscribeToPusher(this.params['id']);
-            getAndShow(path, "#contents");
+            getAndShow(path, "#contents", '#contents');
         });
 
         this.get(root +'topics/:id/page/:page_id/:anchor', function() {
             subscribeToPusher(this.params['id']);
             params = this.params;
-            getAndScroll("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents", params['anchor']);
+            getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents", params['anchor']);
         });
 
         this.get(root +'topics/:id/posts/:post_id/edit', function() {
