@@ -6,8 +6,8 @@ class Post
   field :body, :type => String
   field :state, :type => String
 
-  referenced_in :topic
-  referenced_in :user
+  referenced_in :topic, :validate => false
+  referenced_in :user, :validate => false
 
   attr_accessor :new_topic, :creator, :t
 
