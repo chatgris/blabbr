@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :creator?
   before_filter :redirect_to_https
-  after_filter :flash_to_headers
+  after_filter :flash_to_headers, :set_user_preferences
 
   protected
 
@@ -29,6 +29,14 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_https
     redirect_to :protocol => "https://" unless (request.ssl? || ENV['SSL'].nil?)
+  end
+
+
+  def set_user_preferences
+    if current_user
+      cookies[:audio] = current_user.audio unless cookies[:audio]
+      cookies[:user_id] = current_user.id unless cookies[:user_id]
+    end
   end
 
 end

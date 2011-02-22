@@ -1,7 +1,5 @@
 - title @topic.title
 :javascript
-  var user_id = "#{current_user.id}";
-  var user_audio = #{current_user.audio};
   var page_title = "#{@topic.title}";
 %ul.topic-list
   - if creator? @topic.creator

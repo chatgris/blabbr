@@ -1,6 +1,9 @@
 var titleHolder = document.title;
 
+var blabbr = new blabbr();
+
 jQuery(function($){
+
 
     $('input.autocomplete').livequery(function()
     {
@@ -66,6 +69,13 @@ jQuery(function($){
 
 });
 
+function blabbr() {
+  return {
+    user_id: $.cookie('user_id'),
+    audio: $.cookie('audio')
+  }
+}
+
 function insertQuote(content, user) {
     $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 }
@@ -78,7 +88,7 @@ function showPost(url, userID){
     $.get(url,function(data){
         if (data) {
           $(data).hide().appendTo("#posts").show('slow');
-          if (userID != user_id)
+          if (userID != blabbr.user_id)
           {
             notify();
           }
@@ -196,7 +206,7 @@ function addContent(data){
 function notify() {
     lostFocus();
     blinkTitle(1);
-    if (user_audio)
+    if (blabbr.audio)
     {
         audioNotification();
     }

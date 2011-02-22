@@ -5,6 +5,7 @@ javascripts:
   application:
     - public/javascripts/jquery.autocomplete.js
     - public/javascripts/jquery.livequery.js
+    - public/javascripts/jquery.cookie.js
     - public/javascripts/jquery.sexypost.js
     - public/javascripts/sammy-0.6.2.min.js
     - public/javascripts/blabbr.notify.js
