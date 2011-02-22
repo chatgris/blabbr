@@ -58,6 +58,12 @@ jQuery(function($){
         }
     });
 
+    $('#flash_notice').livequery(function()
+    {
+        $.blabbrNotify('success', $(this).text());
+        $(this).remove();
+    });
+
 });
 
 function insertQuote(content, user) {
