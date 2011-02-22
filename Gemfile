@@ -24,6 +24,8 @@ gem 'em-http-request',      :git => 'git://github.com/igrigorik/em-http-request'
 group :test, :development do
   gem "mongoid-rspec",      :git => "git://github.com/durran/mongoid-rspec.git"
   gem "fabrication"
+  gem 'steak'
+  gem 'capybara'
   gem "rspec-rails",        "~>2.5.0"
   gem "rcov"
   gem "autotest"
