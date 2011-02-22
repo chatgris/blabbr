@@ -183,6 +183,12 @@ function subscribeToPusher(id) {
             var url = "/topics/"+id+"/posts/"+data.id+".js";
             showPost(url, data.user_id);
         });
+        channel.bind('index', function(data) {
+            if ($('aside #topics').length)
+            {
+                getAndShow('/topics.js', "aside");
+            }
+        });
     }
 }
 

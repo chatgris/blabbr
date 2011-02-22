@@ -31,7 +31,10 @@ class PostsController < ApplicationController
       flash[:notice] = t('posts.create.success')
       # TODO : redis to the resque
       begin
-        Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
+        if Pusher.key
+          Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id})
+          Pusher[@topic.slug].trigger('index', true)
+        end
       rescue Pusher::Error => e
         flash[:error] = e
       end

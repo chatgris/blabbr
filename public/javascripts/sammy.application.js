@@ -54,6 +54,7 @@ var root = (history.pushState) ? "/" : "#/";
         });
 
         this.after(function(){
+            subscribeToPusher('index');
             if(typeof(_gaq) !== 'undefined'){
                 _gaq.push(['_trackPageview']);
                 _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
