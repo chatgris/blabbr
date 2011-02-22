@@ -83,6 +83,7 @@ var root = (history.pushState) ? "/" : "#/";
 
         this.get(root +'topics/:id', function() {
             subscribeToPusher(this.params['id']);
+            blabbr.topic_id = this.params['id'];
             getAndShow(path, "#contents", '#contents');
         });
 
@@ -104,11 +105,13 @@ var root = (history.pushState) ? "/" : "#/";
         });
 
         this.get(root +'topics/:id/page/:page_id', function() {
+            blabbr.topic_id = this.params['id'];
             subscribeToPusher(this.params['id']);
             getAndShow(path, "#contents", '#contents');
         });
 
         this.get(root +'topics/:id/page/:page_id/:anchor', function() {
+            blabbr.topic_id = this.params['id'];
             subscribeToPusher(this.params['id']);
             params = this.params;
             getAndShow("/topics/"+params['id']+"/page/"+params['page_id']+".js", "#contents", params['anchor']);

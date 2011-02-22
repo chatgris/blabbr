@@ -72,6 +72,7 @@ jQuery(function($){
 function blabbr() {
   return {
     user_id: $.cookie('user_id'),
+    topic_id: null,
     audio: $.cookie('audio')
   }
 }
@@ -181,7 +182,7 @@ function subscribeToPusher(id) {
         var channel = pusher.subscribe(id);
         channel.bind('new-post', function(data) {
             var url = "/topics/"+id+"/posts/"+data.id+".js";
-            if (data.user_id != blabbr.user_id)
+            if (data.user_id != blabbr.user_id && id == blabbr.topic_id)
             {
                 showPost(url, data.user_id);
             }
@@ -213,7 +214,6 @@ function replaceContent(data, id){
 function addContent(data, id){
     var id = id || "#contents";
     $(id).append(data);
-            console.log('added');
     hideLoadingNotification();
 }
 
