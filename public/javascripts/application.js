@@ -181,7 +181,10 @@ function subscribeToPusher(id) {
         var channel = pusher.subscribe(id);
         channel.bind('new-post', function(data) {
             var url = "/topics/"+id+"/posts/"+data.id+".js";
-            showPost(url, data.user_id);
+            if (data.user_id != blabbr.user_id)
+            {
+                showPost(url, data.user_id);
+            }
         });
         channel.bind('index', function(data) {
             if ($('aside #topics').length)
