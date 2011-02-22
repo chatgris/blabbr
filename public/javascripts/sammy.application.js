@@ -96,7 +96,7 @@ var root = (history.pushState) ? "/" : "#/";
         });
 
         this.post('/topics/:id/posts', function() {
-            postAndAdd(path, this.params);
+            postAndAdd(path, this.params, '#posts');
         });
 
         this.post('/topics/:id/members', function() {

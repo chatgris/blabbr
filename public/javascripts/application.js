@@ -159,14 +159,14 @@ function postAndReplace(path, params) {
     });
 }
 
-function postAndAdd(path, params) {
+function postAndAdd(path, params, id) {
     $.ajax({
         type: "POST",
         url: path,
         dataType: "html",
         data: $.param(params.toHash()),
         success: function(msg){
-            addContent(msg)
+            addContent(msg, id)
         }
     });
 }
@@ -207,8 +207,10 @@ function replaceContent(data, id){
     hideLoadingNotification()
 }
 
-function addContent(data){
-    $("#contents").append(data);
+function addContent(data, id){
+    var id = id || "#contents";
+    $(id).append(data);
+            console.log('added');
     hideLoadingNotification();
 }
 
