@@ -130,7 +130,7 @@ GEM
       will_paginate (~> 3.0.pre)
     nokogiri (1.4.3.1)
     polyglot (0.3.1)
-    pusher (0.7.1)
+    pusher (0.8.0)
       crack (~> 0.1.0)
       json (~> 1.4.0)
       ruby-hmac (~> 0.4.0)
@@ -226,7 +226,7 @@ DEPENDENCIES
   mongoid (= 2.0.0.rc.7)
   mongoid-rspec!
   nokogiri (~> 1.4.3.1)
-  pusher (~> 0.7.0)
+  pusher (~> 0.8.0)
   rack-fiber_pool
   rails (~> 3.0.4)
   rbbcode (~> 0.1.8)

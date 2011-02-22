@@ -29,7 +29,12 @@ class PostsController < ApplicationController
     @post.topic = @topic
     if @post.save
       flash[:notice] = t('posts.create.success')
-      Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
+      # TODO : redis to the resque
+      begin
+        Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id}) if Pusher.key
+      rescue Pusher::Error => e
+        flash[:error] = e
+      end
     else
       flash[:alert] = t('posts.create.error')
     end
