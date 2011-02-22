@@ -16,6 +16,7 @@ fr:
     new: "Nouveau sujet"
     edit: "Éditer le sujet"
     destroy: "Supprimer"
+    label: "Topics"
   posts:
     title: "Message"
     edit: "Éditer le message"

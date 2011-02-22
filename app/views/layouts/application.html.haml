@@ -15,9 +15,10 @@
         %ul#user_info
           %li#avatar
             = link_to_avatar_thumb current_user
-            = link_to current_user.nickname, user_path(current_user.slug)
           %li
-            = link_to t('home'), topics_path
+            = link_to t('home'), root_path
+          %li
+            = link_to t('topics.label'), topics_path
           %li
             = link_to t('preferences'), dashboard_path
           %li
