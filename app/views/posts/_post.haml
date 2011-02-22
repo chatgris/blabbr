@@ -5,6 +5,7 @@
       %br
       = link_to post.user.nickname, user_path(post.user.slug)
   = link_to_edit_post(post, topic)
+  - if post.user_id == current_user.id
   = simple_form_for [topic, post], :html =>{:method => :delete } do |f|
     = f.submit t('posts.delete')
   %time
