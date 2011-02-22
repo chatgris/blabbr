@@ -16,7 +16,7 @@ describe Smiley do
   describe 'named_scope' do
 
     before :each do
-      @smiley = Fabricate(:smiley)
+      @smiley = Factory.create(:smiley)
     end
 
     it "should be find by added_by" do

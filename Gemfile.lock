@@ -99,7 +99,10 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     eventmachine (1.0.0.beta.2)
-    fabrication (0.9.5)
+    factory_girl (1.3.3)
+    factory_girl_rails (1.0.1)
+      factory_girl (~> 1.3)
+      railties (>= 3.0.0)
     ffi (0.6.3)
       rake (>= 0.8.7)
     haml (3.0.25)
@@ -214,7 +217,7 @@ DEPENDENCIES
   em-http-request!
   em-synchrony!
   eventmachine (= 1.0.0.beta.2)
-  fabrication
+  factory_girl_rails (~> 1.0)
   haml (~> 3.0.24)
   jammit (~> 0.5.3)
   jammit_lite!

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe LinkHelper do
   before :each do
-    @user = Fabricate(:creator)
-    @topic = Fabricate(:topic)
+    @user = Factory.create(:creator)
+    @topic = Factory.create(:topic)
     helper.stub!(:logged_in?).and_return(true)
     helper.stub!(:current_user).and_return(@user)
   end
