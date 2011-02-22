@@ -30,10 +30,11 @@ class PostsController < ApplicationController
     if @post.save
       flash[:notice] = t('posts.create.success')
       # TODO : redis to the resque
+      # testing async for the time being
       begin
         if Pusher.key
-          Pusher[@topic.slug].trigger('new-post', {:id => @post.id, :user_id => @post.user_id})
-          Pusher[@topic.slug].trigger('index', true)
+          Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_id => @post.user_id})
+          Pusher[@topic.slug].trigger_async('index', true)
         end
       rescue Pusher::Error => e
         flash[:error] = e
