@@ -8,7 +8,7 @@ feature "Topics index", %q{
 } do
 
   background do
-    Fabricate.build(:creator)
+    Factory.create(:creator)
   end
 
   after do
@@ -16,38 +16,45 @@ feature "Topics index", %q{
   end
 
   scenario "Viewing topics index, add a post" do
-    Fabricate(:topic)
     visit '/'
     within(:css, "#user_new") do
       fill_in 'user[email]', :with => 'email@email.com'
       fill_in 'user[password]', :with => 'password'
     end
     click_on('Sign in')
-    click_on("One topic")
+    click_on('Nouveau sujet')
+    within(:css, '#new_topic') do
+      fill_in 'topic[title]', :with => 'Awesome news'
+      fill_in 'topic[post]', :with => 'Blabbr is cool'
+      click_on("Submit")
+    end
+    page.should have_content("Awesome news")
+    page.should have_content("Blabbr is cool")
     page.should have_css('#new_post')
     within(:css, '#new_post') do
       fill_in 'post[body]', :with => "New message"
     end
     click_on('Sauvegarder')
     page.should have_content('New message')
+    click_on('Déconnexion')
+    current_path.should == '/users/sign_in'
   end
 
   scenario "Viewing topics index, edit first post" do
-    Fabricate(:topic)
     visit '/'
     within(:css, "#user_new") do
       fill_in 'user[email]', :with => 'email@email.com'
       fill_in 'user[password]', :with => 'password'
     end
     click_on('Sign in')
-    within(:css, '#topics') do
-      page.should have_content("One topic")
+    click_on('Nouveau sujet')
+    within(:css, '#new_topic') do
+      fill_in 'topic[title]', :with => 'Awesome news'
+      fill_in 'topic[post]', :with => 'Blabbr is cool'
+      click_on("Submit")
     end
-    click_on("One topic")
-    page.should have_css('.post')
-    within(:css, '.post') do
-      page.should have_content('Some content')
-    end
+    page.should have_content("Awesome news")
+    page.should have_content("Blabbr is cool")
     click_on('Éditer le message')
     page.should have_css('.edit_post', :count => 1)
     within(:css, ".edit_post") do
@@ -56,8 +63,7 @@ feature "Topics index", %q{
     click_on('Sauvegarder')
     page.should have_content('Capybara')
     click_on('Déconnexion')
+    current_path.should == '/users/sign_in'
   end
-
-
 
 end

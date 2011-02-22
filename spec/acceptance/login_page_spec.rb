@@ -7,13 +7,13 @@ feature "login page", %q{
 } do
 
   background do
-    Fabricate.build(:creator)
+    Factory.create(:creator)
   end
 
   after do
     Warden.test_reset!
   end
-  
+
   scenario "Login with valid params" do
     visit '/'
     within(:css, "#user_new") do
