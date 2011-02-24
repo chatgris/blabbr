@@ -166,6 +166,7 @@ GEM
     signature (0.1.2)
       ruby-hmac
     simple_form (1.3.1)
+    spork (0.8.4)
     stateflow (0.4.1)
     steak (1.1.0)
       rspec (>= 1.3)
@@ -215,6 +216,7 @@ DEPENDENCIES
   rcov
   rspec-rails (~> 2.5.0)
   simple_form (~> 1.3.0)
+  spork
   stateflow (~> 0.4.0)
   steak
   thin

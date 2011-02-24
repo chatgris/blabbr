@@ -22,5 +22,10 @@ module Blabbr
        g.test_framework   :rspec
      end
     config.filter_parameters += [:password, :password_confirmation]
+    if Rails.env.test?
+      initializer :after => :initialize_dependency_mechanism do
+        ActiveSupport::Dependencies.mechanism = :load
+      end
+    end
   end
 end
