@@ -2,7 +2,7 @@
 class UsersController < ApplicationController
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
-  respond_to :html, :js
+  respond_to :html, :json
 
   def index
     @users = User.all.paginate :page => params[:page] || nil, :per_page => 10
@@ -21,6 +21,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.by_slug(params[:id]).first
+    respond_with(@user)
   end
 
   def create

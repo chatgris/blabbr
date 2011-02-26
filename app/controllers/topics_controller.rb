@@ -3,10 +3,11 @@ class TopicsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_current_topic_for_member, :get_smilies, :only => [:show]
   after_filter :reset_unread_posts, :only => [:show]
-  respond_to :html, :js
+  respond_to :html, :json
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
+    respond_with @topics
   end
 
   def show
