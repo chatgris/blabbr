@@ -4,10 +4,12 @@ class Post
   include Stateflow
 
   field :body, :type => String
+  field :creator_n, :type => String
+  field :creator_s, :type => String
   field :state, :type => String
+  field :page, :type => Integer
 
   referenced_in :topic, :validate => false
-  referenced_in :user, :validate => false
 
   attr_accessor :new_topic, :creator, :t
 
@@ -26,15 +28,21 @@ class Post
   end
 
   validates :body, :presence => true, :length => {:maximum => 10000}
-  validates :user_id, :presence => true
+  validates :creator_n, :presence => true
 
-  before_validation :set_creator_id, :if => "self.new_record?"
+  before_validation :set_page, :set_creator, :if => "self.new_record?"
   after_create :update_user_posts_count, :update_topic_infos
 
   protected
 
-  def set_creator_id
-    self.user_id = self.creator.id
+  def set_page
+    @page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
+    self.page = @page
+  end
+
+  def set_creator
+    self.creator_n = self.creator.nickname
+    self.creator_s = self.creator.slug
   end
 
   def update_user_posts_count
@@ -47,7 +55,7 @@ class Post
       t.members.each do |member|
         if member.unread == 0
           member.post_id = self.id
-          member.page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
+          member.page = @page
         end
         member.nickname == self.creator.nickname ? member.posts_count += 1 : member.unread += 1
       end

@@ -16,7 +16,6 @@ class User
   field :note, :type  => String
   field :time_zone, :type  => String
   field :audio, :type => Boolean, :default => true
-  field :gravatar_url, :type  => String
   field :attachments_count, :type => Integer, :default => 0
 
   mount_uploader :avatar, ::AvatarUploader
@@ -28,18 +27,9 @@ class User
 
   attr_accessible :nickname, :email, :password, :password_confirmation, :locale, :note, :time_zone, :avatar
 
-  before_validation :set_gravatar_url
-
   validates :nickname, :presence => true, :uniqueness => true, :length => { :maximum => 40 }
   validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
 
   named_scope :by_nickname, lambda { |nickname| { :where => { :nickname => nickname}}}
-
-  protected
-
-  def set_gravatar_url
-    hash = Digest::MD5.hexdigest(email.downcase.strip)[0..31]
-    self.gravatar_url = "http://www.gravatar.com/avatar/#{hash}.jpg?size="
-  end
 
 end

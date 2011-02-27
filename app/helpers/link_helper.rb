@@ -13,15 +13,15 @@ module LinkHelper
   end
 
   def link_to_avatar(user)
-    link_to image_tag(user.avatar.url || user.gravatar_url + "80"), user_path(user.slug)
+    link_to image_tag("/uploads/avatars/#{user}.png"), user_path(user)
   end
 
   def link_to_avatar_thumb(user)
-    link_to image_tag(user.avatar.thumb.url || user.gravatar_url + "25"), user_path(user.slug)
+    link_to image_tag("/uploads/avatars/thumb_#{user}.png"), user_path(user)
   end
 
   def link_to_edit_post(post, topic)
-    link_to t('posts.edit'), edit_topic_post_path(topic.slug, post.id), :class => "edit", :remote => true, :message => post.id if post.user_id == current_user.id
+    link_to t('posts.edit'), edit_topic_post_path(topic.slug, post.id), :class => "edit", :remote => true, :message => post.id if post.creator_n == current_user.nickname
   end
 
 end

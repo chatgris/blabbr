@@ -1,17 +1,16 @@
 %article{:id => post.id, :class => "post"}
-  - cache("topics-#{post.user_id}") do
-    %h4
-      = link_to_avatar post.user
-      %br
-      = link_to post.user.nickname, user_path(post.user.slug)
+  %h4
+    = link_to_avatar post.creator_s
+    %br
+    = link_to post.creator_n, user_path(post.creator_s)
   = link_to_edit_post(post, topic)
-  - if post.user_id == current_user.id
+  - if post.creator_n == current_user.nickname
     = simple_form_for [topic, post], :html =>{:method => :delete } do |f|
       = f.submit t('posts.delete')
   %time
     = post.created_at
   - cache("post-#{post.id}") do
-    %div.bubble{:data_user => post.user.nickname}
+    %div.bubble{:data_user => post.creator_n}
       - if post.state == 'published'
         =raw textilize post.body
       - else

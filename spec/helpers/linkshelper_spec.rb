@@ -8,24 +8,16 @@ describe LinkHelper do
     helper.stub!(:current_user).and_return(@user)
   end
 
-  it "displays a 80px width gravatar link to the user page" do
-    helper.link_to_avatar(@user).should == "<a href=\"/users/creator\"><img alt=\"4f64c9f81bb0d4ee969aaf7b4a5a6f40\" src=\"http://www.gravatar.com/avatar/4f64c9f81bb0d4ee969aaf7b4a5a6f40.jpg?size=80\" /></a>"
-  end
-
-  it "displays a 25px width gravatar link to the user page" do
-    helper.link_to_avatar_thumb(@user).should == "<a href=\"/users/creator\"><img alt=\"4f64c9f81bb0d4ee969aaf7b4a5a6f40\" src=\"http://www.gravatar.com/avatar/4f64c9f81bb0d4ee969aaf7b4a5a6f40.jpg?size=25\" /></a>"
-  end
-
   it "displays a 80px width avatar link to the user page" do
     @user.avatar = File.open(Rails.root.join("image.jpg"))
     @user.save
-    helper.link_to_avatar(@user).should == "<a href=\"/users/creator\"><img alt=\"Creator\" src=\"/uploads/avatars/creator.jpg\" /></a>"
+    helper.link_to_avatar(@user.slug).should == "<a href=\"/users/creator\"><img alt=\"Creator\" src=\"/uploads/avatars/creator.png\" /></a>"
   end
 
   it "displays a 25px width avatar link to the user page" do
     @user.avatar = File.open(Rails.root.join("image.jpg"))
     @user.save
-    helper.link_to_avatar_thumb(@user).should == "<a href=\"/users/creator\"><img alt=\"Thumb_creator\" src=\"/uploads/avatars/thumb_creator.jpg\" /></a>"
+    helper.link_to_avatar_thumb(@user.slug).should == "<a href=\"/users/creator\"><img alt=\"Thumb_creator\" src=\"/uploads/avatars/thumb_creator.png\" /></a>"
   end
 
   it "display a link when there's less posts than PER_PAGE" do

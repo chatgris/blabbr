@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Post do
 
   describe 'relations' do
-    it { should be_referenced_in(:user) }
     it { should be_referenced_in(:topic) }
   end
 
   describe 'fields' do
-    it { should have_fields(:body, :state).of_type(String) }
+    it { should have_fields(:body, :state, :creator_n, :creator_s).of_type(String) }
+    it { should have_fields(:page).of_type(Integer) }
   end
 
   describe 'validation' do
@@ -54,8 +54,16 @@ describe Post do
           creator.reload.posts_count.should == 14
         end
 
-        it "should have a correct user_id for the first post" do
-          post.reload.user_id.should == creator.id
+        it "should have a page" do
+          post.reload.page.should == 1
+        end
+
+        it "should have a correct creator nickname for the first post" do
+          post.reload.creator_n.should == creator.nickname
+        end
+
+        it "should have a correct creator slug for the first post" do
+          post.reload.creator_s.should == creator.slug
         end
 
         it "should increment topic.posts_count when a new post is created" do

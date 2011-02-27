@@ -2,6 +2,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   process :resize_to_fit => [80, 160]
+  process :convert => 'png'
 
   version :thumb do
     process :resize_to_fill => [25,25]
@@ -25,7 +26,11 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    model.slug + File.extname(super.to_s) unless super.nil?
+    model.slug + '.png' unless super.nil?
+  end
+
+  def default_url
+    "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   end
 
 end
