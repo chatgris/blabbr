@@ -7,7 +7,7 @@ describe User do
   end
 
   describe 'fields' do
-    it { should have_fields(:nickname, :email, :locale, :time_zone, :gravatar_url, :note).of_type(String) }
+    it { should have_fields(:nickname, :email, :locale, :time_zone, :note).of_type(String) }
     it { should have_fields(:audio).of_type(Boolean).with_default_value_of(true)}
     it { should have_fields(:posts_count).of_type(Integer).with_default_value_of(0)}
     it { should have_fields(:attachments_count).of_type(Integer).with_default_value_of(0)}
@@ -25,20 +25,6 @@ describe User do
   context 'with a user' do
     let(:user) do
       Factory.create(:user)
-    end
-
-    describe 'validation' do
-
-      describe "Callbacks validations" do
-        it "should have a slug" do
-          user.reload.slug.should == user.nickname.parameterize
-        end
-
-        it "should set a gravatar_url" do
-          user.reload.gravatar_url.should == "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(user.email.downcase.strip)}.jpg?size="
-        end
-      end
-
     end
 
     describe 'named_scope' do

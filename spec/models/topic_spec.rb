@@ -9,7 +9,7 @@ describe Topic do
   end
 
   describe 'fields' do
-    it { should have_fields(:creator, :title, :state).of_type(String) }
+    it { should have_fields(:creator, :title, :state, :last_user).of_type(String) }
     it { should have_fields(:posts_count).of_type(Integer).with_default_value_of(1)}
     it { should have_fields(:attachments_count).of_type(Integer).with_default_value_of(0)}
     it { should have_fields(:posted_at).of_type(Time) }
@@ -47,6 +47,10 @@ describe Topic do
 
         it "should have a valid slug" do
           topic.reload.slug.should == topic.title.parameterize
+        end
+
+        it "should have creator as last_user" do
+          topic.reload.last_user.should == creator.nickname
         end
 
         it 'should not valid if title is already taken' do

@@ -9,6 +9,7 @@ class Topic
   field :posts_count, :type => Integer, :default => 1
   field :attachments_count, :type => Integer, :default => 0
   field :state, :type => String
+  field :last_user, :type => String
   field :posted_at, :type => Time, :default => Time.now.utc
 
   embeds_many :members
@@ -86,6 +87,7 @@ class Topic
 
   def creator_as_members
     self.members << Member.new(:nickname => self.user.nickname, :posts_count => 1)
+    self.last_user = self.user.nickname
   end
 
   def add_post

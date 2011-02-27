@@ -9,6 +9,6 @@
         %h3
           = link_to topic.title, topic_path(topic.slug)
         %h4
-          = "by #{topic.creator} le #{topic.created_at}"
+          = "by #{topic.last_user} le #{current_tz(topic.posted_at)}"
       %hr
 = will_paginate @topics

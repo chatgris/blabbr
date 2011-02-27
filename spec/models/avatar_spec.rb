@@ -13,7 +13,7 @@ describe AvatarUploader do
   end
 
   it "should have save an correctly named avatar in images/avatars" do
-    @uploader.url.should == "/uploads/avatars/#{@user.slug}.jpg"
+    @uploader.url.should == "/uploads/avatars/#{@user.slug}.png"
   end
 
 end

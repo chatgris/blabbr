@@ -33,7 +33,7 @@ class PostsController < ApplicationController
       # testing async for the time being
       begin
         if Pusher.key
-          Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_id => @post.user_id})
+          Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_nickname => @post.creator_n})
           Pusher[@topic.slug].trigger_async('index', true)
         end
       rescue Pusher::Error => e

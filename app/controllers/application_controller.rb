@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   protect_from_forgery
   helper_method :creator?
-  before_filter :redirect_to_https
+  before_filter :redirect_to_https, :set_user_time_zone
   after_filter :flash_to_headers, :set_user_preferences
 
   protected
@@ -31,6 +31,9 @@ class ApplicationController < ActionController::Base
     redirect_to :protocol => "https://" unless (request.ssl? || ENV['SSL'].nil?)
   end
 
+  def set_user_time_zone
+    Time.zone = current_user.time_zone if current_user && current_user.time_zone
+  end
 
   def set_user_preferences
     if current_user
