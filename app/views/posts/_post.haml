@@ -8,7 +8,7 @@
     = simple_form_for [topic, post], :html =>{:method => :delete } do |f|
       = f.submit t('posts.delete')
   %time
-    = post.created_at
+    = current_tz(post.created_at)
   - cache("post-#{post.id}") do
     %div.bubble{:data_user => post.creator_n}
       - if post.state == 'published'

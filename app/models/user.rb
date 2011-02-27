@@ -14,7 +14,7 @@ class User
   field :posts_count, :type => Integer, :default => 0
   field :locale, :default => 'fr', :type  => String
   field :note, :type  => String
-  field :time_zone, :type  => String
+  field :time_zone, :type  => String, :default => "UTC"
   field :audio, :type => Boolean, :default => true
   field :attachments_count, :type => Integer, :default => 0
 
