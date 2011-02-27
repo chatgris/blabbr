@@ -1,7 +1,5 @@
 var titleHolder = document.title;
 
-var blabbr = new blabbr();
-
 jQuery(function($){
 
 
@@ -69,14 +67,6 @@ jQuery(function($){
 
 });
 
-function blabbr() {
-  return {
-    user_id: $.cookie('user_id'),
-    topic_id: null,
-    audio: $.cookie('audio')
-  }
-}
-
 function insertQuote(content, user) {
     $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 }
@@ -89,7 +79,7 @@ function showPost(url, userID){
     $.get(url,function(data){
         if (data) {
           $(data).hide().appendTo("#posts").show('slow');
-          if (userID != blabbr.user_id)
+          if (userID != current.user_id)
           {
             notify();
           }
@@ -182,7 +172,7 @@ function subscribeToPusher(id) {
         var channel = pusher.subscribe(id);
         channel.bind('new-post', function(data) {
             var url = "/topics/"+id+"/posts/"+data.id+".js";
-            if (data.user_id != blabbr.user_id && id == blabbr.topic_id)
+            if (data.user_id != current_user.user_id && id == current_user.topic_id)
             {
                 showPost(url, data.user_id);
             }
@@ -220,7 +210,7 @@ function addContent(data, id){
 function notify() {
     lostFocus();
     blinkTitle(1);
-    if (blabbr.audio)
+    if (current_user.audio)
     {
         audioNotification();
     }
@@ -257,10 +247,6 @@ function lostFocus() {
 
 function gainedFocus() {
     windowIsActive = true;
-}
-
-function loadingNotification() {
-    $("#contents").append('<p class="loading"></p>');
 }
 
 function hideLoadingNotification() {
