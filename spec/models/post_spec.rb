@@ -99,6 +99,10 @@ describe Post do
           new_post.save
         end
 
+        it "should have updated the last_user" do
+          topic.reload.last_user.should == member.nickname
+        end
+
         it "should have 2 members" do
           topic.reload.members.count.should == 2
         end

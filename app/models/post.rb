@@ -59,6 +59,7 @@ class Post
         end
         member.nickname == self.creator.nickname ? member.posts_count += 1 : member.unread += 1
       end
+      t.last_user = self.creator.nickname
       t.posted_at = Time.now.utc
       t.posts_count += 1
       t.save
