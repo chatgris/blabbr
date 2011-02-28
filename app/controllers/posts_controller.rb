@@ -29,8 +29,6 @@ class PostsController < ApplicationController
     @post.topic = @topic
     if @post.save
       flash[:notice] = t('posts.create.success')
-      # TODO : redis to the resque
-      # testing async for the time being
       begin
         if Pusher.key
           Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_nickname => @post.creator_n})
@@ -46,7 +44,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @post = Post.criteria.id(params[:id]).and(:user_id => current_user.id).first
+    @post = Post.criteria.id(params[:id]).and(:creator_n => current_user.nickname).first
     if @post
       @post.delete!
       flash[ :notice] = t('posts.delete_success')
