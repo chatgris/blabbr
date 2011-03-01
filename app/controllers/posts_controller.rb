@@ -48,7 +48,7 @@ class PostsController < ApplicationController
 
   protected
 
-  def get post
+  def get_post
     @post = @topic.posts.find(params[:id])
   end
 
