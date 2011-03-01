@@ -28,14 +28,6 @@ class PostsController < ApplicationController
     @post.topic = @topic
     if @post.save
       flash[:notice] = t('posts.create.success')
-      begin
-        if Pusher.key
-          Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_nickname => @post.creator_n})
-          Pusher[@topic.slug].trigger_async('index', true)
-        end
-      rescue Pusher::Error => e
-        flash[:error] = e
-      end
     else
       flash[:alert] = t('posts.create.error')
     end

@@ -31,9 +31,20 @@ class Post
   validates :creator_n, :presence => true
 
   before_validation :set_page, :set_creator, :if => "self.new_record?"
-  after_create :update_user_posts_count, :update_topic_infos
+  after_create :update_user_posts_count, :update_topic_infos, :ws_notify
 
   protected
+
+  def ws_notify
+    begin
+      if Pusher.key
+          Pusher[@topic.slug].trigger_async('new-post', {:id => @post.id, :user_nickname => @post.creator_n})
+          Pusher[@topic.slug].trigger_async('index', true)
+        end
+      rescue Pusher::Error => e
+         $stderr.puts e
+      end
+  end
 
   def set_page
     @page = (self.topic.posts_count.to_f / PER_PAGE.to_f).ceil
