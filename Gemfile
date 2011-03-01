@@ -35,7 +35,7 @@ group :development do
   gem 'nokogiri',           '~>1.4.3.1'
   gem 'rbbcode',            '~>0.1.8'
   gem 'jammit',             '~>0.5.3'
-  gem 'thin',
+  gem 'thin'
 end
 
 group :production, :development do
