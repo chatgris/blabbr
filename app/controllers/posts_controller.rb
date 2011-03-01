@@ -1,13 +1,13 @@
 class PostsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:destroy]
   before_filter :get_current_topic_for_member, :except => [:destroy]
+  before_filter :get_post
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
   respond_to :html, :js
 
   def show
-    @post = @topic.posts.find(params[:id])
   end
 
   def edit
@@ -15,7 +15,6 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = @topic.posts.find(params[:id])
     if @post.update_attributes(params[:post])
       flash[:notice] = t('posts.update.success')
     else
@@ -56,6 +55,10 @@ class PostsController < ApplicationController
   end
 
   protected
+
+  def get post
+    @post = @topic.posts.find(params[:id])
+  end
 
   def get_current_topic_for_member
     @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
