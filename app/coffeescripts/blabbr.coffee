@@ -38,13 +38,13 @@ blabbr =
       subscribeToPusher 'index'
       blabbr.hideLoadingNotification()
       if _gaq?
-        _gaq.push(['_trackPageview']);
-        _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
+        _gaq.push ['_trackPageview']
+        _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
 
     this.setLocationProxy(new Sammy.PushLocationProxy(this)) if history.pushState
 
     this.get blabbr.prefix, ->
-      getAndShow(this.path, "#contents");
+      getAndShow this.path, "#contents"
 
     this.get "#{blabbr.prefix}topics", ->
       getAndShow this.path, "aside"
@@ -78,9 +78,9 @@ blabbr =
      postAndAdd this.path, this.params
 
     this.get "#{blabbr.prefix}topics/:id/page/:page_id", ->
-      current_user.topic_id = this.params['id'];
-      subscribeToPusher(this.params['id']);
-      getAndShow(path, "#contents", '#contents');
+      current_user.topic_id = this.params['id']
+      subscribeToPusher this.params['id']
+      getAndShow path, "#contents", '#contents'
 
     this.get "#{blabbr.prefix}topics/:id/page/:page_id/:anchor", ->
       current_user.topic_id = this.params['id']
@@ -91,10 +91,10 @@ blabbr =
     this.get "#{blabbr.prefix}topics/:id/posts/:post_id/edit", ->
       post_id = this.params['post_id']
       $.ajax {
-        type: "GET",
-        url: this.path,
-        dataType: "html",
-        success: (data) ->
+        type: "GET"
+        , url: this.path
+        , dataType: "html"
+        , success: (data) ->
           if data?
             showEdit(data, post_id)
       }
@@ -126,5 +126,4 @@ blabbr =
   $(->
     app.run(blabbr.prefix)
   )
-)(jQuery);
-
+)(jQuery)
