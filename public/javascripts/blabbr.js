@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:01:50 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:07:09 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -65,7 +65,7 @@
         that = this;
         return $.ajax({
           type: "GET",
-          url: infos.path,
+          url: that.path,
           dataType: "html",
           success: function(data) {
             if (data != null) {
@@ -165,19 +165,16 @@
       });
       this.get(blabbr.prefix, function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: '#contents'
         });
       });
       this.get("" + blabbr.prefix + "topics", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
       this.get("" + blabbr.prefix + "topics/new", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
@@ -186,7 +183,6 @@
       });
       this.get("" + blabbr.prefix + "topics/page/:page_id", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: '#contents',
           hash: '#contents'
         });
@@ -197,14 +193,12 @@
           id: this.params['id']
         });
         return this.trigger('getAndShow', {
-          path: this.path,
           target: '#contents',
           hash: '#contents'
         });
       });
       this.get("" + blabbr.prefix + "topics/:id/edit", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
@@ -224,7 +218,6 @@
           id: this.params['id']
         });
         return this.trigger('getAndShow', {
-          path: this.path,
           target: '#contents',
           hash: window.location.hash || '#contents'
         });
@@ -254,25 +247,21 @@
       });
       this.get("" + blabbr.prefix + "dashboard", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
       this.get("" + blabbr.prefix + "smilies", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
       this.get("" + blabbr.prefix + "smilies/new", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });
       return this.get("" + blabbr.prefix + "users/:id", function() {
         return this.trigger('getAndShow', {
-          path: this.path,
           target: 'aside'
         });
       });

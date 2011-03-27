@@ -48,7 +48,7 @@ blabbr =
       that = this
       $.ajax {
         type: "GET"
-        , url: infos.path
+        , url: that.path
         , dataType: "html"
         , success: (data) ->
           if data?
@@ -120,28 +120,28 @@ blabbr =
     # routes
     #
     this.get blabbr.prefix, ->
-      this.trigger 'getAndShow',  {path :this.path, target: '#contents'}
+      this.trigger 'getAndShow',  {target: '#contents'}
 
     this.get "#{blabbr.prefix}topics", ->
-      this.trigger 'getAndShow',  {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow',  {target: 'aside'}
 
     this.get "#{blabbr.prefix}topics/new", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
     # TODO : post event
     this.post "/topics", ->
       postAndShow this.path, this.params
 
     this.get "#{blabbr.prefix}topics/page/:page_id", ->
-      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
+      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
     this.get "#{blabbr.prefix}topics/:id", ->
       current_user.topic_id = this.params['id']
       this.trigger 'subscribeToWS',  {id: this.params['id']}
-      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
+      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
     this.get "#{blabbr.prefix}topics/:id/edit", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
     # TODO : post event
     # TODO make only one call
@@ -160,7 +160,7 @@ blabbr =
     this.get "#{blabbr.prefix}topics/:id/page/:page_id", ->
       current_user.topic_id = this.params['id']
       this.trigger 'subscribeToWS',  {id: this.params['id']}
-      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: window.location.hash || '#contents'}
+      this.trigger 'getAndShow', {target: '#contents', hash: window.location.hash || '#contents'}
 
     # TODO : event
     this.get "#{blabbr.prefix}topics/:id/posts/:post_id/edit", ->
@@ -187,16 +187,16 @@ blabbr =
       postAndShow this.path, this.params
 
     this.get "#{blabbr.prefix}dashboard", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
     this.get "#{blabbr.prefix}smilies", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
     this.get "#{blabbr.prefix}smilies/new", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
     this.get "#{blabbr.prefix}users/:id", ->
-      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
+      this.trigger 'getAndShow', {target: 'aside'}
 
   $(->
     app.run(blabbr.prefix)
