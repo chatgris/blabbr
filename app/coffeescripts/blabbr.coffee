@@ -1,14 +1,3 @@
-grab =
-  getData: (path, callback) ->
-    $.get("#{path}.json", '', callback, "json")
-
-topics =
-  index: (path) ->
-    callback = (response) ->
-      $('#contents').html('')
-      addContent(ich.topic(topic), "#contents") for topic in response
-    grab.getData(path, callback)
-
 window.current_user =
   audio: $.cookie('audio')
   user_nickname: $.cookie('user_nickname'),
@@ -16,10 +5,6 @@ window.current_user =
 
 blabbr =
   prefix: if history.pushState then "/" else "#/"
-  loadingNotification: () ->
-    $("#contents").append '<p class="loading"></p>'
-  hideLoadingNotification: () ->
-    $('.loading').hide()
 
 (($) ->
   app = $.sammy ->
@@ -27,13 +12,12 @@ blabbr =
     # before and after filter
     #
     this.before () ->
-      blabbr.loadingNotification()
-      this.path = ajaxPath this.path
+      this.trigger 'loadingNotification'
+      this.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
       this.ws = pusher
 
     this.after () ->
       this.trigger 'subscribeToWS', {id: 'index'}
-      blabbr.hideLoadingNotification()
       if _gaq?
         _gaq.push ['_trackPageview']
         _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
@@ -44,17 +28,25 @@ blabbr =
 
     # bindings
     #
+    this.bind 'loadingNotification', ->
+      $("#contents").append '<p class="loading"></p>'
+
+    this.bind 'hideLoadingNotification', ->
+      $('.loading').hide()
+
     this.bind 'getAndShow', (e, infos) ->
       that = this
+      path = infos.path || that.path
       $.ajax {
         type: "GET"
-        , url: that.path
+        , url: path
         , dataType: "html"
         , success: (data) ->
           if data?
             that.trigger 'showContent', {data: data, target: infos.target}
             if infos.hash
               that.trigger 'moveTo', {hash: infos.hash}
+          that.trigger 'hideLoadingNotification'
 
       }
 
@@ -108,8 +100,6 @@ blabbr =
         channel = that.ws.subscribe id
         channel.bind 'new-post', (data) ->
           url = "/topics/#{id}/posts/#{data.id}.js"
-          console.log data
-          console.log current_user
           if data.user_nickname != current_user.user_nickname && id == current_user.topic_id
             that.trigger 'showPost', {path: url, user_id: data.user_id}
         channel.bind 'index', (data) ->

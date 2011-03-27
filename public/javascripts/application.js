@@ -71,10 +71,6 @@ function insertQuote(content, user) {
     $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 }
 
-function ajaxPath(path) {
-    return (history.pushState) ? '/'+path.substr(1)+'.js' :  path.substr(1)+'.js';
-}
-
 function postAndAdd(path, params, id) {
     $.ajax({
         type: "POST",

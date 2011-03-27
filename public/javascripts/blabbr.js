@@ -1,57 +1,29 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:07:09 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:32:01 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
 (function() {
-  var blabbr, grab, topics;
-  grab = {
-    getData: function(path, callback) {
-      return $.get("" + path + ".json", '', callback, "json");
-    }
-  };
-  topics = {
-    index: function(path) {
-      var callback;
-      callback = function(response) {
-        var topic, _i, _len, _results;
-        $('#contents').html('');
-        _results = [];
-        for (_i = 0, _len = response.length; _i < _len; _i++) {
-          topic = response[_i];
-          _results.push(addContent(ich.topic(topic), "#contents"));
-        }
-        return _results;
-      };
-      return grab.getData(path, callback);
-    }
-  };
+  var blabbr;
   window.current_user = {
     audio: $.cookie('audio'),
     user_nickname: $.cookie('user_nickname'),
     topic_id: null
   };
   blabbr = {
-    prefix: history.pushState ? "/" : "#/",
-    loadingNotification: function() {
-      return $("#contents").append('<p class="loading"></p>');
-    },
-    hideLoadingNotification: function() {
-      return $('.loading').hide();
-    }
+    prefix: history.pushState ? "/" : "#/"
   };
   (function($) {
     var app;
     app = $.sammy(function() {
       this.before(function() {
-        blabbr.loadingNotification();
-        this.path = ajaxPath(this.path);
+        this.trigger('loadingNotification');
+        this.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
         return this.ws = pusher;
       });
       this.after(function() {
         this.trigger('subscribeToWS', {
           id: 'index'
         });
-        blabbr.hideLoadingNotification();
         if (typeof _gaq != "undefined" && _gaq !== null) {
           _gaq.push(['_trackPageview']);
           return _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
@@ -60,12 +32,19 @@
       if (history.pushState) {
         this.setLocationProxy(new Sammy.PushLocationProxy(this));
       }
+      this.bind('loadingNotification', function() {
+        return $("#contents").append('<p class="loading"></p>');
+      });
+      this.bind('hideLoadingNotification', function() {
+        return $('.loading').hide();
+      });
       this.bind('getAndShow', function(e, infos) {
-        var that;
+        var path, that;
         that = this;
+        path = infos.path || that.path;
         return $.ajax({
           type: "GET",
-          url: that.path,
+          url: path,
           dataType: "html",
           success: function(data) {
             if (data != null) {
@@ -74,11 +53,12 @@
                 target: infos.target
               });
               if (infos.hash) {
-                return that.trigger('moveTo', {
+                that.trigger('moveTo', {
                   hash: infos.hash
                 });
               }
             }
+            return that.trigger('hideLoadingNotification');
           }
         });
       });
@@ -144,8 +124,6 @@
           channel.bind('new-post', function(data) {
             var url;
             url = "/topics/" + id + "/posts/" + data.id + ".js";
-            console.log(data);
-            console.log(current_user);
             if (data.user_nickname !== current_user.user_nickname && id === current_user.topic_id) {
               return that.trigger('showPost', {
                 path: url,
