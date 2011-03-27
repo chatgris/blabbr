@@ -3,7 +3,7 @@
 log/*
 tmp/*
 coverage/*
-public/images/**/*
+public/images/*
 tmp/**/*
 config/database.yml
 config/deploy.rb
