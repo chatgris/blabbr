@@ -188,17 +188,18 @@ root = if history.pushState then "/" else "#/"
 
 
     # POST
+    # weird return bug here
     this.post "/topics", ->
       this.trigger 'postAndShow'
-      console.log 'weird return bug here'
+      return
 
     this.post '/topics/:id/posts',->
       this.trigger 'postAndAdd', { target: '#posts'}
-      console.log 'weird return bug here'
+      return
 
     this.post '/topics/:id/members',->
       this.trigger 'postAndAdd'
-      console.log 'weird return bug here'
+      return
 
 
     # PUT

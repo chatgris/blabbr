@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 20:13:53 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 20:24:22 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -260,17 +260,14 @@
       });
       this.post("/topics", function() {
         this.trigger('postAndShow');
-        return console.log('weird return bug here');
       });
       this.post('/topics/:id/posts', function() {
         this.trigger('postAndAdd', {
           target: '#posts'
         });
-        return console.log('weird return bug here');
       });
       this.post('/topics/:id/members', function() {
         this.trigger('postAndAdd');
-        return console.log('weird return bug here');
       });
       this.put("" + root + "topics/:id", function() {
         postAndAdd(this.path, this.params);
