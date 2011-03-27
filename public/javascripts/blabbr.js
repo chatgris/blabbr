@@ -1,24 +1,21 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:32:01 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 18:41:04 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
 (function() {
-  var blabbr;
-  window.current_user = {
+  var current_user, root;
+  current_user = {
     audio: $.cookie('audio'),
     user_nickname: $.cookie('user_nickname'),
     topic_id: null
   };
-  blabbr = {
-    prefix: history.pushState ? "/" : "#/"
-  };
+  root = history.pushState ? "/" : "#/";
   (function($) {
     var app;
     app = $.sammy(function() {
       this.before(function() {
         this.trigger('loadingNotification');
-        this.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
-        return this.ws = pusher;
+        return this.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
       });
       this.after(function() {
         this.trigger('subscribeToWS', {
@@ -52,7 +49,7 @@
                 data: data,
                 target: infos.target
               });
-              if (infos.hash) {
+              if (infos.hash != null) {
                 that.trigger('moveTo', {
                   hash: infos.hash
                 });
@@ -90,7 +87,7 @@
       this.bind('notify', function() {
         lostFocus();
         blinkTitle(1);
-        if (current_user.audio) {
+        if (current_user.audio != null) {
           return this.trigger('audioNotification');
         }
       });
@@ -104,7 +101,7 @@
       });
       this.bind('moveTo', function(e, data) {
         return $.each([window.location.hash, data.hash], function(index, value) {
-          if (value) {
+          if (value != null) {
             return $(value).livequery(function() {
               $(this).addClass('anchor');
               $('html,body').animate({
@@ -119,8 +116,9 @@
         var channel, id, that;
         id = data.id;
         that = this;
-        if (!that.ws.channels.channels[id]) {
-          channel = that.ws.subscribe(id);
+        console.log(pusher);
+        if (!pusher.channels.channels[id]) {
+          channel = pusher.subscribe(id);
           channel.bind('new-post', function(data) {
             var url;
             url = "/topics/" + id + "/posts/" + data.id + ".js";
@@ -132,7 +130,7 @@
             }
           });
           return channel.bind('index', function(data) {
-            if ($('aside #topics').length) {
+            if ($('aside #topics').length != null) {
               return that.trigger('getAndShow', {
                 path: '/topics.js',
                 target: "aside"
@@ -141,66 +139,56 @@
           });
         }
       });
-      this.get(blabbr.prefix, function() {
+      this.bind('topicId', function() {
+        return current_user.topic_id = this.params['id'];
+      });
+      this.get(root, function() {
         return this.trigger('getAndShow', {
           target: '#contents'
         });
       });
-      this.get("" + blabbr.prefix + "topics", function() {
+      this.get("" + root + "topics", function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + blabbr.prefix + "topics/new", function() {
+      this.get("" + root + "topics/new", function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.post("/topics", function() {
-        return postAndShow(this.path, this.params);
-      });
-      this.get("" + blabbr.prefix + "topics/page/:page_id", function() {
+      this.get("" + root + "topics/page/:page_id", function() {
         return this.trigger('getAndShow', {
           target: '#contents',
           hash: '#contents'
         });
       });
-      this.get("" + blabbr.prefix + "topics/:id", function() {
-        current_user.topic_id = this.params['id'];
-        this.trigger('subscribeToWS', {
-          id: this.params['id']
-        });
-        return this.trigger('getAndShow', {
+      this.get("" + root + "topics/:id", function() {
+        this.trigger('getAndShow', {
           target: '#contents',
           hash: '#contents'
         });
+        this.trigger('topicId');
+        return this.trigger('subscribeToWS', {
+          id: this.params['id']
+        });
       });
-      this.get("" + blabbr.prefix + "topics/:id/edit", function() {
+      this.get("" + root + "topics/:id/edit", function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.put("" + blabbr.prefix + "topics/:id", function() {
-        postAndAdd(this.path, this.params);
-        return getAndShow(this.path, "#contents", "#contents");
-      });
-      this.post('/topics/:id/posts', function() {
-        return postAndAdd(this.path, this.params, '#posts');
-      });
-      this.post('/topics/:id/members', function() {
-        return postAndAdd(this.path, this.params);
-      });
-      this.get("" + blabbr.prefix + "topics/:id/page/:page_id", function() {
-        current_user.topic_id = this.params['id'];
-        this.trigger('subscribeToWS', {
-          id: this.params['id']
-        });
-        return this.trigger('getAndShow', {
+      this.get("" + root + "topics/:id/page/:page_id", function() {
+        this.trigger('getAndShow', {
           target: '#contents',
           hash: window.location.hash || '#contents'
         });
+        this.trigger('topicId');
+        return this.trigger('subscribeToWS', {
+          id: this.params['id']
+        });
       });
-      this.get("" + blabbr.prefix + "topics/:id/posts/:post_id/edit", function() {
+      this.get("" + root + "topics/:id/posts/:post_id/edit", function() {
         var post_id;
         post_id = this.params['post_id'];
         return $.ajax({
@@ -214,38 +202,51 @@
           }
         });
       });
-      this.put("" + blabbr.prefix + "topics/:id/posts/:post_id", function() {
-        return postAndReplace(this.path, this.params);
+      this.get("" + root + "dashboard", function() {
+        return this.trigger('getAndShow', {
+          target: 'aside'
+        });
       });
-      this.del("" + blabbr.prefix + "topics/:id/posts/:post_id", function() {
-        return deletePost(this.path, this.params);
+      this.get("" + root + "smilies", function() {
+        return this.trigger('getAndShow', {
+          target: 'aside'
+        });
       });
-      this.put("" + blabbr.prefix + "users/:id", function() {
+      this.get("" + root + "smilies/new", function() {
+        return this.trigger('getAndShow', {
+          target: 'aside'
+        });
+      });
+      this.get("" + root + "users/:id", function() {
+        return this.trigger('getAndShow', {
+          target: 'aside'
+        });
+      });
+      this.post("/topics", function() {
         return postAndShow(this.path, this.params);
       });
-      this.get("" + blabbr.prefix + "dashboard", function() {
-        return this.trigger('getAndShow', {
-          target: 'aside'
-        });
+      this.post('/topics/:id/posts', function() {
+        return postAndAdd(this.path, this.params, '#posts');
       });
-      this.get("" + blabbr.prefix + "smilies", function() {
-        return this.trigger('getAndShow', {
-          target: 'aside'
-        });
+      this.post('/topics/:id/members', function() {
+        return postAndAdd(this.path, this.params);
       });
-      this.get("" + blabbr.prefix + "smilies/new", function() {
-        return this.trigger('getAndShow', {
-          target: 'aside'
-        });
+      this.put("" + root + "topics/:id", function() {
+        postAndAdd(this.path, this.params);
+        return getAndShow(this.path, "#contents", "#contents");
       });
-      return this.get("" + blabbr.prefix + "users/:id", function() {
-        return this.trigger('getAndShow', {
-          target: 'aside'
-        });
+      this.put("" + root + "topics/:id/posts/:post_id", function() {
+        return postAndReplace(this.path, this.params);
+      });
+      this.put("" + root + "users/:id", function() {
+        return postAndShow(this.path, this.params);
+      });
+      return this.del("" + root + "topics/:id/posts/:post_id", function() {
+        return deletePost(this.path, this.params);
       });
     });
     return $(function() {
-      return app.run(blabbr.prefix);
+      return app.run(root);
     });
   })(jQuery);
 }).call(this);

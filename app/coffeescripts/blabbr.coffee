@@ -1,10 +1,9 @@
-window.current_user =
+current_user =
   audio: $.cookie('audio')
   user_nickname: $.cookie('user_nickname'),
   topic_id: null,
 
-blabbr =
-  prefix: if history.pushState then "/" else "#/"
+root = if history.pushState then "/" else "#/"
 
 (($) ->
   app = $.sammy ->
@@ -14,7 +13,6 @@ blabbr =
     this.before () ->
       this.trigger 'loadingNotification'
       this.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
-      this.ws = pusher
 
     this.after () ->
       this.trigger 'subscribeToWS', {id: 'index'}
@@ -44,7 +42,7 @@ blabbr =
         , success: (data) ->
           if data?
             that.trigger 'showContent', {data: data, target: infos.target}
-            if infos.hash
+            if infos.hash?
               that.trigger 'moveTo', {hash: infos.hash}
           that.trigger 'hideLoadingNotification'
 
@@ -76,7 +74,7 @@ blabbr =
     this.bind 'notify', ->
       lostFocus()
       blinkTitle(1)
-      if current_user.audio
+      if current_user.audio?
         this.trigger 'audioNotification'
 
     this.bind 'audioNotification', ->
@@ -87,7 +85,7 @@ blabbr =
 
     this.bind 'moveTo', (e, data) ->
       $.each [window.location.hash, data.hash], (index, value) ->
-        if (value)
+        if value?
           $(value).livequery () ->
               $(this).addClass('anchor')
               $('html,body').animate({scrollTop: $(this).offset().top},'slow')
@@ -96,64 +94,50 @@ blabbr =
     this.bind 'subscribeToWS', (e, data) ->
       id = data.id
       that = this
-      unless that.ws.channels.channels[id]
-        channel = that.ws.subscribe id
+      unless pusher.channels.channels[id]
+        channel = pusher.subscribe id
         channel.bind 'new-post', (data) ->
           url = "/topics/#{id}/posts/#{data.id}.js"
           if data.user_nickname != current_user.user_nickname && id == current_user.topic_id
             that.trigger 'showPost', {path: url, user_id: data.user_id}
         channel.bind 'index', (data) ->
-          if $('aside #topics').length
+          if $('aside #topics').length?
             that.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
 
+    this.bind 'topicId', ->
+      current_user.topic_id = this.params['id']
 
     # routes
     #
-    this.get blabbr.prefix, ->
+
+    # GET
+    this.get root, ->
       this.trigger 'getAndShow',  {target: '#contents'}
 
-    this.get "#{blabbr.prefix}topics", ->
+    this.get "#{root}topics", ->
       this.trigger 'getAndShow',  {target: 'aside'}
 
-    this.get "#{blabbr.prefix}topics/new", ->
+    this.get "#{root}topics/new", ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    # TODO : post event
-    this.post "/topics", ->
-      postAndShow this.path, this.params
-
-    this.get "#{blabbr.prefix}topics/page/:page_id", ->
+    this.get "#{root}topics/page/:page_id", ->
       this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
-    this.get "#{blabbr.prefix}topics/:id", ->
-      current_user.topic_id = this.params['id']
+    this.get "#{root}topics/:id", ->
+      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
+      this.trigger 'topicId'
       this.trigger 'subscribeToWS',  {id: this.params['id']}
-      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
-    this.get "#{blabbr.prefix}topics/:id/edit", ->
+    this.get "#{root}topics/:id/edit", ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    # TODO : post event
-    # TODO make only one call
-    this.put "#{blabbr.prefix}topics/:id", ->
-      postAndAdd this.path, this.params
-      getAndShow this.path, "#contents", "#contents"
-
-    # TODO : post event
-    this.post '/topics/:id/posts',->
-      postAndAdd this.path, this.params, '#posts'
-
-    # TODO : post event
-    this.post '/topics/:id/members',->
-     postAndAdd this.path, this.params
-
-    this.get "#{blabbr.prefix}topics/:id/page/:page_id", ->
-      current_user.topic_id = this.params['id']
-      this.trigger 'subscribeToWS',  {id: this.params['id']}
+    this.get "#{root}topics/:id/page/:page_id", ->
       this.trigger 'getAndShow', {target: '#contents', hash: window.location.hash || '#contents'}
+      this.trigger 'topicId'
+      this.trigger 'subscribeToWS',  {id: this.params['id']}
 
     # TODO : event
-    this.get "#{blabbr.prefix}topics/:id/posts/:post_id/edit", ->
+    this.get "#{root}topics/:id/posts/:post_id/edit", ->
       post_id = this.params['post_id']
       $.ajax {
         type: "GET"
@@ -164,31 +148,51 @@ blabbr =
             showEdit(data, post_id)
       }
 
-    # TODO : post event
-    this.put "#{blabbr.prefix}topics/:id/posts/:post_id", ->
-      postAndReplace this.path, this.params
+    this.get "#{root}dashboard", ->
+      this.trigger 'getAndShow', {target: 'aside'}
 
-    # TODO : delete event
-    this.del "#{blabbr.prefix}topics/:id/posts/:post_id", ->
-      deletePost this.path, this.params
+    this.get "#{root}smilies", ->
+      this.trigger 'getAndShow', {target: 'aside'}
 
-    # TODO : post event
-    this.put "#{blabbr.prefix}users/:id", ->
+    this.get "#{root}smilies/new", ->
+      this.trigger 'getAndShow', {target: 'aside'}
+
+    this.get "#{root}users/:id", ->
+      this.trigger 'getAndShow', {target: 'aside'}
+
+
+    # POST
+    # TODO : event
+    this.post "/topics", ->
       postAndShow this.path, this.params
 
-    this.get "#{blabbr.prefix}dashboard", ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    this.post '/topics/:id/posts',->
+      postAndAdd this.path, this.params, '#posts'
 
-    this.get "#{blabbr.prefix}smilies", ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    this.post '/topics/:id/members',->
+      postAndAdd this.path, this.params
 
-    this.get "#{blabbr.prefix}smilies/new", ->
-      this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{blabbr.prefix}users/:id", ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    # PUT
+    # TODO make only one call
+    # TODO : event
+    this.put "#{root}topics/:id", ->
+      postAndAdd this.path, this.params
+      getAndShow this.path, "#contents", "#contents"
+
+    this.put "#{root}topics/:id/posts/:post_id", ->
+      postAndReplace this.path, this.params
+
+    this.put "#{root}users/:id", ->
+      postAndShow this.path, this.params
+
+
+    # DEL
+    # TODO : event
+    this.del "#{root}topics/:id/posts/:post_id", ->
+      deletePost this.path, this.params
 
   $(->
-    app.run(blabbr.prefix)
+    app.run(root)
   )
 )(jQuery)
