@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:destroy]
   before_filter :get_current_topic_for_member, :except => [:destroy]
-  before_filter :get_post
+  before_filter :get_post, :except => [:create]
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
