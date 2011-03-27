@@ -75,42 +75,21 @@ function ajaxPath(path) {
     return (history.pushState) ? '/'+path.substr(1)+'.js' :  path.substr(1)+'.js';
 }
 
-function showPost(url, userID){
-    $.get(url,function(data){
-        if (data) {
-          $(data).hide().appendTo("#posts").show('slow');
-          if (userID != current.user_id)
-          {
-            notify();
-          }
-          hideLoadingNotification();
+function postAndAdd(path, params, id) {
+    $.ajax({
+        type: "POST",
+        url: path,
+        dataType: "html",
+        data: $.param(params.toHash()),
+        success: function(msg){
+            addContent(msg, id)
         }
-    },'js');
+    });
 }
 
 function showEdit(data, id){
     $("#" + id).find('.bubble').html(data);
     hideLoadingNotification()
-}
-
-function getAndShow(path, place, hash) {
-    $.ajax({
-        type: "GET",
-        url: path,
-        dataType: "html",
-        success: function(data){
-        if (data) {
-            showContent(data, place);
-            setTitle($('.page-title').attr('title'));
-            $.each([window.location.hash, hash], function(index, value) {
-                if (value)
-                {
-                    goToByScroll(value);
-                    return false;
-                }
-            });
-        }}
-    });
 }
 
 function deletePost(path, params) {
@@ -150,52 +129,6 @@ function postAndReplace(path, params) {
     });
 }
 
-function postAndAdd(path, params, id) {
-    $.ajax({
-        type: "POST",
-        url: path,
-        dataType: "html",
-        data: $.param(params.toHash()),
-        success: function(msg){
-            addContent(msg, id)
-        }
-    });
-}
-
-function subscribeToPusher(id) {
-    if (!pusher)
-    {
-        pusher = new Pusher($('body').attr('id'));
-    }
-    if (!pusher.channels.channels[id])
-    {
-        var channel = pusher.subscribe(id);
-        channel.bind('new-post', function(data) {
-            var url = "/topics/"+id+"/posts/"+data.id+".js";
-            if (data.user_id != current_user.user_id && id == current_user.topic_id)
-            {
-                showPost(url, data.user_id);
-            }
-        });
-        channel.bind('index', function(data) {
-            if ($('aside #topics').length)
-            {
-                getAndShow('/topics.js', "aside");
-            }
-        });
-    }
-}
-
-function showContent(data, place){
-    $(place).show().html(data);
-    hideLoadingNotification()
-}
-
-function setTitle(title) {
-    $("#page-title").html(title);
-    document.title = "Blabbr - " + title;
-}
-
 function replaceContent(data, id){
     $("#"+id+" .bubble").html(data);
     hideLoadingNotification()
@@ -204,16 +137,6 @@ function replaceContent(data, id){
 function addContent(data, id){
     var id = id || "#contents";
     $(id).append(data);
-    hideLoadingNotification();
-}
-
-function notify() {
-    lostFocus();
-    blinkTitle(1);
-    if (current_user.audio)
-    {
-        audioNotification();
-    }
 }
 
 function blinkTitle(state) {
@@ -232,15 +155,6 @@ function blinkTitle(state) {
     }
 }
 
-function audioNotification() {
-    $('body').append('<audio id="player" src="/sound.mp3" autoplay />');
-    var audio = $('#player');
-    $(audio).bind('ended', function()
-    {
-        $(this).remove;
-    });
-}
-
 function lostFocus() {
     windowIsActive = false;
 }
@@ -248,17 +162,3 @@ function lostFocus() {
 function gainedFocus() {
     windowIsActive = true;
 }
-
-function hideLoadingNotification() {
-    $('.loading').hide();
-}
-
-function goToByScroll(id){
-    $(id).livequery(function()
-    {
-        $(this).addClass('anchor');
-        $('html,body').animate({scrollTop: $(this).offset().top},'slow');
-        $(id).livequery().expire();
-    });
-}
-

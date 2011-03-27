@@ -11,8 +11,7 @@ topics =
 
 window.current_user =
   audio: $.cookie('audio')
-  user_id: $.cookie('user_id'),
-  nick: $.cookie('nick'),
+  user_nickname: $.cookie('user_nickname'),
   topic_id: null,
 
 blabbr =
@@ -30,19 +29,18 @@ blabbr =
     this.before () ->
       blabbr.loadingNotification()
       this.path = ajaxPath this.path
+      this.ws = pusher
 
     this.after () ->
-      subscribeToPusher 'index'
+      this.trigger 'subscribeToWS', {id: 'index'}
       blabbr.hideLoadingNotification()
       if _gaq?
         _gaq.push ['_trackPageview']
         _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
 
-
-    # set location proxy
+    # set location proxy-]
     #
     this.setLocationProxy(new Sammy.PushLocationProxy(this)) if history.pushState
-
 
     # bindings
     #
@@ -61,15 +59,62 @@ blabbr =
       }
 
     this.bind 'showContent', (e, data) ->
-      $(data.target).show().html(data.data)
+      $(data.target).show().html data.data
+      this.trigger 'updateTitle'
+
+
+    this.bind 'showPost', (e, data) ->
+      that = this
+      $.ajax {
+        type: "GET"
+        , url: data.path
+        , dataType: "html"
+        , success: (data) ->
+          if data?
+            $(data).hide().appendTo("#posts").show('slow')
+            that.trigger 'notify'
+
+      }
+
+    this.bind 'updateTitle', ->
+      title = $('.page-title').attr 'title'
+      $("#page-title").html title
+      document.title = "Blabbr - #{title}"
+
+    this.bind 'notify', ->
+      lostFocus()
+      blinkTitle(1)
+      if current_user.audio
+        this.trigger 'audioNotification'
+
+    this.bind 'audioNotification', ->
+      $('body').append '<audio id="player" src="/sound.mp3" autoplay />'
+      audio = $('#player')
+      $(audio).bind 'ended', ->
+        $(this).remove
 
     this.bind 'moveTo', (e, data) ->
       $.each [window.location.hash, data.hash], (index, value) ->
         if (value)
           $(value).livequery () ->
-              $(this).addClass('anchor');
-              $('html,body').animate({scrollTop: $(this).offset().top},'slow');
-              $(value).livequery().expire();
+              $(this).addClass('anchor')
+              $('html,body').animate({scrollTop: $(this).offset().top},'slow')
+              $(value).livequery().expire()
+
+    this.bind 'subscribeToWS', (e, data) ->
+      id = data.id
+      that = this
+      unless that.ws.channels.channels[id]
+        channel = that.ws.subscribe id
+        channel.bind 'new-post', (data) ->
+          url = "/topics/#{id}/posts/#{data.id}.js"
+          console.log data
+          console.log current_user
+          if data.user_nickname != current_user.user_nickname && id == current_user.topic_id
+            that.trigger 'showPost', {path: url, user_id: data.user_id}
+        channel.bind 'index', (data) ->
+          if $('aside #topics').length
+            that.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
 
 
     # routes
@@ -90,10 +135,9 @@ blabbr =
     this.get "#{blabbr.prefix}topics/page/:page_id", ->
       this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
 
-    # TODO : pusher as event
     this.get "#{blabbr.prefix}topics/:id", ->
       current_user.topic_id = this.params['id']
-      subscribeToPusher this.params['id']
+      this.trigger 'subscribeToWS',  {id: this.params['id']}
       this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
 
     this.get "#{blabbr.prefix}topics/:id/edit", ->
@@ -113,10 +157,9 @@ blabbr =
     this.post '/topics/:id/members',->
      postAndAdd this.path, this.params
 
-    # TODO : pusher as event
     this.get "#{blabbr.prefix}topics/:id/page/:page_id", ->
       current_user.topic_id = this.params['id']
-      subscribeToPusher this.params['id']
+      this.trigger 'subscribeToWS',  {id: this.params['id']}
       this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: window.location.hash || '#contents'}
 
     # TODO : event

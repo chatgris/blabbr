@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   def set_user_preferences
     if current_user
       cookies[:audio] = current_user.audio unless cookies[:audio]
-      cookies[:user_id] = current_user.id unless cookies[:user_id]
+      cookies[:user_nickname] = current_user.nickname unless cookies[:user_nickname]
     end
   end
 

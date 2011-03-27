@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 09:49:18 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 16:01:50 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -27,8 +27,7 @@
   };
   window.current_user = {
     audio: $.cookie('audio'),
-    user_id: $.cookie('user_id'),
-    nick: $.cookie('nick'),
+    user_nickname: $.cookie('user_nickname'),
     topic_id: null
   };
   blabbr = {
@@ -45,10 +44,13 @@
     app = $.sammy(function() {
       this.before(function() {
         blabbr.loadingNotification();
-        return this.path = ajaxPath(this.path);
+        this.path = ajaxPath(this.path);
+        return this.ws = pusher;
       });
       this.after(function() {
-        subscribeToPusher('index');
+        this.trigger('subscribeToWS', {
+          id: 'index'
+        });
         blabbr.hideLoadingNotification();
         if (typeof _gaq != "undefined" && _gaq !== null) {
           _gaq.push(['_trackPageview']);
@@ -81,7 +83,44 @@
         });
       });
       this.bind('showContent', function(e, data) {
-        return $(data.target).show().html(data.data);
+        $(data.target).show().html(data.data);
+        return this.trigger('updateTitle');
+      });
+      this.bind('showPost', function(e, data) {
+        var that;
+        that = this;
+        return $.ajax({
+          type: "GET",
+          url: data.path,
+          dataType: "html",
+          success: function(data) {
+            if (data != null) {
+              $(data).hide().appendTo("#posts").show('slow');
+              return that.trigger('notify');
+            }
+          }
+        });
+      });
+      this.bind('updateTitle', function() {
+        var title;
+        title = $('.page-title').attr('title');
+        $("#page-title").html(title);
+        return document.title = "Blabbr - " + title;
+      });
+      this.bind('notify', function() {
+        lostFocus();
+        blinkTitle(1);
+        if (current_user.audio) {
+          return this.trigger('audioNotification');
+        }
+      });
+      this.bind('audioNotification', function() {
+        var audio;
+        $('body').append('<audio id="player" src="/sound.mp3" autoplay />');
+        audio = $('#player');
+        return $(audio).bind('ended', function() {
+          return $(this).remove;
+        });
       });
       this.bind('moveTo', function(e, data) {
         return $.each([window.location.hash, data.hash], function(index, value) {
@@ -95,6 +134,34 @@
             });
           }
         });
+      });
+      this.bind('subscribeToWS', function(e, data) {
+        var channel, id, that;
+        id = data.id;
+        that = this;
+        if (!that.ws.channels.channels[id]) {
+          channel = that.ws.subscribe(id);
+          channel.bind('new-post', function(data) {
+            var url;
+            url = "/topics/" + id + "/posts/" + data.id + ".js";
+            console.log(data);
+            console.log(current_user);
+            if (data.user_nickname !== current_user.user_nickname && id === current_user.topic_id) {
+              return that.trigger('showPost', {
+                path: url,
+                user_id: data.user_id
+              });
+            }
+          });
+          return channel.bind('index', function(data) {
+            if ($('aside #topics').length) {
+              return that.trigger('getAndShow', {
+                path: '/topics.js',
+                target: "aside"
+              });
+            }
+          });
+        }
       });
       this.get(blabbr.prefix, function() {
         return this.trigger('getAndShow', {
@@ -126,7 +193,9 @@
       });
       this.get("" + blabbr.prefix + "topics/:id", function() {
         current_user.topic_id = this.params['id'];
-        subscribeToPusher(this.params['id']);
+        this.trigger('subscribeToWS', {
+          id: this.params['id']
+        });
         return this.trigger('getAndShow', {
           path: this.path,
           target: '#contents',
@@ -151,7 +220,9 @@
       });
       this.get("" + blabbr.prefix + "topics/:id/page/:page_id", function() {
         current_user.topic_id = this.params['id'];
-        subscribeToPusher(this.params['id']);
+        this.trigger('subscribeToWS', {
+          id: this.params['id']
+        });
         return this.trigger('getAndShow', {
           path: this.path,
           target: '#contents',
