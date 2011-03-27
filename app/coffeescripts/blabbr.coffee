@@ -9,11 +9,6 @@ topics =
       addContent(ich.topic(topic), "#contents") for topic in response
     grab.getData(path, callback)
 
-users =
-  show: (path) ->
-    callback = (response) -> showContent ich.user(response), "#contents"
-    grab.getData(path, callback)
-
 window.current_user =
   audio: $.cookie('audio')
   user_id: $.cookie('user_id'),
@@ -30,6 +25,8 @@ blabbr =
 (($) ->
   app = $.sammy ->
 
+    # before and after filter
+    #
     this.before () ->
       blabbr.loadingNotification()
       this.path = ajaxPath this.path
@@ -41,53 +38,88 @@ blabbr =
         _gaq.push ['_trackPageview']
         _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
 
+
+    # set location proxy
+    #
     this.setLocationProxy(new Sammy.PushLocationProxy(this)) if history.pushState
 
+
+    # bindings
+    #
+    this.bind 'getAndShow', (e, infos) ->
+      that = this
+      $.ajax {
+        type: "GET"
+        , url: infos.path
+        , dataType: "html"
+        , success: (data) ->
+          if data?
+            that.trigger 'showContent', {data: data, target: infos.target}
+            if infos.hash
+              that.trigger 'moveTo', {hash: infos.hash}
+
+      }
+
+    this.bind 'showContent', (e, data) ->
+      $(data.target).show().html(data.data)
+
+    this.bind 'moveTo', (e, data) ->
+      $.each [window.location.hash, data.hash], (index, value) ->
+        if (value)
+          $(value).livequery () ->
+              $(this).addClass('anchor');
+              $('html,body').animate({scrollTop: $(this).offset().top},'slow');
+              $(value).livequery().expire();
+
+
+    # routes
+    #
     this.get blabbr.prefix, ->
-      getAndShow this.path, "#contents"
+      this.trigger 'getAndShow',  {path :this.path, target: '#contents'}
 
     this.get "#{blabbr.prefix}topics", ->
-      getAndShow this.path, "aside"
+      this.trigger 'getAndShow',  {path: this.path, target: 'aside'}
 
     this.get "#{blabbr.prefix}topics/new", ->
-      getAndShow this.path, "aside"
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
+    # TODO : post event
     this.post "/topics", ->
       postAndShow this.path, this.params
 
     this.get "#{blabbr.prefix}topics/page/:page_id", ->
-      getAndShow this.path, "#contents", "#contents"
+      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
 
+    # TODO : pusher as event
     this.get "#{blabbr.prefix}topics/:id", ->
       current_user.topic_id = this.params['id']
       subscribeToPusher this.params['id']
-      getAndShow this.path, "#contents", "#contents"
+      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: '#contents'}
 
     this.get "#{blabbr.prefix}topics/:id/edit", ->
-      getAndShow this.path, "aside"
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
+    # TODO : post event
+    # TODO make only one call
     this.put "#{blabbr.prefix}topics/:id", ->
       postAndAdd this.path, this.params
-      # TODO make only one call
       getAndShow this.path, "#contents", "#contents"
 
+    # TODO : post event
     this.post '/topics/:id/posts',->
       postAndAdd this.path, this.params, '#posts'
 
+    # TODO : post event
     this.post '/topics/:id/members',->
      postAndAdd this.path, this.params
 
+    # TODO : pusher as event
     this.get "#{blabbr.prefix}topics/:id/page/:page_id", ->
       current_user.topic_id = this.params['id']
       subscribeToPusher this.params['id']
-      getAndShow path, "#contents", '#contents'
+      this.trigger 'getAndShow', {path: this.path, target: '#contents', hash: window.location.hash || '#contents'}
 
-    this.get "#{blabbr.prefix}topics/:id/page/:page_id/:anchor", ->
-      current_user.topic_id = this.params['id']
-      subscribeToPusher this.params['id']
-      params = this.params
-      getAndShow "/topics/#{params['id']}/page/#{params['page_id']}.js", "#contents", params['anchor']
-
+    # TODO : event
     this.get "#{blabbr.prefix}topics/:id/posts/:post_id/edit", ->
       post_id = this.params['post_id']
       $.ajax {
@@ -99,29 +131,29 @@ blabbr =
             showEdit(data, post_id)
       }
 
+    # TODO : post event
     this.put "#{blabbr.prefix}topics/:id/posts/:post_id", ->
       postAndReplace this.path, this.params
 
+    # TODO : delete event
     this.del "#{blabbr.prefix}topics/:id/posts/:post_id", ->
       deletePost this.path, this.params
 
-    this.get "#{blabbr.prefix}users/:id", ->
-      getAndShow this.path, 'aside'
-
+    # TODO : post event
     this.put "#{blabbr.prefix}users/:id", ->
       postAndShow this.path, this.params
 
     this.get "#{blabbr.prefix}dashboard", ->
-      getAndShow this.path, 'aside'
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
     this.get "#{blabbr.prefix}smilies", ->
-      getAndShow this.path
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
     this.get "#{blabbr.prefix}smilies/new", ->
-      getAndShow this.path, 'aside'
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
     this.get "#{blabbr.prefix}users/:id", ->
-      users.show this.path
+      this.trigger 'getAndShow', {path: this.path, target: 'aside'}
 
   $(->
     app.run(blabbr.prefix)
