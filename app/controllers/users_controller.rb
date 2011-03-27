@@ -21,7 +21,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.by_slug(params[:id]).first
-    respond_with(@user)
   end
 
   def create
