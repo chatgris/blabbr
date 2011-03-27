@@ -13,5 +13,4 @@ javascripts:
     - public/javascripts/sammy.push_location_proxy.js
     - public/javascripts/blabbr.js
     - public/javascripts/blabbr.notify.js
-    - public/javascripts/ICanHaz.js
     - public/javascripts/application.js
