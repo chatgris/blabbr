@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 18:41:04 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 20:13:53 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -59,9 +59,46 @@
           }
         });
       });
+      this.bind('postAndShow', function() {
+        var that;
+        that = this;
+        return $.ajax({
+          type: "POST",
+          url: that.path,
+          dataType: "html",
+          data: $.param(that.params.toHash()),
+          success: function(msg) {
+            return that.trigger('showContent', {
+              data: msg,
+              target: "#contents"
+            });
+          }
+        });
+      });
+      this.bind('postAndAdd', function(e, infos) {
+        var that;
+        that = this;
+        return $.ajax({
+          type: "POST",
+          url: that.path,
+          dataType: "html",
+          data: $.param(that.params.toHash()),
+          success: function(msg) {
+            return that.trigger('addContent', {
+              data: msg,
+              target: infos.target
+            });
+          }
+        });
+      });
       this.bind('showContent', function(e, data) {
         $(data.target).show().html(data.data);
         return this.trigger('updateTitle');
+      });
+      this.bind('addContent', function(e, data) {
+        var id;
+        id = data.target || "#contents";
+        return $(id).append(data.data);
       });
       this.bind('showPost', function(e, data) {
         var that;
@@ -116,7 +153,6 @@
         var channel, id, that;
         id = data.id;
         that = this;
-        console.log(pusher);
         if (!pusher.channels.channels[id]) {
           channel = pusher.subscribe(id);
           channel.bind('new-post', function(data) {
@@ -223,13 +259,18 @@
         });
       });
       this.post("/topics", function() {
-        return postAndShow(this.path, this.params);
+        this.trigger('postAndShow');
+        return console.log('weird return bug here');
       });
       this.post('/topics/:id/posts', function() {
-        return postAndAdd(this.path, this.params, '#posts');
+        this.trigger('postAndAdd', {
+          target: '#posts'
+        });
+        return console.log('weird return bug here');
       });
       this.post('/topics/:id/members', function() {
-        return postAndAdd(this.path, this.params);
+        this.trigger('postAndAdd');
+        return console.log('weird return bug here');
       });
       this.put("" + root + "topics/:id", function() {
         postAndAdd(this.path, this.params);

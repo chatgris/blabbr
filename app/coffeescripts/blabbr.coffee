@@ -48,10 +48,36 @@ root = if history.pushState then "/" else "#/"
 
       }
 
+    # TODO : return html rather than js
+    this.bind 'postAndShow', ->
+      that = this
+      $.ajax {
+        type: "POST",
+        url: that.path,
+        dataType: "html",
+        data: $.param(that.params.toHash()),
+        success: (msg) ->
+          that.trigger 'showContent', {data: msg, target: "#contents"}
+      }
+
+    this.bind 'postAndAdd', (e, infos) ->
+      that = this
+      $.ajax {
+        type: "POST",
+        url: that.path,
+        dataType: "html",
+        data: $.param(that.params.toHash()),
+        success: (msg) ->
+          that.trigger 'addContent', {data: msg, target: infos.target}
+      }
+
     this.bind 'showContent', (e, data) ->
       $(data.target).show().html data.data
       this.trigger 'updateTitle'
 
+    this.bind 'addContent', (e, data) ->
+      id = data.target || "#contents"
+      $(id).append(data.data)
 
     this.bind 'showPost', (e, data) ->
       that = this
@@ -162,15 +188,17 @@ root = if history.pushState then "/" else "#/"
 
 
     # POST
-    # TODO : event
     this.post "/topics", ->
-      postAndShow this.path, this.params
+      this.trigger 'postAndShow'
+      console.log 'weird return bug here'
 
     this.post '/topics/:id/posts',->
-      postAndAdd this.path, this.params, '#posts'
+      this.trigger 'postAndAdd', { target: '#posts'}
+      console.log 'weird return bug here'
 
     this.post '/topics/:id/members',->
-      postAndAdd this.path, this.params
+      this.trigger 'postAndAdd'
+      console.log 'weird return bug here'
 
 
     # PUT

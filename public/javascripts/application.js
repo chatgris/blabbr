@@ -1,160 +1,141 @@
-var titleHolder = document.title;
+/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 19:12:53 GMT from
+ * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
+ */
 
-jQuery(function($){
-
-
-    $('input.autocomplete').livequery(function()
-    {
-        $(this).each(function()
-        {
-            var $input = $(this);
-            $input.autocomplete($input.attr('data-autocomplete-url'));
-        });
+(function() {
+  var titleHolder;
+  titleHolder = document.title;
+  $(document).ready(function() {
+    var addContent, blinkTitle, deletePost, gainedFocus, insertQuote, lostFocus, postAndAdd, postAndReplace, postAndShow, replaceContent, showEdit;
+    $('input.autocomplete').livequery(function() {
+      return $(this).each(function() {
+        var input;
+        input = $(this);
+        return input.autocomplete(input.attr('data-autocomplete-url'));
+      });
     });
-
-    $("#new_smiley").livequery(function()
-    {
-        $(this).sexyPost({
-            onprogress: function(event, completed, loaded, total) {
-              $("#status").text("Uploading: " + (completed * 100).toFixed(2) + "% complete...");
-            },
-            oncomplete: function(event, responseText) {
-              $("#status").text("Upload complete.");
-            }
-        });
-    });
-
-    if (!history.pushState)
-    {
-        $("a[href^=/][class!='no-ajax']").livequery(function()
-        {
-            var href= $(this).attr('href');
-            $(this).attr('href', '#'+href.replace('#', '/'));
-        });
-    }
-
-    $(".simple_form.user").livequery(function()
-    {
-        $(this).sexyPost({
-            onprogress: function(event, completed, loaded, total) {
-              $("#status").text("Uploading: " + (completed * 100).toFixed(2) + "% complete...");
-            },
-            oncomplete: function(event, responseText) {
-              $("#status").text("Upload complete.");
-            }
-        });
-    });
-
-    $('html').mouseover(function()
-    {
-        gainedFocus();
-    });
-
-    $('.bubble p, .bubble ul')
-    .live('click', function(e) {
-        if ($(e.target).is('p, ul'))
-        {
-          var user = $(this).parent().get(0).getAttribute("data_user");
-          insertQuote($(this).text(), user)
+    $("#new_smiley").livequery(function() {
+      return $(this).sexyPost({
+        onprogress: function(event, completed, loaded, total) {
+          return $("#status").text("Uploading: " + ((completed * 100).toFixed(2)) + "% complete...");
+        },
+        oncomplete: function(event, responseText) {
+          return $("#status").text("Upload complete.");
         }
+      });
     });
-
-    $('#flash_notice').livequery(function()
-    {
-        $.blabbrNotify('success', $(this).text());
-        $(this).remove();
+    if (!history.pushState) {
+      $("a[href^=/][class!='no-ajax']").livequery(function() {
+        var href;
+        href = $(this).attr('href');
+        return $(this).attr('href', "#" + (href.replace('#', '/')));
+      });
+    }
+    $(".simple_form.user").livequery(function() {
+      return $(this).sexyPost({
+        onprogress: function(event, completed, loaded, total) {
+          return $("#status").text("Uploading: " + ((completed * 100).toFixed(2)) + "% complete...");
+        },
+        oncomplete: function(event, responseText) {
+          return $("#status").text("Upload complete.");
+        }
+      });
     });
-
-});
-
-function insertQuote(content, user) {
-    $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
-}
-
-function postAndAdd(path, params, id) {
-    $.ajax({
+    $('html').mouseover(function() {
+      return gainedFocus();
+    });
+    $('.bubble p, .bubble ul').live('click', function(e) {
+      var user;
+      if ($(e.target).is('p, ul')) {
+        user = $(this).parent().get(0).getAttribute("data_user");
+        return insertQuote($(this).text(), user);
+      }
+    });
+    $('#flash_notice').livequery(function() {
+      $.blabbrNotify('success', $(this).text());
+      return $(this).remove();
+    });
+    insertQuote = function(content, user) {
+      return $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
+    };
+    postAndAdd = function(path, params, id) {
+      return $.ajax({
         type: "POST",
         url: path,
         dataType: "html",
         data: $.param(params.toHash()),
-        success: function(msg){
-            addContent(msg, id)
+        success: function(msg) {
+          return addContent(msg, id);
         }
-    });
-}
-
-function showEdit(data, id){
-    $("#" + id).find('.bubble').html(data);
-    hideLoadingNotification()
-}
-
-function deletePost(path, params) {
-    $.ajax({
+      });
+    };
+    showEdit = function(data, id) {
+      $("#" + id).find('.bubble').html(data);
+      return hideLoadingNotification();
+    };
+    deletePost = function(path, params) {
+      return $.ajax({
         type: "DELETE",
         url: path,
         data: $.param(params.toHash()),
         dataType: "html",
-        success: function(msg){
-            replaceContent(msg, params['post_id']);
-            $('#edit_post_'+params['post_id']).remove()
+        success: function(msg) {
+          replaceContent(msg, params['post_id']);
+          return $('#edit_post_' + params['post_id']).remove();
         }
-    });
-}
-
-function postAndShow(path, params) {
-    $.ajax({
+      });
+    };
+    postAndShow = function(path, params) {
+      return $.ajax({
         type: "POST",
         url: path,
         dataType: "html",
         data: $.param(params.toHash()),
-        success: function(msg){
-            showContent(msg, "#contents")
+        success: function(msg) {
+          return showContent(msg, "#contents");
         }
-    });
-}
-
-function postAndReplace(path, params) {
-    $.ajax({
+      });
+    };
+    postAndReplace = function(path, params) {
+      return $.ajax({
         type: "POST",
         url: path,
         dataType: "html",
         data: $.param(params.toHash()),
-        success: function(msg){
-            replaceContent(msg, params['post_id'])
+        success: function(msg) {
+          return replaceContent(msg, params['post_id']);
         }
-    });
-}
-
-function replaceContent(data, id){
-    $("#"+id+" .bubble").html(data);
-    hideLoadingNotification()
-}
-
-function addContent(data, id){
-    var id = id || "#contents";
-    $(id).append(data);
-}
-
-function blinkTitle(state) {
-    if (windowIsActive != true) {
-      if (state == 1) {
-        document.title = "[new!] - " + titleHolder;
-        state = 0;
+      });
+    };
+    replaceContent = function(data, id) {
+      $("#" + id + " .bubble").html(data);
+      return hideLoadingNotification();
+    };
+    addContent = function(data, id) {
+      id = id || "#contents";
+      return $(id).append(data);
+    };
+    blinkTitle = function(state) {
+      if (windowIsActive !== true) {
+        if (state === 1) {
+          document.title = "[new!] - " + titleHolder;
+          state = 0;
+        } else {
+          document.title = titleHolder;
+          state = 1;
+        }
+        return setTimeout("blinkTitle(" + state + ")", 1600);
       } else {
-        document.title = "" + titleHolder;
-        state = 1;
+        return document.title = titleHolder;
       }
-
-      setTimeout("blinkTitle(" + state + ")", 1600);
-    } else {
-      document.title = titleHolder;
-    }
-}
-
-function lostFocus() {
-    windowIsActive = false;
-}
-
-function gainedFocus() {
-    windowIsActive = true;
-}
+    };
+    lostFocus = function() {
+      var windowIsActive;
+      return windowIsActive = false;
+    };
+    return gainedFocus = function() {
+      var windowIsActive;
+      return windowIsActive = true;
+    };
+  });
+}).call(this);
