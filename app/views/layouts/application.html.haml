@@ -7,22 +7,6 @@
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = include_javascripts :application
     = csrf_meta_tag
-    %script#user(type="text/html")
-      %p
-        = "Messages : {{posts_count}}"
-    %script#topic(type="text/html")
-      %article
-        %p.unread
-          %mark
-            0
-        %header
-          %h3
-            %a(href="/topics/{{slug}}") {{title}}
-          %h4
-            = "by {{creator}} le {{created_at}}"
-        %hr
-        %p
-          = "{{title}}"
   %body
     %header#top
       %nav
@@ -55,4 +39,3 @@
     = render(:partial => "shared/ga")
     :javascript
       pusher = new Pusher("#{ENV['PUSHER_KEY']}");
-

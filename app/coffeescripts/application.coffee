@@ -2,6 +2,7 @@ titleHolder = document.title;
 
 $(document).ready ->
 
+  # TODO : find a better autocomplete
   $('input.autocomplete').livequery ->
     $(this).each ->
       input = $(this)
@@ -58,21 +59,6 @@ deletePost = (path, params) ->
           replaceContent(msg, params['post_id']);
           $('#edit_post_'+params['post_id']).remove()
   }
-
-postAndReplace = (path, params) ->
-  $.ajax {
-      type: "POST",
-      url: path,
-      dataType: "html",
-      data: $.param(params.toHash()),
-      success: (msg) ->
-          replaceContent(msg, params['post_id'])
-  }
-
-replaceContent = (data, id) ->
-  $("#"+id+" .bubble").html(data)
-  hideLoadingNotification()
-
 
 blinkTitle = (state) ->
   if  windowIsActive != true

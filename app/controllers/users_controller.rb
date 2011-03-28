@@ -2,7 +2,6 @@
 class UsersController < ApplicationController
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
-  respond_to :html, :json
 
   def index
     @users = User.all.paginate :page => params[:page] || nil, :per_page => 10

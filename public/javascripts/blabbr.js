@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 20:24:22 GMT from
+/* DO NOT MODIFY. This file was compiled Mon, 28 Mar 2011 20:51:03 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -75,6 +75,24 @@
           }
         });
       });
+      this.bind('postAndReplace', function() {
+        var target, that;
+        that = this;
+        target = "#" + that.params['post_id'] + " .bubble";
+        return $.ajax({
+          type: "POST",
+          url: that.path,
+          dataType: "html",
+          data: $.param(that.params.toHash()),
+          success: function(msg) {
+            that.trigger('replaceContent', {
+              data: msg,
+              target: target
+            });
+            return that.trigger('hideLoadingNotification');
+          }
+        });
+      });
       this.bind('postAndAdd', function(e, infos) {
         var that;
         that = this;
@@ -84,21 +102,35 @@
           dataType: "html",
           data: $.param(that.params.toHash()),
           success: function(msg) {
-            return that.trigger('addContent', {
+            that.trigger('addContent', {
               data: msg,
               target: infos.target
             });
+            that.trigger('moveTo', {
+              hash: infos.target
+            });
+            return that.trigger('hideLoadingNotification');
           }
         });
       });
-      this.bind('showContent', function(e, data) {
-        $(data.target).show().html(data.data);
-        return this.trigger('updateTitle');
-      });
-      this.bind('addContent', function(e, data) {
-        var id;
-        id = data.target || "#contents";
-        return $(id).append(data.data);
+      this.bind('getAndReplace', function(e, infos) {
+        var target, that;
+        that = this;
+        target = "#" + that.params['post_id'] + " .bubble";
+        return $.ajax({
+          type: "GET",
+          url: this.path,
+          dataType: "html",
+          success: function(data) {
+            if (data != null) {
+              that.trigger('replaceContent', {
+                data: data,
+                target: target
+              });
+              return that.trigger('hideLoadingNotification');
+            }
+          }
+        });
       });
       this.bind('showPost', function(e, data) {
         var that;
@@ -114,6 +146,37 @@
             }
           }
         });
+      });
+      this.bind('deletePost', function() {
+        var target, that;
+        that = this;
+        target = "#" + that.params['post_id'] + " .bubble";
+        return $.ajax({
+          type: "DELETE",
+          url: that.path,
+          data: $.param(that.params.toHash()),
+          dataType: "html",
+          success: function(data) {
+            that.trigger('replaceContent', {
+              data: data,
+              target: target
+            });
+            $("#edit_post_" + that.params['post_id']).remove();
+            return that.trigger('hideLoadingNotification');
+          }
+        });
+      });
+      this.bind('showContent', function(e, data) {
+        $(data.target).show().html(data.data);
+        return this.trigger('updateTitle');
+      });
+      this.bind('addContent', function(e, data) {
+        var id;
+        id = data.target || "#contents";
+        return $(id).append(data.data);
+      });
+      this.bind('replaceContent', function(e, data) {
+        return $(data.target).html(data.data);
       });
       this.bind('updateTitle', function() {
         var title;
@@ -225,17 +288,8 @@
         });
       });
       this.get("" + root + "topics/:id/posts/:post_id/edit", function() {
-        var post_id;
-        post_id = this.params['post_id'];
-        return $.ajax({
-          type: "GET",
-          url: this.path,
-          dataType: "html",
-          success: function(data) {
-            if (data != null) {
-              return showEdit(data, post_id);
-            }
-          }
+        return this.trigger('getAndReplace', {
+          target: this.params['post_id']
         });
       });
       this.get("" + root + "dashboard", function() {
@@ -269,18 +323,16 @@
       this.post('/topics/:id/members', function() {
         this.trigger('postAndAdd');
       });
-      this.put("" + root + "topics/:id", function() {
-        postAndAdd(this.path, this.params);
-        return getAndShow(this.path, "#contents", "#contents");
+      this.put("" + root + "topics/:id", function(context) {
+        this.trigger('postAndAdd', {
+          target: '#contents'
+        });
       });
       this.put("" + root + "topics/:id/posts/:post_id", function() {
-        return postAndReplace(this.path, this.params);
-      });
-      this.put("" + root + "users/:id", function() {
-        return postAndShow(this.path, this.params);
+        this.trigger('postAndReplace');
       });
       return this.del("" + root + "topics/:id/posts/:post_id", function() {
-        return deletePost(this.path, this.params);
+        this.trigger('deletePost');
       });
     });
     return $(function() {

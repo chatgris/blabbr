@@ -60,6 +60,19 @@ root = if history.pushState then "/" else "#/"
           that.trigger 'showContent', {data: msg, target: "#contents"}
       }
 
+    this.bind 'postAndReplace', ->
+      that = this
+      target = "##{that.params['post_id']} .bubble"
+      $.ajax {
+        type: "POST",
+        url: that.path,
+        dataType: "html",
+        data: $.param(that.params.toHash()),
+        success: (msg) ->
+          that.trigger 'replaceContent', {data: msg, target: target}
+          that.trigger 'hideLoadingNotification'
+      }
+
     this.bind 'postAndAdd', (e, infos) ->
       that = this
       $.ajax {
@@ -69,15 +82,23 @@ root = if history.pushState then "/" else "#/"
         data: $.param(that.params.toHash()),
         success: (msg) ->
           that.trigger 'addContent', {data: msg, target: infos.target}
+          that.trigger 'moveTo', {hash: infos.target}
+          that.trigger 'hideLoadingNotification'
       }
 
-    this.bind 'showContent', (e, data) ->
-      $(data.target).show().html data.data
-      this.trigger 'updateTitle'
+    this.bind 'getAndReplace', (e, infos) ->
+      that = this
+      target = "##{that.params['post_id']} .bubble"
+      $.ajax {
+        type: "GET"
+        , url: this.path
+        , dataType: "html"
+        , success: (data) ->
+          if data?
+            that.trigger 'replaceContent', {data: data, target: target}
+            that.trigger 'hideLoadingNotification'
+      }
 
-    this.bind 'addContent', (e, data) ->
-      id = data.target || "#contents"
-      $(id).append(data.data)
 
     this.bind 'showPost', (e, data) ->
       that = this
@@ -91,6 +112,31 @@ root = if history.pushState then "/" else "#/"
             that.trigger 'notify'
 
       }
+
+    this.bind 'deletePost', ->
+      that = this
+      target = "##{that.params['post_id']} .bubble"
+      $.ajax {
+        type: "DELETE",
+        url: that.path,
+        data: $.param(that.params.toHash()),
+        dataType: "html",
+        success: (data) ->
+          that.trigger 'replaceContent', {data: data, target: target}
+          $("#edit_post_#{that.params['post_id']}").remove()
+          that.trigger 'hideLoadingNotification'
+      }
+
+    this.bind 'showContent', (e, data) ->
+      $(data.target).show().html data.data
+      this.trigger 'updateTitle'
+
+    this.bind 'addContent', (e, data) ->
+      id = data.target || "#contents"
+      $(id).append(data.data)
+
+    this.bind 'replaceContent', (e, data) ->
+      $(data.target).html(data.data)
 
     this.bind 'updateTitle', ->
       title = $('.page-title').attr 'title'
@@ -162,17 +208,8 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'topicId'
       this.trigger 'subscribeToWS',  {id: this.params['id']}
 
-    # TODO : event
     this.get "#{root}topics/:id/posts/:post_id/edit", ->
-      post_id = this.params['post_id']
-      $.ajax {
-        type: "GET"
-        , url: this.path
-        , dataType: "html"
-        , success: (data) ->
-          if data?
-            showEdit(data, post_id)
-      }
+      this.trigger 'getAndReplace', {target: this.params['post_id']}
 
     this.get "#{root}dashboard", ->
       this.trigger 'getAndShow', {target: 'aside'}
@@ -204,22 +241,19 @@ root = if history.pushState then "/" else "#/"
 
     # PUT
     # TODO make only one call
-    # TODO : event
-    this.put "#{root}topics/:id", ->
-      postAndAdd this.path, this.params
-      getAndShow this.path, "#contents", "#contents"
+    this.put "#{root}topics/:id", (context) ->
+      this.trigger 'postAndAdd', {target: '#contents'}
+      return
 
     this.put "#{root}topics/:id/posts/:post_id", ->
-      postAndReplace this.path, this.params
-
-    this.put "#{root}users/:id", ->
-      postAndShow this.path, this.params
+      this.trigger 'postAndReplace'
+      return
 
 
     # DEL
-    # TODO : event
     this.del "#{root}topics/:id/posts/:post_id", ->
-      deletePost this.path, this.params
+      this.trigger 'deletePost'
+      return
 
   $(->
     app.run(root)

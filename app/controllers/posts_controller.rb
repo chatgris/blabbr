@@ -11,7 +11,7 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = @topic.posts.criteria.id(params[:id]).first
+    @post = @topic.posts.find(params[:id])
   end
 
   def update
@@ -35,7 +35,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @post = Post.criteria.id(params[:id]).and(:creator_n => current_user.nickname).first
+    @post = Post.where(:creator_n => current_user.nickname).find(params[:id])
     if @post
       @post.delete!
       flash[ :notice] = t('posts.delete_success')
@@ -60,7 +60,7 @@ class PostsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.criteria.id(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
+    @topic = Topic.by_subscribed_topic(current_user.nickname).find(params[:topic_id])
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end

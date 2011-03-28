@@ -73,7 +73,7 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.criteria.id(params[:id]).and('creator' => current_user.nickname).first
+    @topic = Topic.by_subscribed_topic(current_user.nickname).find(params[:id])
     unless @topic
       redirect_to :back, :alert => t('topic.not_auth')
     end

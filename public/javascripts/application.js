@@ -1,9 +1,9 @@
-/* DO NOT MODIFY. This file was compiled Sun, 27 Mar 2011 20:23:46 GMT from
+/* DO NOT MODIFY. This file was compiled Mon, 28 Mar 2011 19:39:11 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
  */
 
 (function() {
-  var blinkTitle, deletePost, gainedFocus, insertQuote, lostFocus, postAndReplace, replaceContent, showEdit, titleHolder;
+  var blinkTitle, deletePost, gainedFocus, insertQuote, lostFocus, showEdit, titleHolder;
   titleHolder = document.title;
   $(document).ready(function() {
     $('input.autocomplete').livequery(function() {
@@ -73,21 +73,6 @@
         return $('#edit_post_' + params['post_id']).remove();
       }
     });
-  };
-  postAndReplace = function(path, params) {
-    return $.ajax({
-      type: "POST",
-      url: path,
-      dataType: "html",
-      data: $.param(params.toHash()),
-      success: function(msg) {
-        return replaceContent(msg, params['post_id']);
-      }
-    });
-  };
-  replaceContent = function(data, id) {
-    $("#" + id + " .bubble").html(data);
-    return hideLoadingNotification();
   };
   blinkTitle = function(state) {
     if (windowIsActive !== true) {
