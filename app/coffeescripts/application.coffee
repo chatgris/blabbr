@@ -45,21 +45,6 @@ insertQuote = (content, user) ->
   $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
 
 
-showEdit = (data, id) ->
-  $("#" + id).find('.bubble').html(data)
-  hideLoadingNotification()
-
-deletePost = (path, params) ->
-  $.ajax {
-      type: "DELETE",
-      url: path,
-      data: $.param(params.toHash()),
-      dataType: "html",
-      success: (msg) ->
-          replaceContent(msg, params['post_id']);
-          $('#edit_post_'+params['post_id']).remove()
-  }
-
 blinkTitle = (state) ->
   if  windowIsActive != true
     if state == 1
