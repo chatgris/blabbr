@@ -8,11 +8,14 @@ root = if history.pushState then "/" else "#/"
 (($) ->
   app = $.sammy ->
 
+    context = this
+
     # before and after filter
     #
     this.before () ->
       this.trigger 'loadingNotification'
-      this.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
+      context.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
+      context.params = this.params
 
     this.after () ->
       this.trigger 'subscribeToWS', {id: 'index'}
@@ -33,75 +36,69 @@ root = if history.pushState then "/" else "#/"
       $('.loading').hide()
 
     this.bind 'getAndShow', (e, infos) ->
-      that = this
-      path = infos.path || that.path
+      path = infos.path || context.path
       $.ajax {
         type: "GET"
         , url: path
         , dataType: "html"
         , success: (data) ->
           if data?
-            that.trigger 'showContent', {data: data, target: infos.target}
+            context.trigger 'showContent', {data: data, target: infos.target}
             if infos.hash?
-              that.trigger 'moveTo', {hash: infos.hash}
-          that.trigger 'hideLoadingNotification'
+              context.trigger 'moveTo', {hash: infos.hash}
+          context.trigger 'hideLoadingNotification'
 
       }
 
     # TODO : return html rather than js
     this.bind 'postAndShow', ->
-      that = this
       $.ajax {
         type: "POST",
-        url: that.path,
+        url: context.path,
         dataType: "html",
-        data: $.param(that.params.toHash()),
+        data: $.param(context.params.toHash()),
         success: (msg) ->
-          that.trigger 'showContent', {data: msg, target: "#contents"}
+          context.trigger 'showContent', {data: msg, target: "#contents"}
       }
 
     this.bind 'postAndReplace', ->
-      that = this
-      target = "##{that.params['post_id']} .bubble"
+      target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "POST",
-        url: that.path,
+        url: context.path,
         dataType: "html",
-        data: $.param(that.params.toHash()),
+        data: $.param(context.params.toHash()),
         success: (msg) ->
-          that.trigger 'replaceContent', {data: msg, target: target}
-          that.trigger 'hideLoadingNotification'
+          context.trigger 'replaceContent', {data: msg, target: target}
+          context.trigger 'hideLoadingNotification'
       }
 
     this.bind 'postAndAdd', (e, infos) ->
-      that = this
       $.ajax {
         type: "POST",
-        url: that.path,
+        url: context.path,
         dataType: "html",
-        data: $.param(that.params.toHash()),
+        data: $.param(context.params.toHash()),
         success: (msg) ->
-          that.trigger 'addContent', {data: msg, target: infos.target}
-          that.trigger 'moveTo', {hash: infos.target}
-          that.trigger 'hideLoadingNotification'
+          context.trigger 'addContent', {data: msg, target: infos.target}
+          context.trigger 'moveTo', {hash: infos.hash || infos.target}
+          context.trigger 'hideLoadingNotification'
       }
 
     this.bind 'getAndReplace', (e, infos) ->
-      that = this
-      target = "##{that.params['post_id']} .bubble"
+      target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "GET"
         , url: this.path
         , dataType: "html"
         , success: (data) ->
           if data?
-            that.trigger 'replaceContent', {data: data, target: target}
-            that.trigger 'hideLoadingNotification'
+            context.trigger 'replaceContent', {data: data, target: target}
+            context.trigger 'hideLoadingNotification'
       }
 
 
     this.bind 'showPost', (e, data) ->
-      that = this
       $.ajax {
         type: "GET"
         , url: data.path
@@ -109,22 +106,21 @@ root = if history.pushState then "/" else "#/"
         , success: (data) ->
           if data?
             $(data).hide().appendTo("#posts").show('slow')
-            that.trigger 'notify'
+            context.trigger 'notify'
 
       }
 
     this.bind 'deletePost', ->
-      that = this
-      target = "##{that.params['post_id']} .bubble"
+      target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "DELETE",
-        url: that.path,
-        data: $.param(that.params.toHash()),
+        url: context.path,
+        data: $.param(context.params.toHash()),
         dataType: "html",
         success: (data) ->
-          that.trigger 'replaceContent', {data: data, target: target}
-          $("#edit_post_#{that.params['post_id']}").remove()
-          that.trigger 'hideLoadingNotification'
+          context.trigger 'replaceContent', {data: data, target: target}
+          $("#edit_post_#{context.params['post_id']}").remove()
+          context.trigger 'hideLoadingNotification'
       }
 
     this.bind 'showContent', (e, data) ->
@@ -165,24 +161,21 @@ root = if history.pushState then "/" else "#/"
 
     this.bind 'subscribeToWS', (e, data) ->
       id = data.id
-      that = this
       unless pusher.channels.channels[id]
         channel = pusher.subscribe id
         channel.bind 'new-post', (data) ->
           url = "/topics/#{id}/posts/#{data.id}.js"
           if data.user_nickname != current_user.user_nickname && id == current_user.topic_id
-            that.trigger 'showPost', {path: url, user_id: data.user_id}
+            context.trigger 'showPost', {path: url, user_id: data.user_id}
         channel.bind 'index', (data) ->
           if $('aside #topics').length?
-            that.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
+            context.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
 
     this.bind 'topicId', ->
       current_user.topic_id = this.params['id']
 
     # routes
     #
-
-    # GET
     this.get root, ->
       this.trigger 'getAndShow',  {target: '#contents'}
 
@@ -223,24 +216,18 @@ root = if history.pushState then "/" else "#/"
     this.get "#{root}users/:id", ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-
-    # POST
-    # weird return bug here
     this.post "/topics", ->
       this.trigger 'postAndShow'
       return
 
     this.post '/topics/:id/posts',->
-      this.trigger 'postAndAdd', { target: '#posts'}
+      this.trigger 'postAndAdd', { target: '#posts', hash:'#new_post'}
       return
 
     this.post '/topics/:id/members',->
       this.trigger 'postAndAdd'
       return
 
-
-    # PUT
-    # TODO make only one call
     this.put "#{root}topics/:id", (context) ->
       this.trigger 'postAndAdd', {target: '#contents'}
       return
@@ -249,8 +236,6 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'postAndReplace'
       return
 
-
-    # DEL
     this.del "#{root}topics/:id/posts/:post_id", ->
       this.trigger 'deletePost'
       return

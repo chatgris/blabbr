@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Mon, 28 Mar 2011 20:51:03 GMT from
+/* DO NOT MODIFY. This file was compiled Sat, 02 Apr 2011 12:14:40 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -13,9 +13,12 @@
   (function($) {
     var app;
     app = $.sammy(function() {
+      var context;
+      context = this;
       this.before(function() {
         this.trigger('loadingNotification');
-        return this.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
+        context.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
+        return context.params = this.params;
       });
       this.after(function() {
         this.trigger('subscribeToWS', {
@@ -36,39 +39,36 @@
         return $('.loading').hide();
       });
       this.bind('getAndShow', function(e, infos) {
-        var path, that;
-        that = this;
-        path = infos.path || that.path;
+        var path;
+        path = infos.path || context.path;
         return $.ajax({
           type: "GET",
           url: path,
           dataType: "html",
           success: function(data) {
             if (data != null) {
-              that.trigger('showContent', {
+              context.trigger('showContent', {
                 data: data,
                 target: infos.target
               });
               if (infos.hash != null) {
-                that.trigger('moveTo', {
+                context.trigger('moveTo', {
                   hash: infos.hash
                 });
               }
             }
-            return that.trigger('hideLoadingNotification');
+            return context.trigger('hideLoadingNotification');
           }
         });
       });
       this.bind('postAndShow', function() {
-        var that;
-        that = this;
         return $.ajax({
           type: "POST",
-          url: that.path,
+          url: context.path,
           dataType: "html",
-          data: $.param(that.params.toHash()),
+          data: $.param(context.params.toHash()),
           success: function(msg) {
-            return that.trigger('showContent', {
+            return context.trigger('showContent', {
               data: msg,
               target: "#contents"
             });
@@ -76,65 +76,59 @@
         });
       });
       this.bind('postAndReplace', function() {
-        var target, that;
-        that = this;
-        target = "#" + that.params['post_id'] + " .bubble";
+        var target;
+        target = "#" + context.params['post_id'] + " .bubble";
         return $.ajax({
           type: "POST",
-          url: that.path,
+          url: context.path,
           dataType: "html",
-          data: $.param(that.params.toHash()),
+          data: $.param(context.params.toHash()),
           success: function(msg) {
-            that.trigger('replaceContent', {
+            context.trigger('replaceContent', {
               data: msg,
               target: target
             });
-            return that.trigger('hideLoadingNotification');
+            return context.trigger('hideLoadingNotification');
           }
         });
       });
       this.bind('postAndAdd', function(e, infos) {
-        var that;
-        that = this;
         return $.ajax({
           type: "POST",
-          url: that.path,
+          url: context.path,
           dataType: "html",
-          data: $.param(that.params.toHash()),
+          data: $.param(context.params.toHash()),
           success: function(msg) {
-            that.trigger('addContent', {
+            context.trigger('addContent', {
               data: msg,
               target: infos.target
             });
-            that.trigger('moveTo', {
-              hash: infos.target
+            context.trigger('moveTo', {
+              hash: infos.hash || infos.target
             });
-            return that.trigger('hideLoadingNotification');
+            return context.trigger('hideLoadingNotification');
           }
         });
       });
       this.bind('getAndReplace', function(e, infos) {
-        var target, that;
-        that = this;
-        target = "#" + that.params['post_id'] + " .bubble";
+        var target;
+        target = "#" + context.params['post_id'] + " .bubble";
         return $.ajax({
           type: "GET",
           url: this.path,
           dataType: "html",
           success: function(data) {
             if (data != null) {
-              that.trigger('replaceContent', {
+              context.trigger('replaceContent', {
                 data: data,
                 target: target
               });
-              return that.trigger('hideLoadingNotification');
+              return context.trigger('hideLoadingNotification');
             }
           }
         });
       });
       this.bind('showPost', function(e, data) {
-        var that;
-        that = this;
         return $.ajax({
           type: "GET",
           url: data.path,
@@ -142,27 +136,26 @@
           success: function(data) {
             if (data != null) {
               $(data).hide().appendTo("#posts").show('slow');
-              return that.trigger('notify');
+              return context.trigger('notify');
             }
           }
         });
       });
       this.bind('deletePost', function() {
-        var target, that;
-        that = this;
-        target = "#" + that.params['post_id'] + " .bubble";
+        var target;
+        target = "#" + context.params['post_id'] + " .bubble";
         return $.ajax({
           type: "DELETE",
-          url: that.path,
-          data: $.param(that.params.toHash()),
+          url: context.path,
+          data: $.param(context.params.toHash()),
           dataType: "html",
           success: function(data) {
-            that.trigger('replaceContent', {
+            context.trigger('replaceContent', {
               data: data,
               target: target
             });
-            $("#edit_post_" + that.params['post_id']).remove();
-            return that.trigger('hideLoadingNotification');
+            $("#edit_post_" + context.params['post_id']).remove();
+            return context.trigger('hideLoadingNotification');
           }
         });
       });
@@ -213,16 +206,15 @@
         });
       });
       this.bind('subscribeToWS', function(e, data) {
-        var channel, id, that;
+        var channel, id;
         id = data.id;
-        that = this;
         if (!pusher.channels.channels[id]) {
           channel = pusher.subscribe(id);
           channel.bind('new-post', function(data) {
             var url;
             url = "/topics/" + id + "/posts/" + data.id + ".js";
             if (data.user_nickname !== current_user.user_nickname && id === current_user.topic_id) {
-              return that.trigger('showPost', {
+              return context.trigger('showPost', {
                 path: url,
                 user_id: data.user_id
               });
@@ -230,7 +222,7 @@
           });
           return channel.bind('index', function(data) {
             if ($('aside #topics').length != null) {
-              return that.trigger('getAndShow', {
+              return context.trigger('getAndShow', {
                 path: '/topics.js',
                 target: "aside"
               });
@@ -317,7 +309,8 @@
       });
       this.post('/topics/:id/posts', function() {
         this.trigger('postAndAdd', {
-          target: '#posts'
+          target: '#posts',
+          hash: '#new_post'
         });
       });
       this.post('/topics/:id/members', function() {
