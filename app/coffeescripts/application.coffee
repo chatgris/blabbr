@@ -33,7 +33,9 @@ $(document).ready ->
     gainedFocus()
 
   $('#contents').livequery ->
-    $('aside').css('left', $('#contents').position().left + 680)
+    left = $('#contents').position().left
+    $('aside').css('left', left + 680)
+    $('#notify').css('left', left + 680)
 
   $('.bubble p, .bubble ul').live 'click', (e) ->
     if $(e.target).is('p, ul')
