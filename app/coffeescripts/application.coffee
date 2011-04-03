@@ -32,6 +32,9 @@ $(document).ready ->
   $('html').mouseover ->
     gainedFocus()
 
+  $('#contents').livequery ->
+    $('aside').css('left', $('#contents').position().left + 680)
+
   $('.bubble p, .bubble ul').live 'click', (e) ->
     if $(e.target).is('p, ul')
       user = $(this).parent().get(0).getAttribute("data_user")

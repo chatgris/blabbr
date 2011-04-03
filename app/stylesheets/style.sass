@@ -26,7 +26,7 @@ html
 
 body
   background: $background
-  width: 1000px
+  width: 100%
   color: $text
 
 section, article, header, footer, nav, aside, hgroup
@@ -51,8 +51,10 @@ section, article, header, footer, nav, aside, hgroup
 
 #top
   position: fixed
-  width: 1000px
+  width: 100%
   nav
+    width: 1000px
+    margin: auto
     z-index: 20
     position: relative
   ul
@@ -142,6 +144,9 @@ section, article, header, footer, nav, aside, hgroup
 .new a
   background: url(images/new.png) no-repeat 4px center
 
+#center
+  width: 1000px
+  margin: auto
 #contents
   width: 650px
   +border-curve(white)
@@ -165,7 +170,6 @@ section, article, header, footer, nav, aside, hgroup
 
 aside
   position: fixed
-  left: 680px
   top: 120px
   +border-curve-right($beige)
   overflow: visible

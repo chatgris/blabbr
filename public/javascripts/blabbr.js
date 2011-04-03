@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sat, 02 Apr 2011 12:14:40 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 03 Apr 2011 15:31:08 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 

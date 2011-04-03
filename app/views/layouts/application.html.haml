@@ -21,21 +21,22 @@
             = link_to t('preferences'), dashboard_path
           %li
             = link_to t('logout'), logout_path
-      %ul.topic-list
-        %li.new
-          = link_to t('topics.new'), new_topic_path
-        %li.new
-          = link_to t('smilies.new'), new_smiley_path
+        %ul.topic-list
+          %li.new
+            = link_to t('topics.new'), new_topic_path
+          %li.new
+            = link_to t('smilies.new'), new_smiley_path
     %hr
     - flash.each do |name, msg|
       = content_tag :div, msg, :id => "flash_#{name}"
-    %h2#page-title
-      = yield(:title)
-    %section#contents
-      =yield
-    #notify
-    %aside
-    %hr
+    %section#center
+      %h2#page-title
+        = yield(:title)
+      %section#contents
+        =yield
+      #notify
+      %aside
+      %hr
     = render(:partial => "shared/ga")
     :javascript
       pusher = new Pusher("#{ENV['PUSHER_KEY']}");
