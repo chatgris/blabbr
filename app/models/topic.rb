@@ -16,13 +16,14 @@ class Topic
   embeds_many :attachments
   references_many :posts, :validate => false
 
+  accepts_nested_attributes_for :posts
+  attr_accessor :user
+
   slug_field :title
 
   index :posted_at
   index :created_at
   index 'members.nickname'
-
-  attr_accessor :post, :user
 
   stateflow do
     initial :published
@@ -39,17 +40,12 @@ class Topic
   end
 
   validates :title, :presence => true, :uniqueness => true, :length => { :maximum => 100 }
-  validates :post, :presence => true, :length => { :maximum => 10000 }, :if => "self.new_record?"
+  validates :posts, :presence => true
 
-  before_create :creator_as_members, :set_creator
-  after_create :add_post
+  before_create :set_attributes
+  after_create :save_posts
 
-  named_scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
-
-  def update_post(post, body)
-    post.body = body
-    post.save
-  end
+  scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
   def new_member(nickname)
     if User.by_nickname(nickname).first
@@ -81,19 +77,19 @@ class Topic
 
   protected
 
-  def set_creator
+  def set_attributes
     self.creator = self.user.nickname unless self.user == ''
-  end
-
-  def creator_as_members
     self.members << Member.new(:nickname => self.user.nickname, :posts_count => 1)
     self.last_user = self.user.nickname
   end
 
-  def add_post
-    post = Post.new(:body => self.post, :content => self.post, :creator => self.user, :new_topic => true)
-    post.topic = self
-    post.save
+  # Don't get why I have to forced save on referenced association
+  def save_posts
+    self.posts.first.tap do |post|
+      post.creator = self.user
+      post.new_topic = true
+      post.save
+    end
   end
 
 end

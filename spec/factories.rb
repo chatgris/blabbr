@@ -25,15 +25,19 @@ Factory.define :creator, :class => "user" do |u|
   u.posts_count               12
 end
 
+
+Factory.define :post do |p|
+  p.creator                      Factory.build(:creator)
+  p.body                      "Some content"
+end
+
 Factory.define :topic do |t|
   t.title                     "One topic"
   t.creator                   "creator"
   t.user                      Factory.build(:creator)
-  t.post                      "Some content"
-end
-
-Factory.define :post do |p|
-  p.body                      "Some content"
+  t.after_build do |tp|
+    tp.posts.push(Factory.build(:post))
+  end
 end
 
 Factory.define :member do |s|

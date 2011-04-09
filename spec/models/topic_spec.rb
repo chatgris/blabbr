@@ -17,10 +17,9 @@ describe Topic do
 
   describe 'validations' do
     it { should validate_presence_of(:title) }
-    it { should validate_presence_of(:post) }
+    it { should validate_presence_of(:posts) }
     it { should validate_uniqueness_of(:title) }
     it { should validate_length_of(:title) }
-    it { should validate_length_of(:post) }
   end
 
   context 'set up : topic and user created' do
