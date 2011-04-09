@@ -8,5 +8,6 @@ tmp/**/*
 config/database.yml
 config/deploy.rb
 .bundle
+meta.xml
 image.jpg
 lib/tasks/import.rake
