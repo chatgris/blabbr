@@ -1,25 +1,26 @@
 source :rubygems
 
-gem 'barista',              '~> 1.0'
-gem 'bson',                 '1.2'
-gem 'bson_ext',             '1.2'
-gem 'carrierwave',          '~>0.5.1'
-gem 'devise',               '~>1.1.5'
-gem 'em-http-request',      '0.3.0'
-gem 'eventmachine',         '1.0.0.beta.2'
-gem 'haml',                 '~>3.0.24'
+gem 'barista',              '~>1.0'
+gem 'bson',                 '~>1.3'
+gem 'bson_ext',             '~>1.3'
+gem 'carrierwave',          '~>0.5.3'
+gem 'devise',               '~>1.2.1'
+gem 'em-http-request',      '~>0.3.0'
+gem 'eventmachine',         '~>0.12.10'
+gem 'haml',                 '~>3.0.25'
 gem 'jammit_lite',          :git => 'git://github.com/chatgris/jammit_lite.git'
-gem 'mini_magick',          '~>3.1'
-gem 'mongo',                '1.2'
-gem 'mongoid',              '2.0.0.rc.8'
+gem 'mini_magick',          '~>3.2'
+gem 'mongo',                '~>1.3'
+gem 'mongoid',              '~>2.0.1'
 gem 'pusher',               '~>0.8.0'
-gem 'rails',                '~>3.0.5'
-gem 'RedCloth',             '~>4.2.3'
-gem 'simple_form',          '~>1.3.0'
-gem 'stateflow',            '~>0.4.0'
+gem 'rails',                '~>3.0.6'
+gem 'RedCloth',             '~>4.2.7'
+gem 'simple_form',          '~>1.3.1'
+gem 'stateflow',            '~>0.4.2'
 
 group :test, :development do
   gem 'autotest'
+  gem 'autotest-notification'
   gem 'capybara'
   gem 'factory_girl_rails', '~>1.0'
   gem 'mongoid-rspec',      :git => 'git://github.com/durran/mongoid-rspec.git'
@@ -39,5 +40,5 @@ group :development do
 end
 
 group :production, :development do
-  gem 'dalli',              '~>1.0.0'
+  gem 'dalli',              '~>1.0.3'
 end
