@@ -14,7 +14,7 @@ class Topic
 
   embeds_many :members
   embeds_many :attachments
-  references_many :posts, :validate => false
+  references_many :posts, :validate => false, autosave: true
 
   accepts_nested_attributes_for :posts
   attr_accessor :user
@@ -43,7 +43,6 @@ class Topic
   validates :posts, :presence => true
 
   before_create :set_attributes
-  after_create :save_posts
 
   scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
 
@@ -81,14 +80,9 @@ class Topic
     self.creator = self.user.nickname unless self.user == ''
     self.members << Member.new(:nickname => self.user.nickname, :posts_count => 1)
     self.last_user = self.user.nickname
-  end
-
-  # Don't get why I have to forced save on referenced association
-  def save_posts
     self.posts.first.tap do |post|
       post.creator = self.user
       post.new_topic = true
-      post.save
     end
   end
 
