@@ -25,14 +25,15 @@ class TopicsController < ApplicationController
   end
 
   def create
-    params[:topic][:user] = current_user
     @topic = Topic.new(params[:topic])
+    @topic.user = current_user
 
     if @topic.save
       flash[:notice] = t('topics.create.success')
       redirect_to topic_path(@topic.slug) unless request.xhr?
     else
       @post = Post.new(:body => params[:topic][:post])
+      flash[:alert] = t('topics.create.fail')
       render :action => 'new', :collection => @post
     end
   end
@@ -45,7 +46,6 @@ class TopicsController < ApplicationController
   end
 
   def update
-    @topic = Topic.find(params[:id])
     if @topic.update_attributes(params[:topic])
       flash[:notice] = t('topics.update.success')
     else
@@ -57,9 +57,9 @@ class TopicsController < ApplicationController
   def destroy
     unless @topic.nil?
       @topic.destroy
-      redirect_to :back, :notice => t('topic.deleted')
+      redirect_to :back, :notice => t('topics.deleted')
     else
-      redirect_to :back, :alert => t('topic.not_auth')
+      redirect_to :back, :alert => t('topics.not_auth')
     end
   end
 
