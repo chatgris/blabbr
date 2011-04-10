@@ -74,16 +74,16 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.by_subscribed_topic(current_user.nickname).find(params[:id])
+    @topic = Topic.for_creator(current_user.nickname).find(params[:id])
     unless @topic
-      redirect_to :back, :alert => t('topic.not_auth')
+      redirect_to :back, :alert => t('topics.not_auth')
     end
   end
 
   def get_current_topic_for_member
     @topic = Topic.by_slug(params[:id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
-      redirect_to :back, :alert => t('topic.not_auth')
+      redirect_to :back, :alert => t('topics.not_auth')
     end
   end
 
