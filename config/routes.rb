@@ -7,7 +7,7 @@ Blabbr::Application.routes.draw do
   authenticate :user do
     match "/uploads/*path" => "gridfs#serve"
 
-    resources :users, :except => [:edit, :destroy] do
+    resources :users, :only => [:show, :create, :update] do
       get :autocomplete, :on => :collection
     end
 

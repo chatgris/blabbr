@@ -2,20 +2,13 @@
 class UsersController < ApplicationController
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
-
-  def index
-    @users = User.all.paginate :page => params[:page] || nil, :per_page => 10
-  end
+  respond_to :html, :js
 
   def autocomplete
     @users = User.where(:nickname => /#{params[:q]}/).all
   end
 
   def edit
-  end
-
-  def new
-    redirect_to :back
   end
 
   def show
@@ -26,12 +19,11 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       session[:current_user] = @user.id
-      flash[:notice] =  "User was successfully created"
-      redirect_to root_url
+      flash[:notice] =  t('users.create.success')
     else
-      flash[:error] = "User failed to be created"
-      render :new
+      flash[:alert] = t('users.create.fail')
     end
+    respond_with(@user, :location => root_path)
   end
 
   def update

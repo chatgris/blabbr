@@ -2,84 +2,137 @@ require 'spec_helper'
 
 describe UsersController do
 
-  describe 'current_user == user' do
+  let(:user) {mock_user}
 
-    before :each do
-      @current_user = Factory.create(:creator)
-      controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@current_user)
+  context 'whitout logged user' do
+
+    describe 'POST create' do
+
+      before :each do
+        User.should_receive(:new).with({'new' => 'user'}).and_return(user)
+      end
+
+      context 'with valid params' do
+
+        before :each do
+          user.should_receive(:save).and_return(true)
+          post :create, :user => {'new' => 'user'}
+        end
+
+        it 'should assign user' do
+          assigns(:user).should == user
+        end
+
+        it 'should be redirected' do
+          response.should redirect_to('/')
+        end
+
+        it 'should have a notice' do
+          flash[:notice].should == I18n.t('users.create.success')
+        end
+      end
+
+      context 'without valid params' do
+
+        before :each do
+          user.should_receive(:save).and_return(false)
+          post :create, :user => {'new' => 'user'}
+        end
+
+        it 'should assign user' do
+          assigns(:user).should == user
+        end
+
+        it 'should be redirected' do
+          response.should redirect_to('/')
+        end
+
+        it 'should have a notice' do
+          flash[:alert].should == I18n.t('users.create.fail')
+        end
+      end
     end
-
-    it 'should be able to see index' do
-      get :index
-      response.should be_success
-    end
-
-    it 'get new should be success' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      get :new
-      response.should redirect_to :back
-    end
-
-    it 'should see show' do
-      get :show, :id => @current_user.slug
-      response.should be_success
-    end
-
-    it 'should see edit' do
-      get :edit
-      response.should be_success
-    end
-
-    it 'should update user if current_user is user' do
-      put :update, :user => {:email => 'new@email.com', :avatar => File.open(Rails.root.join("image.jpg")) }, :id => @current_user.id
-      response.should redirect_to 'http://test.host/users/creator'
-      @current_user.reload.email.should == 'new@email.com'
-      @current_user.reload.avatar.url.should == '/uploads/avatars/creator.png'
-    end
-
-    it 'should update time_zone if current_user is user' do
-      put :update, :user => {:email => 'new@email.com', :time_zone => 'Paris' }, :id => @current_user.id
-      response.should redirect_to 'http://test.host/users/creator'
-      @current_user.reload.email.should == 'new@email.com'
-      @current_user.reload.time_zone.should == 'Paris'
-    end
-
   end
 
-  describe 'user != current_user' do
-
+  context 'with a logged user' do
     before :each do
-      @current_user = Factory.create(:creator)
-      @user = Factory.create(:user)
       controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@current_user)
-    end
-
-    it 'should be able to see index' do
-      get :index
-      response.should be_success
-    end
-
-    it 'get new should be success' do
+      controller.stub!(:current_user).and_return(user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      get :new
-      response.should redirect_to :back
     end
 
-    it 'should update user if current_user is user' do
-      put :update, :user => {:email => 'new@email.com'}, :id => @user.id
-      response.should redirect_to 'http://test.host/users/creator'
-      @user.reload.email.should_not == 'new@email.com'
+    describe 'GET show' do
+      before :each do
+        User.should_receive(:by_slug).with(user.slug).and_return(user)
+        user.should_receive(:first).and_return(user)
+        get :show, :id => user.slug
+      end
+
+      it 'should be success' do
+        response.should be_success
+      end
+
+      it 'should assign user' do
+        assigns(:user).should == user
+      end
     end
 
-  end
+    context 'when user is current_user' do
+      describe 'GET edit' do
+        before :each do
+          get :edit
+        end
 
-  describe 'create a user with an avatar' do
-    it 'should have an avatar' do
-      post :create, :user => {:email => 'new@email.com', :nickname => 'creator', :locale => 'fr', :password => 'password', :password_confirmation => 'password'}
-      User.first.email.should == 'new@email.com'
+        it 'should assigns user' do
+          assigns(:user).should == user
+        end
+
+        it 'should be success' do
+          response.should be_success
+        end
+      end
+
+      describe 'PUT update' do
+        context 'with valid params' do
+          before :each do
+            user.should_receive(:update_attributes).with({'updated' => 'user'}).and_return(true)
+            put :update, :id => user.slug, :user => {'updated' => 'user'}
+          end
+
+          it 'should assigns user' do
+            assigns(:user).should == user
+          end
+
+          it 'should be redirect_to' do
+            response.should redirect_to(user_path(user.slug))
+          end
+
+          it 'should have a notice' do
+            flash[:notice].should == I18n.t('users.update.success')
+          end
+        end
+
+        context 'without valid params' do
+          before :each do
+            user.should_receive(:update_attributes).with({'updated' => 'user'}).and_return(false)
+            put :update, :id => user.slug, :user => {'updated' => 'user'}
+          end
+
+          it 'should assigns user' do
+            assigns(:user).should == user
+          end
+
+          it 'should be redirect_to' do
+            response.should redirect_to(user_path(user.slug))
+          end
+
+          it 'should have a notice' do
+            flash[:alert].should == I18n.t('users.update.fail')
+          end
+        end
+      end
     end
+
   end
 
 end
