@@ -45,6 +45,7 @@ class Topic
   before_create :set_attributes
 
   scope :by_subscribed_topic, lambda { |current_user| { :where => { 'members.nickname' => current_user}}}
+  scope :for_creator, lambda { |creator| { :where => { 'creator' => creator}}}
 
   def new_member(nickname)
     if User.by_nickname(nickname).first

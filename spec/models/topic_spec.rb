@@ -169,11 +169,16 @@ describe Topic do
 
     end
 
-    describe 'named_scope' do
+    describe 'scope' do
 
       it "should find by slug" do
         Topic.by_slug(topic.reload.slug).first.title.should == topic.title
         Topic.by_slug("Does not exist").first.should be_nil
+      end
+
+      it "should find by creator" do
+        Topic.for_creator(topic.reload.creator).first.title.should == topic.title
+        Topic.for_creator("Does not exist").first.should be_nil
       end
 
       it "should find by subscribed topic" do
