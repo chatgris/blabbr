@@ -5,27 +5,28 @@ class MembersController < ApplicationController
 
   def create
     if @topic.new_member(params[:nickname])
-      flash[:notice] = t('member.add_success', :name => params[:nickname])
+      flash[:notice] = t('members.create.success', :name => params[:nickname])
     else
-      flash[:alert] = t('member.not_find')
+      flash[:alert] = t('members.create.fail')
     end
     respond_with(@topic, :location => topic_path(@topic.slug))
   end
 
   def destroy
     if @topic.rm_member!(params[:id])
-      redirect_to topic_path(@topic.slug), :notice => t('member.remove_success', :name => params[:id])
+      flash[:notice] = t('members.destroy.success', :name => params[:nickname])
     else
-      redirect_to topic_path(@topic.slug), :alert => t('member.not_find')
+      flash[:alert] = t('members.destroy.fail')
     end
+    respond_with(@topic, :location => topic_path(@topic.slug))
   end
 
   protected
 
   def get_current_topic_for_creator
-    @topic = Topic.criteria.id(params[:topic_id]).and('creator' => current_user.nickname).first
+    @topic = Topic.for_creator(current_user.nickname).find(params[:topic_id])
     unless @topic
-      redirect_to :back, :alert => t('topic.not_auth')
+      redirect_to :back, :alert => t('topics.not_auth')
     end
   end
 

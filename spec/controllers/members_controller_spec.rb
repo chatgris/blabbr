@@ -1,65 +1,148 @@
 require 'spec_helper'
 
 describe MembersController do
+
+  let(:topic)    {mock_topic}
+  let(:topics)   {[mock_topic]}
+  let(:one_post) {mock_post}
+  let(:posts)    {[mock_post]}
+  let(:user)     {mock_user}
+  let(:member)   {mock_user}
+
+  before :each do
+    controller.stub!(:logged_in?).and_return(true)
+    controller.stub!(:current_user).and_return(user)
+    request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+  end
+
   describe 'with creator as current_user' do
 
     before :each do
-      @current_user = Factory.create(:creator)
-      @topic = Factory.create(:topic)
-      @member = Factory.create(:user)
-      @topic.new_member(@member.nickname)
-      controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@current_user)
+      Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+      topic.should_receive(:find).with(topic.id).and_return(topic)
     end
 
-    it "it should not add a member if he doesn't exist" do
-      post :create, :nickname => 'New member', :topic_id => @topic.id
-      response.should redirect_to(topic_path(@topic.slug))
-      flash[:alert].should == I18n.t('member.not_find')
+    describe 'POST create' do
+
+      context 'with valid params' do
+        before :each do
+          topic.should_receive(:new_member).and_return(true)
+          post :create, :topic_id => topic.id, :nickname => member.nickname
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to topic_path(topic.slug)
+        end
+
+        it 'should assigns topic' do
+          assigns(:topic).should == topic
+        end
+
+        it 'should have a flash message' do
+          flash[:notice].should == I18n.t('members.create.success')
+        end
+      end
+
+      context 'without valid params' do
+        before :each do
+          topic.should_receive(:new_member).and_return(false)
+          post :create, :topic_id => topic.id, :nickname => member.nickname
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to topic_path(topic.slug)
+        end
+
+        it 'should assigns topic' do
+          assigns(:topic).should == topic
+        end
+
+        it 'should have a flash message' do
+          flash[:alert].should == I18n.t('members.create.fail')
+        end
+
+      end
     end
 
-    it "it should add a member" do
-      post :create, :nickname => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.slug)
-      flash[:notice].should == I18n.t('member.add_success')
-    end
+    describe 'DELETE destroy' do
+      context 'with valid params' do
+        before :each do
+          topic.should_receive(:rm_member!).with(member.id).and_return(true)
+          delete :destroy, :topic_id => topic.id, :id => member.id
+        end
 
-    it "should fail when removing a user who is not a member" do
-      delete :destroy, :id => "New member", :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.slug)
-      flash[:alert].should == I18n.t('member.not_find')
-    end
+        it 'should be redirect' do
+          response.should redirect_to topic_path(topic.slug)
+        end
 
-    it "should remove a user from members" do
-      delete :destroy, :id => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to topic_path(@topic.slug)
-      flash[:notice].should == I18n.t('member.remove_success')
+        it 'should assigns topic' do
+          assigns(:topic).should == topic
+        end
+
+        it 'should have a flash message' do
+          flash[:notice].should == I18n.t('members.destroy.success')
+        end
+      end
+
+      context 'without valid params' do
+        before :each do
+          topic.should_receive(:rm_member!).with(member.id).and_return(false)
+          delete :destroy, :topic_id => topic.id, :id => member.id
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to topic_path(topic.slug)
+        end
+
+        it 'should assigns topic' do
+          assigns(:topic).should == topic
+        end
+
+        it 'should have a flash message' do
+          flash[:alert].should == I18n.t('members.destroy.fail')
+        end
+      end
     end
 
   end
 
   describe 'with a logged user as current_user, not a member' do
+
     before :each do
-      @current_user = Factory.create(:creator)
-      @topic = Factory.create(:topic)
-      @member = Factory.create(:user)
-      @topic.new_member(@member.nickname)
-      controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@member)
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
+      Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+      topic.should_receive(:find).with(topic.id).and_return(nil)
     end
 
-    it "it should not add a member" do
-      post :create, :nickname => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to :back
-      flash[:alert].should == I18n.t('topic.not_auth')
+    describe 'POST create' do
+      before :each do
+        topic.should_not_receive(:new_member)
+        post :create, :topic_id => topic.id, :nickname => member.nickname
+      end
+
+      it 'should be redirect' do
+        response.should redirect_to(:back)
+      end
+
+      it 'should have a notice' do
+        flash[:alert].should == I18n.t('topics.not_auth')
+      end
+
     end
 
-    it "it should not delete a member" do
-      post :create, :id => @member.nickname, :topic_id => @topic.id
-      response.should redirect_to :back
-      flash[:alert].should == I18n.t('topic.not_auth')
-    end
+    describe 'DELETE destroy' do
+      before :each do
+        delete :destroy, :topic_id => topic.id, :id => member.id
+      end
 
+      it 'should be redirect' do
+        response.should redirect_to(:back)
+      end
+
+      it 'should have a notice' do
+        flash[:alert].should == I18n.t('topics.not_auth')
+      end
+
+    end
   end
+
 end
