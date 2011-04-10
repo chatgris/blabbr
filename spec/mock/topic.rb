@@ -4,6 +4,7 @@ def mock_topic(options = {}, stubs = {})
   mock.stub!(:id).and_return(1)
   mock.stub!(:title).and_return('Title')
   mock.stub!(:slug).and_return('title')
+  mock.stub!(:posts_count).and_return(34)
 
   mock
 end

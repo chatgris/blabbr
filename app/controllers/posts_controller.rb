@@ -1,17 +1,16 @@
 class PostsController < ApplicationController
-  before_filter :get_current_topic_for_creator, :only => [:destroy]
-  before_filter :get_current_topic_for_member, :except => [:destroy]
-  before_filter :get_post, :except => [:create]
+  before_filter :get_current_topic_for_member
+  before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => ['update']
   respond_to :html, :js
 
   def show
+    @post = @topic.posts.find(params[:id])
   end
 
   def edit
-    @post = @topic.posts.find(params[:id])
   end
 
   def update
@@ -24,23 +23,22 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(:creator => current_user, :t => @topic, :body => params[:post][:body])
+    @post = Post.new(params[:post])
+    @post.creator = current_user
     @post.topic = @topic
     if @post.save
       flash[:notice] = t('posts.create.success')
     else
-      flash[:alert] = t('posts.create.error')
+      flash[:alert] = t('posts.create.fail')
     end
     respond_with(@post, :location => page_topic_path(:id => @topic.slug, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
   end
 
   def destroy
-    @post = Post.where(:creator_n => current_user.nickname).find(params[:id])
-    if @post
-      @post.delete!
-      flash[ :notice] = t('posts.delete_success')
+    if @post.delete!
+      flash[ :notice] = t('posts.destroy.success')
     else
-      flash[:alert] = t('posts.delete_unsuccess')
+      flash[:alert] = t('posts.destroy.fail')
     end
     respond_with(@post, :location => :back)
 
@@ -48,21 +46,17 @@ class PostsController < ApplicationController
 
   protected
 
-  def get_post
-    @post = @topic.posts.find(params[:id])
+  def get_post_for_creator
+    @post = @topic.posts.for_creator(current_user.nickname).find(params[:id])
+    unless @post
+      redirect_to :back, :alert => t('posts.not_auth')
+    end
   end
 
   def get_current_topic_for_member
     @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
-      redirect_to :back, :alert => t('topic.not_auth')
-    end
-  end
-
-  def get_current_topic_for_creator
-    @topic = Topic.by_subscribed_topic(current_user.nickname).find(params[:topic_id])
-    unless @topic
-      redirect_to :back, :alert => t('topic.not_auth')
+      redirect_to :back, :alert => t('topics.not_auth')
     end
   end
 
