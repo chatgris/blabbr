@@ -11,7 +11,7 @@ class Post
 
   referenced_in :topic, :validate => false
 
-  attr_accessor :new_topic, :creator, :t
+  attr_accessor :new_topic, :creator
 
   stateflow do
     initial :published
@@ -64,7 +64,7 @@ class Post
 
   def update_topic_infos
     if self.new_topic.nil?
-      t = self.t
+      t = self.topic
       t.members.each do |member|
         if member.unread == 0
           member.post_id = self.id

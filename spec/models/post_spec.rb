@@ -31,7 +31,7 @@ describe Post do
     end
 
     let(:post) do
-      Factory.build(:post, :creator => creator, :t => topic)
+      Factory.build(:post, :creator => creator)
     end
 
     describe "callback" do
@@ -89,7 +89,7 @@ describe Post do
       context "when a post is added by a member" do
 
         let(:new_post) do
-          Factory.build(:post, :creator => member, :t => topic)
+          Factory.build(:post, :creator => member)
         end
 
         before :each do
