@@ -114,16 +114,11 @@ describe TopicsController do
       context 'with invalid params' do
         before :each do
           topic.should_receive(:save).and_return(false)
-          Post.should_receive(:new).and_return(:one_post)
           post :create, :topic => {'new' => 'topic'}
         end
 
         it 'should assigns topic' do
           assigns(:topic).should == topic
-        end
-
-        it 'should render the new template' do
-          response.should render_template(:new)
         end
 
         it 'should have a flash message' do
@@ -178,16 +173,40 @@ describe TopicsController do
       before :each do
         Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
         topic.should_receive(:find).with(topic.id).and_return(topic)
-        topic.should_receive(:destroy)
-        delete :destroy, :id => topic.id
       end
 
-      it 'redirect to back' do
-        response.should redirect_to(:back)
+      context 'with valid params' do
+
+        before :each do
+          topic.should_receive(:delete!).and_return(true)
+          delete :destroy, :id => topic.id
+        end
+
+        it 'redirect to back' do
+          response.should redirect_to topics_path
+        end
+
+        it 'should have a notice message' do
+          flash[:notice].should == I18n.t('topics.delete.success')
+        end
+
       end
 
-      it 'should have a notice message' do
-        flash[:notice].should == I18n.t('topics.deleted')
+      context 'without valid params' do
+
+        before :each do
+          topic.should_receive(:delete!).and_return(false)
+          delete :destroy, :id => topic.id
+        end
+
+        it 'redirect to back' do
+          response.should redirect_to topics_path
+        end
+
+        it 'should have a notice message' do
+          flash[:alert].should == I18n.t('topics.delete.fail')
+        end
+
       end
     end
 

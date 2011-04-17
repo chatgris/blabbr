@@ -11,17 +11,14 @@ class TopicsController < ApplicationController
   end
 
   def show
-    if @topic.nil?
-      flash[:error] = t('topic.not_auth')
-      redirect_to topics_path
-    else
-      @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
-    end
+    @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
+    respond_with @topic
   end
 
   def new
     @topic = Topic.new
     @topic.posts.new
+    respond_with @post
   end
 
   def create
@@ -30,19 +27,13 @@ class TopicsController < ApplicationController
 
     if @topic.save
       flash[:notice] = t('topics.create.success')
-      redirect_to topic_path(@topic.slug) unless request.xhr?
     else
-      @post = Post.new(:body => params[:topic][:post])
       flash[:alert] = t('topics.create.fail')
-      render :action => 'new', :collection => @post
     end
+    respond_with(@topic, :location => topic_path(@topic.slug))
   end
 
   def edit
-    if @topic.nil?
-      flash[:error] = t('topic.not_auth')
-      redirect_to topics_path
-    end
   end
 
   def update
@@ -55,12 +46,12 @@ class TopicsController < ApplicationController
   end
 
   def destroy
-    unless @topic.nil?
-      @topic.destroy
-      redirect_to :back, :notice => t('topics.deleted')
+    if @topic.delete!
+      flash[:notice] = t('topics.delete.success')
     else
-      redirect_to :back, :alert => t('topics.not_auth')
+      flash[:alert] = t('topics.delete.fail')
     end
+    respond_with(@topic, :location => topics_path)
   end
 
   protected
