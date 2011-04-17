@@ -101,6 +101,7 @@ describe TopicsController do
       context 'with valid params' do
         before :each do
           topic.should_receive(:save).and_return(true)
+          topic.should_receive(:posts).and_return(posts)
           post :create, :topic => {'new' => 'topic'}
         end
 

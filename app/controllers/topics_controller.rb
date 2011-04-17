@@ -1,24 +1,23 @@
 # encoding: utf-8
 class TopicsController < ApplicationController
   before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
-  before_filter :get_current_topic_for_member, :get_smilies, :only => [:show]
+  before_filter :get_current_topic_for_member, :only => [:show]
+  before_filter :get_smilies, :only => [:show, :create]
   after_filter :reset_unread_posts, :only => [:show]
   respond_to :html, :json, :js
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
-    respond_with @topics
   end
 
   def show
-    @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
+     @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
     respond_with @posts
   end
 
   def new
     @topic = Topic.new
     @topic.posts.new
-    respond_with @post
   end
 
   def create
@@ -27,6 +26,7 @@ class TopicsController < ApplicationController
 
     if @topic.save
       flash[:notice] = t('topics.create.success')
+      @posts = @topic.posts.paginate
     else
       flash[:alert] = t('topics.create.fail')
     end
