@@ -73,6 +73,9 @@ root = if history.pushState then "/" else "#/"
           context.trigger 'hideLoadingNotification'
       }
 
+    this.bind 'emptyAside', ->
+      $('aside').html('')
+
     this.bind 'postAndAdd', (e, infos) ->
       $.ajax {
         type: "POST",
@@ -218,6 +221,7 @@ root = if history.pushState then "/" else "#/"
 
     this.post "/topics", ->
       this.trigger 'postAndShow'
+      this.trigger 'emptyAside'
       return
 
     this.post '/topics/:id/posts',->
