@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 03 Apr 2011 15:31:08 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 17 Apr 2011 15:56:53 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -115,7 +115,7 @@
         target = "#" + context.params['post_id'] + " .bubble";
         return $.ajax({
           type: "GET",
-          url: this.path,
+          url: context.path,
           dataType: "html",
           success: function(data) {
             if (data != null) {
@@ -178,14 +178,13 @@
         return document.title = "Blabbr - " + title;
       });
       this.bind('notify', function() {
-        lostFocus();
-        blinkTitle(1);
         if (current_user.audio != null) {
           return this.trigger('audioNotification');
         }
       });
       this.bind('audioNotification', function() {
         var audio;
+        console.log('pouet');
         $('body').append('<audio id="player" src="/sound.mp3" autoplay />');
         audio = $('#player');
         return $(audio).bind('ended', function() {

@@ -89,7 +89,7 @@ root = if history.pushState then "/" else "#/"
       target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "GET"
-        , url: this.path
+        , url: context.path
         , dataType: "html"
         , success: (data) ->
           if data?
@@ -140,8 +140,8 @@ root = if history.pushState then "/" else "#/"
       document.title = "Blabbr - #{title}"
 
     this.bind 'notify', ->
-      lostFocus()
-      blinkTitle(1)
+      #lostFocus()
+      #blinkTitle(1)
       if current_user.audio?
         this.trigger 'audioNotification'
 
