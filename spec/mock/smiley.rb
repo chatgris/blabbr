@@ -5,6 +5,8 @@ def mock_smiley(options = {}, stubs={})
   mock.stub!(:code).and_return('blabla')
   mock.stub!(:added_by).and_return('chatgris')
   mock.stub!(:image).and_return(SmileyUploader.new)
-  mock.stub!(:image_url).and_return("http://github.com")
+  mock.stub!(:image?).and_return(true)
+  mock.stub!(:image_url).and_return('/user.avatar.jpg')
+  mock.stub!(:image_cache).and_return('/user.avatar.jpg')
   mock
 end
