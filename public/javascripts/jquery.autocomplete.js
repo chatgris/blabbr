@@ -1,660 +1,532 @@
-/**
- * jquery.autocomplete.js
- * Version 3.1
- * Copyright (c) Dylan Verheul <dylan.verheul@gmail.com>
- */
-(function($) {
+jQuery.autocomplete = function(input, options) {
+    // Create a link to self
+    var me = this;
 
-    /**
-     * Autocompleter Object
-     * @param {jQuery} $elem jQuery object with one input tag
-     * @param {Object=} options Settings
-     * @constructor
-     */
-    $.Autocompleter = function($elem, options) {
+    // Create jQuery object for input element
+    var $input = $(input).attr("autocomplete", "off");
 
-        /**
-         * Cached data
-         * @type Object
-         * @private
-         */
-        this.cacheData_ = {};
+    // Apply inputClass if necessary
+    if (options.inputClass) $input.addClass(options.inputClass);
 
-        /**
-         * Number of cached data items
-         * @type number
-         * @private
-         */
-        this.cacheLength_ = 0;
+    // Create results
+    var results = document.createElement("div");
+    // Create jQuery object for results
+    var $results = $(results);
+    $results.hide().addClass(options.resultsClass).css("position", "absolute");
+    if( options.width > 0 ) $results.css("width", options.width);
 
-        /**
-         * Class name to mark selected item
-         * @type string
-         * @private
-         */
-    	this.selectClass_ = 'jquery-autocomplete-selected-item';
+    // Add to body element
+    $("body").append(results);
 
-    	/**
-    	 * Handler to activation timeout
-    	 * @type ?number
-    	 * @private
-    	 */
-        this.keyTimeout_ = null;
+    input.autocompleter = me;
 
-    	/**
-    	 * Last key pressed in the input field (store for behavior)
-    	 * @type ?number
-    	 * @private
-    	 */
-        this.lastKeyPressed_ = null;
+    var timeout = null;
+    var prev = "";
+    var active = -1;
+    var cache = {};
+    var keyb = false;
+    var hasFocus = false;
+    var lastKeyPressCode = null;
 
-    	/**
-    	 * Last value processed by the autocompleter
-    	 * @type ?string
-    	 * @private
-    	 */
-        this.lastProcessedValue_ = null;
+    // flush cache
+    function flushCache(){
+        cache = {};
+        cache.data = {};
+        cache.length = 0;
+    };
 
-    	/**
-    	 * Last value selected by the user
-    	 * @type ?string
-    	 * @private
-    	 */
-        this.lastSelectedValue_ = null;
+    // flush cache
+    flushCache();
 
-    	/**
-    	 * Is this autocompleter active?
-    	 * @type boolean
-    	 * @private
-    	 */
-        this.active_ = false;
+    // if there is a data array supplied
+    if( options.data != null ){
+        var sFirstChar = "", stMatchSets = {}, row = [];
 
-    	/**
-    	 * Is it OK to finish on blur?
-    	 * @type boolean
-    	 * @private
-    	 */
-        this.finishOnBlur_ = true;
+        // no url was specified, we need to adjust the cache length to make sure it fits the local data store
+        if( typeof options.url != "string" ) options.cacheLength = 1;
 
-        /**
-         * Assert parameters
-         */
-        if (!$elem || !($elem instanceof jQuery) || $elem.length !== 1 || $elem.get(0).tagName.toUpperCase() !== 'INPUT') {
-            alert('Invalid parameter for jquery.Autocompleter, jQuery object with one element with INPUT tag expected');
-            return;
+        // loop through the array and create a lookup structure
+        for( var i=0; i < options.data.length; i++ ){
+            // if row is a string, make an array otherwise just reference the array
+            row = ((typeof options.data[i] == "string") ? [options.data[i]] : options.data[i]);
+
+            // if the length is zero, don't add to list
+            if( row[0].length > 0 ){
+                // get the first character
+                sFirstChar = row[0].substring(0, 1).toLowerCase();
+                // if no lookup array for this character exists, look it up now
+                if( !stMatchSets[sFirstChar] ) stMatchSets[sFirstChar] = [];
+                // if the match is a string
+                stMatchSets[sFirstChar].push(row);
+            }
         }
 
-        /**
-         * Init and sanitize options
-         */
-        if (typeof options === 'string') {
-            this.options = { url:options };
+        // add the data items to the cache
+        for( var k in stMatchSets ){
+            // increase the cache size
+            options.cacheLength++;
+            // add to the cache
+            addToCache(k, stMatchSets[k]);
+        }
+    }
+
+    $input
+    .keydown(function(e) {
+        // track last key pressed
+        lastKeyPressCode = e.keyCode;
+        switch(e.keyCode) {
+            case 38: // up
+                e.preventDefault();
+                moveSelect(-1);
+                break;
+            case 40: // down
+                e.preventDefault();
+                moveSelect(1);
+                break;
+            case 9:  // tab
+            case 13: // return
+                if( selectCurrent() ){
+                    // make sure to blur off the current field
+                    $input.get(0).blur();
+                    e.preventDefault();
+                }
+                break;
+            default:
+                active = -1;
+                if (timeout) clearTimeout(timeout);
+                timeout = setTimeout(function(){onChange();}, options.delay);
+                break;
+        }
+    })
+    .focus(function(){
+        // track whether the field has focus, we shouldn't process any results if the field no longer has focus
+        hasFocus = true;
+    })
+    .blur(function() {
+        // track whether the field has focus
+        hasFocus = false;
+        hideResults();
+    });
+
+    hideResultsNow();
+
+    function onChange() {
+        // ignore if the following keys are pressed: [del] [shift] [capslock]
+        if( lastKeyPressCode == 46 || (lastKeyPressCode > 8 && lastKeyPressCode < 32) ) return $results.hide();
+        var v = $input.val();
+        if (v == prev) return;
+        prev = v;
+        if (v.length >= options.minChars) {
+            $input.addClass(options.loadingClass);
+            requestData(v);
         } else {
-            this.options = options;
+            $input.removeClass(options.loadingClass);
+            $results.hide();
         }
-		this.options.maxCacheLength = parseInt(this.options.maxCacheLength);
-		if (isNaN(this.options.maxCacheLength) || this.options.maxCacheLength < 1) {
-			this.options.maxCacheLength = 1;
-		}
-		this.options.minChars = parseInt(this.options.minChars);
-		if (isNaN(this.options.minChars) || this.options.minChars < 1) {
-			this.options.minChars = 1;
-		}
+    };
 
-        /**
-         * Init DOM elements repository
-         */
-        this.dom = {};
+    function moveSelect(step) {
 
-        /**
-         * Store the input element we're attached to in the repository, add class
-         */
-        this.dom.$elem = $elem;
-		if (this.options.inputClass) {
-			this.dom.$elem.addClass(this.options.inputClass);
-		}
+        var lis = $("li", results);
+        if (!lis) return;
 
-        /**
-         * Create DOM element to hold results
-         */
-		this.dom.$results = $('<div></div>').hide();
-		if (this.options.resultsClass) {
-			this.dom.$results.addClass(this.options.resultsClass);
-		}
-		this.dom.$results.css({
-			position: 'absolute'
-		});
-		$('body').append(this.dom.$results);
+        active += step;
 
-        /**
-         * Shortcut to self
-         */
-        var self = this;
+        if (active < 0) {
+            active = 0;
+        } else if (active >= lis.size()) {
+            active = lis.size() - 1;
+        }
 
-        /**
-         * Position results element and reposition on window resize
-         */
-		this.position();
-		$(window).resize(function() {
-		    self.position();
-		});
+        lis.removeClass("ac_over");
 
-        /**
-         * Attach keyboard monitoring to $elem
-         */
-		$elem.keydown(function(e) {
-			self.lastKeyPressed_ = e.keyCode;
-			switch(self.lastKeyPressed_) {
+        $(lis[active]).addClass("ac_over");
 
-				case 38: // up
-					e.preventDefault();
-					if (self.active_) {
-						self.focusPrev();
-					} else {
-						self.activate();
-					}
-					return false;
-				break;
-
-				case 40: // down
-					e.preventDefault();
-					if (self.active_) {
-						self.focusNext();
-					} else {
-						self.activate();
-					}
-					return false;
-				break;
-
-				case 9: // tab
-				case 13: // return
-					if (self.active_) {
-						e.preventDefault();
-						self.selectCurrent();
-						return false;
-					}
-				break;
-
-				case 27: // escape
-					if (self.active_) {
-						e.preventDefault();
-						self.finish();
-						return false;
-					}
-				break;
-
-				default:
-					self.activate();
-
-			}
-		});
-		$elem.blur(function() {
-			if (self.finishOnBlur_) {
-				setTimeout(function() { self.finish(); }, 200);
-			}
-		});
+        // Weird behaviour in IE
+        // if (lis[active] && lis[active].scrollIntoView) {
+        //  lis[active].scrollIntoView(false);
+        // }
 
     };
 
-    $.Autocompleter.prototype.position = function() {
-        var offset = this.dom.$elem.offset();
-		this.dom.$results.css({
-			top: offset.top + this.dom.$elem.outerHeight(),
-			left: offset.left
-		});
-    };
-
-	$.Autocompleter.prototype.cacheRead = function(filter) {
-		var filterLength, searchLength, search, maxPos, pos;
-		if (this.options.useCache) {
-			filter = String(filter);
-			filterLength = filter.length;
-			if (this.options.matchSubset) {
-				searchLength = 1;
-			} else {
-				searchLength = filterLength;
-			}
-			while (searchLength <= filterLength) {
-				if (this.options.matchInside) {
-					maxPos = filterLength - searchLength;
-				} else {
-					maxPos = 0;
-				}
-				pos = 0;
-				while (pos <= maxPos) {
-					search = filter.substr(0, searchLength);
-					if (this.cacheData_[search] !== undefined) {
-						return this.cacheData_[search];
-					}
-					pos++;
-				}
-				searchLength++;
-			}
-		}
-		return false;
-    };
-
-	$.Autocompleter.prototype.cacheWrite = function(filter, data) {
-		if (this.options.useCache) {
-			if (this.cacheLength_ >= this.options.maxCacheLength) {
-				this.cacheFlush();
-			}
-			filter = String(filter);
-			if (this.cacheData_[filter] !== undefined) {
-				this.cacheLength_++;
-			}
-			return this.cacheData_[filter] = data;
-		}
-		return false;
-    };
-
-	$.Autocompleter.prototype.cacheFlush = function() {
-	    this.cacheData_ = {};
-	    this.cacheLength_ = 0;
-    };
-
-	$.Autocompleter.prototype.callHook = function(hook, data) {
-		var f = this.options[hook];
-		if (f && $.isFunction(f)) {
-			return f(data, this);
-		}
-		return false;
-	};
-
-	$.Autocompleter.prototype.activate = function() {
-	    var self = this;
-	    var activateNow = function() {
-	        self.activateNow();
-	    };
-		var delay = parseInt(this.options.delay);
-		if (isNaN(delay) || delay <= 0) {
-			delay = 250;
-		}
-		if (this.keyTimeout_) {
-			clearTimeout(this.keyTimeout_);
-		}
-		this.keyTimeout_ = setTimeout(activateNow, delay);
-	};
-
-    $.Autocompleter.prototype.activateNow = function() {
-		var value = this.dom.$elem.val();
-		if (value !== this.lastProcessedValue_ && value !== this.lastSelectedValue_) {
-			if (value.length >= this.options.minChars) {
-				this.active_ = true;
-				this.lastProcessedValue_ = value;
-				this.fetchData(value);
-			}
-		}
-	};
-
-	$.Autocompleter.prototype.fetchData = function(value) {
-		if (this.options.data) {
-			this.filterAndShowResults(this.options.data, value);
-		} else {
-		    var self = this;
-			this.fetchRemoteData(value, function(remoteData) {
-				self.filterAndShowResults(remoteData, value);
-			});
-		}
-	};
-
-	$.Autocompleter.prototype.fetchRemoteData = function(filter, callback) {
-		var data = this.cacheRead(filter);
-		if (data) {
-			callback(data);
-		} else {
-			try {
-    		    var self = this;
-				this.dom.$elem.addClass(this.options.loadingClass);
-				$.get(this.makeUrl(filter), function(data) {
-					var parsed = self.parseRemoteData(data);
-					self.cacheWrite(filter, parsed);
-					self.dom.$elem.removeClass(self.options.loadingClass);
-					callback(parsed);
-				});
-			} catch(e) {
-				this.dom.$elem.removeClass(this.options.loadingClass);
-				callback(false);
-			}
-		}
-	};
-
-    $.Autocompleter.prototype.setExtraParam = function(name, value) {
-        var index = $.trim(String(name));
-        if (index) {
-            if (!this.options.extraParams) {
-                this.options.extraParams = {};
+    function selectCurrent() {
+        var li = $("li.ac_over", results)[0];
+        if (!li) {
+            var $li = $("li", results);
+            if (options.selectOnly) {
+                if ($li.length == 1) li = $li[0];
+            } else if (options.selectFirst) {
+                li = $li[0];
             }
-            if (this.options.extraParams[index] !== value) {
-                this.options.extraParams[index] = value;
-                this.cacheFlush();
+        }
+        if (li) {
+            selectItem(li);
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    function selectItem(li) {
+        if (!li) {
+            li = document.createElement("li");
+            li.extra = [];
+            li.selectValue = "";
+        }
+        var v = $.trim(li.selectValue ? li.selectValue : li.innerHTML);
+        input.lastSelected = v;
+        prev = v;
+        $results.html("");
+        $input.val(v);
+        hideResultsNow();
+        if (options.onItemSelect) setTimeout(function() { options.onItemSelect(li) }, 1);
+    };
+
+    // selects a portion of the input string
+    function createSelection(start, end){
+        // get a reference to the input element
+        var field = $input.get(0);
+        if( field.createTextRange ){
+            var selRange = field.createTextRange();
+            selRange.collapse(true);
+            selRange.moveStart("character", start);
+            selRange.moveEnd("character", end);
+            selRange.select();
+        } else if( field.setSelectionRange ){
+            field.setSelectionRange(start, end);
+        } else {
+            if( field.selectionStart ){
+                field.selectionStart = start;
+                field.selectionEnd = end;
+            }
+        }
+        field.focus();
+    };
+
+    // fills in the input box w/the first match (assumed to be the best match)
+    function autoFill(sValue){
+        // if the last user key pressed was backspace, don't autofill
+        if( lastKeyPressCode != 8 ){
+            // fill in the value (keep the case the user has typed)
+            $input.val($input.val() + sValue.substring(prev.length));
+            // select the portion of the value not typed by the user (so the next character will erase)
+            createSelection(prev.length, sValue.length);
+        }
+    };
+
+    function showResults() {
+        // get the position of the input field right now (in case the DOM is shifted)
+        var pos = findPos(input);
+        // either use the specified width, or autocalculate based on form element
+        var iWidth = (options.width > 0) ? options.width : $input.width();
+        // reposition
+        $results.css({
+            width: parseInt(iWidth) + "px",
+            top: (pos.y + input.offsetHeight) + "px",
+            left: pos.x + "px"
+        }).show();
+    };
+
+    function hideResults() {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(hideResultsNow, 200);
+    };
+
+    function hideResultsNow() {
+        if (timeout) clearTimeout(timeout);
+        $input.removeClass(options.loadingClass);
+        if ($results.is(":visible")) {
+            $results.hide();
+        }
+        if (options.mustMatch) {
+            var v = $input.val();
+            if (v != input.lastSelected) {
+                selectItem(null);
             }
         }
     };
 
-	$.Autocompleter.prototype.makeUrl = function(param) {
-	    var self = this;
-		var paramName = this.options.paramName || 'q';
-		var url = this.options.url;
-		var params = $.extend({}, this.options.extraParams);
-		var urlAppend = [];
-		params[paramName] = param;
-		$.each(params, function(index, value) {
-			urlAppend.push(self.makeUrlParam(index, value));
-		});
-		url += url.indexOf('?') == -1 ? '?' : '&';
-		url += urlAppend.join('&');
-		return url;
-	};
+    function receiveData(q, data) {
+        if (data) {
+            $input.removeClass(options.loadingClass);
+            results.innerHTML = "";
 
-	$.Autocompleter.prototype.makeUrlParam = function(name, value) {
-		return String(name) + '=' + encodeURIComponent(value);
-	}
+            // if the field no longer has focus or if there are no matches, do not display the drop down
+            if( !hasFocus || data.length == 0 ) return hideResultsNow();
 
-	$.Autocompleter.prototype.parseRemoteData = function(remoteData) {
-		var results = [];
-		var text = String(remoteData).replace('\r\n', '\n');
-		var i, j, data, line, lines = text.split('\n');
-		var value;
-		for (i = 0; i < lines.length; i++) {
-			line = lines[i].split('|');
-			data = [];
-			for (j = 0; j < line.length; j++) {
-				data.push(unescape(line[j]));
-			}
-			value = data.shift();
-			results.push({ value: unescape(value), data: data });
-		}
-		return results;
-	};
+            if ($.browser.msie) {
+                // we put a styled iframe behind the calendar so HTML SELECT elements don't show through
+                $results.append(document.createElement('iframe'));
+            }
+            results.appendChild(dataToDom(data));
+            // autofill in the complete box w/the first match as long as the user hasn't entered in more data
+            if( options.autoFill && ($input.val().toLowerCase() == q.toLowerCase()) ) autoFill(data[0][0]);
+            showResults();
+        } else {
+            hideResultsNow();
+        }
+    };
 
-	$.Autocompleter.prototype.filterAndShowResults = function(results, filter) {
-		this.showResults(this.filterResults(results, filter), filter);
-	};
+    function parseData(data) {
+        if (!data) return null;
+        var parsed = [];
+        var rows = data.split(options.lineSeparator);
+        for (var i=0; i < rows.length; i++) {
+            var row = $.trim(rows[i]);
+            if (row) {
+                parsed[parsed.length] = row.split(options.cellSeparator);
+            }
+        }
+        return parsed;
+    };
 
-	$.Autocompleter.prototype.filterResults = function(results, filter) {
+    function parseJsonData(data) {
+        if (!data) return null;
+        var parsed = [];
+        
+        for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            if (row && typeof(row) == "string") {
+                parsed[i] = row.split(options.cellSeparator);
+            } else if (row && typeof(row) != "object") {
+                parsed[i] = escape(row);
+            }
+        }
+        
+        return parsed;
+    };
 
-		var filtered = [];
-		var value, data, i, result, type;
-		var regex, pattern, attributes = '';
+    function dataToDom(data) {
+        var ul = document.createElement("ul");
+        var num = data.length;
 
-		for (i = 0; i < results.length; i++) {
-			result = results[i];
-			type = typeof result;
-			if (type === 'string') {
-				value = result;
-				data = {};
-			} else if ($.isArray(result)) {
-				value = result.shift();
-				data = result;
-			} else if (type === 'object') {
-				value = result.value;
-				data = result.data;
-			}
-			value = String(value);
-			// Condition below means we do NOT do empty results
-			if (value) {
-				if (typeof data !== 'object') {
-					data = {};
-				}
-				pattern = String(filter);
-				if (!this.options.matchInside) {
-					pattern = '^' + pattern;
-				}
-				if (!this.options.matchCase) {
-					attributes = 'i';
-				}
-				regex = new RegExp(pattern, attributes);
-				if (regex.test(value)) {
-					filtered.push({ value: value, data: data });
-				}
-			}
-		}
+        // limited results to a max number
+        if( (options.maxItemsToShow > 0) && (options.maxItemsToShow < num) ) num = options.maxItemsToShow;
 
-		if (this.options.sortResults) {
-			return this.sortResults(filtered);
-		}
+        for (var i=0; i < num; i++) {
+            var row = data[i];
+            if (!row) continue;
+            var li = document.createElement("li");
+            if (options.formatItem) {
+                li.innerHTML = options.formatItem(row, i, num);
+                li.selectValue = row[0];
+            } else {
+                li.innerHTML = row[0];
+                li.selectValue = row[0];
+            }
+            var extra = null;
+            if (row.length > 1) {
+                extra = [];
+                for (var j=1; j < row.length; j++) {
+                    extra[extra.length] = row[j];
+                }
+            }
+            li.extra = extra;
+            ul.appendChild(li);
+            $(li).hover(
+                function() { $("li", ul).removeClass("ac_over"); $(this).addClass("ac_over"); active = $("li", ul).indexOf($(this).get(0)); },
+                function() { $(this).removeClass("ac_over"); }
+            ).click(function(e) { e.preventDefault(); e.stopPropagation(); selectItem(this) });
+        }
+        return ul;
+    };
 
-		return filtered;
+    function requestData(q) {
+        if (!options.matchCase) q = q.toLowerCase();
+        var data = options.cacheLength ? loadFromCache(q) : null;
+        // recieve the cached data
+        if (data) {
+            receiveData(q, data);
+        } else if (options.json != false && (typeof options.url == "string")) { 
+            $.getJSON(makeUrl(q), function(data) {
 
-	};
+                data = parseJsonData(data);
+                addToCache(q, data);
+                receiveData(q, data);
+            });
+        // if an AJAX url has been supplied, try loading the data now
+        } else if( (typeof options.url == "string") && (options.url.length > 0) ){
+            $.get(makeUrl(q), function(data) {
+                data = parseData(data);
+                addToCache(q, data);
+                receiveData(q, data);
+            });
+        // if there's been no data found, remove the loading class
+        } else {
+            $input.removeClass(options.loadingClass);
+        }
+    };
 
-	$.Autocompleter.prototype.sortResults = function(results) {
-	    var self = this;
-		if ($.isFunction(this.options.sortFunction)) {
-			results.sort(this.options.sortFunction);
-		} else {
-			results.sort(function(a, b) { return self.sortValueAlpha(a, b); });
-		}
-		return results;
-	};
+    function makeUrl(q) {
+        var url = options.url + "?q=" + encodeURI(q);
+        for (var i in options.extraParams) {
+            url += "&" + i + "=" + encodeURI(options.extraParams[i]);
+        }
+        return url;
+    };
 
-	$.Autocompleter.prototype.sortValueAlpha = function(a, b) {
-		a = String(a.value);
-		b = String(b.value);
-		if (!this.options.matchCase) {
-			a = a.toLowerCase();
-			b = b.toLowerCase();
-		}
-		if (a > b) {
-			return 1;
-		}
-		if (a < b) {
-			return -1;
-		}
-		return 0;
-	};
+    function loadFromCache(q) {
+        if (!q) return null;
+        if (cache.data[q]) return cache.data[q];
+        if (options.matchSubset) {
+            for (var i = q.length - 1; i >= options.minChars; i--) {
+                var qs = q.substr(0, i);
+                var c = cache.data[qs];
+                if (c) {
+                    var csub = [];
+                    for (var j = 0; j < c.length; j++) {
+                        var x = c[j];
+                        var x0 = x[0];
+                        if (matchSubset(x0, q)) {
+                            csub[csub.length] = x;
+                        }
+                    }
+                    return csub;
+                }
+            }
+        }
+        return null;
+    };
 
-	$.Autocompleter.prototype.showResults = function(results, filter) {
-	    var self = this;
-		var $ul = $('<ul></ul>');
-		var i, result, $li, extraWidth, first = false, $first = false;
-		var numResults = results.length;
-		for (i = 0; i < numResults; i++) {
-			result = results[i];
-			$li = $('<li>' + this.showResult(result.value, result.data) + '</li>');
-			$li.data('value', result.value);
-			$li.data('data', result.data);
-			$li.click(function() {
-				var $this = $(this);
-				self.selectItem($this);
-			}).mousedown(function() {
-				self.finishOnBlur_ = false;
-			}).mouseup(function() {
-				self.finishOnBlur_ = true;
-			});
-			$ul.append($li);
-			if (first === false) {
-				first = String(result.value);
-				$first = $li;
-				$li.addClass(this.options.firstItemClass);
-			}
-			if (i == numResults - 1) {
-				$li.addClass(this.options.lastItemClass);
-			}
-		}
-		this.dom.$results.html($ul).show();
-		extraWidth = this.dom.$results.outerWidth() - this.dom.$results.width();
-		this.dom.$results.width(this.dom.$elem.outerWidth() - extraWidth);
-		$('li', this.dom.$results).hover(
-			function() { self.focusItem(this); },
-			function() { /* void */ }
-		);
-		if (this.autoFill(first, filter)) {
-			this.focusItem($first);
-		}
-	};
+    function matchSubset(s, sub) {
+        if (!options.matchCase) s = s.toLowerCase();
+        var i = s.indexOf(sub);
+        if (i == -1) return false;
+        return i == 0 || options.matchContains;
+    };
 
-	$.Autocompleter.prototype.showResult = function(value, data) {
-		if ($.isFunction(this.options.showResult)) {
-			return this.options.showResult(value, data);
-		} else {
-			return value;
-		}
-	};
+    this.flushCache = function() {
+        flushCache();
+    };
 
-	$.Autocompleter.prototype.autoFill = function(value, filter) {
-		var lcValue, lcFilter, valueLength, filterLength;
-		if (this.options.autoFill && this.lastKeyPressed_ != 8) {
-			lcValue = String(value).toLowerCase();
-			lcFilter = String(filter).toLowerCase();
-			valueLength = value.length;
-			filterLength = filter.length;
-			if (lcValue.substr(0, filterLength) === lcFilter) {
-				this.dom.$elem.val(value);
-				this.selectRange(filterLength, valueLength);
-				return true;
-			}
-		}
-		return false;
-	};
+    this.setExtraParams = function(p) {
+        options.extraParams = p;
+    };
 
-	$.Autocompleter.prototype.focusNext = function() {
-		this.focusMove(+1);
-	};
+    this.findValue = function(){
+        var q = $input.val();
 
-	$.Autocompleter.prototype.focusPrev = function() {
-		this.focusMove(-1);
-	};
+        if (!options.matchCase) q = q.toLowerCase();
+        var data = options.cacheLength ? loadFromCache(q) : null;
+        if (data) {
+            findValueCallback(q, data);
+        } else if (options.json != false && (typeof options.url == "string")) { 
+            $.getJSON(makeUrl(q), function(data) {
+                data = parseJsonData(data);
+                addToCache(q, data);
+                findValueCallback(q, data);
+            });
+        } else if( (typeof options.url == "string") && (options.url.length > 0) ){
+            $.get(makeUrl(q), function(data) {
+                data = parseData(data)
+                addToCache(q, data);
+                findValueCallback(q, data);
+            });
+        } else {
+            // no matches
+            findValueCallback(q, null);
+        }
+    }
 
-	$.Autocompleter.prototype.focusMove = function(modifier) {
-		var i, $items = $('li', this.dom.$results);
-		modifier = parseInt(modifier);
-		for (var i = 0; i < $items.length; i++) {
-			if ($($items[i]).hasClass(this.selectClass_)) {
-				this.focusItem(i + modifier);
-				return;
-			}
-		}
-		this.focusItem(0);
-	};
+    function findValueCallback(q, data){
+        if (data) $input.removeClass(options.loadingClass);
 
-	$.Autocompleter.prototype.focusItem = function(item) {
-		var $item, $items = $('li', this.dom.$results);
-		if ($items.length) {
-			$items.removeClass(this.selectClass_).removeClass(this.options.selectClass);
-			if (typeof item === 'number') {
-				item = parseInt(item);
-				if (item < 0) {
-					item = 0;
-				} else if (item >= $items.length) {
-					item = $items.length - 1;
-				}
-				$item = $($items[item]);
-			} else {
-				$item = $(item);
-			}
-			if ($item) {
-				$item.addClass(this.selectClass_).addClass(this.options.selectClass);
-			}
-		}
-	};
+        var num = (data) ? data.length : 0;
+        var li = null;
 
-	$.Autocompleter.prototype.selectCurrent = function() {
-		var $item = $('li.' + this.selectClass_, this.dom.$results);
-		if ($item.length == 1) {
-			this.selectItem($item);
-		} else {
-			this.finish();
-		}
-	};
+        for (var i=0; i < num; i++) {
+            var row = data[i];
 
-	$.Autocompleter.prototype.selectItem = function($li) {
-		var value = $li.data('value');
-		var data = $li.data('data');
-		var displayValue = this.displayValue(value, data);
-		this.lastProcessedValue_ = displayValue;
-		this.lastSelectedValue_ = displayValue;
-		this.dom.$elem.val(displayValue).focus();
-		this.setCaret(displayValue.length);
-		this.callHook('onItemSelect', { value: value, data: data });
-		this.finish();
-	};
-
-	$.Autocompleter.prototype.displayValue = function(value, data) {
-		if ($.isFunction(this.options.displayValue)) {
-			return this.options.displayValue(value, data);
-		} else {
-			return value;
-		}
-	};
-
-	$.Autocompleter.prototype.finish = function() {
-		if (this.keyTimeout_) {
-			clearTimeout(this.keyTimeout_);
-		}
-		if (this.dom.$elem.val() !== this.lastSelectedValue_) {
-			if (this.options.mustMatch) {
-				this.dom.$elem.val('');
-			}
-			this.callHook('onNoMatch');
-		}
-		this.dom.$results.hide();
-		this.lastKeyPressed_ = null;
-		this.lastProcessedValue_ = null;
-		if (this.active_) {
-			this.callHook('onFinish');
-		}
-		this.active_ = false;
-	};
-
-	$.Autocompleter.prototype.selectRange = function(start, end) {
-		var input = this.dom.$elem.get(0);
-		if (input.setSelectionRange) {
-			input.focus();
-			input.setSelectionRange(start, end);
-		} else if (this.createTextRange) {
-			var range = this.createTextRange();
-			range.collapse(true);
-			range.moveEnd('character', end);
-			range.moveStart('character', start);
-			range.select();
-		}
-	};
-
-	$.Autocompleter.prototype.setCaret = function(pos) {
-		this.selectRange(pos, pos);
-	};
-
-    /**
-     * autocomplete plugin
-     */
-    $.fn.autocomplete = function(options) {
-
-        if (typeof options === 'string') {
-            options = { url:options };
+            if( row[0].toLowerCase() == q.toLowerCase() ){
+                li = document.createElement("li");
+                if (options.formatItem) {
+                    li.innerHTML = options.formatItem(row, i, num);
+                    li.selectValue = row[0];
+                } else {
+                    li.innerHTML = row[0];
+                    li.selectValue = row[0];
+                }
+                var extra = null;
+                if( row.length > 1 ){
+                    extra = [];
+                    for (var j=1; j < row.length; j++) {
+                        extra[extra.length] = row[j];
+                    }
+                }
+                li.extra = extra;
+            }
         }
 
-        var o = $.extend({}, $.fn.autocomplete.defaults, options);
+        if( options.onFindValue ) setTimeout(function() { options.onFindValue(li) }, 1);
+    }
 
-		return this.each(function() {
-		    var $this = $(this);
-		    var ac = new $.Autocompleter($this, o);
-		    $this.data('autocompleter', ac);
-		});
+    function addToCache(q, data) {
+        if (!data || !q || !options.cacheLength) return;
+        if (!cache.length || cache.length > options.cacheLength) {
+            flushCache();
+            cache.length++;
+        } else if (!cache[q]) {
+            cache.length++;
+        }
+        cache.data[q] = data;
+    };
 
-	};
+    function findPos(obj) {
+        var curleft = obj.offsetLeft || 0;
+        var curtop = obj.offsetTop || 0;
+        while (obj = obj.offsetParent) {
+            curleft += obj.offsetLeft
+            curtop += obj.offsetTop
+        }
+        return {x:curleft,y:curtop};
+    }
+}
 
-    /**
-     * Default options for autocomplete plugin
-     */
-	$.fn.autocomplete.defaults = {
-		minChars: 1,
-		loadingClass: 'acLoading',
-		resultsClass: 'acResults',
-		inputClass: 'acInput',
-		selectClass: 'acSelect',
-		mustMatch: false,
-		matchCase: false,
-		matchInside: true,
-		matchSubset: true,
-		useCache: true,
-		maxCacheLength: 10,
-		autoFill: false,
-		sortResults: true,
-		sortFunction: false,
-		onItemSelect: false,
-		onNoMatch: false
-	};
+jQuery.fn.autocomplete = function(url, options, data) {
+    // Make sure options exists
+    options = options || {};
+    // Set url as option
+    options.url = url;
+    // set some bulk local data
+    options.data = ((typeof data == "object") && (data.constructor == Array)) ? data : null;
 
-})(jQuery);
+    // Set default values for required options
+    options.inputClass = options.inputClass || "ac_input";
+    options.resultsClass = options.resultsClass || "ac_results";
+    options.lineSeparator = options.lineSeparator || "\n";
+    options.cellSeparator = options.cellSeparator || "|";
+    options.minChars = options.minChars || 1;
+    options.delay = options.delay || 400;
+    options.matchCase = options.matchCase || 0;
+    options.matchSubset = options.matchSubset || 1;
+    options.matchContains = options.matchContains || 0;
+    options.cacheLength = options.cacheLength || 1;
+    options.mustMatch = options.mustMatch || 0;
+    options.extraParams = options.extraParams || {};
+    options.loadingClass = options.loadingClass || "ac_loading";
+    options.selectFirst = options.selectFirst || false;
+    options.selectOnly = options.selectOnly || false;
+    options.maxItemsToShow = options.maxItemsToShow || -1;
+    options.autoFill = options.autoFill || false;
+    options.json =  options.json || false;
+    options.width = parseInt(options.width, 10) || 0;
+
+    this.each(function() {
+        var input = this;
+        new jQuery.autocomplete(input, options);
+    });
+
+    // Don't break the chain
+    return this;
+}
+
+jQuery.fn.autocompleteArray = function(data, options) {
+    return this.autocomplete(null, options, data);
+}
+
+jQuery.fn.indexOf = function(e){
+    for( var i=0; i<this.length; i++ ){
+        if( this[i] == e ) return i;
+    }
+    return -1;
+};

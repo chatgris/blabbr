@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 03 Apr 2011 16:04:34 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 17 Apr 2011 14:28:25 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
  */
 
@@ -8,9 +8,13 @@
   $(document).ready(function() {
     $('input.autocomplete').livequery(function() {
       return $(this).each(function() {
-        var input;
+        var action, input;
         input = $(this);
-        return input.autocomplete(input.attr('data-autocomplete-url'));
+        action = input.attr('data-autocomplete-url');
+        return input.autocomplete("" + action + ".json", {
+          json: true,
+          minChars: 3
+        });
       });
     });
     $("#new_smiley").livequery(function() {

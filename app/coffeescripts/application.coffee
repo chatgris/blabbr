@@ -6,7 +6,11 @@ $(document).ready ->
   $('input.autocomplete').livequery ->
     $(this).each ->
       input = $(this)
-      input.autocomplete(input.attr('data-autocomplete-url'))
+      action = input.attr('data-autocomplete-url')
+      input.autocomplete("#{action}.json", {
+        json: true,
+        minChars: 3
+      })
 
   $("#new_smiley").livequery ->
     $(this).sexyPost {

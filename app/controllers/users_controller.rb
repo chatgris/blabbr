@@ -2,10 +2,12 @@
 class UsersController < ApplicationController
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
-  respond_to :html, :js
+  respond_to :html, :js, :json
 
   def autocomplete
-    @users = User.where(:nickname => /#{params[:q]}/).all
+    # TODO : check why only and exclude doesn't works here
+    @users = User.only(:nickname).where(:nickname => /#{params[:q]}/i)
+    respond_with @users.map(&:nickname)
   end
 
   def edit
