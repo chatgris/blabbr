@@ -11,6 +11,7 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.mock_with :rspec
+    config.render_views
 
     config.before(:each) do
       Mongoid.master.collections.select { |c| c.name != 'system.indexes' }.each(&:drop)

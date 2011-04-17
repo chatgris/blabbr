@@ -21,19 +21,22 @@ gem 'stateflow',            '~>0.4.2'
 group :test, :development do
   gem 'autotest'
   gem 'autotest-notification'
-  gem 'capybara'
-  gem 'factory_girl_rails', '~>1.0'
-  gem 'mongoid-rspec',      :git => 'git://github.com/durran/mongoid-rspec.git'
-  gem 'rcov'
   gem 'rspec-rails',        '~>2.5.0'
   gem 'spork'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'factory_girl_rails', '~>1.0'
+  gem 'faker',              '~>0.9.5'
+  gem 'mongoid-rspec',      :git => 'git://github.com/durran/mongoid-rspec.git'
+  gem 'rcov'
   gem 'steak'
 end
 
 group :development do
   gem 'ClothRed',           '~>0.4.1'
   gem 'jammit',             '~>0.5.3'
-  gem 'jasmine',            '~>1.0.1'
   gem 'nokogiri',           '~>1.4.3.1'
   gem 'rbbcode',            '~>0.1.8'
   gem 'thin'

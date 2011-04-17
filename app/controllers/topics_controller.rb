@@ -12,7 +12,7 @@ class TopicsController < ApplicationController
 
   def show
     @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
-    respond_with @topic
+    respond_with @posts
   end
 
   def new

@@ -54,7 +54,9 @@ describe PostsController do
         end
 
         it 'should be redirect' do
-          response.should redirect_to page_topic_path(:id => topic.slug, :page => 1, :anchor => '1')
+          response.should redirect_to page_topic_path(:id => topic.slug,
+                                                      :page => topic.posts_count / PER_PAGE + 1,
+                                                      :anchor => one_post.id.to_s)
         end
 
         it 'should assigns topic' do
@@ -77,7 +79,9 @@ describe PostsController do
         end
 
         it 'should be redirect' do
-          response.should redirect_to page_topic_path(:id => topic.slug, :page => 1, :anchor => '1')
+          response.should redirect_to page_topic_path(:id => topic.slug,
+                                                      :page => topic.posts_count / PER_PAGE + 1,
+                                                      :anchor => one_post.id.to_s)
         end
 
         it 'should assigns topic' do
@@ -230,7 +234,7 @@ describe PostsController do
       controller.stub!(:current_user).and_return(member)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
       Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
-      topic.should_receive(:by_subscribed_topic).with(user.nickname).and_return(topic)
+      topic.should_receive(:by_subscribed_topic).with(member.nickname).and_return(topic)
       topic.should_receive(:first).and_return(topic)
       topic.should_receive(:posts).and_return(posts)
       posts.should_receive(:for_creator).and_return(posts)

@@ -14,7 +14,7 @@ Bundler.require :default, Rails.env
 module Blabbr
   class Application < Rails::Application
      config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
-     config.i18n.default_locale = :fr
+     config.i18n.default_locale = :en
      config.time_zone = "UTC"
      config.generators do |g|
        g.orm             :mongoid
