@@ -2,86 +2,201 @@ require 'spec_helper'
 
 describe SmiliesController do
 
+  let(:user)    {mock_user}
+  let(:smiley)  {mock_smiley}
+  let(:smilies) {[smiley]}
+
   describe 'current_user == added_by' do
 
     before :each do
-      @current_user = Factory.create(:user)
-      @smiley = Factory.create(:smiley)
       controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@current_user)
-    end
-
-    it 'should be able to see index' do
-      get :index
-      response.should be_success
-    end
-
-    it 'should create a smiley' do
-      post :create, :smiley => {:code => 'test', :image => File.open(Rails.root.join("image.jpg"))}
-      response.should redirect_to root_path
-      Smiley.all.size.should == 2
-      Smiley.last.image.url.should == "/uploads/smilies/test.jpg"
-    end
-
-    it 'get new should be success' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      get :new
-      response.should be_success
-    end
-
-    it 'should see edit' do
-      get :edit, :id => @smiley.id
-      response.should be_success
-    end
-
-    it 'should update smiley if current_user is user' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      put :update, :smiley => {:code => 'code', :image => File.open(Rails.root.join("image.jpg"))}, :id => @smiley.id
-      response.should redirect_to :back
-      @smiley.reload.code.should == 'code'
-      @smiley.reload.image.filename.should == "code.jpg"
-    end
-
-    it 'should delete the smiley' do
-      lambda do
-        delete :destroy, :id => @smiley.id
-      end.should change(Smiley, :count).by(-1)
-      Topic.criteria.id(@smiley.id).first.should be_nil
-      response.should redirect_to topics_path
-    end
-
-  end
-
-  describe 'current_user != added_by' do
-
-    before :each do
-      @current_user = Factory.create(:creator)
-      @smiley = Factory.create(:smiley)
-      controller.stub!(:logged_in?).and_return(true)
-      controller.stub!(:current_user).and_return(@current_user)
+      controller.stub!(:current_user).and_return(user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
     end
 
-    it 'should not see edit' do
-      get :edit, :id => @smiley.id
-      response.should redirect_to :back
-      flash[:alert].should == I18n.t('smilies.not_auth')
+    describe 'GET new' do
+      before :each do
+        Smiley.should_receive(:new).and_return(smiley)
+        get :new
+      end
+
+      it 'should assign smiley' do
+        assigns(:smiley).should == smiley
+      end
+
+      it 'get new should be success' do
+        response.should be_success
+      end
     end
 
-    it 'should not update smiley' do
-      request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      put :update, :smiley => {:code => 'code'}, :id => @smiley.id
-      response.should redirect_to :back
-      @smiley.reload.code.should_not == 'code'
-      flash[:alert].should == I18n.t('smilies.not_auth')
+    describe 'POST create' do
+      before :each do
+        Smiley.should_receive(:new).with({'new' => 'smiley'}).and_return(smiley)
+        smiley.should_receive(:added_by=).with(user.nickname).and_return(smiley)
+      end
+
+      context 'with valid params' do
+        before :each do
+          smiley.should_receive(:save).and_return(true)
+          post :create, :smiley => {'new' => 'smiley'}
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to root_path
+        end
+
+        it 'should assigns smiley' do
+          assigns(:smiley).should == smiley
+        end
+
+        it 'should have a flash message' do
+          flash[:notice].should == I18n.t('smilies.create.success')
+        end
+      end
+
+      context 'without valid params' do
+        before :each do
+          smiley.should_receive(:save).and_return(false)
+          post :create, :smiley => {'new' => 'smiley'}
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to root_path
+        end
+
+        it 'should assigns smiley' do
+          assigns(:smiley).should == smiley
+        end
+
+        it 'should have a flash message' do
+          flash[:alert].should == I18n.t('smilies.create.fail')
+        end
+      end
     end
 
-    it 'should not delete the smiley' do
-      lambda do
-        delete :destroy, :id => @smiley.id
-      end.should_not change(Smiley, :count).by(-1)
-      response.should redirect_to :back
-      flash[:alert].should == I18n.t('smilies.not_auth')
+    describe 'GET index' do
+      before :each do
+        Smiley.should_receive(:all).and_return(smilies)
+        get :index
+      end
+
+      it 'should assign smilies' do
+        assigns(:smilies).should == smilies
+      end
+
+      it 'get new should be success' do
+        response.should be_success
+      end
+    end
+
+    describe 'GET edit' do
+      before :each do
+        Smiley.should_receive(:criteria).and_return(smiley)
+        smiley.should_receive(:for_ids).with(smiley.id).and_return(smiley)
+        smiley.should_receive(:by_nickname).with(user.nickname).and_return(smiley)
+        smiley.should_receive(:first).and_return(smiley)
+        get :edit, :id => smiley.id
+      end
+
+      it 'get new should be success' do
+        response.should be_success
+      end
+
+      it 'should assigns smiley' do
+        assigns(:smiley).should == smiley
+      end
+    end
+
+    describe 'PUT update' do
+      before :each do
+        Smiley.should_receive(:criteria).and_return(smiley)
+        smiley.should_receive(:for_ids).with(smiley.id).and_return(smiley)
+        smiley.should_receive(:by_nickname).with(user.nickname).and_return(smiley)
+        smiley.should_receive(:first).and_return(smiley)
+      end
+
+      context 'with valid params' do
+        before :each do
+          smiley.should_receive(:update_attributes).with({'update' => 'smiley'}).and_return(true)
+          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to :back
+        end
+
+        it 'should assigns topic' do
+          assigns(:smiley).should == smiley
+        end
+
+        it 'should have a flash message' do
+          flash[:notice].should == I18n.t('smilies.update.success')
+        end
+      end
+
+      context 'without valid params' do
+        before :each do
+          smiley.should_receive(:update_attributes).with({'update' => 'smiley'}).and_return(false)
+          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}
+        end
+
+        it 'should be redirect' do
+          response.should redirect_to :back
+        end
+
+        it 'should assigns topic' do
+          assigns(:smiley).should == smiley
+        end
+
+        it 'should have a flash message' do
+          flash[:alert].should == I18n.t('smilies.update.fail')
+        end
+      end
+
+    end
+
+    describe 'DELETE :destroy' do
+
+      before :each do
+        Smiley.should_receive(:criteria).and_return(smiley)
+        smiley.should_receive(:for_ids).with(smiley.id).and_return(smiley)
+        smiley.should_receive(:by_nickname).with(user.nickname).and_return(smiley)
+        smiley.should_receive(:first).and_return(smiley)
+      end
+
+      context 'with valid params' do
+
+        before :each do
+          smiley.should_receive(:destroy).and_return(true)
+          delete :destroy, :id => smiley.id
+        end
+
+        it 'redirect to back' do
+          response.should redirect_to root_path
+        end
+
+        it 'should have a notice message' do
+          flash[:notice].should == I18n.t('smilies.destroy.success')
+        end
+
+      end
+
+      context 'without valid params' do
+
+        before :each do
+          smiley.should_receive(:destroy).and_return(false)
+          delete :destroy, :id => smiley.id
+        end
+
+        it 'redirect to back' do
+          response.should redirect_to root_path
+        end
+
+        it 'should have a notice message' do
+          flash[:alert].should == I18n.t('smilies.destroy.fail')
+        end
+
+      end
     end
 
   end
