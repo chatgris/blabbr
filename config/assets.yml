@@ -3,7 +3,7 @@ package_assets: on
 
 javascripts:
   application:
-    - public/javascripts/jquery.min.js
+    - public/javascripts/jquery-1.5.2.js
     - public/javascripts/pusher.min.js
     - public/javascripts/jquery.autocomplete.js
     - public/javascripts/jquery.livequery.js
