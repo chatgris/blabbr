@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_filter :get_current_topic_for_member
+  before_filter :get_current_topic_for_member, :only => [:show, :create]
+  before_filter :get_current_topic_for_action, :only => [:edit, :update, :destroy]
   before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
@@ -49,6 +50,13 @@ class PostsController < ApplicationController
   def get_post_for_creator
     @post = @topic.posts.for_creator(current_user.nickname).find(params[:id])
     unless @post
+      redirect_to :back, :alert => t('posts.not_auth')
+    end
+  end
+
+  def get_current_topic_for_action
+    @topic = Topic.criteria.for_ids(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
+    unless @topic
       redirect_to :back, :alert => t('posts.not_auth')
     end
   end
