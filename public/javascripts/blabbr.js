@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 17 Apr 2011 16:21:42 GMT from
+/* DO NOT MODIFY. This file was compiled Thu, 21 Apr 2011 19:18:03 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -18,7 +18,8 @@
       this.before(function() {
         this.trigger('loadingNotification');
         context.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
-        return context.params = this.params;
+        context.params = this.params;
+        return context.title = $('title').text();
       });
       this.after(function() {
         this.trigger('subscribeToWS', {
@@ -109,7 +110,8 @@
             context.trigger('moveTo', {
               hash: infos.hash || infos.target
             });
-            return context.trigger('hideLoadingNotification');
+            context.trigger('hideLoadingNotification');
+            return context.trigger('notify');
           }
         });
       });
@@ -181,8 +183,33 @@
         return document.title = "Blabbr - " + title;
       });
       this.bind('notify', function() {
+        context.trigger('lostFocus');
+        context.trigger('blinkTitle', 1);
         if (current_user.audio != null) {
           return this.trigger('audioNotification');
+        }
+      });
+      this.bind('lostFocus', function() {
+        console.log('focus');
+        return window.isActive = false;
+      });
+      this.bind('blinkTitle', function(e, state) {
+        console.log(context.title);
+        if (!window.isActive) {
+          if (state === 1) {
+            document.title = "[new!] - " + context.title;
+            state = 0;
+            console.log(state);
+          } else {
+            console.log('zero');
+            document.title = context.title;
+            state = 1;
+          }
+          return setTimeout(function() {
+            return context.trigger('blinkTitle', state);
+          }, 1600);
+        } else {
+          return document.title = context.title;
         }
       });
       this.bind('audioNotification', function() {

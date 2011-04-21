@@ -34,7 +34,7 @@ $(document).ready ->
       }
 
   $('html').mouseover ->
-    gainedFocus()
+    window.isActive = true
 
   $('#contents').livequery ->
     left = $('#contents').position().left
@@ -52,23 +52,3 @@ $(document).ready ->
 
 insertQuote = (content, user) ->
   $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
-
-
-blinkTitle = (state) ->
-  if  windowIsActive != true
-    if state == 1
-      document.title = "[new!] - " + titleHolder
-      state = 0
-    else
-      document.title = titleHolder
-      state = 1
-
-    setTimeout("blinkTitle(#{state})", 1600)
-  else
-    document.title = titleHolder
-
-lostFocus = ->
-  windowIsActive = false
-
-gainedFocus = ->
-    windowIsActive = true

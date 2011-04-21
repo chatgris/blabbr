@@ -16,6 +16,7 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'loadingNotification'
       context.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
       context.params = this.params
+      context.title = $('title').text()
 
     this.after () ->
       this.trigger 'subscribeToWS', {id: 'index'}
@@ -143,10 +144,27 @@ root = if history.pushState then "/" else "#/"
       document.title = "Blabbr - #{title}"
 
     this.bind 'notify', ->
-      #lostFocus()
-      #blinkTitle(1)
+      context.trigger 'lostFocus'
+      context.trigger 'blinkTitle', 1
       if current_user.audio?
         this.trigger 'audioNotification'
+
+    this.bind 'lostFocus', ->
+      window.isActive = false
+
+    this.bind 'blinkTitle', (e, state) ->
+      unless window.isActive
+        if state == 1
+          document.title = "[new!] - #{context.title}";
+          state = 0
+        else
+          document.title = context.title
+          state = 1
+        setTimeout ->
+          context.trigger 'blinkTitle', state
+        , 1600
+      else
+        document.title = context.title
 
     this.bind 'audioNotification', ->
       $('body').append '<audio id="player" src="/sound.mp3" autoplay />'
@@ -158,9 +176,9 @@ root = if history.pushState then "/" else "#/"
       $.each [window.location.hash, data.hash], (index, value) ->
         if value?
           $(value).livequery () ->
-              $(this).addClass('anchor')
-              $('html,body').animate({scrollTop: $(this).offset().top},'slow')
-              $(value).livequery().expire()
+            $(this).addClass('anchor')
+            $('html,body').animate({scrollTop: $(this).offset().top},'slow')
+            $(value).livequery().expire()
 
     this.bind 'subscribeToWS', (e, data) ->
       id = data.id

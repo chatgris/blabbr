@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sun, 17 Apr 2011 14:28:25 GMT from
+/* DO NOT MODIFY. This file was compiled Thu, 21 Apr 2011 19:10:45 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
  */
 
@@ -45,7 +45,7 @@
       });
     });
     $('html').mouseover(function() {
-      return gainedFocus();
+      return window.isActive = true;
     });
     $('#contents').livequery(function() {
       var left;
