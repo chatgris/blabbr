@@ -36,11 +36,6 @@ $(document).ready ->
   $('html').mouseover ->
     window.isActive = true
 
-  $('#contents').livequery ->
-    left = $('#contents').position().left
-    $('aside').css('left', left + 680)
-    $('#notify').css('left', left + 680)
-
   $('.bubble p, .bubble ul').live 'click', (e) ->
     if $(e.target).is('p, ul')
       user = $(this).parent().get(0).getAttribute("data_user")

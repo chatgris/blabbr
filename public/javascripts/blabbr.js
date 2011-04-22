@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Thu, 21 Apr 2011 19:18:03 GMT from
+/* DO NOT MODIFY. This file was compiled Fri, 22 Apr 2011 18:02:39 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -110,8 +110,7 @@
             context.trigger('moveTo', {
               hash: infos.hash || infos.target
             });
-            context.trigger('hideLoadingNotification');
-            return context.trigger('notify');
+            return context.trigger('hideLoadingNotification');
           }
         });
       });
@@ -190,18 +189,14 @@
         }
       });
       this.bind('lostFocus', function() {
-        console.log('focus');
         return window.isActive = false;
       });
       this.bind('blinkTitle', function(e, state) {
-        console.log(context.title);
         if (!window.isActive) {
           if (state === 1) {
             document.title = "[new!] - " + context.title;
             state = 0;
-            console.log(state);
           } else {
-            console.log('zero');
             document.title = context.title;
             state = 1;
           }

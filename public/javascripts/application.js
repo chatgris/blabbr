@@ -1,9 +1,9 @@
-/* DO NOT MODIFY. This file was compiled Thu, 21 Apr 2011 19:10:45 GMT from
+/* DO NOT MODIFY. This file was compiled Fri, 22 Apr 2011 18:03:11 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
  */
 
 (function() {
-  var blinkTitle, gainedFocus, insertQuote, lostFocus, titleHolder;
+  var insertQuote, titleHolder;
   titleHolder = document.title;
   $(document).ready(function() {
     $('input.autocomplete').livequery(function() {
@@ -47,12 +47,6 @@
     $('html').mouseover(function() {
       return window.isActive = true;
     });
-    $('#contents').livequery(function() {
-      var left;
-      left = $('#contents').position().left;
-      $('aside').css('left', left + 680);
-      return $('#notify').css('left', left + 680);
-    });
     $('.bubble p, .bubble ul').live('click', function(e) {
       var user;
       if ($(e.target).is('p, ul')) {
@@ -67,27 +61,5 @@
   });
   insertQuote = function(content, user) {
     return $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ");
-  };
-  blinkTitle = function(state) {
-    if (windowIsActive !== true) {
-      if (state === 1) {
-        document.title = "[new!] - " + titleHolder;
-        state = 0;
-      } else {
-        document.title = titleHolder;
-        state = 1;
-      }
-      return setTimeout("blinkTitle(" + state + ")", 1600);
-    } else {
-      return document.title = titleHolder;
-    }
-  };
-  lostFocus = function() {
-    var windowIsActive;
-    return windowIsActive = false;
-  };
-  gainedFocus = function() {
-    var windowIsActive;
-    return windowIsActive = true;
   };
 }).call(this);

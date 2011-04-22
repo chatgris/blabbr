@@ -168,28 +168,31 @@ section, article, header, footer, nav, aside, hgroup
   .fail
     +border-curve-right($red)
 
-aside
+.aside
   position: fixed
   top: 120px
-  +border-curve-right($beige)
-  overflow: visible
-  width: 310px
-  padding: 0 5px
-
-  input[type=text], input[type=file], input[type=email]
+  aside
+    position: absolute
+    left: 680px
+    +border-curve-right($beige)
+    overflow: visible
     width: 310px
-  textarea
-    width: 300px
-  .pagination
-    display: none
-  #topics
-    font-size: 9px
-    margin: .5em 0
-    article
-      .unread
-        width: 30px
-      header
-        width: 270px
+    padding: 0 5px
+
+    input[type=text], input[type=file], input[type=email]
+      width: 310px
+    textarea
+      width: 300px
+    .pagination
+      display: none
+    #topics
+      font-size: 9px
+      margin: .5em 0
+      article
+        .unread
+          width: 30px
+        header
+          width: 270px
 
 #topics
   list-style: none
