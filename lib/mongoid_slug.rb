@@ -6,7 +6,7 @@ module Mongoid::Slug
   included do
     field :slug, :type => String
     set_callback :create, :before, :set_slug
-    named_scope :by_slug, lambda { |slug| { :where => { :slug => slug}}}
+    scope :by_slug, ->(slug) { where(:slug => slug)}
     delegate :slugged, :to => "self.class"
   end
 

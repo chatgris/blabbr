@@ -33,7 +33,7 @@ class Post
   before_validation :set_page, :set_creator, :if => "self.new_record?"
   after_create :update_user_posts_count, :update_topic_infos, :ws_notify
 
-  scope :for_creator, lambda { |creator| { :where => { 'creator_n' => creator}}}
+  scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
   protected
 
