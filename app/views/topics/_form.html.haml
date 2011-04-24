@@ -4,5 +4,5 @@
     = f.input :title
   = field_set_tag do
     = f.simple_fields_for :posts do |fp|
-      = fp.input :body
+      = fp.input :body, :as => :text
   = f.submit "Submit"
