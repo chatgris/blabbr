@@ -59,7 +59,7 @@ class Topic
 
   def rm_member!(nickname)
     members.each do |member|
-      if member.nickname == nickname
+      if member.slug == nickname
         return true if member.delete
         break
       end

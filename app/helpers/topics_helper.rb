@@ -16,12 +16,6 @@ module TopicsHelper
   end
 
   def members_without_creator(topic)
-    members = []
-    topic.members.each do |member|
-      next if member.nickname == topic.creator
-      members << member.nickname
-    end
-    members
+    topic.members.select { |m| m.nickname != topic.creator }
   end
-
 end

@@ -21,8 +21,9 @@
   %strong
     = t('subscriber').pluralize
     - members_without_creator(topic).each do |member|
-      = member
-      = link_to "X", topic_member_path(topic, :id => member), :method => :delete
+      = simple_form_for [topic, member], :html =>{:method => :delete } do |f|
+        = member.nickname
+        = f.submit t('members.delete')
 = will_paginate @posts, :params => { :format => nil }
 %section#posts{:class => 'page-title', :title => topic.title}
   = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => topic}

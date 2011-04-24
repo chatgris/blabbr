@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Fri, 22 Apr 2011 18:02:39 GMT from
+/* DO NOT MODIFY. This file was compiled Sun, 24 Apr 2011 15:21:25 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -159,6 +159,21 @@
               target: target
             });
             $("#edit_post_" + context.params['post_id']).remove();
+            return context.trigger('hideLoadingNotification');
+          }
+        });
+      });
+      this.bind('deleteMember', function(e, infos) {
+        return $.ajax({
+          type: "DELETE",
+          url: context.path,
+          data: $.param(context.params.toHash()),
+          dataType: "html",
+          success: function(data) {
+            context.trigger('addContent', {
+              data: data,
+              target: infos.target
+            });
             return context.trigger('hideLoadingNotification');
           }
         });
@@ -348,8 +363,11 @@
       this.put("" + root + "topics/:id/posts/:post_id", function() {
         this.trigger('postAndReplace');
       });
-      return this.del("" + root + "topics/:id/posts/:post_id", function() {
+      this.del("" + root + "topics/:id/posts/:post_id", function() {
         this.trigger('deletePost');
+      });
+      return this.del("" + root + "topics/:id/members/:member_id", function() {
+        this.trigger('deleteMember');
       });
     });
     return $(function() {

@@ -127,6 +127,17 @@ root = if history.pushState then "/" else "#/"
           context.trigger 'hideLoadingNotification'
       }
 
+    this.bind 'deleteMember', (e, infos) ->
+      $.ajax {
+        type: "DELETE",
+        url: context.path,
+        data: $.param(context.params.toHash()),
+        dataType: "html",
+        success: (data) ->
+          context.trigger 'addContent', {data: data, target: infos.target}
+          context.trigger 'hideLoadingNotification'
+      }
+
     this.bind 'showContent', (e, data) ->
       $(data.target).show().html data.data
       this.trigger 'updateTitle'
@@ -260,6 +271,10 @@ root = if history.pushState then "/" else "#/"
 
     this.del "#{root}topics/:id/posts/:post_id", ->
       this.trigger 'deletePost'
+      return
+
+    this.del "#{root}topics/:id/members/:member_id", ->
+      this.trigger 'deleteMember'
       return
 
   $(->
