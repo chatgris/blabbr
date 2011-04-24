@@ -30,7 +30,7 @@ class TopicsController < ApplicationController
     else
       flash[:alert] = t('topics.create.fail')
     end
-    respond_with(@topic, :location => topic_path(@topic.slug))
+    respond_with(@topic, :location => topic_path(@topic))
   end
 
   def edit
@@ -42,7 +42,7 @@ class TopicsController < ApplicationController
     else
       flash[:alert] = t('topics.update.fail')
     end
-    respond_with(@topic, :location => topic_path(@topic.slug))
+    respond_with(@topic, :location => topic_path(@topic))
   end
 
   def destroy
@@ -65,7 +65,7 @@ class TopicsController < ApplicationController
   end
 
   def get_current_topic_for_creator
-    @topic = Topic.for_creator(current_user.nickname).find(params[:id])
+    @topic = Topic.by_slug(params[:id]).for_creator(current_user.nickname).first
     unless @topic
       redirect_to :back, :alert => t('topics.not_auth')
     end

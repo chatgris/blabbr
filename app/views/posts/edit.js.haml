@@ -1,2 +1,2 @@
-= form_for([@topic, @post], :url => {:controller => "posts", :action => :update, :topic_id =>@topic.slug, :id => @post.id}, :remote => true, :html => {:method => :put}) do |form|
+= form_for([@topic, @post], :url => {:controller => "posts", :action => :update, :topic_id =>@topic, :id => @post.id}, :remote => true, :html => {:method => :put}) do |form|
   = render form

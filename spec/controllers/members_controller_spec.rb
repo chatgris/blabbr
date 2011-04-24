@@ -18,8 +18,9 @@ describe MembersController do
   describe 'with creator as current_user' do
 
     before :each do
-      Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-      topic.should_receive(:find).with(topic.id).and_return(topic)
+      Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+      topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+      topic.should_receive(:first).and_return(topic)
     end
 
     describe 'POST create' do
@@ -27,11 +28,11 @@ describe MembersController do
       context 'with valid params' do
         before :each do
           topic.should_receive(:new_member).and_return(true)
-          post :create, :topic_id => topic.id, :nickname => member.nickname
+          post :create, :topic_id => topic.slug, :nickname => member.nickname
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -46,11 +47,11 @@ describe MembersController do
       context 'without valid params' do
         before :each do
           topic.should_receive(:new_member).and_return(false)
-          post :create, :topic_id => topic.id, :nickname => member.nickname
+          post :create, :topic_id => topic.slug, :nickname => member.nickname
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -68,11 +69,11 @@ describe MembersController do
       context 'with valid params' do
         before :each do
           topic.should_receive(:rm_member!).with(member.id).and_return(true)
-          delete :destroy, :topic_id => topic.id, :id => member.id
+          delete :destroy, :topic_id => topic.slug, :id => member.id
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -87,11 +88,11 @@ describe MembersController do
       context 'without valid params' do
         before :each do
           topic.should_receive(:rm_member!).with(member.id).and_return(false)
-          delete :destroy, :topic_id => topic.id, :id => member.id
+          delete :destroy, :topic_id => topic.slug, :id => member.id
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -109,14 +110,15 @@ describe MembersController do
   describe 'with a logged user as current_user, not a member' do
 
     before :each do
-      Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-      topic.should_receive(:find).with(topic.id).and_return(nil)
+      Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+      topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+      topic.should_receive(:first).and_return(nil)
     end
 
     describe 'POST create' do
       before :each do
         topic.should_not_receive(:new_member)
-        post :create, :topic_id => topic.id, :nickname => member.nickname
+        post :create, :topic_id => topic.slug, :nickname => member.nickname
       end
 
       it 'should be redirect' do
@@ -131,7 +133,7 @@ describe MembersController do
 
     describe 'DELETE destroy' do
       before :each do
-        delete :destroy, :topic_id => topic.id, :id => member.id
+        delete :destroy, :topic_id => topic.slug, :id => member.id
       end
 
       it 'should be redirect' do

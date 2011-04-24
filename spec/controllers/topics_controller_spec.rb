@@ -78,9 +78,10 @@ describe TopicsController do
 
     describe 'GET edit' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(topic)
-        get :edit, :id => topic.id
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(topic)
+        get :edit, :id => topic.slug
       end
 
       it 'get new should be success' do
@@ -106,7 +107,7 @@ describe TopicsController do
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -137,18 +138,19 @@ describe TopicsController do
 
     describe 'PUT update' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(topic)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(topic)
       end
 
       context 'with valid params' do
         before :each do
           topic.should_receive(:update_attributes).with('new' => 'topic').and_return(true)
-          put :update, :id => topic.id, :topic => {'new' => 'topic'}
+          put :update, :id => topic.slug, :topic => {'new' => 'topic'}
         end
 
         it 'should be redirect' do
-          response.should redirect_to topic_path(topic.slug)
+          response.should redirect_to topic_path(topic)
         end
 
         it 'should assigns topic' do
@@ -163,7 +165,7 @@ describe TopicsController do
       context 'with invalid params' do
         before :each do
           topic.should_receive(:update_attributes).with('new' => 'topic').and_return(false)
-          put :update, :id => topic.id, :topic => {'new' => 'topic'}
+          put :update, :id => topic.slug, :topic => {'new' => 'topic'}
         end
 
         it 'should assigns topic' do
@@ -178,15 +180,16 @@ describe TopicsController do
 
     describe 'DELETE destroy' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(topic)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(topic)
       end
 
       context 'with valid params' do
 
         before :each do
           topic.should_receive(:delete!).and_return(true)
-          delete :destroy, :id => topic.id
+          delete :destroy, :id => topic.slug
         end
 
         it 'redirect to back' do
@@ -203,7 +206,7 @@ describe TopicsController do
 
         before :each do
           topic.should_receive(:delete!).and_return(false)
-          delete :destroy, :id => topic.id
+          delete :destroy, :id => topic.slug
         end
 
         it 'redirect to back' do
@@ -245,9 +248,10 @@ describe TopicsController do
 
     describe 'GET edit' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
-        get :edit, :id => topic.id
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
+        get :edit, :id => topic.slug
       end
 
       it 'should be redirect' do
@@ -261,10 +265,11 @@ describe TopicsController do
 
     describe 'DELETE destroy' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
         topic.should_not_receive(:destroy)
-        delete :destroy, :id => topic.id
+        delete :destroy, :id => topic.slug
       end
 
       it 'should be redirect' do
@@ -278,10 +283,11 @@ describe TopicsController do
 
     describe 'PUT update' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
         topic.should_not_receive(:update_attributes).with('new' => 'topic').and_return(true)
-        put :update, :id => topic.id, :topic => {'new' => 'topic'}
+        put :update, :id => topic.slug, :topic => {'new' => 'topic'}
       end
 
       it 'should be redirect' do
@@ -325,12 +331,13 @@ describe TopicsController do
 
     describe 'GET edit' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
-        get :edit, :id => topic.id
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
+        get :edit, :id => topic.slug
       end
 
-      it 'should be redirect' do
+      it 'should be redirect_to' do
         response.should redirect_to(:back)
       end
 
@@ -341,10 +348,11 @@ describe TopicsController do
 
     describe 'PUT update' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
         topic.should_not_receive(:update_attributes).with('new' => 'topic').and_return(true)
-        put :update, :id => topic.id, :topic => {'new' => 'topic'}
+        put :update, :id => topic.slug, :topic => {'new' => 'topic'}
       end
 
       it 'should be redirect' do
@@ -358,10 +366,11 @@ describe TopicsController do
 
     describe 'DELETE destroy' do
       before :each do
-        Topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
-        topic.should_receive(:find).with(topic.id).and_return(nil)
+        Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
+        topic.should_receive(:for_creator).with(user.nickname).and_return(topic)
+        topic.should_receive(:first).and_return(nil)
         topic.should_not_receive(:destroy)
-        delete :destroy, :id => topic.id
+        delete :destroy, :id => topic.slug
       end
 
       it 'shouldl be redirect' do

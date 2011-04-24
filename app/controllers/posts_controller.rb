@@ -32,7 +32,7 @@ class PostsController < ApplicationController
     else
       flash[:alert] = t('posts.create.fail')
     end
-    respond_with(@post, :location => page_topic_path(:id => @topic.slug, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
+    respond_with(@post, :location => page_topic_path(:id => @topic, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
   end
 
   def destroy
@@ -55,7 +55,7 @@ class PostsController < ApplicationController
   end
 
   def get_current_topic_for_action
-    @topic = Topic.criteria.for_ids(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
+    @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
     unless @topic
       redirect_to :back, :alert => t('posts.not_auth')
     end

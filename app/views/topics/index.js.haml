@@ -6,7 +6,7 @@
         %mark=link_to_unread topic
       %header
         %h3
-          = link_to topic.title, topic_path(topic.slug)
+          = link_to topic.title, topic_path(topic)
         %h4
           = "by #{topic.last_user} le #{current_tz(topic.posted_at)}"
       %hr

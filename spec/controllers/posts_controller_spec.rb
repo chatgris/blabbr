@@ -14,8 +14,7 @@ describe PostsController do
       controller.stub!(:logged_in?).and_return(true)
       controller.stub!(:current_user).and_return(user)
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-      Topic.should_receive(:criteria).and_return(topic)
-      topic.should_receive(:for_ids).with(topic.id).and_return(topic)
+      Topic.should_receive(:by_slug).and_return(topic)
       topic.should_receive(:by_subscribed_topic).with(user.nickname).and_return(topic)
       topic.should_receive(:first).and_return(topic)
     end
@@ -25,7 +24,7 @@ describe PostsController do
         topic.should_receive(:posts).and_return(posts)
         posts.should_receive(:for_creator).and_return(posts)
         posts.should_receive(:find).with(one_post.id).and_return(one_post)
-        get :edit, :topic_id => topic.id, :id => one_post.id
+        get :edit, :topic_id => topic.slug, :id => one_post.id
       end
 
       it 'should assigns topic' do
@@ -126,7 +125,7 @@ describe PostsController do
       context 'without valid params' do
         before :each do
           one_post.should_receive(:delete!).and_return(false)
-          delete :destroy, :topic_id => topic.id, :id => one_post.id
+          delete :destroy, :topic_id => topic.slug, :id => one_post.id
         end
 
         it 'should assigns topic' do
@@ -201,7 +200,7 @@ describe PostsController do
           end
 
           it 'should be redirect' do
-            response.should redirect_to page_topic_path(:id => topic.slug,
+            response.should redirect_to page_topic_path(:id => topic,
                                                         :page => topic.posts_count / PER_PAGE + 1,
                                                         :anchor => one_post.id.to_s)
           end
@@ -226,7 +225,7 @@ describe PostsController do
           end
 
           it 'should be redirect' do
-            response.should redirect_to page_topic_path(:id => topic.slug,
+            response.should redirect_to page_topic_path(:id => topic,
                                                         :page => topic.posts_count / PER_PAGE + 1,
                                                         :anchor => one_post.id.to_s)
           end
@@ -251,8 +250,7 @@ describe PostsController do
         controller.stub!(:logged_in?).and_return(true)
         controller.stub!(:current_user).and_return(member)
         request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
-        Topic.should_receive(:criteria).and_return(topic)
-        topic.should_receive(:for_ids).with(topic.id).and_return(topic)
+        Topic.should_receive(:by_slug).and_return(topic)
         topic.should_receive(:by_subscribed_topic).with(member.nickname).and_return(topic)
         topic.should_receive(:first).and_return(topic)
         topic.should_receive(:posts).and_return(posts)

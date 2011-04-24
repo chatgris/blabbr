@@ -13,11 +13,13 @@ module LinkHelper
   end
 
   def link_to_avatar(user)
-    link_to image_tag("/uploads/avatars/#{user}.png"), user_path(user)
+    slug = user.respond_to?(:slug) ? user.slug : user
+    link_to image_tag("/uploads/avatars/#{slug}.png"), user_path(user)
   end
 
   def link_to_avatar_thumb(user)
-    link_to image_tag("/uploads/avatars/thumb_#{user}.png"), user_path(user)
+    slug = user.respond_to?(:slug) ? user.slug : user
+    link_to image_tag("/uploads/avatars/thumb_#{slug}.png"), user_path(user)
   end
 
   def link_to_edit_post(post, topic)
