@@ -24,20 +24,50 @@ describe Topic do
 
   context 'set up : topic and user created' do
 
-    let(:creator) do
-      Factory.create(:creator)
-    end
+    let(:creator) { Factory.create(:creator)}
+    let(:topic) { Factory.create(:topic, :creator => creator.nickname)}
+    let(:post) { Factory.build(:post)}
+    let(:current_user) { Factory.create(:user)}
+    let(:member) { Factory.create(:user)}
+    let(:ability_for_creator) { Ability.new(creator)}
+    let(:ability_for_member) { Ability.new(member)}
+    let(:ability_for_user) { Ability.new(current_user)}
 
-    let(:topic) do
-      Factory.create(:topic)
-    end
+    describe 'Ability' do
 
-    let(:post) do
-      Factory.build(:post)
-    end
+      context 'Ability for creator' do
+        [:read, :update, :destroy, :rm_member, :add_member].each do |action|
+          it "should be possible fot creator to #{action}" do
+            ability_for_creator.should be_able_to(action, topic)
+          end
+        end
+      end
 
-    let(:current_user) do
-      Factory.create(:user)
+      context 'Ability for member' do
+        before :each do
+          topic.add_member(member.nickname)
+        end
+
+        [:update, :destroy, :rm_member, :add_member].each do |action|
+          it "should be possible for a creator to #{action}" do
+            ability_for_member.should_not be_able_to(action, topic)
+          end
+        end
+
+        it "should be possible for a member to read" do
+          ability_for_member.should be_able_to(:read, topic)
+        end
+      end
+
+      context 'Ability for  user' do
+
+        [:read, :update, :destroy, :rm_member, :add_member].each do |action|
+          it "should be possible for a user to #{action}" do
+            ability_for_member.should_not be_able_to(action, topic)
+          end
+        end
+      end
+
     end
 
     context "Validations" do
@@ -94,27 +124,27 @@ describe Topic do
 
         it "shouldn't add a unregistered user to topic" do
           topic.reload.members.size.should == 1
-          topic.new_member(member.nickname)
+          topic.add_member(member.nickname)
           topic.reload.members.size.should == 1
         end
 
         it "should add a registered user to topic" do
-          topic.new_member(current_user.nickname)
+          topic.add_member(current_user.nickname)
           topic.reload.members.size.should == 2
         end
 
         it "should have a posts_count equals to 0 when invited" do
-          topic.new_member(current_user.nickname)
+          topic.add_member(current_user.nickname)
           topic.reload.members[1].posts_count.should == 0
         end
 
         it "shouldn't add a user if this user is already invited" do
-          topic.new_member(current_user.nickname)
+          topic.add_member(current_user.nickname)
           topic.reload.members.size.should == 2
         end
 
         it "should make unread equals to posts.size when a member is invited" do
-          topic.new_member(current_user.nickname)
+          topic.add_member(current_user.nickname)
           topic.reload.members[1].unread.should == topic.reload.posts.count
         end
       end

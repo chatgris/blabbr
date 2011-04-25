@@ -257,7 +257,11 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'postAndAdd', { target: '#posts', hash:'#new_post'}
       return
 
-    this.post '/topics/:id/members',->
+    this.put '/topics/:id/add_member',->
+      this.trigger 'postAndAdd'
+      return
+
+    this.put '/topics/:id/rm_member',->
       this.trigger 'postAndAdd'
       return
 
@@ -273,13 +277,8 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'deletePost'
       return
 
-    this.del "#{root}topics/:id/members/:member_id", ->
-      this.trigger 'deleteMember'
-      return
-
     this.get "#{root}logout", (e) ->
       window.location = e.path
-
 
   $(->
     app.run(root)

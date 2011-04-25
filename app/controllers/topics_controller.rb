@@ -1,10 +1,11 @@
 # encoding: utf-8
 class TopicsController < ApplicationController
-  before_filter :get_current_topic_for_creator, :only => [:edit, :update, :destroy]
-  before_filter :get_current_topic_for_member, :only => [:show]
+  before_filter :get_topic, :only => [:show, :edit, :update, :destroy, :add_member, :rm_member]
   before_filter :get_smilies, :only => [:show, :create]
   after_filter :reset_unread_posts, :only => [:show]
   respond_to :html, :json, :js
+  #load_and_authorize_resource
+  authorize_resource
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
@@ -54,6 +55,25 @@ class TopicsController < ApplicationController
     respond_with(@topic, :location => topics_path)
   end
 
+  # Members
+  def add_member
+    if @topic.add_member(params[:nickname])
+      flash[:notice] = t('members.create.success', :name => params[:nickname])
+    else
+      flash[:alert] = t('members.create.fail')
+    end
+    respond_with(@topic, :location => topic_path(@topic))
+  end
+
+  def rm_member
+    if @topic.rm_member!(params[:nickname])
+      flash[:notice] = t('members.destroy.success', :name => params[:nickname])
+    else
+      flash[:alert] = t('members.destroy.fail')
+    end
+    respond_with(@topic, :location => topic_path(@topic))
+  end
+
   protected
 
   def users_list
@@ -62,20 +82,6 @@ class TopicsController < ApplicationController
 
   def reset_unread_posts
     @topic.reset_unread(current_user.nickname) if @topic
-  end
-
-  def get_current_topic_for_creator
-    @topic = Topic.by_slug(params[:id]).for_creator(current_user.nickname).first
-    unless @topic
-      redirect_to :back, :alert => t('topics.not_auth')
-    end
-  end
-
-  def get_current_topic_for_member
-    @topic = Topic.by_slug(params[:id]).by_subscribed_topic(current_user.nickname).first
-    unless @topic
-      redirect_to :back, :alert => t('topics.not_auth')
-    end
   end
 
 end

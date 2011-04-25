@@ -3,6 +3,7 @@ source :rubygems
 gem 'barista',              '~>1.0'
 gem 'bson',                 '~>1.3'
 gem 'bson_ext',             '~>1.3'
+gem 'cancan',               '~>1.6.4'
 gem 'carrierwave',          '~>0.5.3'
 gem 'devise',               '~>1.2.1'
 gem 'em-http-request',      '~>0.3.0'

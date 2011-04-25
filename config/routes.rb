@@ -18,7 +18,8 @@ Blabbr::Application.routes.draw do
 
     resources :topics do
       resources :posts
-      resources :members, :only => [:create, :destroy]
+      put :add_member, :on => :member
+      put :rm_member, :on => :member
     end
 
     match 'dashboard' => 'users#edit', :as => :dashboard

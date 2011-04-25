@@ -1,9 +1,14 @@
+# encoding: utf-8
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
   protect_from_forgery
   helper_method :creator?
   before_filter :redirect_to_https, :set_user_time_zone
   after_filter :flash_to_headers, :set_user_preferences
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to :back, :alert => t('cancan.not_authorize')
+  end
 
   protected
 
@@ -13,6 +18,10 @@ class ApplicationController < ActionController::Base
 
   def get_smilies
     @smilies = Smiley.all.flatten
+  end
+
+  def get_topic
+    @topic = Topic.by_slug(params[:id]).first
   end
 
   def layout_by_resource

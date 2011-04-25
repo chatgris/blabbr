@@ -18,20 +18,41 @@ describe Post do
 
   context "Setup : topic, user, and cretor created" do
 
-    let(:creator) do
-      Factory.create(:creator)
-    end
+    let(:creator) { Factory :creator}
+    let(:member) { Factory :user}
+    let(:topic) { Factory :topic, :user => creator}
+    let(:post) { Factory.build(:post, :creator => creator)}
+    let(:ability_for_creator) { Ability.new(creator)}
+    let(:ability_for_member) { Ability.new(member)}
 
-    let(:member) do
-      Factory.create(:user)
-    end
+    describe 'Ability' do
+      before :all do
+        topic.posts << post
+      end
 
-    let(:topic) do
-      Factory.create(:topic, :user => creator)
-    end
+      context 'Ability for creator' do
+        [:read, :update, :destroy].each do |action|
+          it "should be possible fot creator to #{action}" do
+            ability_for_creator.should be_able_to(action, post)
+          end
+        end
+      end
 
-    let(:post) do
-      Factory.build(:post, :creator => creator)
+      context 'Ability for member' do
+        before :each do
+          topic.add_member(member.nickname)
+        end
+
+        [:update, :destroy].each do |action|
+          it "should be possible for a creator to #{action}" do
+            ability_for_member.should_not be_able_to(action, post)
+          end
+        end
+
+        it "should be possible for a member to read" do
+          ability_for_member.should be_able_to(:read, post)
+        end
+      end
     end
 
     describe "callback" do
@@ -93,7 +114,7 @@ describe Post do
         end
 
         before :each do
-          topic.new_member(member.nickname)
+          topic.add_member(member.nickname)
           new_post.topic = topic
           new_post.save
         end

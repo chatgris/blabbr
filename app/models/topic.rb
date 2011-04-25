@@ -47,7 +47,7 @@ class Topic
   scope :by_subscribed_topic, ->(current_user) {where('members.nickname' => current_user)}
   scope :for_creator,         ->(creator) { where('creator' => creator)}
 
-  def new_member(nickname)
+  def add_member(nickname)
     if User.by_nickname(nickname).first
       members.create(:nickname => nickname, :unread => self.posts_count)
     end
@@ -58,13 +58,7 @@ class Topic
   end
 
   def rm_member!(nickname)
-    members.each do |member|
-      if member.slug == nickname
-        return true if member.delete
-        break
-      end
-    end
-    return false
+    members.where(nickname: nickname).delete
   end
 
   def reset_unread(nickname)

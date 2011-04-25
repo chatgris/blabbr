@@ -1,9 +1,9 @@
 %ul.topic-list
-  - if creator? topic.creator
+  - if can? :update, @topic
     %li#add-member
-      = form_tag topic_members_path(topic), :method => 'post' do
+      = form_tag add_member_topic_path, :method => 'put' do
         = text_field_tag :nickname, params[:nickname], 'data-autocomplete-url' => autocomplete_users_path, :class => 'autocomplete'
-        = submit_tag "Ajouter"
+        = submit_tag t('member.add')
     %li.edit
       = link_to t('topics.edit'), edit_topic_path(topic)
     %li.destroy
@@ -17,13 +17,14 @@
       %li#files-ratio
         = link_to attachments_ratio(topic), topic_path(topic)
 %hr
-- if creator? topic.creator
+- if can? :update, @topic
   %strong
     = t('subscriber').pluralize
     - members_without_creator(topic).each do |member|
-      = simple_form_for [topic, member], :html =>{:method => :delete } do |f|
+      = form_tag rm_member_topic_path, :method => :put do
         = member.nickname
-        = f.submit t('members.delete')
+        = hidden_field_tag :nickname, member.nickname
+        = submit_tag t('members.delete')
 = will_paginate @posts, :params => { :format => nil }
 %section#posts{:class => 'page-title', :title => topic.title}
   = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => topic}

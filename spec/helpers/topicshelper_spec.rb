@@ -64,12 +64,12 @@ describe TopicsHelper do
       @creator = Factory.create(:creator)
       @user = Factory.create(:user)
       @topic = Factory.create(:topic)
-      @topic.new_member(@user.nickname)
+      @topic.add_member(@user.nickname)
     end
 
     it "should return a array of members without the creator" do
-      helper.members_without_creator(@topic).should include(@user.nickname)
-      helper.members_without_creator(@topic).should_not include(@topic.creator)
+      helper.members_without_creator(@topic).map(&:nickname).should include(@user.nickname)
+      helper.members_without_creator(@topic).map(&:nickname).should_not include(@topic.creator)
     end
 
   end
