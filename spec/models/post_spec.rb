@@ -57,54 +57,49 @@ describe Post do
 
     describe "callback" do
       context "When a post is created" do
-        before :each do
-          post.topic = topic
-          post.save
-        end
-
-        it "should increment creator.posts_count at creation" do
-          creator.reload.posts_count.should == 14
+        it "should increment user.posts_count when a new post is created" do
+          topic.save
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(creator, :posts_count).by(1)
         end
 
         it "should increment topic.posts.count when a new post is created" do
-          topic.reload.posts.count.should == 2
-        end
-
-        it "should increment user.posts_count when a new post is created" do
-          creator.reload.posts_count.should == 14
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(topic, :posts_count).by(1)
         end
 
         it "should have a page" do
-          post.reload.page.should == 1
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(post, :page).from(nil).to(1)
         end
 
         it "should have a correct creator nickname for the first post" do
-          post.reload.creator_n.should == creator.nickname
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(post, :creator_n).from(nil).to(creator.nickname)
         end
 
         it "should have a correct creator slug for the first post" do
-          post.reload.creator_s.should == creator.slug
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(post, :creator_s).from(nil).to(creator.slug)
         end
-
-        it "should increment topic.posts_count when a new post is created" do
-          topic.reload.posts_count.should == 2
-        end
-
-      end
-
-      context "When a post is created, next" do
 
         it "should update posted_at time" do
-          sleep(1)
-          post.topic = topic
-          topic.reload.posted_at.to_s.should_not == topic.created_at.to_s
+          lambda {
+            post.topic = topic
+            post.save
+          }.should change(topic, :posted_at)
         end
 
-        it "shouldn't add a post if body is not present" do
-          post.body = ''
-          post.topic = topic
-          topic.reload.posts.size.should == 1
-        end
       end
 
       context "when a post is added by a member" do
@@ -116,49 +111,60 @@ describe Post do
         before :each do
           topic.add_member(member.nickname)
           new_post.topic = topic
-          new_post.save
         end
 
         it "should have updated the last_user" do
-          topic.reload.last_user.should == member.nickname
+          lambda {
+            new_post.save
+          }.should change(topic, :last_user).from(creator.nickname).to(member.nickname)
         end
 
-        it "should have 2 members" do
-          topic.reload.members.count.should == 2
-        end
 
         it "should have increment posts_count when a new post is added by user" do
-          topic.reload.members[1].posts_count.should == 1
+          lambda {
+            new_post.save
+          }.should change(topic.members[1], :posts_count).by(1)
         end
 
         it "shouldn't increment posts_count of creator in this context" do
-          topic.reload.members[0].posts_count.should == 1
+          lambda {
+            new_post.save
+          }.should_not change(topic.members[0], :posts_count)
         end
 
         it "shouldn't increment unread count when a post is added by the same user" do
-          topic.reload.members[1].unread.should == 1
+          lambda {
+            new_post.save
+          }.should_not change(topic.members[1], :unread)
         end
 
         it "should increment unread count when a post is added" do
-          topic.reload.members[1].unread.should == 1
-          post.topic = topic
-          post.save
-          topic.reload.members[1].unread.should == 2
+          lambda {
+            new_post.save
+          }.should change(topic.members[0], :unread).by(1)
         end
 
         it "should reset unread post" do
-          topic.reload.members[1].unread.should == 1
-          topic.reset_unread(member.nickname)
-          topic.reload.members[1].unread.should == 0
-          topic.reload.members[0].unread.should_not == 0
+          new_post.save
+          lambda {
+            topic.reset_unread(member.nickname)
+          }.should change(topic.members[1], :unread).by(-1)
         end
 
         it "should add post_id to member" do
-          topic.reload.members[0].post_id.should == topic.reload.posts[1].id.to_s
+          lambda {
+            new_post.save
+          }.should change(topic.members[0], :post_id)
         end
 
         it "should add page number of the newly added post to member" do
-          topic.reload.members[1].page.should == topic.reload.posts_count / PER_PAGE + 1
+          PER_PAGE = 1
+          topic.reset_unread(member.nickname)
+          topic.posts << Factory.build(:post, :creator => member)
+          topic.save
+          lambda {
+            new_post.save
+          }.should change(topic.members[1], :page)
         end
       end
     end

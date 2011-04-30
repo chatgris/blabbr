@@ -24,11 +24,11 @@ describe Topic do
 
   context 'set up : topic and user created' do
 
-    let(:creator) { Factory.create(:creator)}
-    let(:topic) { Factory.create(:topic, :creator => creator.nickname)}
+    let(:creator) { Factory :creator}
+    let(:topic) { Factory :topic, :creator => creator.nickname}
     let(:post) { Factory.build(:post)}
-    let(:current_user) { Factory.create(:user)}
-    let(:member) { Factory.create(:user)}
+    let(:current_user) { Factory :user}
+    let(:member) { Factory :user}
     let(:ability_for_creator) { Ability.new(creator)}
     let(:ability_for_member) { Ability.new(member)}
     let(:ability_for_user) { Ability.new(current_user)}
@@ -107,6 +107,14 @@ describe Topic do
       end
     end
 
+    describe 'callback' do
+      it 'should increment creator posts_count' do
+        lambda {
+          Factory :topic, :user => creator
+        }.should change(creator, :posts_count).by(1)
+      end
+    end
+
     describe 'members' do
 
       let(:post) do
@@ -177,12 +185,13 @@ describe Topic do
 
       context "By default" do
         it "should be set to published by default" do
-          topic.reload.state.should == "published"
+          topic.state.should == "published"
         end
 
         it "should set a topic as deleted" do
-          topic.delete!
-          topic.reload.state.should == "deleted"
+          lambda {
+            topic.delete!
+          }.should change(topic, :state).from('published').to('deleted')
         end
       end
 
@@ -192,8 +201,9 @@ describe Topic do
         end
 
         it "should set a deleted topic as published" do
-          topic.publish!
-          topic.reload.state.should == "published"
+          lambda {
+            topic.publish!
+          }.should change(topic, :state).from('deleted').to('published')
         end
       end
 
