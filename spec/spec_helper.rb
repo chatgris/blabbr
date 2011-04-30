@@ -1,11 +1,11 @@
 require 'rubygems'
 require 'spork'
-require "cancan/matchers"
 
 Spork.prefork do
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require "cancan/matchers"
 
   Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
   Dir["#{File.dirname(__FILE__)}/mock/**/*.rb"].each {|f| require f}
