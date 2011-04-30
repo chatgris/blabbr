@@ -1,7 +1,7 @@
 %ul.topic-list
   - if can? :update, @topic
     %li#add-member
-      = form_tag add_member_topic_path, :method => 'put' do
+      = form_tag add_member_topic_path(@topic), :method => 'put' do
         = text_field_tag :nickname, params[:nickname], 'data-autocomplete-url' => autocomplete_users_path, :class => 'autocomplete'
         = submit_tag t('member.add')
     %li.edit
