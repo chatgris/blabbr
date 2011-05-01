@@ -5,8 +5,7 @@ class TopicsController < ApplicationController
   after_filter :reset_unread_posts, :only => [:show]
   respond_to :html, :json, :js
   authorize_resource
-  #caches_action :show, :if => Proc.new { |c| c.request.format.json? }
-  caches_action :show
+  caches_action :show, :if => Proc.new { |c| c.request.format.json? }
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
