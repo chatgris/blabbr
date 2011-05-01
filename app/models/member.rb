@@ -14,4 +14,8 @@ class Member
 
   validates :nickname, :presence => true, :uniqueness => true
 
+  def as_json(options={})
+    super(:only => [:nickname, :unread, :page, :post_id, :posts_count])
+  end
+
 end

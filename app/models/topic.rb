@@ -3,6 +3,7 @@ class Topic
   include Mongoid::Timestamps
   include Mongoid::Slug
   include Stateflow
+  include Rails.application.routes.url_helpers
 
   field :creator, :type => String
   field :title, :type => String
@@ -69,7 +70,16 @@ class Topic
     end
   end
 
+  def as_json(options={})
+    super(:only => [:creator, :members, :title, :posts_count, :last_user, :posted_at, :created_at],
+          :methods => :path)
+  end
+
   protected
+
+  def path
+    topic_path(self)
+  end
 
   def set_attributes
     self.creator = self.user.nickname unless self.user == ''

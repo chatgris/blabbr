@@ -2,6 +2,7 @@ class Post
   include Mongoid::Document
   include Mongoid::Timestamps
   include Stateflow
+  include Rails.application.routes.url_helpers
 
   field :body, :type => String
   field :creator_n, :type => String
@@ -35,7 +36,20 @@ class Post
 
   scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
+  def as_json(options={})
+    super(:only => [:body, :state, :page, :creator_n, :creator_s],
+          :methods => [:path, :content])
+  end
+
   protected
+
+  def path
+    topic_post_path(self.topic, self)
+  end
+
+  def content
+    RedCloth.new(self.body, @smilies).to_html(:textile, :refs_smiley)
+  end
 
   def ws_notify
     begin

@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
-  after_filter :reset_cache, :only => ['update']
+  after_filter :reset_cache, :only => ['update', 'create']
   respond_to :html, :js
 
   def show
@@ -73,7 +73,7 @@ class PostsController < ApplicationController
   end
 
   def reset_cache
-    expire_fragment "post-#{@post.id}"
+    expire_action(:controller => 'topics', :action => 'show', :id => @topic.slug, :page => @post.page)
   end
 
 end

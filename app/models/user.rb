@@ -5,6 +5,7 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Slug
+  include Rails.application.routes.url_helpers
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -31,5 +32,20 @@ class User
   validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
 
   scope :by_nickname, ->(nickname) { where(:nickname => nickname)}
+
+  def as_json(options={})
+    super(:only => [:nickname, :posts_count, :time_zone, :audio],
+          :methods => [:avatar_path, :path])
+  end
+
+  protected
+
+  def avatar_path
+    self.avatar.url
+  end
+
+  def path
+    user_path(self)
+  end
 
 end

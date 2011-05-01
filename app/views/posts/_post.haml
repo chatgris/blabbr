@@ -9,10 +9,9 @@
       = f.submit t('posts.delete')
   %time
     = current_tz(post.created_at)
-  - cache("post-#{post.id}") do
-    %div.bubble{:data_user => post.creator_n}
-      - if post.state == 'published'
-        =raw textilize post.body
-      - else
-        = t('posts.deleted')
+  %div.bubble{:data_user => post.creator_n}
+    - if post.state == 'published'
+      =raw textilize post.body
+    - else
+      = t('posts.deleted')
   %hr

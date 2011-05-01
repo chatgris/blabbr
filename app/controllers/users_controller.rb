@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   respond_to :html, :js, :json
 
   def autocomplete
-    # TODO : check why only and exclude doesn't works here
     @users = User.only(:nickname).where(:nickname => /#{params[:q]}/i)
     respond_with @users.map(&:nickname)
   end
@@ -14,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.by_slug(params[:id]).first
+    respond_with(@user = User.by_slug(params[:id]).first)
   end
 
   def create
