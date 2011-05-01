@@ -1,12 +1,9 @@
 module RedCloth
   class TextileDoc
-    include ActionView::Helpers::TextHelper
-    include ActionView::Helpers::TagHelper
-
     def initialize( string, smilies, restrictions = [] )
       @smilies = smilies
       restrictions.each { |r| method("#{r}=").call( true ) }
-      super( auto_link(string) )
+      super(string)
     end
   end
 end
@@ -16,7 +13,7 @@ module RedClothSmileyExtension
   def refs_smiley(text)
     if @smilies
       @smilies.each do |smiley|
-        text.gsub!(":#{smiley['code']}:", "!#{smiley['path']}?#{smiley['updated_at'].to_i.to_s}(#{smiley['code']})!")
+        text.gsub!(":#{smiley['code']}:", "!#{smiley['path']}?#{smiley['ts']}(#{smiley['code']})!")
       end
     end
     text
@@ -28,6 +25,9 @@ RedCloth.send(:include, RedClothSmileyExtension)
 module RedCloth::Formatters::HTML
 
   include RedCloth::Formatters::Base
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TagHelper
+
 
   def bq_close(opts)
     cite = opts[:cite] ? "<cite>#{ escape_attribute opts[:cite] }</cite>" : ''
@@ -36,6 +36,10 @@ module RedCloth::Formatters::HTML
 
   def before_transform(text)
     clean_html(text, ALLOWED_TAGS)
+  end
+
+  def after_transform(text)
+    auto_link(text).chomp
   end
 
   ALLOWED_TAGS = {

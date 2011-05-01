@@ -17,9 +17,12 @@ class ApplicationController < ActionController::Base
   end
 
   def get_smilies
-    @smilies = JSON.parse(Rails.cache.read 'smilies_list')
-    if @smilies.nil?
-      Rails.cache.write('smilies_list', Smiley.all.flatten.to_json)
+    smilies = Rails.cache.read 'smilies_list'
+    if smilies
+      @smilies = JSON.parse(smilies)
+    else
+      @smilies = Smiley.all.flatten.to_json
+      Rails.cache.write('smilies_list', @smilies)
     end
   end
 

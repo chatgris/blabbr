@@ -7,6 +7,7 @@ def mock_post(options = {}, stubs = {})
   mock.stub!(:body).and_return(Faker::Lorem.paragraphs(2).to_s)
   mock.stub!(:created_at).and_return(Time.now)
   mock.stub!(:state).and_return('published')
+  mock.stub!(:page).and_return(1)
 
   mock
 end

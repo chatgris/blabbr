@@ -18,12 +18,16 @@ class Smiley
   scope :by_nickname, ->(nickname) { where(:added_by => nickname)}
 
   def as_json(options={})
-    super(:only => [:added_by, :code, :updated_at],
-          :methods => [:path])
+    super(:only => [:added_by, :code],
+          :methods => [:path, :ts])
   end
 
   def path
     self.image.url
+  end
+
+  def ts
+    self.updated_at.to_i.to_s
   end
 
   private

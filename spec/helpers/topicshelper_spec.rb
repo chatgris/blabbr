@@ -12,7 +12,7 @@ describe TopicsHelper do
       @smiley = Factory.build(:smiley)
       @smiley.image = File.open(Rails.root.join("image.jpg"))
       @smiley.save
-      @smilies = Smiley.all.flatten
+      @smilies = JSON.parse(Smiley.all.flatten.to_json)
     end
 
     it "should do basic textile" do
