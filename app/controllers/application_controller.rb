@@ -17,7 +17,10 @@ class ApplicationController < ActionController::Base
   end
 
   def get_smilies
-    @smilies = Smiley.all.flatten
+    @smilies = JSON.parse(Rails.cache.read 'smilies_list')
+    if @smilies.nil?
+      Rails.cache.write('smilies_list', Smiley.all.flatten.to_json)
+    end
   end
 
   def get_topic

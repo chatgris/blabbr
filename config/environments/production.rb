@@ -16,7 +16,7 @@ Blabbr::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store, ENV['MEMCACHE_SERVERS'], {:expires_in => 1.day, :compress => true, :compress_threshold => 64.kilobytes}
+  config.cache_store = :redis_store, ENV["REDIS_URL"]
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this

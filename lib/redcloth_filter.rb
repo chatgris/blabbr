@@ -12,7 +12,7 @@ end
 module RedClothSmileyExtension
   def refs_smiley(text)
     @smilies.each do |smiley|
-      text.gsub!(":#{smiley.code}:", "!#{smiley.image.url}?#{smiley.updated_at.to_i.to_s}(#{smiley.code})!")
+      text.gsub!(":#{smiley['code']}:", "!#{smiley['path']}?#{smiley['updated_at'].to_i.to_s}(#{smiley['code']})!")
     end
     text
   end

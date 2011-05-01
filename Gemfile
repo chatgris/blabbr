@@ -16,6 +16,7 @@ gem 'mongoid',              '~>2.0.1'
 gem 'pusher',               '~>0.8.0'
 gem 'rails',                '~>3.0.6'
 gem 'RedCloth',             '~>4.2.7'
+gem 'redis-store',          '~>1.0.0.beta4'
 gem 'simple_form',          '~>1.3.1'
 gem 'stateflow',            '~>0.4.2'
 
@@ -41,8 +42,4 @@ group :development do
   gem 'nokogiri',           '~>1.4.3.1'
   gem 'rbbcode',            '~>0.1.8'
   gem 'thin'
-end
-
-group :production, :development do
-  gem 'dalli',              '~>1.0.3'
 end

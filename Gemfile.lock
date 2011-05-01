@@ -84,7 +84,6 @@ GEM
     crack (0.1.8)
     culerity (0.2.15)
     daemons (1.1.2)
-    dalli (1.0.3)
     devise (1.2.1)
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.3)
@@ -159,6 +158,10 @@ GEM
     rbbcode (0.1.11)
       sanitize-url (>= 0.1.3)
     rcov (0.9.9)
+    redis (2.2.0)
+    redis-store (1.0.0.beta5)
+      redis (~> 2.2.0)
+      redis (>= 2.0.0)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -218,7 +221,6 @@ DEPENDENCIES
   cancan (~> 1.6.4)
   capybara
   carrierwave (~> 0.5.3)
-  dalli (~> 1.0.3)
   devise (~> 1.2.1)
   em-http-request (~> 0.3.0)
   eventmachine (~> 0.12.10)
@@ -236,6 +238,7 @@ DEPENDENCIES
   rails (~> 3.0.6)
   rbbcode (~> 0.1.8)
   rcov
+  redis-store (~> 1.0.0.beta4)
   rspec-rails (~> 2.5.0)
   simple_form (~> 1.3.1)
   spork
