@@ -1,3 +1,7 @@
+class String
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
+end
+
 module RedCloth
   class TextileDoc
     def initialize( string, smilies, restrictions = [] )
@@ -27,7 +31,6 @@ module RedCloth::Formatters::HTML
   include RedCloth::Formatters::Base
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper
-
 
   def bq_close(opts)
     cite = opts[:cite] ? "<cite>#{ escape_attribute opts[:cite] }</cite>" : ''
