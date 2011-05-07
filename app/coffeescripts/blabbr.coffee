@@ -1,10 +1,5 @@
-current_user =
-  audio: $.cookie('audio')
-  user_nickname: $.cookie('user_nickname'),
-  topic_id: null,
-
 (($) ->
-  app = $.sammy ->
+  window.app = $.sammy ->
 
     context = this
 
@@ -45,7 +40,6 @@ current_user =
 
       }
 
-    # TODO : return html rather than js
     this.bind 'postAndShow', ->
       $.ajax {
         type: "POST",
@@ -275,6 +269,6 @@ current_user =
       window.location = e.path
 
   $(->
-    app.run()
+    #app.run()
   )
 )(jQuery)

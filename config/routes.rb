@@ -8,7 +8,10 @@ Blabbr::Application.routes.draw do
     match "/uploads/*path" => "gridfs#serve"
 
     resources :users, :only => [:show, :create, :update] do
-      get :autocomplete, :on => :collection
+      collection do
+        get :autocomplete
+        get :current
+      end
     end
 
     resources :smilies, :as => "smileys", :except => [:show]

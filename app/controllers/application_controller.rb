@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :creator?
   before_filter :redirect_to_https, :set_user_time_zone
-  after_filter :flash_to_headers, :set_user_preferences
+  after_filter :flash_to_headers
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to :back, :alert => t('cancan.not_authorize')
@@ -48,13 +48,6 @@ class ApplicationController < ActionController::Base
 
   def set_user_time_zone
     Time.zone = current_user.time_zone if current_user && current_user.time_zone
-  end
-
-  def set_user_preferences
-    if current_user
-      cookies[:audio] = current_user.audio unless cookies[:audio]
-      cookies[:user_nickname] = current_user.nickname unless cookies[:user_nickname]
-    end
   end
 
 end

@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Fri, 22 Apr 2011 18:03:11 GMT from
+/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 16:25:19 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/application.coffee
  */
 
@@ -6,6 +6,14 @@
   var insertQuote, titleHolder;
   titleHolder = document.title;
   $(document).ready(function() {
+    var load_current_user;
+    load_current_user = function() {
+      return $.getJSON('/users/current.json', function(data) {
+        window.current_user = data;
+        return window.app.run();
+      });
+    };
+    load_current_user();
     $('input.autocomplete').livequery(function() {
       return $(this).each(function() {
         var action, input;

@@ -1,17 +1,10 @@
-/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 15:30:10 GMT from
+/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 16:25:18 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
 (function() {
-  var current_user;
-  current_user = {
-    audio: $.cookie('audio'),
-    user_nickname: $.cookie('user_nickname'),
-    topic_id: null
-  };
   (function($) {
-    var app;
-    app = $.sammy(function() {
+    window.app = $.sammy(function() {
       var context;
       context = this;
       this.before(function() {
@@ -369,8 +362,6 @@
         return window.location = e.path;
       });
     });
-    return $(function() {
-      return app.run();
-    });
+    return $(function() {});
   })(jQuery);
 }).call(this);

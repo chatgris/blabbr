@@ -16,6 +16,10 @@ class UsersController < ApplicationController
     respond_with(@user = User.by_slug(params[:id]).first)
   end
 
+  def current
+    respond_with(current_user)
+  end
+
   def create
     @user = User.new(params[:user])
     if @user.save

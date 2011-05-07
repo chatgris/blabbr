@@ -1,8 +1,13 @@
 titleHolder = document.title;
 
 $(document).ready ->
+  load_current_user = () ->
+    $.getJSON '/users/current.json', (data) ->
+      window.current_user = data
+      window.app.run()
 
-  # TODO : find a better autocomplete
+  load_current_user()
+
   $('input.autocomplete').livequery ->
     $(this).each ->
       input = $(this)
