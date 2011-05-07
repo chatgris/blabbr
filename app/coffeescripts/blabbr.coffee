@@ -8,6 +8,7 @@
     this.before () ->
       this.trigger 'loadingNotification'
       context.path = "#{this.path.split('#')[0]}.js"
+      context.path_json = "#{this.path.split('#')[0]}.json"
       context.params = this.params
       context.title = $('title').text()
 
@@ -34,6 +35,28 @@
         , success: (data) ->
           if data?
             context.trigger 'showContent', {data: data, target: infos.target}
+            if infos.hash?
+              context.trigger 'moveTo', {hash: infos.hash}
+          context.trigger 'hideLoadingNotification'
+
+      }
+
+    this.bind 'posts', (e, data) ->
+      $('.page-title').html('')
+      context.trigger 'addContent', {data: ich.post(post), target: '.page-title'} for post in data.posts
+
+    this.bind 'user', (e, data) ->
+      context.trigger 'showContent', {data: ich.user(data), target: 'aside'}
+
+    this.bind 'getAndShowJson', (e, infos) ->
+      path = infos.path || context.path
+      $.ajax {
+        type: "GET"
+        , url: context.path_json
+        , dataType: "json"
+        , success: (data) ->
+          if data?
+            context.trigger infos.type, data
             if infos.hash?
               context.trigger 'moveTo', {hash: infos.hash}
           context.trigger 'hideLoadingNotification'
@@ -209,7 +232,7 @@
       this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
     this.get 'topics/:id', ->
-      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
+      this.trigger 'getAndShowJson', {target: '#contents', hash: '#contents', type: 'posts'}
       this.trigger 'topicId'
       this.trigger 'subscribeToWS',  {id: this.params['id']}
 
@@ -234,7 +257,7 @@
       this.trigger 'getAndShow', {target: 'aside'}
 
     this.get 'users/:id', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+      this.trigger 'getAndShowJson', {target: 'aside', type: 'user'}
 
     this.post '/topics', ->
       this.trigger 'postAndShow'

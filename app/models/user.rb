@@ -34,7 +34,7 @@ class User
   scope :by_nickname, ->(nickname) { where(:nickname => nickname)}
 
   def as_json(options={})
-    super(:only => [:nickname, :posts_count, :time_zone, :audio],
+    super(:only => [:nickname, :posts_count, :time_zone, :audio, :slug],
           :methods => [:avatar_path, :path])
   end
 
