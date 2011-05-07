@@ -1,15 +1,14 @@
-/* DO NOT MODIFY. This file was compiled Mon, 25 Apr 2011 14:09:21 GMT from
+/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 15:30:10 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
 (function() {
-  var current_user, root;
+  var current_user;
   current_user = {
     audio: $.cookie('audio'),
     user_nickname: $.cookie('user_nickname'),
     topic_id: null
   };
-  root = history.pushState ? "/" : "#/";
   (function($) {
     var app;
     app = $.sammy(function() {
@@ -17,7 +16,7 @@
       context = this;
       this.before(function() {
         this.trigger('loadingNotification');
-        context.path = history.pushState ? "/" + (this.path.substr(1)) + ".js" : "" + (this.path.substr(1)) + ".js";
+        context.path = "" + (this.path.split('#')[0]) + ".js";
         context.params = this.params;
         return context.title = $('title').text();
       });
@@ -30,9 +29,6 @@
           return _gaq.push(['_trackEvent', this.path, this.verb, 'blabbr']);
         }
       });
-      if (history.pushState) {
-        this.setLocationProxy(new Sammy.PushLocationProxy(this));
-      }
       this.bind('loadingNotification', function() {
         return $("#contents").append('<p class="loading"></p>');
       });
@@ -271,28 +267,28 @@
       this.bind('topicId', function() {
         return current_user.topic_id = this.params['id'];
       });
-      this.get(root, function() {
+      this.get('/', function() {
         return this.trigger('getAndShow', {
           target: '#contents'
         });
       });
-      this.get("" + root + "topics", function() {
+      this.get('topics', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "topics/new", function() {
+      this.get('topics/new', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "topics/page/:page_id", function() {
+      this.get('topics/page/:page_id', function() {
         return this.trigger('getAndShow', {
           target: '#contents',
           hash: '#contents'
         });
       });
-      this.get("" + root + "topics/:id", function() {
+      this.get('topics/:id', function() {
         this.trigger('getAndShow', {
           target: '#contents',
           hash: '#contents'
@@ -302,12 +298,12 @@
           id: this.params['id']
         });
       });
-      this.get("" + root + "topics/:id/edit", function() {
+      this.get('topics/:id/edit', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "topics/:id/page/:page_id", function() {
+      this.get('topics/:id/page/:page_id', function() {
         this.trigger('getAndShow', {
           target: '#contents',
           hash: window.location.hash || '#contents'
@@ -317,32 +313,32 @@
           id: this.params['id']
         });
       });
-      this.get("" + root + "topics/:id/posts/:post_id/edit", function() {
+      this.get('topics/:id/posts/:post_id/edit', function() {
         return this.trigger('getAndReplace', {
           target: this.params['post_id']
         });
       });
-      this.get("" + root + "dashboard", function() {
+      this.get('dashboard', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "smilies", function() {
+      this.get('smilies', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "smilies/new", function() {
+      this.get('smilies/new', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.get("" + root + "users/:id", function() {
+      this.get('users/:id', function() {
         return this.trigger('getAndShow', {
           target: 'aside'
         });
       });
-      this.post("/topics", function() {
+      this.post('/topics', function() {
         this.trigger('postAndShow');
         this.trigger('emptyAside');
       });
@@ -358,23 +354,23 @@
       this.put('/topics/:id/rm_member', function() {
         this.trigger('postAndAdd');
       });
-      this.put("" + root + "topics/:id", function() {
+      this.put('topics/:id', function() {
         this.trigger('postAndAdd', {
           target: '#contents'
         });
       });
-      this.put("" + root + "topics/:id/posts/:post_id", function() {
+      this.put('topics/:id/posts/:post_id', function() {
         this.trigger('postAndReplace');
       });
-      this.del("" + root + "topics/:id/posts/:post_id", function() {
+      this.del('topics/:id/posts/:post_id', function() {
         this.trigger('deletePost');
       });
-      return this.get("" + root + "logout", function(e) {
+      return this.get('logout', function(e) {
         return window.location = e.path;
       });
     });
     return $(function() {
-      return app.run(root);
+      return app.run();
     });
   })(jQuery);
 }).call(this);

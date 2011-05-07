@@ -3,8 +3,6 @@ current_user =
   user_nickname: $.cookie('user_nickname'),
   topic_id: null,
 
-root = if history.pushState then "/" else "#/"
-
 (($) ->
   app = $.sammy ->
 
@@ -14,7 +12,7 @@ root = if history.pushState then "/" else "#/"
     #
     this.before () ->
       this.trigger 'loadingNotification'
-      context.path = if history.pushState then "/#{this.path.substr(1)}.js" else "#{this.path.substr(1)}.js"
+      context.path = "#{this.path.split('#')[0]}.js"
       context.params = this.params
       context.title = $('title').text()
 
@@ -23,10 +21,6 @@ root = if history.pushState then "/" else "#/"
       if _gaq?
         _gaq.push ['_trackPageview']
         _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
-
-    # set location proxy-]
-    #
-    this.setLocationProxy(new Sammy.PushLocationProxy(this)) if history.pushState
 
     # bindings
     #
@@ -208,47 +202,47 @@ root = if history.pushState then "/" else "#/"
 
     # routes
     #
-    this.get root, ->
+    this.get '/', ->
       this.trigger 'getAndShow',  {target: '#contents'}
 
-    this.get "#{root}topics", ->
+    this.get 'topics', ->
       this.trigger 'getAndShow',  {target: 'aside'}
 
-    this.get "#{root}topics/new", ->
+    this.get 'topics/new', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{root}topics/page/:page_id", ->
+    this.get 'topics/page/:page_id', ->
       this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
-    this.get "#{root}topics/:id", ->
+    this.get 'topics/:id', ->
       this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
       this.trigger 'topicId'
       this.trigger 'subscribeToWS',  {id: this.params['id']}
 
-    this.get "#{root}topics/:id/edit", ->
+    this.get 'topics/:id/edit', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{root}topics/:id/page/:page_id", ->
+    this.get 'topics/:id/page/:page_id', ->
       this.trigger 'getAndShow', {target: '#contents', hash: window.location.hash || '#contents'}
       this.trigger 'topicId'
       this.trigger 'subscribeToWS',  {id: this.params['id']}
 
-    this.get "#{root}topics/:id/posts/:post_id/edit", ->
+    this.get 'topics/:id/posts/:post_id/edit', ->
       this.trigger 'getAndReplace', {target: this.params['post_id']}
 
-    this.get "#{root}dashboard", ->
+    this.get 'dashboard', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{root}smilies", ->
+    this.get 'smilies', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{root}smilies/new", ->
+    this.get 'smilies/new', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.get "#{root}users/:id", ->
+    this.get 'users/:id', ->
       this.trigger 'getAndShow', {target: 'aside'}
 
-    this.post "/topics", ->
+    this.post '/topics', ->
       this.trigger 'postAndShow'
       this.trigger 'emptyAside'
       return
@@ -265,22 +259,22 @@ root = if history.pushState then "/" else "#/"
       this.trigger 'postAndAdd'
       return
 
-    this.put "#{root}topics/:id", ->
+    this.put 'topics/:id', ->
       this.trigger 'postAndAdd', {target: '#contents'}
       return
 
-    this.put "#{root}topics/:id/posts/:post_id", ->
+    this.put 'topics/:id/posts/:post_id', ->
       this.trigger 'postAndReplace'
       return
 
-    this.del "#{root}topics/:id/posts/:post_id", ->
+    this.del 'topics/:id/posts/:post_id', ->
       this.trigger 'deletePost'
       return
 
-    this.get "#{root}logout", (e) ->
+    this.get 'logout', (e) ->
       window.location = e.path
 
   $(->
-    app.run(root)
+    app.run()
   )
 )(jQuery)
