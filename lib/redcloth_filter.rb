@@ -17,7 +17,7 @@ module RedClothSmileyExtension
   def refs_smiley(text)
     if @smilies
       @smilies.each do |smiley|
-        text.gsub!(":#{smiley['code']}:", "!#{smiley['path']}?#{smiley['ts']}(#{smiley['code']})!")
+        text.gsub!(":#{smiley.code}:", "!#{smiley.path}?#{smiley.ts}(#{smiley.code})!")
       end
     end
     text

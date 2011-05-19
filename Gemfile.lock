@@ -105,6 +105,7 @@ GEM
       i18n (~> 0.4)
     ffi (1.0.7)
       rake (>= 0.8.7)
+    habject (0.1.0)
     haml (3.0.25)
     i18n (0.5.0)
     jammit (0.5.4)
@@ -226,6 +227,7 @@ DEPENDENCIES
   eventmachine (~> 0.12.10)
   factory_girl_rails (~> 1.0)
   faker (~> 0.9.5)
+  habject (~> 0.1.0)
   haml (~> 3.0.25)
   jammit (~> 0.5.3)
   jammit_lite!
