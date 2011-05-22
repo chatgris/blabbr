@@ -42,8 +42,10 @@ describe TopicsController do
       before :each do
         Topic.should_receive(:by_subscribed_topic).with(user.nickname).and_return(topics)
         topics.should_receive(:desc).and_return(topics)
-        topics.should_receive(:paginate).and_return(topics)
-        topics.should_receive(:total_pages).at_least(:once).and_return(1)
+        topics.should_receive(:page).and_return(topics)
+        topics.should_receive(:current_page).at_least(:once).and_return(1)
+        topics.should_receive(:num_pages).at_least(:once).and_return(1)
+        topics.should_receive(:limit_value).at_least(:once).and_return(1)
         get :index
       end
 
@@ -62,8 +64,10 @@ describe TopicsController do
         topic.should_receive(:first).and_return(topic)
         topic.should_receive(:posts).and_return(posts)
         posts.should_receive(:asc).and_return(posts)
-        posts.should_receive(:paginate).and_return(posts)
-        posts.should_receive(:total_pages).at_least(:once).and_return(1)
+        posts.should_receive(:page).and_return(posts)
+        posts.should_receive(:current_page).at_least(:once).and_return(1)
+        posts.should_receive(:num_pages).at_least(:once).and_return(1)
+        posts.should_receive(:limit_value).at_least(:once).and_return(1)
         topic.should_receive(:reset_unread)
         get :show, :id => topic.slug
       end
@@ -107,6 +111,7 @@ describe TopicsController do
         before :each do
           topic.should_receive(:save).and_return(true)
           topic.should_receive(:posts).and_return(posts)
+          posts.should_receive(:page).and_return(posts)
           post :create, :topic => {'new' => 'topic'}
         end
 

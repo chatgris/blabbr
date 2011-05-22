@@ -32,7 +32,7 @@ class TopicsController < ApplicationController
 
     if @topic.save
       flash[:notice] = t('topics.create.success')
-      @posts = @topic.posts.paginate
+      @posts = @topic.posts.page
     else
       flash[:alert] = t('topics.create.fail')
     end

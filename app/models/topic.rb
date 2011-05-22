@@ -20,7 +20,7 @@ class Topic
   accepts_nested_attributes_for :posts
   attr_accessor :user
 
-  paginates_per 15
+  paginates_per PER_PAGE_INDEX
 
   slug_field :title
 

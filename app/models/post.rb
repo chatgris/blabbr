@@ -13,7 +13,7 @@ class Post
   referenced_in :topic, :validate => false
 
   attr_accessor :new_topic, :creator
-  paginates_per 50
+  paginates_per PER_PAGE
 
   stateflow do
     initial :published
