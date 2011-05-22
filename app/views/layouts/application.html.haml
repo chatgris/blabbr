@@ -7,6 +7,22 @@
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = include_javascripts :application
     = csrf_meta_tag
+    %script{:type => "text/html",:id  => "user"}
+      %p
+        Messages : {{ posts_count }}
+      %p
+        <a href="{{path}}"><img = src="{{avatar_path}}" /></a>
+    %script{:type => "text/html",:id  => "post"}
+      %article{:class => 'post', :id => "{{pid}}"}
+        %h4
+          <a href="/users/{{creator_s}}"><img = src="/uploads/avatars/{{creator_s}}.png" /></a>
+          %br
+          <a href="/users/{{creator_s}}">{{creator_n}}</a>
+        %time
+          {{created_at}}
+        %div{:class => 'bubble'}
+          {{{content}}}
+        %hr
   %body
     %header#top
       %nav

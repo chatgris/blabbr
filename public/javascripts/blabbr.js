@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 16:25:18 GMT from
+/* DO NOT MODIFY. This file was compiled Sat, 07 May 2011 22:05:26 GMT from
  * /home/chatgris/dev/blabbr/app/coffeescripts/blabbr.coffee
  */
 
@@ -10,6 +10,7 @@
       this.before(function() {
         this.trigger('loadingNotification');
         context.path = "" + (this.path.split('#')[0]) + ".js";
+        context.path_json = "" + (this.path.split('#')[0]) + ".json";
         context.params = this.params;
         return context.title = $('title').text();
       });
@@ -41,6 +42,46 @@
                 data: data,
                 target: infos.target
               });
+              if (infos.hash != null) {
+                context.trigger('moveTo', {
+                  hash: infos.hash
+                });
+              }
+            }
+            return context.trigger('hideLoadingNotification');
+          }
+        });
+      });
+      this.bind('posts', function(e, data) {
+        var post, _i, _len, _ref, _results;
+        $('.page-title').html('');
+        _ref = data.posts;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          post = _ref[_i];
+          _results.push(context.trigger('addContent', {
+            data: ich.post(post),
+            target: '.page-title'
+          }));
+        }
+        return _results;
+      });
+      this.bind('user', function(e, data) {
+        return context.trigger('showContent', {
+          data: ich.user(data),
+          target: 'aside'
+        });
+      });
+      this.bind('getAndShowJson', function(e, infos) {
+        var path;
+        path = infos.path || context.path;
+        return $.ajax({
+          type: "GET",
+          url: context.path_json,
+          dataType: "json",
+          success: function(data) {
+            if (data != null) {
+              context.trigger(infos.type, data);
               if (infos.hash != null) {
                 context.trigger('moveTo', {
                   hash: infos.hash
@@ -282,9 +323,10 @@
         });
       });
       this.get('topics/:id', function() {
-        this.trigger('getAndShow', {
+        this.trigger('getAndShowJson', {
           target: '#contents',
-          hash: '#contents'
+          hash: '#contents',
+          type: 'posts'
         });
         this.trigger('topicId');
         return this.trigger('subscribeToWS', {
@@ -327,8 +369,9 @@
         });
       });
       this.get('users/:id', function() {
-        return this.trigger('getAndShow', {
-          target: 'aside'
+        return this.trigger('getAndShowJson', {
+          target: 'aside',
+          type: 'user'
         });
       });
       this.post('/topics', function() {

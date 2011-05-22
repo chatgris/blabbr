@@ -8,6 +8,7 @@ javascripts:
     - public/javascripts/jquery.autocomplete.js
     - public/javascripts/jquery.livequery.js
     - public/javascripts/jquery.sexypost.js
+    - public/javascripts/ICanHaz.js
     - public/javascripts/sammy.js
     - public/javascripts/blabbr.js
     - public/javascripts/blabbr.notify.js

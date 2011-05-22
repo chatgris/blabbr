@@ -37,8 +37,8 @@ class Post
   scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
   def as_json(options={})
-    super(:only => [:body, :state, :page, :creator_n, :creator_s],
-          :methods => [:path, :content])
+    super(:only => [:state, :page, :creator_n, :creator_s, :created_at],
+          :methods => [:pid, :path, :content])
   end
 
   protected
@@ -47,8 +47,13 @@ class Post
     topic_post_path(self.topic, self)
   end
 
+  def pid
+    self.id.to_s
+  end
+
   def content
-    RedCloth.new(self.body, @smilies).to_html(:textile, :refs_smiley)
+    $stderr.puts @smilies
+    RedCloth.new(self.body, JSON.parse(Rails.cache.read('smilies_list'))).to_html(:textile, :refs_smiley)
   end
 
   def ws_notify
