@@ -111,6 +111,8 @@ GEM
       closure-compiler (>= 0.1.0)
       yui-compressor (>= 0.9.1)
     json_pure (1.5.1)
+    kaminari (0.12.4)
+      rails (>= 3.0.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -200,7 +202,6 @@ GEM
     tzinfo (0.3.27)
     warden (1.0.4)
       rack (>= 1.0)
-    will_paginate (3.0.pre2)
     xpath (0.1.4)
       nokogiri (~> 1.3)
     yui-compressor (0.9.6)
@@ -229,6 +230,7 @@ DEPENDENCIES
   haml (~> 3.0.25)
   jammit (~> 0.5.3)
   jammit_lite!
+  kaminari (~> 0.12.4)
   mini_magick (~> 3.2)
   mongo (~> 1.3)
   mongoid (~> 2.0.2)
@@ -245,4 +247,3 @@ DEPENDENCIES
   stateflow (~> 0.4.2)
   steak
   thin
-  will_paginate (~> 3.0.pre)

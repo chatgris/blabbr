@@ -1,5 +1,5 @@
 - title "Topics"
-= will_paginate @topics
+= paginate @topics
 %section#topics
   - @topics.each do |topic|
     %article
@@ -11,4 +11,4 @@
         %h4
           = "by #{topic.last_user} le #{current_tz(topic.posted_at)}"
       %hr
-= will_paginate @topics
+= paginate @topics

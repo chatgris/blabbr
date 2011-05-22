@@ -13,6 +13,7 @@ class Post
   referenced_in :topic, :validate => false
 
   attr_accessor :new_topic, :creator
+  paginates_per 50
 
   stateflow do
     initial :published
@@ -52,7 +53,6 @@ class Post
   end
 
   def content
-    $stderr.puts @smilies
     RedCloth.new(self.body, JSON.parse(Rails.cache.read('smilies_list'))).to_html(:textile, :refs_smiley)
   end
 

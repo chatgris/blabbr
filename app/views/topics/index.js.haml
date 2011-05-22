@@ -1,4 +1,4 @@
-= will_paginate @topics, :params => { :format => nil }
+= paginate @topics, :params => { :format => nil }
 %section#topics{:class => 'page-title', :title => "Topics"}
   - @topics.each do |topic|
     %article
@@ -10,4 +10,4 @@
         %h4
           = "by #{topic.last_user} le #{current_tz(topic.posted_at)}"
       %hr
-= will_paginate @topics, :params => { :format => nil }
+= paginate @topics, :params => { :format => nil }

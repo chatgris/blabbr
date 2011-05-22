@@ -8,19 +8,17 @@ class TopicsController < ApplicationController
   caches_action :show, :if => Proc.new { |c| c.request.format.json? }
 
   def index
-    @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE_INDEX
+    @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).page params[:page] || nil
     respond_with(@topics)
   end
 
   def show
-    @posts = @topic.posts.asc(:created_at).paginate :page => params[:page] || nil, :per_page => PER_PAGE
+    @posts = @topic.posts.asc(:created_at).page params[:page] || nil
     respond_to do |format|
       format.html
       format.js
       format.json { render :json => { :topic => @topic, :posts => @posts }}
     end
-
-    #respond_with @posts
   end
 
   def new

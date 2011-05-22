@@ -25,9 +25,9 @@
         = member.nickname
         = hidden_field_tag :nickname, member.nickname
         = submit_tag t('members.delete')
-= will_paginate @posts, :params => { :format => nil }
+= paginate @posts, :params => { :format => nil }
 %section#posts{:class => 'page-title', :title => topic.title}
   = render :partial => 'posts/post', :collection => @posts, :locals => {:topic => topic}
-= will_paginate @posts, :params => { :format => nil }
+= paginate @posts, :params => { :format => nil }
 = form_for([topic, Post.new], :url => topic_posts_path(topic), :remote => true ) do |form|
   = render :partial => 'posts/form', :locals => {:form => form}
