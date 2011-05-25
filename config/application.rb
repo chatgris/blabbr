@@ -15,6 +15,7 @@ module Blabbr
      config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
      config.i18n.default_locale = :en
      config.time_zone = "UTC"
+     config.assets.enabled = true
      config.generators do |g|
        g.orm             :mongoid
        g.template_engine :haml

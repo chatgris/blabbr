@@ -3,10 +3,11 @@
   %head
     %title
       = h("Blabbr - #{yield(:title)}")
-    = stylesheet_link_tag 'style'
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
-    = include_javascripts :application
+    = stylesheet_link_tag 'style'
     = csrf_meta_tag
+    -# TODO : fix include_tags
+    %script{:src => "/assets/application.js", :type => "text/javascript"}
     %script{:type => "text/html",:id  => "user"}
       %p
         Messages : {{ posts_count }}
