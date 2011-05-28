@@ -11,6 +11,6 @@
 //= require jquery.sexypost
 //= require ICanHaz
 //= require sammy
+//= require blabbr.helper
 //= require blabbr
 //= require blabbr.notify
-//= app
