@@ -8,6 +8,7 @@
     = csrf_meta_tag
     -# TODO : fix include_tags
     %script{:src => "/assets/application.js", :type => "text/javascript"}
+    = raw hoptoad_javascript_notifier
     %script{:type => "text/html",:id  => "user"}
       %p
         Messages : {{ posts_count }}

@@ -90,6 +90,9 @@ GEM
     habject (0.1.1)
     haml (3.0.25)
     hike (1.0.0)
+    hoptoad_notifier (2.4.11)
+      activesupport
+      builder
     i18n (0.6.0)
     json_pure (1.5.1)
     kaminari (0.12.4)
@@ -224,6 +227,7 @@ DEPENDENCIES
   faker (~> 0.9.5)
   habject (~> 0.1.0)
   haml (~> 3.0.25)
+  hoptoad_notifier
   kaminari (~> 0.12.4)
   mini_magick (~> 3.2)
   mongo (~> 1.3)
