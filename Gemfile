@@ -46,3 +46,7 @@ group :development do
   gem 'rbbcode',            '~>0.1.8'
   gem 'thin'
 end
+
+group :production do
+  gem 'therubyracer-heroku', '0.8.1.pre3'
+end

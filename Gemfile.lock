@@ -185,6 +185,7 @@ GEM
     steak (1.1.0)
       rspec (>= 1.3)
     subexec (0.0.4)
+    therubyracer-heroku (0.8.1.pre3)
     thin (1.2.11)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -241,5 +242,6 @@ DEPENDENCIES
   spork
   stateflow (~> 0.4.2)
   steak
+  therubyracer-heroku (= 0.8.1.pre3)
   thin
   uglifier
