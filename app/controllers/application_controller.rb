@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
   protect_from_forgery
   helper_method :creator?
-  before_filter :redirect_to_https, :set_user_time_zone
+  before_filter :set_user_time_zone
   after_filter :flash_to_headers
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -40,10 +40,6 @@ class ApplicationController < ActionController::Base
 
   def flash_to_headers
     flash.discard if request.xhr?
-  end
-
-  def redirect_to_https
-    redirect_to :protocol => "https://" unless (request.ssl? || ENV['SSL'].nil?)
   end
 
   def set_user_time_zone

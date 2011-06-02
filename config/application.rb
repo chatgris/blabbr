@@ -16,6 +16,7 @@ module Blabbr
      config.i18n.default_locale = :en
      config.time_zone = "UTC"
      config.assets.enabled = true
+     config.force_ssl unless ENV['SSL'].nil?
      config.generators do |g|
        g.orm             :mongoid
        g.template_engine :haml
