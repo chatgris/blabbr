@@ -11,6 +11,8 @@
 //= require jquery.sexypost
 //= require ICanHaz
 //= require sammy
-//= require blabbr.helper
-//= require blabbr
+//= require js-model-0.10.1
+//= require models/topic
+//= require views/user_view
+//= require blabbr_app
 //= require blabbr.notify
