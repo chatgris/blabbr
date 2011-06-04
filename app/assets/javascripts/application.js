@@ -4,7 +4,7 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery-1.5.2
+//= require jquery-1.6.1
 //= require pusher.min.js
 //= require jquery.autocomplete
 //= require jquery.livequery
