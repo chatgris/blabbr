@@ -1,7 +1,6 @@
 //= require jquery-1.6.1
 //= require pusher.min.js
 //= require jquery.autocomplete
-//= require jquery.livequery
 //= require jquery.sexypost
 //= require ICanHaz
 //= require sammy
