@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => [:update, :create]
-  respond_to :html, :js
+  respond_to :html, :js, :json
 
   def show
     @post = @topic.posts.find(params[:id])

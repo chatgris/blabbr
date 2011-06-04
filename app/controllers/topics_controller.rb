@@ -16,7 +16,6 @@ class TopicsController < ApplicationController
     @posts = @topic.posts.asc(:created_at).page params[:page] || nil
     respond_to do |format|
       format.html
-      format.js
       format.json { render :json => { :topic => @topic, :posts => @posts }}
     end
   end
@@ -36,7 +35,9 @@ class TopicsController < ApplicationController
     else
       flash[:alert] = t('topics.create.fail')
     end
-    respond_with(@topic, :location => topic_path(@topic))
+    respond_with(@topic, :location => topic_path(@topic)) do |format|
+      format.json { render :json => { :topic => @topic, :posts => @posts }}
+    end
   end
 
   def edit

@@ -1,0 +1,31 @@
+<script id="topic_new" type="text/html">
+  <form accept-charset="UTF-8" action="/topics" method="post">
+  <input name="utf8" type="hidden" value="&#x2713;" />
+  <fieldset>
+    <p>
+      <label class="string required" for="topic_title"><abbr title="required">*</abbr> Title</label>
+      <input class="string required" id="topic_title" name="topic[title]" required="required" size="50" type="text" />
+    </p>
+    <label class="text required" for="topic_posts_attributes_0_body"><abbr title="required">*</abbr> Body</label>
+    <textarea class="text required" cols="40" id="topic_posts_0_body" name="topic[posts][0][body]" required="required" rows="20"></textarea></div>
+  </fieldset>
+  <input name="commit" type="submit" value="Submit" />
+  </form>
+</script>
+
+<script id="topic" type="text/html">
+  <section id="posts"></section>
+  <section id="new_post"></section>
+</script>
+
+
+<script id="post_new" type="text/html">
+  <form accept-charset="UTF-8" action="{{path}}/posts" method="post">
+    <input name="utf8" type="hidden" value="✓">
+    <label for="post_body">Title</label>
+    <textarea cols="40" id="post_body" name="post[body]" rows="20"></textarea>
+    <p>
+    <input name="commit" type="submit" value="save">
+    </p>
+  </form>
+</script>

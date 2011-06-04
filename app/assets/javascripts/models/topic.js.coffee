@@ -1,18 +1,46 @@
+class Model
+  @xhr: (method = 'GET', path, callback, data = '')->
+    $.ajax {
+      type: method,
+      url: path,
+      contentType: "application/json",
+      dataType: "json",
+      data: data,
+      complete: (xhr, textStatus) ->
+        callback $.parseJSON(xhr.responseText)
+    }
+    return
+
+  @find: (id, callback)->
+    path = "#{@persistence}/#{id}"
+    @xhr 'GET', path, callback
+
+  @all: (callback)->
+    @xhr 'GET', @persistence, callback
+
+  @create: (data) ->
+    path = @persistence.replace(param, data[param]) for param in @params when param in @params
+    @xhr 'POST', path, @after_create, JSON.stringify data
+
 (($) ->
-  window.User = Model 'user', ->
-    @.persistence Model.REST, '/users'
+  class window.User extends Model
+    @persistence: '/users'
 
-    @.extend {
-      fetch: (id, callback)->
-        @persistence().query(id, callback)
-    }
+  class window.Post extends Model
+    @persistence: '/topics/id/posts'
+    @params: ['id']
 
-  window.Topic = Model 'topic', ->
-    @.persistence Model.REST, '/topics'
+    initialize: (@params) ->
+      @persistence = "/topics/#{@params.id}/posts"
 
-    @.extend {
-      fetch: (id, callback)->
-        @persistence().query(id, callback)
-    }
+    @after_create: (post) ->
+      new PostView post
+      $('#new_post textarea').text('')
+
+  class window.Topic extends Model
+    @persistence: '/topics'
+
+    @after_create: (topic)->
+      new PostsView topic.posts
 
 )(jQuery)
