@@ -19,7 +19,10 @@ class Model
     @xhr 'GET', @persistence, callback
 
   @create: (data) ->
-    path = @persistence.replace(param, data[param]) for param in @params when param in @params
+    if @params
+      path = @persistence.replace(param, data[param]) for param in @params when param in @params
+    else
+      path = @persistence
     @xhr 'POST', path, @after_create, JSON.stringify data
 
 (($) ->
@@ -41,6 +44,7 @@ class Model
     @persistence: '/topics'
 
     @after_create: (topic)->
-      new PostsView topic.posts
+      new TopicView topic
+      $('aside form')[0].reset()
 
 )(jQuery)

@@ -23,7 +23,7 @@
 
     yield: ->
       # TODO: use promises or defer
-      @selector.append @template(@topic)
+      @selector.html @template(@topic)
       new PostView(topic) for topic in @topic.posts
       new PostNewView @topic.topic
 
