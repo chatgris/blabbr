@@ -6,7 +6,7 @@ window.Blabbr = {}
     @use Sammy.NestedParams
 
     @get '/', ->
-      do Topic.all (topics)->
+      Topic.all (topics)->
         new TopicsView topics
 
     @get 'topics/new', ->
@@ -17,8 +17,12 @@ window.Blabbr = {}
         new TopicView topic
 
     @get 'topics/page/:page_id', ->
-      topics = Topic.fetch @params.page_id, (topics)->
-        console.log topics
+      Topic.get @path, (topics) ->
+        new TopicsView topics
+
+    @get 'topics/:id/page/:page_id', ->
+      Topic.get @path, (topic) ->
+        new TopicView topic
 
     @get 'users/:id', ->
       User.find @params.id, (user) ->

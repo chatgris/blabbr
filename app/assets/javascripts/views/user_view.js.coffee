@@ -21,10 +21,15 @@
     clear: ->
       @selector.html('')
 
+    paginate: ->
+      pagination = new Domino {current_page: @topic.current_page, per_page: @topic.per_page, total_entries: @topic.total_entries, path: "#{@topic.topic.path}/page/"}
+      pagination.paginate()
+
     yield: ->
       # TODO: use promises or defer
       @selector.html @template(@topic)
       new PostView(topic) for topic in @topic.posts
+      @selector.find('.pagination').append do @paginate
       new PostNewView @topic.topic
 
     insertQuote: (e)->
@@ -36,7 +41,6 @@
 
   class window.PostNewView
     constructor: (@topic)->
-      console.log @topic
       @selector = $('#new_post')
       do @yield
 
@@ -96,7 +100,9 @@
 
     yield: ->
       @selector.append '<section id="topics"></section>'
-      @selector.find('section').append @template(topic) for topic in @topics
+      @selector.find('section').append @template(topic) for topic in @topics.topics
+      pagination = new Domino {current_page: @topics.current_page, per_page: @topics.per_page, total_entries: @topics.total_entries, path: '/topics/page/'}
+      @selector.find('section').append pagination.paginate()
 
 
 )(jQuery)

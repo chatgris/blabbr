@@ -5,6 +5,7 @@
 //= require ICanHaz
 //= require sammy
 //= require sammy.nested_params
+//= require domino
 //= require models/topic
 //= require views/user_view
 //= require blabbr_app

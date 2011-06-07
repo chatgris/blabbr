@@ -8,15 +8,24 @@ class TopicsController < ApplicationController
   caches_action :show, :if => Proc.new { |c| c.request.format.json? }
 
   def index
-    @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).page params[:page] || nil
-    respond_with(@topics)
+    @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).page current_page
+    respond_with(@topics) do |format|
+      format.json {render :json => {:topics => @topics,
+                                    :current_page => current_page,
+                                    :per_page => @topics.limit_value,
+                                    :total_entries => @topics.total_count}}
+    end
   end
 
   def show
-    @posts = @topic.posts.asc(:created_at).page params[:page] || nil
+    @posts = @topic.posts.asc(:created_at).page current_page
     respond_to do |format|
       format.html
-      format.json { render :json => { :topic => @topic, :posts => @posts }}
+      format.json { render :json => {:topic => @topic,
+                                     :posts => @posts,
+                                     :current_page => current_page,
+                                     :per_page => @posts.limit_value,
+                                     :total_entries => @posts.total_count}}
     end
   end
 

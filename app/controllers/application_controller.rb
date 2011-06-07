@@ -46,4 +46,8 @@ class ApplicationController < ActionController::Base
     Time.zone = current_user.time_zone if current_user && current_user.time_zone
   end
 
+  def current_page
+    params[:page] || 1
+  end
+
 end

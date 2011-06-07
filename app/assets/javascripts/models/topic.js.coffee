@@ -18,6 +18,9 @@ class Model
   @all: (callback)->
     @xhr 'GET', @persistence, callback
 
+  @get: (path, callback)->
+    @xhr 'GET', path, callback
+
   @create: (data) ->
     if @params
       path = @persistence.replace(param, data[param]) for param in @params when param in @params
@@ -32,9 +35,6 @@ class Model
   class window.Post extends Model
     @persistence: '/topics/id/posts'
     @params: ['id']
-
-    initialize: (@params) ->
-      @persistence = "/topics/#{@params.id}/posts"
 
     @after_create: (post) ->
       new PostView post
