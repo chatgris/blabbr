@@ -1,10 +1,10 @@
-//= require jquery-1.6.1
-//= require pusher.min.js
+//= require jquery-1.6.1.js
 //= require jquery.autocomplete
 //= require jquery.sexypost
-//= require ICanHaz
+//= require pusher
 //= require sammy
 //= require sammy.nested_params
+//= require ICanHaz
 //= require domino
 //= require models/topic
 //= require views/user_view

@@ -15,6 +15,8 @@ module Blabbr
      config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
      config.i18n.default_locale = :en
      config.time_zone = "UTC"
+     config.assets.paths << Rails.root.join('vendor', 'assets')
+     config.assets.paths << Rails.root.join('lib', 'assets')
      config.assets.enabled = true
      config.force_ssl unless ENV['SSL'].nil?
      config.generators do |g|
