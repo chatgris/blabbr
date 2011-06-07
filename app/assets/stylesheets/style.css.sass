@@ -183,9 +183,7 @@ section, article, header, footer, nav, aside, hgroup
       width: 310px
     textarea
       width: 300px
-    .pagination
-      display: none
-    #topics
+    .topics
       font-size: 9px
       margin: .5em 0
       article
@@ -194,7 +192,7 @@ section, article, header, footer, nav, aside, hgroup
         header
           width: 270px
 
-#topics
+.topics
   list-style: none
   font-size: 12px
   line-height: 1.4em
@@ -228,6 +226,17 @@ section, article, header, footer, nav, aside, hgroup
         color: $gray
         font-style: italic
         font-weight: normal
+
+.pagination
+  text-align: right
+  li
+    display: inline
+    margin: .3em
+    .current
+      font-size: 14px
+      font-weight: bold
+    a
+      font-size: 12px
 
 h2
   font-size: 22px

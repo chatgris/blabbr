@@ -14,7 +14,7 @@ class window.Domino
     @pagination += "<li><a href='#{@opts.path}#{page}\'>#{page}</li>"
 
   add_current_page: ->
-    @pagination += "<li><a href='#{@opts.path}#{@opts.current_page}\' class='current-page'>#{@opts.current_page}</li>"
+    @pagination += "<li><a href='#{@opts.path}#{@opts.current_page}\' class='current'>#{@opts.current_page}</li>"
 
   pre_current: ->
     start = @opts.current_page - @opts.inner
