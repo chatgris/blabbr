@@ -1,9 +1,10 @@
 class window.Domino
-  constructor: (@opts)->
+  constructor: (@opts, callback)->
     @opts.inner ||= 3
     @opts.outer ||= 3
     @opts.separator ||= '...'
     @opts.current_page = parseInt(@opts.current_page)
+    callback(do @paginate)
 
   paginate: ->
     return if @opts.per_page > @opts.total_entries

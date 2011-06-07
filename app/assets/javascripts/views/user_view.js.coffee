@@ -21,15 +21,20 @@
     clear: ->
       @selector.html('')
 
-    paginate: ->
-      pagination = new Domino {current_page: @topic.current_page, per_page: @topic.per_page, total_entries: @topic.total_entries, path: "#{@topic.topic.path}/page/"}
-      pagination.paginate()
+    paginate: (selector)->
+      new Domino {
+        current_page: @topic.current_page,
+        per_page: @topic.per_page,
+        total_entries: @topic.total_entries,
+        path: "#{@topic.topic.path}/page/"
+      }, (pagination)->
+        selector.append pagination
 
     yield: ->
       # TODO: use promises or defer
       @selector.html @template(@topic)
       new PostView(topic) for topic in @topic.posts
-      @selector.find('.pagination').append do @paginate
+      @paginate @selector.find('.pagination')
       new PostNewView @topic.topic
 
     insertQuote: (e)->
@@ -94,9 +99,14 @@
       topic.member = @member(topic.members)
       ich.topic_item topic
 
-    paginate: (topics)->
-      pagination = new Domino {current_page: topics.current_page, per_page: topics.per_page, total_entries: topics.total_entries, path: '/topics/page/'}
-      pagination.paginate()
+    paginate: (selector)->
+      new Domino {
+        current_page: @topics.current_page,
+        per_page: @topics.per_page,
+        total_entries: @topics.total_entries,
+        path: '/topics/page/'
+      }, (pagination)->
+        selector.find('.pagination').append pagination
 
     clear: ->
       @selector.html('')
@@ -105,7 +115,7 @@
       @selector.append '<section class="topics"></section>'
       @selector.append '<nav class="pagination"></section>'
       @selector.find('section').append @template(topic) for topic in @topics.topics
-      @selector.find('.pagination').append @paginate(@topics)
+      @paginate @selector
 
   class window.TopicsSideView extends TopicsView
     yield: ->
