@@ -5,28 +5,28 @@
 
     # before and after filter
     #
-    this.before () ->
-      this.trigger 'loadingNotification'
-      context.path = "#{this.path.split('#')[0]}.js"
-      context.path_json = "#{this.path.split('#')[0]}.json"
-      context.params = this.params
+    @before () ->
+      @trigger 'loadingNotification'
+      context.path = "#{@path.split('#')[0]}.js"
+      context.path_json = "#{@path.split('#')[0]}.json"
+      context.params = @params
       context.title = $('title').text()
 
-    this.after () ->
-      this.trigger 'subscribeToWS', {id: 'index'}
+    @after () ->
+      @trigger 'subscribeToWS', {id: 'index'}
       if _gaq?
         _gaq.push ['_trackPageview']
-        _gaq.push ['_trackEvent', this.path, this.verb, 'blabbr']
+        _gaq.push ['_trackEvent', @path, @verb, 'blabbr']
 
     # bindings
     #
-    this.bind 'loadingNotification', ->
+    @bind 'loadingNotification', ->
       $("#contents").append '<p class="loading"></p>'
 
-    this.bind 'hideLoadingNotification', ->
+    @bind 'hideLoadingNotification', ->
       $('.loading').hide()
 
-    this.bind 'getAndShow', (e, infos) ->
+    @bind 'getAndShow', (e, infos) ->
       path = infos.path || context.path
       $.ajax {
         type: "GET"
@@ -41,14 +41,14 @@
 
       }
 
-    this.bind 'posts', (e, data) ->
+    @bind 'posts', (e, data) ->
       $('.page-title').html('')
       context.trigger 'addContent', {data: ich.post(post), target: '.page-title'} for post in data.posts
 
-    this.bind 'user', (e, data) ->
+    @bind 'user', (e, data) ->
       context.trigger 'showContent', {data: ich.user(data), target: 'aside'}
 
-    this.bind 'getAndShowJson', (e, infos) ->
+    @bind 'getAndShowJson', (e, infos) ->
       path = infos.path || context.path
       $.ajax {
         type: "GET"
@@ -63,7 +63,7 @@
 
       }
 
-    this.bind 'postAndShow', ->
+    @bind 'postAndShow', ->
       $.ajax {
         type: "POST",
         url: context.path,
@@ -73,7 +73,7 @@
           context.trigger 'showContent', {data: msg, target: "#contents"}
       }
 
-    this.bind 'postAndReplace', ->
+    @bind 'postAndReplace', ->
       target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "POST",
@@ -85,10 +85,10 @@
           context.trigger 'hideLoadingNotification'
       }
 
-    this.bind 'emptyAside', ->
+    @bind 'emptyAside', ->
       $('aside').html('')
 
-    this.bind 'postAndAdd', (e, infos) ->
+    @bind 'postAndAdd', (e, infos) ->
       $.ajax {
         type: "POST",
         url: context.path,
@@ -100,7 +100,7 @@
           context.trigger 'hideLoadingNotification'
       }
 
-    this.bind 'getAndReplace', (e, infos) ->
+    @bind 'getAndReplace', (e, infos) ->
       target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "GET"
@@ -113,7 +113,7 @@
       }
 
 
-    this.bind 'showPost', (e, data) ->
+    @bind 'showPost', (e, data) ->
       $.ajax {
         type: "GET"
         , url: data.path
@@ -125,7 +125,7 @@
 
       }
 
-    this.bind 'deletePost', ->
+    @bind 'deletePost', ->
       target = "##{context.params['post_id']} .bubble"
       $.ajax {
         type: "DELETE",
@@ -138,7 +138,7 @@
           context.trigger 'hideLoadingNotification'
       }
 
-    this.bind 'deleteMember', (e, infos) ->
+    @bind 'deleteMember', (e, infos) ->
       $.ajax {
         type: "DELETE",
         url: context.path,
@@ -149,32 +149,32 @@
           context.trigger 'hideLoadingNotification'
       }
 
-    this.bind 'showContent', (e, data) ->
+    @bind 'showContent', (e, data) ->
       $(data.target).show().html data.data
-      this.trigger 'updateTitle'
+      @trigger 'updateTitle'
 
-    this.bind 'addContent', (e, data) ->
+    @bind 'addContent', (e, data) ->
       id = data.target || "#contents"
       $(id).append(data.data)
 
-    this.bind 'replaceContent', (e, data) ->
+    @bind 'replaceContent', (e, data) ->
       $(data.target).html(data.data)
 
-    this.bind 'updateTitle', ->
+    @bind 'updateTitle', ->
       title = $('.page-title').attr 'title'
       $("#page-title").html title
       document.title = "Blabbr - #{title}"
 
-    this.bind 'notify', ->
+    @bind 'notify', ->
       context.trigger 'lostFocus'
       context.trigger 'blinkTitle', 1
       if current_user.audio?
-        this.trigger 'audioNotification'
+        @trigger 'audioNotification'
 
-    this.bind 'lostFocus', ->
+    @bind 'lostFocus', ->
       window.isActive = false
 
-    this.bind 'blinkTitle', (e, state) ->
+    @bind 'blinkTitle', (e, state) ->
       unless window.isActive
         if state == 1
           document.title = "[new!] - #{context.title}";
@@ -188,21 +188,21 @@
       else
         document.title = context.title
 
-    this.bind 'audioNotification', ->
+    @bind 'audioNotification', ->
       $('body').append '<audio id="player" src="/sound.mp3" autoplay />'
       audio = $('#player')
       $(audio).bind 'ended', ->
-        $(this).remove
+        $(@.remove
 
-    this.bind 'moveTo', (e, data) ->
+    @bind 'moveTo', (e, data) ->
       $.each [window.location.hash, data.hash], (index, value) ->
         if value?
           $(value).livequery () ->
-            $(this).addClass('anchor')
-            $('html,body').animate({scrollTop: $(this).offset().top},'slow')
+            $(@.addClass('anchor')
+            $('html,body').animate({scrollTop: $(@.offset().top},'slow')
             $(value).livequery().expire()
 
-    this.bind 'subscribeToWS', (e, data) ->
+    @bind 'subscribeToWS', (e, data) ->
       id = data.id
       unless pusher.channels.channels[id]
         channel = pusher.subscribe id
@@ -214,81 +214,81 @@
           if $('aside #topics').length?
             context.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
 
-    this.bind 'topicId', ->
-      current_user.topic_id = this.params['id']
+    @bind 'topicId', ->
+      current_user.topic_id = @params['id']
 
     # routes
     #
-    this.get '/', ->
-      this.trigger 'getAndShow',  {target: '#contents'}
+    @get '/', ->
+      @trigger 'getAndShow',  {target: '#contents'}
 
-    this.get 'topics', ->
-      this.trigger 'getAndShow',  {target: 'aside'}
+    @get 'topics', ->
+      @trigger 'getAndShow',  {target: 'aside'}
 
-    this.get 'topics/new', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    @get 'topics/new', ->
+      @trigger 'getAndShow', {target: 'aside'}
 
-    this.get 'topics/page/:page_id', ->
-      this.trigger 'getAndShow', {target: '#contents', hash: '#contents'}
+    @get 'topics/page/:page_id', ->
+      @trigger 'getAndShow', {target: '#contents', hash: '#contents'}
 
-    this.get 'topics/:id', ->
-      this.trigger 'getAndShowJson', {target: '#contents', hash: '#contents', type: 'posts'}
-      this.trigger 'topicId'
-      this.trigger 'subscribeToWS',  {id: this.params['id']}
+    @get 'topics/:id', ->
+      @trigger 'getAndShowJson', {target: '#contents', hash: '#contents', type: 'posts'}
+      @trigger 'topicId'
+      @trigger 'subscribeToWS',  {id: @params['id']}
 
-    this.get 'topics/:id/edit', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    @get 'topics/:id/edit', ->
+      @trigger 'getAndShow', {target: 'aside'}
 
-    this.get 'topics/:id/page/:page_id', ->
-      this.trigger 'getAndShow', {target: '#contents', hash: window.location.hash || '#contents'}
-      this.trigger 'topicId'
-      this.trigger 'subscribeToWS',  {id: this.params['id']}
+    @get 'topics/:id/page/:page_id', ->
+      @trigger 'getAndShow', {target: '#contents', hash: window.location.hash || '#contents'}
+      @trigger 'topicId'
+      @trigger 'subscribeToWS',  {id: @params['id']}
 
-    this.get 'topics/:id/posts/:post_id/edit', ->
-      this.trigger 'getAndReplace', {target: this.params['post_id']}
+    @get 'topics/:id/posts/:post_id/edit', ->
+      @trigger 'getAndReplace', {target: @params['post_id']}
 
-    this.get 'dashboard', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    @get 'dashboard', ->
+      @trigger 'getAndShow', {target: 'aside'}
 
-    this.get 'smilies', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    @get 'smilies', ->
+      @trigger 'getAndShow', {target: 'aside'}
 
-    this.get 'smilies/new', ->
-      this.trigger 'getAndShow', {target: 'aside'}
+    @get 'smilies/new', ->
+      @trigger 'getAndShow', {target: 'aside'}
 
-    this.get 'users/:id', ->
-      this.trigger 'getAndShowJson', {target: 'aside', type: 'user'}
+    @get 'users/:id', ->
+      @trigger 'getAndShowJson', {target: 'aside', type: 'user'}
 
-    this.post '/topics', ->
-      this.trigger 'postAndShow'
-      this.trigger 'emptyAside'
+    @post '/topics', ->
+      @trigger 'postAndShow'
+      @trigger 'emptyAside'
       return
 
-    this.post '/topics/:id/posts',->
-      this.trigger 'postAndAdd', { target: '#posts', hash:'#new_post'}
+    @post '/topics/:id/posts',->
+      @trigger 'postAndAdd', { target: '#posts', hash:'#new_post'}
       return
 
-    this.put '/topics/:id/add_member',->
-      this.trigger 'postAndAdd'
+    @put '/topics/:id/add_member',->
+      @trigger 'postAndAdd'
       return
 
-    this.put '/topics/:id/rm_member',->
-      this.trigger 'postAndAdd'
+    @put '/topics/:id/rm_member',->
+      @trigger 'postAndAdd'
       return
 
-    this.put 'topics/:id', ->
-      this.trigger 'postAndAdd', {target: '#contents'}
+    @put 'topics/:id', ->
+      @trigger 'postAndAdd', {target: '#contents'}
       return
 
-    this.put 'topics/:id/posts/:post_id', ->
-      this.trigger 'postAndReplace'
+    @put 'topics/:id/posts/:post_id', ->
+      @trigger 'postAndReplace'
       return
 
-    this.del 'topics/:id/posts/:post_id', ->
-      this.trigger 'deletePost'
+    @del 'topics/:id/posts/:post_id', ->
+      @trigger 'deletePost'
       return
 
-    this.get 'logout', (e) ->
+    @get 'logout', (e) ->
       window.location = e.path
 
   $(->
