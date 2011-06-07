@@ -81,8 +81,7 @@
       @selector.append @template
 
   class window.TopicsView
-    constructor: (@topics) ->
-      @selector = $('#contents')
+    constructor: (@topics, @selector = $('#contents')) ->
       do @clear
       do @yield
 
@@ -95,14 +94,23 @@
       topic.member = @member(topic.members)
       ich.topic_item topic
 
+    paginate: (topics)->
+      pagination = new Domino {current_page: topics.current_page, per_page: topics.per_page, total_entries: topics.total_entries, path: '/topics/page/'}
+      pagination.paginate()
+
     clear: ->
       @selector.html('')
 
     yield: ->
-      @selector.append '<section id="topics"></section>'
+      @selector.append '<section class="topics"></section>'
+      @selector.append '<nav class="pagination"></section>'
       @selector.find('section').append @template(topic) for topic in @topics.topics
-      pagination = new Domino {current_page: @topics.current_page, per_page: @topics.per_page, total_entries: @topics.total_entries, path: '/topics/page/'}
-      @selector.find('section').append pagination.paginate()
+      @selector.find('.pagination').append @paginate(@topics)
+
+  class window.TopicsSideView extends TopicsView
+    yield: ->
+      @selector.append '<section class="topics"></section>'
+      @selector.find('section').append @template(topic) for topic in @topics.topics
 
 
 )(jQuery)

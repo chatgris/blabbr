@@ -9,6 +9,10 @@ window.Blabbr = {}
       Topic.all (topics)->
         new TopicsView topics
 
+    @get 'topics', ->
+      Topic.all (topics)->
+        new TopicsSideView topics, $('.aside aside')
+
     @get 'topics/new', ->
       new TopicNewView
 
