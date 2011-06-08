@@ -1,5 +1,10 @@
 (($) ->
- class window.UserView
+ class window.CommonView
+   update_title: (title) ->
+    $("#page-title").html title
+    document.title = "Blabbr - #{title}"
+
+ class window.UserView extends CommonView
     constructor: (@user) ->
       @selector = $('.aside aside')
       do @yield
@@ -10,7 +15,7 @@
     yield: ->
       @selector.html @template()
 
-  class window.TopicView
+  class window.TopicView extends CommonView
     constructor: (@topic)->
       @selector = $('#contents')
       do @yield
@@ -33,6 +38,7 @@
     yield: ->
       # TODO: use promises or defer
       @selector.html @template(@topic)
+      @update_title @topic.topic.title
       new PostView(topic) for topic in @topic.posts
       @paginate @selector.find('.pagination')
       new PostNewView @topic.topic
@@ -85,7 +91,7 @@
     yield: ->
       @selector.append @template
 
-  class window.TopicsView
+  class window.TopicsView extends CommonView
     constructor: (@topics, @selector = $('#contents')) ->
       do @clear
       do @yield
@@ -116,6 +122,7 @@
       @selector.append '<nav class="pagination"></section>'
       @selector.find('section').append @template(topic) for topic in @topics.topics
       @paginate @selector
+      @update_title 'Topics'
 
   class window.TopicsSideView extends TopicsView
     yield: ->
