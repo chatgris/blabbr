@@ -84,18 +84,22 @@ window.Blabbr = {}
     @post 'topics', (e)->
       Topic.create @params
       context.trigger 'hideLoadingNotification'
+      return
 
     @post '/topics/:id/posts', ->
       Post.create @params
       context.trigger 'hideLoadingNotification'
+      return
 
     @put 'topics/:id', ->
       console.log 'TODO'
       context.trigger 'hideLoadingNotification'
+      return
 
     @put 'topics/:id/posts/:post_id', ->
       console.log 'TODO'
       context.trigger 'hideLoadingNotification'
+      return
 
     @del 'topics/:id/posts/:post_id', ->
       console.log 'TODO'
