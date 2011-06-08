@@ -1,5 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
+YAML::ENGINE.yamler = 'syck'
 # Pick the frameworks you want:
 # require "active_record/railtie"
 require "action_controller/railtie"
