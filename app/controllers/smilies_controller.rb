@@ -1,6 +1,6 @@
 class SmiliesController < ApplicationController
   before_filter :get_current_smiley_for_creator, :only => [:edit, :update, :destroy]
-  respond_to :html, :js
+  respond_to :json
 
   def index
     @smilies = Smiley.all

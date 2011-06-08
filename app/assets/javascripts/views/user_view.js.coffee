@@ -1,16 +1,47 @@
 (($) ->
- class window.CommonView
-   update_title: (title) ->
-     $("#page-title").html title
-     document.title = "Blabbr - #{title}"
+  class window.CommonView
 
-   move_to: (hash) ->
-     hash = window.location.hash || hash
-     selector = $(hash)
-     selector.addClass('anchor')
-     $('html,body').animate({scrollTop: selector.offset().top},'slow')
+    update_title: (title) ->
+      $("#page-title").html title
+      document.title = "Blabbr - #{title}"
 
- class window.UserView extends CommonView
+    move_to: (hash) ->
+      hash = window.location.hash || hash
+      selector = $(hash)
+      selector.addClass('anchor')
+      $('html,body').animate({scrollTop: selector.offset().top},'slow')
+
+    show_errors: (selector, errors)->
+      selector.html('')
+      selector.append "<dt>#{key} :</dt><dd>#{error[0]}</dd>" for key, error of errors
+
+    get_token: ->
+      $('meta[name="csrf-token"]').attr('content')
+
+  class window.SmileyView extends CommonView
+    constructor: ->
+      @selector = $('.aside aside')
+      do @yield
+
+    template: ->
+      ich.smiley_new {token: @get_token()}
+
+    yield: ->
+      context = @
+      @selector.html @template()
+      @selector.find('form').sexyPost {
+        autoclear: true,
+        progress: (event, completed, loaded, total) ->
+          $(this).siblings('meter:first').attr('value',(completed *100).toFixed(2))
+        , complete: (event, responseText, status) ->
+          if status is 201
+            $.blabbrNotify 'success', 'Smiley added !'
+            context.selector.find('.errors').html ''
+          else if status is 422
+            context.show_errors context.selector.find('.errors'), $.parseJSON(responseText)
+      }
+
+  class window.UserView extends CommonView
     constructor: (@user) ->
       @selector = $('.aside aside')
       do @yield
@@ -21,7 +52,7 @@
     yield: ->
       @selector.html @template()
 
-  class window.TopicView extends CommonView
+   class window.TopicView extends CommonView
     constructor: (@topic)->
       @selector = $('#contents')
       do @yield

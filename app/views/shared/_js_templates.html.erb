@@ -31,3 +31,19 @@
     </p>
   </form>
 </script>
+
+<script id="smiley_new" type="text/html">
+  <form accept-charset="UTF-8" action="/smilies" enctype="multipart/form-data" method="post">
+    <fieldset>
+      <dl class="errors"></dl>
+      <input name="utf8" type="hidden" value="✓">
+      <input name="authenticity_token" type="hidden" value="{{token}}">
+      <label for="smiley[code]">code</label>
+      <input id="smiley_code" name="smiley[code]" size="30" type="text">
+      <label for="smiley_image">Image</label>
+      <input id="smiley_image" name="smiley[image]" type="file">
+      <input name="commit" type="submit" value="save">
+      <meter max="100" value="0" id="status"></meter>
+    </fieldset>
+  </form>
+</script>

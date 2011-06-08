@@ -69,7 +69,7 @@ window.Blabbr = {}
       context.trigger 'hideLoadingNotification'
 
     @get 'smilies/new', ->
-      console.log 'TODO'
+      new SmileyView
       context.trigger 'hideLoadingNotification'
 
     @get 'users/:id', ->
