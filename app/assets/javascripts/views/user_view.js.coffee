@@ -1,8 +1,14 @@
 (($) ->
  class window.CommonView
    update_title: (title) ->
-    $("#page-title").html title
-    document.title = "Blabbr - #{title}"
+     $("#page-title").html title
+     document.title = "Blabbr - #{title}"
+
+   move_to: (hash) ->
+     hash = window.location.hash || hash
+     selector = $(hash)
+     selector.addClass('anchor')
+     $('html,body').animate({scrollTop: selector.offset().top},'slow')
 
  class window.UserView extends CommonView
     constructor: (@user) ->
@@ -42,6 +48,7 @@
       new PostView(topic) for topic in @topic.posts
       @paginate @selector.find('.pagination')
       new PostNewView @topic.topic
+      @move_to @selector.get(0)
 
     insertQuote: (e)->
       if $(e.target).is('p, ul')
