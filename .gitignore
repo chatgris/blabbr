@@ -2,6 +2,7 @@
 **/.DS_Store
 log/*
 tmp/*
+.sass-cache/*
 coverage/*
 public/images/*
 tmp/**/*
