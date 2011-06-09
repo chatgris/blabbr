@@ -41,10 +41,6 @@ module RedCloth::Formatters::HTML
     clean_html(text, ALLOWED_TAGS)
   end
 
-  def after_transform(text)
-    auto_link(text).chomp
-  end
-
   ALLOWED_TAGS = {
     'a' => ['href', 'title'],
     'img' => ['src', 'title', 'alt'],
