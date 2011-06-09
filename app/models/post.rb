@@ -3,8 +3,6 @@ class Post
   include Mongoid::Timestamps
   include Stateflow
   include Rails.application.routes.url_helpers
-  include ActionView::Helpers::TextHelper
-  include ActionView::Helpers::TagHelper
 
   field :body, :type => String
   field :creator_n, :type => String
@@ -55,7 +53,7 @@ class Post
   end
 
   def content
-    auto_link RedCloth.new(self.body, JSON.parse(Rails.cache.read('smilies_list'))).to_html(:textile, :refs_smiley)
+    Textilize.new(self.body).to_html
   end
 
   def ws_notify

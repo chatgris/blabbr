@@ -1,36 +1,27 @@
-class String
-  extend ActionView::Helpers::SanitizeHelper::ClassMethods
-end
+class Textilize
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::UrlHelper
 
-module RedCloth
-  class TextileDoc
-    def initialize( string, smilies, restrictions = [] )
-      @smilies = smilies
-      restrictions.each { |r| method("#{r}=").call( true ) }
-      super(string)
+  def initialize(text)
+    @smilies = JSON.parse(Rails.cache.read('smilies_list')) || []
+    @text = smilize(text)
+  end
+
+  def smilize(text)
+    @smilies.inject(text) do |text, smiley|
+      text.gsub(":#{smiley.code}:", "!#{smiley.path}?#{smiley.ts}(#{smiley.code})!")
     end
   end
-end
 
-
-module RedClothSmileyExtension
-  def refs_smiley(text)
-    if @smilies
-      @smilies.each do |smiley|
-        text.gsub!(":#{smiley.code}:", "!#{smiley.path}?#{smiley.ts}(#{smiley.code})!")
-      end
-    end
-    text
+  def to_html
+    auto_link(RedCloth.new(@text).to_html(:textile))
   end
 end
-
-RedCloth.send(:include, RedClothSmileyExtension)
 
 module RedCloth::Formatters::HTML
 
   include RedCloth::Formatters::Base
-  include ActionView::Helpers::TextHelper
-  include ActionView::Helpers::TagHelper
 
   def bq_close(opts)
     cite = opts[:cite] ? "<cite>#{ escape_attribute opts[:cite] }</cite>" : ''
