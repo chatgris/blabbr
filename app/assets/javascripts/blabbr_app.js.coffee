@@ -94,6 +94,9 @@ window.Blabbr = {}
       app.run()
 
   $(->
+    $('html').mouseover ->
+      Blabbr.is_active = true
+
     # add csrf protection on ajax request
     $.ajaxPrefilter (options, originalOptions, xhr)->
       token = $('meta[name="csrf-token"]').attr('content')
