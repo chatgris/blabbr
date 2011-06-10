@@ -112,7 +112,7 @@
       @selector.append @template(@post)
 
 
-  class window.TopicNewView
+  class window.TopicNewView extends CommonView
     constructor: ->
       @selector = $('.aside aside')
       do @clear_selector
