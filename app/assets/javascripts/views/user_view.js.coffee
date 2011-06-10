@@ -65,6 +65,7 @@
     constructor: (@topic)->
       @selector = $('#contents')
       do @yield
+      do @events
       do @hide_loading_notification
 
     template: (topic)->
@@ -88,12 +89,15 @@
       new PostNewView @topic.topic
       @move_to @selector.get(0)
 
-    insertQuote: (e)->
+    insert_quote: (e)->
       if $(e.target).is('p, ul')
-        console.log e
+        console.log e.currentTarget
+        content = $(e.currentTarget).text()
+        user = $(e.currentTarget).parents('article:first').find('.user').text()
+        $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
 
     events: ->
-      @selector.find('.bubble p, .bubble ul').bind 'click', @insertQuote
+      @selector.find('.bubble p, .bubble ul').bind 'click', @insert_quote
 
   class window.PostNewView extends CommonView
     constructor: (@topic)->
