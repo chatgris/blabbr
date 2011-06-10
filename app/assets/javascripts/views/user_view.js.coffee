@@ -95,7 +95,7 @@
     events: ->
       @selector.find('.bubble p, .bubble ul').bind 'click', @insertQuote
 
-  class window.PostNewView
+  class window.PostNewView extends CommonView
     constructor: (@topic)->
       @selector = $('#new_post')
       do @yield
@@ -107,7 +107,7 @@
     yield: ->
       @selector.append @template(@topic)
 
-  class window.PostView
+  class window.PostView extends CommonView
     constructor: (@post) ->
       @selector = $('#posts')
       do @yield
