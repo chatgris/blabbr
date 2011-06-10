@@ -35,6 +35,17 @@
     <input name="commit" type="submit" value="save">
     </p>
   </form>
+  <a href="/smilies">Smilies</a>
+</script>
+
+<script id="smiley_item" type="text/html">
+  <h3>Smilies</h3>
+  <ul class="smilies">
+    <li>
+      <img src="{{path}}?{{ts}}" alt=":{{code}}:" title=":{{code}}:" />
+      :{{code}}:
+    </li>
+  </ul>
 </script>
 
 <script id="smiley_new" type="text/html">

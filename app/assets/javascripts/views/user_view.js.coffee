@@ -15,6 +15,9 @@
       selector.html('')
       selector.append "<dt>#{key} :</dt><dd>#{error[0]}</dd>" for key, error of errors
 
+    clear_selector: ->
+      @selector.html('')
+
     get_token: ->
       $('meta[name="csrf-token"]').attr('content')
 
@@ -60,9 +63,6 @@
     template: (topic)->
       ich.topic topic
 
-    clear: ->
-      @selector.html('')
-
     paginate: (selector)->
       new Domino {
         current_page: @topic.current_page,
@@ -93,9 +93,6 @@
       @selector = $('#new_post')
       do @yield
 
-    clear: ->
-      @selector.html('')
-
     template: (topic)->
       ich.post_new topic
 
@@ -117,11 +114,8 @@
   class window.TopicNewView
     constructor: ->
       @selector = $('.aside aside')
-      do @clear
+      do @clear_selector
       do @yield
-
-    clear: ->
-      @selector.html('')
 
     template: ->
       ich.topic_new
@@ -131,7 +125,7 @@
 
   class window.TopicsView extends CommonView
     constructor: (@topics, @selector = $('#contents')) ->
-      do @clear
+      do @clear_selector
       do @yield
 
     member: (members)->
@@ -155,9 +149,6 @@
       }, (pagination)->
         selector.find('.pagination').append pagination
 
-    clear: ->
-      @selector.html('')
-
     yield: ->
       @selector.append @template
       @selector.find('.topics').append @template_item(topic) for topic in @topics.topics
@@ -168,6 +159,26 @@
     yield: ->
       @selector.append '<section class="topics"></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
+
+  class window.SmiliesView extends CommonView
+    constructor: (@smilies) ->
+      @selector = $('.aside aside')
+      do @yield
+      do @events
+
+    template_item: (smiley)->
+      ich.smiley_item smiley
+
+    insert_smiley: (e)->
+      code = $(e.currentTarget).attr('alt')
+      $('#post_body').val($('#post_body').val() + code)
+
+    yield: ->
+      @selector.html @template_item(smiley) for smiley in @smilies
+
+    events: ->
+      console.log @selector.find('li')
+      @selector.find('img').bind 'click', @insert_smiley
 
 
 )(jQuery)

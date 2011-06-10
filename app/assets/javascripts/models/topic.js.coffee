@@ -40,6 +40,9 @@ class Model
       new PostView post
       $('#new_post textarea').text('')
 
+  class window.Smiley extends Model
+    @persistence: '/smilies'
+
   class window.Topic extends Model
     @persistence: '/topics'
 
