@@ -22,8 +22,6 @@ window.Blabbr = {}
     @bind 'loadingNotification', ->
       $("#contents").append '<p class="loading"></p>'
 
-    @bind 'hideLoadingNotification', ->
-      $('.loading').hide()
 
     # routes
     #
@@ -35,76 +33,60 @@ window.Blabbr = {}
     @get 'topics', ->
       Topic.all (topics)->
         new TopicsSideView topics, $('.aside aside')
-        context.trigger 'hideLoadingNotification'
 
     @get 'topics/new', ->
       new TopicNewView
-      context.trigger 'hideLoadingNotification'
 
     @get 'topics/:id', ->
       Topic.find @params.id, (topic)->
         new TopicView topic
-        context.trigger 'hideLoadingNotification'
 
     @get 'topics/:id/edit', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
 
     @get 'topics/page/:page_id', ->
       Topic.get @path, (topics) ->
         new TopicsView topics
-        context.trigger 'hideLoadingNotification'
 
     @get 'topics/:id/page/:page_id', ->
       Topic.get @path, (topic) ->
         new TopicView topic
-        context.trigger 'hideLoadingNotification'
 
     @get 'topics/:id/posts/:post_id/edit', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
 
     @get 'smilies', ->
       Smiley.all (smilies)->
         new SmiliesView smilies
-      context.trigger 'hideLoadingNotification'
 
     @get 'smilies/new', ->
       new SmileyView
-      context.trigger 'hideLoadingNotification'
 
     @get 'users/:id', ->
       User.find @params.id, (user) ->
         new UserView user
-        context.trigger 'hideLoadingNotification'
 
     @get 'dashboard', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
 
     @post 'topics', (e)->
       Topic.create @params
-      context.trigger 'hideLoadingNotification'
       return
 
     @post '/topics/:id/posts', ->
       Post.create @params
-      context.trigger 'hideLoadingNotification'
       return
 
     @put 'topics/:id', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
       return
 
     @put 'topics/:id/posts/:post_id', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
       return
 
     @del 'topics/:id/posts/:post_id', ->
       console.log 'TODO'
-      context.trigger 'hideLoadingNotification'
 
   Blabbr.run = () ->
     $.getJSON '/users/current.json', (data) ->

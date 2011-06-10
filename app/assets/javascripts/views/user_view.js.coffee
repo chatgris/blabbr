@@ -18,6 +18,9 @@
     clear_selector: ->
       @selector.html('')
 
+    hide_loading_notification: ->
+      $('.loading').hide()
+
     get_token: ->
       $('meta[name="csrf-token"]').attr('content')
 
@@ -25,6 +28,7 @@
     constructor: ->
       @selector = $('.aside aside')
       do @yield
+      do @hide_loading_notification
 
     template: ->
       ich.smiley_new {token: @get_token()}
@@ -49,6 +53,7 @@
     constructor: (@user) ->
       @selector = $('.aside aside')
       do @yield
+      do @hide_loading_notification
 
     template: ->
       ich.user @user
@@ -60,6 +65,7 @@
     constructor: (@topic)->
       @selector = $('#contents')
       do @yield
+      do @hide_loading_notification
 
     template: (topic)->
       ich.topic topic
@@ -93,6 +99,7 @@
     constructor: (@topic)->
       @selector = $('#new_post')
       do @yield
+      do @hide_loading_notification
 
     template: (topic)->
       ich.post_new topic
@@ -104,6 +111,7 @@
     constructor: (@post) ->
       @selector = $('#posts')
       do @yield
+      do @hide_loading_notification
 
     template: (post)->
       ich.post post
@@ -117,6 +125,7 @@
       @selector = $('.aside aside')
       do @clear_selector
       do @yield
+      do @hide_loading_notification
 
     template: ->
       ich.topic_new
@@ -128,6 +137,7 @@
     constructor: (@topics, @selector = $('#contents')) ->
       do @clear_selector
       do @yield
+      do @hide_loading_notification
 
     member: (members)->
       member = (member for member in members when member.nickname == Blabbr.current_user.nickname)
@@ -160,11 +170,13 @@
     yield: ->
       @selector.append '<section class="topics"></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
+      do @hide_loading_notification
 
   class window.SmiliesView extends CommonView
     constructor: (@smilies) ->
       @selector = $('.aside aside')
       do @yield
+      do @hide_loading_notification
       do @events
 
     template_item: (smiley)->
