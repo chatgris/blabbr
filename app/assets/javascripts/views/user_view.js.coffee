@@ -33,6 +33,7 @@
       context = @
       @selector.html @template()
       @selector.find('form').sexyPost {
+        accept: 'application/json',
         autoclear: true,
         progress: (event, completed, loaded, total) ->
           $(this).siblings('meter:first').attr('value',(completed *100).toFixed(2))

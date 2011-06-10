@@ -99,6 +99,9 @@
         xhr.open(method, action, async);
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        if (config.accept) {
+          xhr.setRequestHeader("Accept", config.accept);
+        }
         xhr.send(data);
       }
     });
