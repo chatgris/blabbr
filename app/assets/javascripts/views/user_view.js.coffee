@@ -139,7 +139,10 @@
       member[0].hash = 'new_post' if member[0].unread == 0
       member[0]
 
-    template: (topic)->
+    template: ->
+      ich.topics
+
+    template_item: (topic)->
       topic.member = @member(topic.members)
       ich.topic_item topic
 
@@ -156,16 +159,15 @@
       @selector.html('')
 
     yield: ->
-      @selector.append '<section class="topics"></section>'
-      @selector.append '<nav class="pagination"></nav>'
-      @selector.find('section').append @template(topic) for topic in @topics.topics
+      @selector.append @template
+      @selector.find('.topics').append @template_item(topic) for topic in @topics.topics
       @paginate @selector
       @update_title 'Topics'
 
   class window.TopicsSideView extends TopicsView
     yield: ->
       @selector.append '<section class="topics"></section>'
-      @selector.find('section').append @template(topic) for topic in @topics.topics
+      @selector.find('section').append @template_item(topic) for topic in @topics.topics
 
 
 )(jQuery)
