@@ -29,7 +29,7 @@
       %article
         %p.unread
           %mark
-            {{#member}}<a href="{{path}}/page/{{page}}\#{{hash}}">{{unread}}</a>{{/member}}
+            {{#member}}<a {{#unread}}class="new"{{/unread}} href="{{path}}/page/{{page}}\#{{hash}}">{{unread}}</a>{{/member}}
         %header
           %h3
             <a href="{{path}}">{{title}}</a>
