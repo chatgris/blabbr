@@ -8,5 +8,5 @@
 //= require domino
 //= require models/topic
 //= require views/user_view
-//= require blabbr_app
+//= require blabbr
 //= require blabbr.notify
