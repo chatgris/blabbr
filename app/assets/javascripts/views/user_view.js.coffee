@@ -178,7 +178,6 @@
       @selector.html @template_item(smiley) for smiley in @smilies
 
     events: ->
-      console.log @selector.find('li')
       @selector.find('img').bind 'click', @insert_smiley
 
 
