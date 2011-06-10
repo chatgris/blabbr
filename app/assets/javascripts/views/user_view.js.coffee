@@ -157,7 +157,7 @@
 
     yield: ->
       @selector.append '<section class="topics"></section>'
-      @selector.append '<nav class="pagination"></section>'
+      @selector.append '<nav class="pagination"></nav>'
       @selector.find('section').append @template(topic) for topic in @topics.topics
       @paginate @selector
       @update_title 'Topics'
