@@ -59,8 +59,8 @@ class Post
   def ws_notify
     begin
       if Pusher.key
-          Pusher[topic.slug].trigger_async('new-post', {:id => self.id, :user_nickname => self.creator_n})
-          Pusher[topic.slug].trigger_async('index', true)
+          Pusher[topic.id].trigger_async('new-post', self.to_json)
+          Pusher[topic.id].trigger_async('index', true)
         end
       rescue Pusher::Error => e
          $stderr.puts e

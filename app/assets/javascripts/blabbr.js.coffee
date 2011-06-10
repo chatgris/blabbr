@@ -1,19 +1,18 @@
-(($) ->
-  window.app = $.sammy ->
+window.Blabbr = {}
 
-    context = this
+(($) ->
+
+  app = $.sammy ->
+    @use Sammy.NestedParams
+    context = @
 
     # before and after filter
     #
     @before () ->
       @trigger 'loadingNotification'
-      context.path = "#{@path.split('#')[0]}.js"
-      context.path_json = "#{@path.split('#')[0]}.json"
-      context.params = @params
-      context.title = $('title').text()
 
     @after () ->
-      @trigger 'subscribeToWS', {id: 'index'}
+      # google analytic
       if _gaq?
         _gaq.push ['_trackPageview']
         _gaq.push ['_trackEvent', @path, @verb, 'blabbr']
@@ -23,25 +22,18 @@
     @bind 'loadingNotification', ->
       $("#contents").append '<p class="loading"></p>'
 
-    @bind 'hideLoadingNotification', ->
-      $('.loading').hide()
-
-    @bind 'updateTitle', ->
-      title = $('.page-title').attr 'title'
-      $("#page-title").html title
-      document.title = "Blabbr - #{title}"
-
     @bind 'notify', ->
+      context.title = $('title').text()
       context.trigger 'lostFocus'
       context.trigger 'blinkTitle', 1
-      if current_user.audio?
+      if Blabbr.current_user.audio?
         @trigger 'audioNotification'
 
     @bind 'lostFocus', ->
-      window.isActive = false
+      Blabbr.is_active = false
 
     @bind 'blinkTitle', (e, state) ->
-      unless window.isActive
+      unless Blabbr.is_active
         if state == 1
           document.title = "[new!] - #{context.title}"
           state = 0
@@ -58,32 +50,103 @@
       $('body').append '<audio id="player" src="/sound.mp3" autoplay />'
       audio = $('#player')
       $(audio).bind 'ended', ->
-        $(@.remove
-
-    @bind 'moveTo', (e, data) ->
-      $.each [window.location.hash, data.hash], (index, value) ->
-        if value?
-          $(value).livequery () ->
-            $(@.addClass('anchor')
-            $('html,body').animate({scrollTop: $(@.offset().top},'slow')
-            $(value).livequery().expire()
+        $(@).remove
 
     @bind 'subscribeToWS', (e, data) ->
+      context = @
       id = data.id
       unless pusher.channels.channels[id]
         channel = pusher.subscribe id
-        channel.bind 'new-post', (data) ->
-          url = "/topics/#{id}/posts/#{data.id}.js"
-          if data.user_nickname != current_user.user_nickname && id == current_user.topic_id
-            context.trigger 'showPost', {path: url, user_id: data.user_id}
+        Blabbr.topic_id = id
+        channel.bind 'new-post', (post) ->
+          if post.creator_n != Blabbr.current_user.nickname && id != Blabbr.topic_id
+            new PostView post
+            context.trigger 'notify'
         channel.bind 'index', (data) ->
-          if $('aside #topics').length?
-            context.trigger 'getAndShow', {path: '/topics.js', target: "aside"}
+          if $('aside .topics').length > 0
+            context.redirect 'topics'
 
-    @bind 'topicId', ->
-      current_user.topic_id = @params['id']
+    # routes
+    #
+    @get '/', ->
+      Topic.all (topics)->
+        new TopicsView topics
+        context.trigger 'hideLoadingNotification'
+
+    @get 'topics', ->
+      Topic.all (topics)->
+        new TopicsSideView topics, $('.aside aside')
+
+    @get 'topics/new', ->
+      new TopicNewView
+
+    @get 'topics/:id', ->
+      Topic.find @params.id, (topic)->
+        new TopicView topic
+        context.trigger 'subscribeToWS',  {id: topic.topic.tid}
+
+    @get 'topics/:id/edit', ->
+      console.log 'TODO'
+
+    @get 'topics/page/:page_id', ->
+      Topic.get @path, (topics) ->
+        new TopicsView topics
+
+    @get 'topics/:id/page/:page_id', ->
+      Topic.get @path, (topic) ->
+        new TopicView topic
+        context.trigger 'subscribeToWS',  {id: topic.topic.tid}
+
+    @get 'topics/:id/posts/:post_id/edit', ->
+      console.log 'TODO'
+
+    @get 'smilies', ->
+      Smiley.all (smilies)->
+        new SmiliesView smilies
+
+    @get 'smilies/new', ->
+      new SmileyView
+
+    @get 'users/:id', ->
+      User.find @params.id, (user) ->
+        new UserView user
+
+    @get 'dashboard', ->
+      console.log 'TODO'
+
+    @post 'topics', (e)->
+      Topic.create @params
+      return
+
+    @post '/topics/:id/posts', ->
+      Post.create @params
+      return
+
+    @put 'topics/:id', ->
+      console.log 'TODO'
+      return
+
+    @put 'topics/:id/posts/:post_id', ->
+      console.log 'TODO'
+      return
+
+    @del 'topics/:id/posts/:post_id', ->
+      console.log 'TODO'
+
+  Blabbr.run = () ->
+    $.getJSON '/users/current.json', (data) ->
+      Blabbr.current_user = data
+      app.run()
 
   $(->
-    #app.run()
+    $('html').mouseover ->
+      Blabbr.is_active = true
+
+    # add csrf protection on ajax request
+    $.ajaxPrefilter (options, originalOptions, xhr)->
+      token = $('meta[name="csrf-token"]').attr('content')
+      xhr.setRequestHeader('X-CSRF-Token', token)
+
+    Blabbr.run()
   )
 )(jQuery)
