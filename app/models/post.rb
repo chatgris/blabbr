@@ -37,7 +37,8 @@ class Post
 
   scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
-  def as_json(options={})
+  def as_json(options = {})
+    options ||= {} #wtf
     super({:only => [:state, :page, :creator_n, :creator_s, :created_at],
            :methods => [:pid, :path, :content]
           }.merge(options))
