@@ -54,6 +54,8 @@ class TopicsController < ApplicationController
   end
 
   def update
+    # TODO : update members
+    #@topic.update_members
     if @topic.update_attributes(params[:topic])
       flash[:notice] = t('topics.update.success')
       respond_to do |format|
@@ -77,6 +79,7 @@ class TopicsController < ApplicationController
   end
 
   # Members
+  # TODO : remove
   def add_member
     if @topic.add_member(params[:nickname])
       flash[:notice] = t('members.create.success', :name => params[:nickname])

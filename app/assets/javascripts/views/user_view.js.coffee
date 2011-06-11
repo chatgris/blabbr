@@ -185,10 +185,16 @@
       do @hide_loading_notification
 
     template: ->
+      @topic.members_list = ("#{member.nickname}," for member in @topic.members)
       ich.topic_edit @topic
 
     yield: ->
       @selector.append @template()
+      @selector.find('#members_list').tagsInput {
+          defaultText: 'add a member'
+          autocomplete_url:'/users/autocomplete.json',
+          autocomplete: {json: true}
+      }
 
   class window.TopicsView extends CommonView
     constructor: (@topics, @selector = $('#contents')) ->

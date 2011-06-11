@@ -2,7 +2,7 @@
 class UsersController < ApplicationController
   before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
-  respond_to :html, :js, :json
+  respond_to :json
 
   def autocomplete
     @users = User.only(:nickname).where(:nickname => /#{params[:q]}/i)

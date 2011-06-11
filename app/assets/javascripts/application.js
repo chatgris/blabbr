@@ -1,6 +1,7 @@
 //= require jquery-1.6.1.js
 //= require jquery.autocomplete
 //= require jquery.sexypost
+//= require jquery.tagsinput
 //= require pusher
 //= require sammy
 //= require sammy.nested_params

@@ -283,7 +283,7 @@ jQuery.autocomplete = function(input, options) {
     function parseJsonData(data) {
         if (!data) return null;
         var parsed = [];
-        
+
         for (var i = 0; i < data.length; i++) {
             var row = data[i];
             if (row && typeof(row) == "string") {
@@ -292,7 +292,7 @@ jQuery.autocomplete = function(input, options) {
                 parsed[i] = escape(row);
             }
         }
-        
+
         return parsed;
     };
 
@@ -337,7 +337,7 @@ jQuery.autocomplete = function(input, options) {
         // recieve the cached data
         if (data) {
             receiveData(q, data);
-        } else if (options.json != false && (typeof options.url == "string")) { 
+        } else if (options.json != false && (typeof options.url == "string")) {
             $.getJSON(makeUrl(q), function(data) {
 
                 data = parseJsonData(data);
@@ -410,7 +410,7 @@ jQuery.autocomplete = function(input, options) {
         var data = options.cacheLength ? loadFromCache(q) : null;
         if (data) {
             findValueCallback(q, data);
-        } else if (options.json != false && (typeof options.url == "string")) { 
+        } else if (options.json != false && (typeof options.url == "string")) {
             $.getJSON(makeUrl(q), function(data) {
                 data = parseJsonData(data);
                 addToCache(q, data);
