@@ -37,6 +37,7 @@ class Post
 
   scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
+  # TODO: don't send content twice
   def as_json(options={})
     super(:only => [:state, :page, :creator_n, :creator_s, :created_at, :body],
           :methods => [:pid, :path, :content])

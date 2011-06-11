@@ -119,7 +119,7 @@ window.Blabbr = {}
       Topic.create @params
       return
 
-    @post '/topics/:id/posts', ->
+    @post '/topics/:topic_id/posts', ->
       Post.create @params
       return
 
@@ -127,11 +127,11 @@ window.Blabbr = {}
       console.log 'TODO'
       return
 
-    @put 'topics/:id/posts/:post_id', ->
-      console.log 'TODO'
+    @put 'topics/:topic_id/posts/:id', ->
+      Post.update @params
       return
 
-    @del 'topics/:id/posts/:post_id', ->
+    @del 'topics/:topic_id/posts/:id', ->
       console.log 'TODO'
 
   Blabbr.run = () ->

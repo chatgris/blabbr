@@ -123,9 +123,17 @@
     yield: ->
       @selector.append @template(@post)
 
+  class window.PostEditedView extends CommonView
+    constructor: (@post)->
+      @selector = $("#p#{@post.pid} .bubble")
+      do @yield
+      do @hide_loading_notification
+
+    yield: ->
+      @selector.html @post.content
+
   class window.PostEditView extends CommonView
     constructor: (@post) ->
-      console.log @post
       @selector = $("#p#{@post.pid}")
       do @yield
       do @hide_loading_notification

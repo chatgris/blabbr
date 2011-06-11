@@ -31,7 +31,11 @@
       @xhr 'GET', path, callback
 
     @create: (data) ->
-      @xhr 'POST', @filter_path(data.param), @after_create, JSON.stringify data
+      @xhr 'POST', @filter_path(data), @after_create, JSON.stringify data
+
+    @update: (data) ->
+      path = "#{@filter_path(data)}/#{data.id}"
+      @xhr 'PUT', path, @after_update, JSON.stringify data
 
   class window.User extends Model
     @persistence: '/users'
@@ -43,6 +47,9 @@
     @after_create: (post) ->
       new PostView post
       $('#new_post textarea').text('')
+
+    @after_update: (post)->
+      new PostEditedView post
 
   class window.Smiley extends Model
     @persistence: '/smilies'

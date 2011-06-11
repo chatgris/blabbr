@@ -1,8 +1,6 @@
 class PostsController < ApplicationController
-  before_filter :get_current_topic_for_member, :only => [:show, :create]
-  before_filter :get_current_topic_for_action, :only => [:edit, :update, :destroy]
+  before_filter :get_current_topic_for_member
   before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
-  before_filter :get_smilies, :only => [:show, :update, :create]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => [:update, :create]
   respond_to :html, :js, :json
@@ -18,10 +16,15 @@ class PostsController < ApplicationController
   def update
     if @post.update_attributes(params[:post])
       flash[:notice] = t('posts.update.success')
+      respond_to do |format|
+        format.json {render :json => @post, :status => 200}
+      end
     else
       flash[:alert] = t('posts.update.fail')
+      respond_to do |format|
+        format.json {render :json => @post.errors, :status => 422}
+      end
     end
-    respond_with(@post, :location => :back)
   end
 
   def create
@@ -51,13 +54,6 @@ class PostsController < ApplicationController
   def get_post_for_creator
     @post = @topic.posts.for_creator(current_user.nickname).find(params[:id])
     unless @post
-      redirect_to :back, :alert => t('posts.not_auth')
-    end
-  end
-
-  def get_current_topic_for_action
-    @topic = Topic.by_slug(params[:topic_id]).by_subscribed_topic(current_user.nickname).first
-    unless @topic
       redirect_to :back, :alert => t('posts.not_auth')
     end
   end
