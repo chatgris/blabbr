@@ -134,11 +134,15 @@ window.Blabbr = {}
       console.log 'TODO'
 
   Blabbr.run = () ->
-    $.getJSON '/users/current.json', (data) ->
-      Blabbr.current_user = data
+    $.getJSON '/users/current.json', (user) ->
+      Blabbr.current_user = user
       app.run()
 
   $(->
+    notice = $('#flash_notice')
+    $.blabbrNotify 'success', notice.text() if notice.text()
+    notice.remove()
+
     $('html').mouseover ->
       Blabbr.is_active = true
 
