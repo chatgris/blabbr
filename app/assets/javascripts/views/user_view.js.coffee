@@ -1,5 +1,9 @@
 (($) ->
   class window.CommonView
+    constructor: ->
+      do @yield
+      do @events
+      do @hide_loading_notification
 
     update_title: (title) ->
       $("#page-title").html title
@@ -15,9 +19,6 @@
       selector.html('')
       selector.append "<dt>#{key} :</dt><dd>#{error[0]}</dd>" for key, error of errors
 
-    clear_selector: ->
-      @selector.html('')
-
     hide_loading_notification: ->
       $('.loading').hide()
 
@@ -29,11 +30,13 @@
       member[0].hash = 'new_post' if member[0].unread == 0
       member[0]
 
+    events: ->
+      # do nothing, placeholder method
+
   class window.SmileyView extends CommonView
     constructor: ->
       @selector = $('.aside aside')
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       ich.smiley_new {token: @get_token()}
@@ -57,8 +60,7 @@
   class window.UserView extends CommonView
     constructor: (@user) ->
       @selector = $('.aside aside')
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       ich.user @user
@@ -69,8 +71,7 @@
   class window.TopicInfoView extends CommonView
     constructor: (@topic)->
       @selector = $('.topic-info')
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       @topic.member_posts_count = @member(@topic.members).posts_count
@@ -84,9 +85,7 @@
   class window.TopicView extends CommonView
     constructor: (@topic)->
       @selector = $('#contents')
-      do @yield
-      do @events
-      do @hide_loading_notification
+      super
 
     template: (topic)->
       ich.topic topic
@@ -121,8 +120,7 @@
   class window.PostNewView extends CommonView
     constructor: (@topic)->
       @selector = $('#new_post')
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: (topic)->
       ich.post_new topic
@@ -134,8 +132,7 @@
     constructor: (@post, @topic) ->
       @selector = $('#posts')
       @post.current = @post.creator_n == Blabbr.current_user.nickname
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: (post)->
       ich.post post
@@ -146,8 +143,7 @@
   class window.PostEditedView extends CommonView
     constructor: (@post)->
       @selector = $("#p#{@post.pid} .bubble")
-      do @yield
-      do @hide_loading_notification
+      super
 
     yield: ->
       @selector.html @post.content
@@ -155,8 +151,7 @@
   class window.PostEditView extends CommonView
     constructor: (@post) ->
       @selector = $("#p#{@post.pid}")
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       ich.post_edit @post
@@ -167,29 +162,25 @@
   class window.TopicNewView extends CommonView
     constructor: ->
       @selector = $('.aside aside')
-      do @clear_selector
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       ich.topic_new
 
     yield: ->
-      @selector.append @template
+      @selector.html @template
 
   class window.TopicEditView extends CommonView
     constructor: (@topic)->
       @selector = $('.aside aside')
-      do @clear_selector
-      do @yield
-      do @hide_loading_notification
+      super
 
     template: ->
       @topic.members_list = ("#{member.nickname}," for member in @topic.members)
       ich.topic_edit @topic
 
     yield: ->
-      @selector.append @template()
+      @selector.html @template()
       @selector.find('#members_list').tagsInput {
           defaultText: 'add a member'
           autocomplete_url:'/users/autocomplete.json',
@@ -198,10 +189,7 @@
 
   class window.TopicsView extends CommonView
     constructor: (@topics, @selector = $('#contents')) ->
-      do @clear_selector
-      do @yield
-      do @hide_loading_notification
-
+      super
 
     template: ->
       ich.topics
@@ -220,23 +208,23 @@
         selector.find('.pagination').append pagination
 
     yield: ->
-      @selector.append @template
+      @selector.html @template
       @selector.find('.topics').append @template_item(topic) for topic in @topics.topics
       @paginate @selector
       @update_title 'Topics'
 
   class window.TopicsSideView extends TopicsView
+    constructor: ->
+      super
+
     yield: ->
       @selector.append '<section class="topics"></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
-      do @hide_loading_notification
 
   class window.SmiliesView extends CommonView
     constructor: (@smilies) ->
       @selector = $('.aside aside')
-      do @yield
-      do @hide_loading_notification
-      do @events
+      super
 
     template_item: (smiley)->
       ich.smiley_item smiley
