@@ -13,11 +13,35 @@
   </form>
 </script>
 
+<script id="topic_edit" type="text/html">
+  <form accept-charset="UTF-8" action="{{path}}" method="post">
+    <input name="_method" type="hidden" value="put">
+    <input name="utf8" type="hidden" value="&#x2713;" />
+    <fieldset>
+      <p>
+        <label class="string required" for="topic_title"><abbr title="required">*</abbr> Title</label>
+        <input class="string required" value="{{title}}" id="topic_title" name="topic[title]" required="required" size="50" type="text" />
+      </p>
+    </fieldset>
+    <input name="commit" type="submit" value="Submit" />
+  </form>
+</script>
+
 <script id="topic" type="text/html">
+  <ul class='topic-info'></ul>
+  <hr />
   <nav class="pagination"></nav>
   <section id="posts"></section>
   <nav class="pagination"></nav>
   <section id="new_post"></section>
+</script>
+
+<script id="topic_info" type="text/html">
+  {{#is_creator}}
+  <li class="edit"><a href="{{path}}/edit">Edit</a></li>
+  {{/is_creator}}
+  <li class='posts'>{{member_posts_count}}/ {{posts_count}}</li>
+  <li class='members'>{{members_size}}</li>
 </script>
 
 <script id="topics" type="text/html">

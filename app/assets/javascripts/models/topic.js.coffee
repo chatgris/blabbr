@@ -59,6 +59,10 @@
 
     @after_create: (topic)->
       new TopicView topic
-      $('aside form')[0].reset()
+      $('.aside aside').html('')
+
+    @after_update: (topic) ->
+      new TopicInfoView topic
+      $('.aside aside').html('')
 
 )(jQuery)

@@ -74,13 +74,17 @@ class Topic
 
   def as_json(options={})
     super(:only => [:creator, :members, :title, :posts_count, :last_user, :posted_at, :created_at],
-          :methods => [:path, :tid])
+          :methods => [:path, :tid, :members_size])
   end
 
   protected
 
   def path
     topic_path(self)
+  end
+
+  def members_size
+    members.size
   end
 
   def tid

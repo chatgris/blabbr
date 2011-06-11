@@ -24,6 +24,11 @@
     get_token: ->
       $('meta[name="csrf-token"]').attr('content')
 
+    member: (members)->
+      member = (member for member in members when member.nickname == Blabbr.current_user.nickname)
+      member[0].hash = 'new_post' if member[0].unread == 0
+      member[0]
+
   class window.SmileyView extends CommonView
     constructor: ->
       @selector = $('.aside aside')
@@ -61,7 +66,22 @@
     yield: ->
       @selector.html @template()
 
-   class window.TopicView extends CommonView
+  class window.TopicInfoView extends CommonView
+    constructor: (@topic)->
+      @selector = $('.topic-info')
+      do @yield
+      do @hide_loading_notification
+
+    template: ->
+      @topic.member_posts_count = @member(@topic.members).posts_count
+      @topic.is_creator = @topic.creator == Blabbr.current_user.nickname
+      ich.topic_info @topic
+
+    yield: ->
+      @selector.html @template()
+      @update_title @topic.title
+
+  class window.TopicView extends CommonView
     constructor: (@topic)->
       @selector = $('#contents')
       do @yield
@@ -82,8 +102,8 @@
 
     yield: ->
       # TODO: use promises or defer
-      @selector.html @template(@topic)
-      @update_title @topic.topic.title
+      @selector.html @template(@topic.topic)
+      new TopicInfoView @topic.topic
       new PostView(post) for post in @topic.posts
       @paginate @selector.find('.pagination')
       new PostNewView @topic.topic
@@ -157,16 +177,25 @@
     yield: ->
       @selector.append @template
 
+  class window.TopicEditView extends CommonView
+    constructor: (@topic)->
+      @selector = $('.aside aside')
+      do @clear_selector
+      do @yield
+      do @hide_loading_notification
+
+    template: ->
+      ich.topic_edit @topic
+
+    yield: ->
+      @selector.append @template()
+
   class window.TopicsView extends CommonView
     constructor: (@topics, @selector = $('#contents')) ->
       do @clear_selector
       do @yield
       do @hide_loading_notification
 
-    member: (members)->
-      member = (member for member in members when member.nickname == Blabbr.current_user.nickname)
-      member[0].hash = 'new_post' if member[0].unread == 0
-      member[0]
 
     template: ->
       ich.topics

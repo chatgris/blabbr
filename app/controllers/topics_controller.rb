@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   before_filter :get_topic, :only => [:show, :edit, :update, :destroy, :add_member, :rm_member]
   before_filter :get_smilies, :only => [:show, :create]
   after_filter :reset_unread_posts, :only => [:show]
-  respond_to :html, :json, :js
+  respond_to :json
   authorize_resource
   caches_action :show, :if => Proc.new { |c| c.request.format.json? }
 
@@ -56,10 +56,15 @@ class TopicsController < ApplicationController
   def update
     if @topic.update_attributes(params[:topic])
       flash[:notice] = t('topics.update.success')
+      respond_to do |format|
+        format.json {render :json => @topic, :status => 200}
+      end
     else
       flash[:alert] = t('topics.update.fail')
+      respond_to do |format|
+        format.json {render :json => @topic, :status => 200}
+      end
     end
-    respond_with(@topic, :location => topic_path(@topic))
   end
 
   def destroy

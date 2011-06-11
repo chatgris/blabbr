@@ -86,7 +86,8 @@ window.Blabbr = {}
         context.trigger 'subscribeToWS',  {id: topic.topic.tid}
 
     @get 'topics/:id/edit', ->
-      console.log 'TODO'
+      Topic.find @params, (topic)->
+        new TopicEditView topic.topic
 
     @get 'topics/page/:page_id', ->
       Topic.get @path, (topics) ->
@@ -124,7 +125,7 @@ window.Blabbr = {}
       return
 
     @put 'topics/:id', ->
-      console.log 'TODO'
+      Topic.update @params
       return
 
     @put 'topics/:topic_id/posts/:id', ->

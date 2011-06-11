@@ -87,9 +87,10 @@ section, article, header, footer, nav, aside, hgroup
   li + li
     border-left: 1px solid #eeddcc
 
-.topic-list
+.topic-list, .topic-info
+  margin: 5px 0
   float: right
-  #ratio:hover
+  .ratio:hover
     background: $beige
   li
     display: inline-block
@@ -98,26 +99,17 @@ section, article, header, footer, nav, aside, hgroup
     font-weight: bold
     text-transform: lowercase
     text-shadow: 1px 1px 0 white
-    a
-      display: block
-      padding: 0.3em 0.6em 0.3em 22px
-      &:hover
-        text-decoration: underline
-    li
-      background: transparent
-      -moz-border-radius: 0
-      -moz-box-shadow: none
-      -webkit-border-radius: 0
-      -webkit-box-shadow: none
-      margin: 0
-    li + li
-      border-left: $background unquote("1px solid")
-
-#posts-ratio a
-  background: url(/stylesheets/images/post.png) no-repeat 4px center
-
-#members a
-  background: url(/stylesheets/images/member.png) no-repeat 4px center
+    padding: 0.3em 0.6em 0.3em 22px
+  .posts
+    background: $beige url(/stylesheets/images/post.png) no-repeat 4px center
+  .members
+    background: $beige url(/stylesheets/images/member.png) no-repeat 4px center
+  .edit
+    background: $beige url(/stylesheets/images/edit.png) no-repeat 4px center
+  .destroy
+    background: $beige url(/stylesheets/images/destroy.png) no-repeat 4px center
+  .new
+    background: $beige url(/stylesheets/images/new.png) no-repeat 4px center
 
 #add-member
   background: $beige url(/stylesheets/images/add-member.png) no-repeat 4px center
@@ -131,17 +123,6 @@ section, article, header, footer, nav, aside, hgroup
 .autocomplete
   margin: 1px 0 0 0
 
-#files-ratio a
-  background: url(/stylesheets/images/file.png) no-repeat 4px center
-
-.edit a
-  background: url(/stylesheets/images/edit.png) no-repeat 4px center
-
-.destroy a
-  background: url(/stylesheets/images/destroy.png) no-repeat 4px center
-
-.new a
-  background: url(/stylesheets/images/new.png) no-repeat 4px center
 
 #center
   width: 1000px
