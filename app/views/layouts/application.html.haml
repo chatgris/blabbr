@@ -9,22 +9,6 @@
     -# TODO : fix include_tags
     %script{:src => "/assets/application.js", :type => "text/javascript"}
     = raw hoptoad_javascript_notifier
-    %script{:type => "text/html",:id  => "user"}
-      %p
-        Messages : {{ posts_count }}
-      %p
-        <a href="{{path}}"><img = src="{{avatar_path}}" /></a>
-    %script{:type => "text/html",:id  => "post"}
-      %article{:class => 'post', :id => "{{pid}}"}
-        %h4
-          <a href="/users/{{creator_s}}"><img = src="/uploads/avatars/{{creator_s}}.png" /></a>
-          %br
-          <a class="user" href="/users/{{creator_s}}">{{creator_n}}</a>
-        %time
-          {{created_at}}
-        %div{:class => 'bubble'}
-          {{{content}}}
-        %hr
     %script{:type => "text/html",:id  => "topic_item"}
       %article
         %p.unread

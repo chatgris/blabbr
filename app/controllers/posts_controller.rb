@@ -9,6 +9,7 @@ class PostsController < ApplicationController
 
   def show
     @post = @topic.posts.find(params[:id])
+    respond_with(@post)
   end
 
   def edit

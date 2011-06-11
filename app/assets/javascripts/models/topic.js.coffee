@@ -1,42 +1,44 @@
-class Model
-  @xhr: (method = 'GET', path, callback, data = '')->
-    $.ajax {
-      type: method,
-      url: path,
-      contentType: "application/json",
-      dataType: "json",
-      data: data,
-      complete: (xhr, textStatus) ->
-        $.blabbrNotify 'success', xhr.getResponseHeader('X-Message-Notice') if xhr.getResponseHeader('X-Message-Notice')
-        $.blabbrNotify 'fail', xhr.getResponseHeader('X-Message-Error') if xhr.getResponseHeader('X-Message-Error')
-        callback $.parseJSON(xhr.responseText)
-    }
-    return
-
-  @find: (id, callback)->
-    path = "#{@persistence}/#{id}"
-    @xhr 'GET', path, callback
-
-  @all: (callback)->
-    @xhr 'GET', @persistence, callback
-
-  @get: (path, callback)->
-    @xhr 'GET', path, callback
-
-  @create: (data) ->
-    if @params
-      path = @persistence.replace(param, data[param]) for param in @params when param in @params
-    else
-      path = @persistence
-    @xhr 'POST', path, @after_create, JSON.stringify data
-
 (($) ->
+  class Model
+    @xhr: (method = 'GET', path, callback, data = '')->
+      $.ajax {
+        type: method,
+        url: path,
+        contentType: "application/json",
+        dataType: "json",
+        data: data,
+        complete: (xhr, textStatus) ->
+          $.blabbrNotify 'success', xhr.getResponseHeader('X-Message-Notice') if xhr.getResponseHeader('X-Message-Notice')
+          $.blabbrNotify 'fail', xhr.getResponseHeader('X-Message-Error') if xhr.getResponseHeader('X-Message-Error')
+          callback $.parseJSON(xhr.responseText)
+      }
+      return
+
+    @filter_path: (params)->
+      if @params
+        path = @persistence.replace(param, params[param]) for param in @params when param in @params
+      else
+        path = @persistence
+
+    @find: (params, callback)->
+      path = "#{@filter_path(params)}/#{params.id}"
+      @xhr 'GET', path, callback
+
+    @all: (callback)->
+      @xhr 'GET', @persistence, callback
+
+    @get: (path, callback)->
+      @xhr 'GET', path, callback
+
+    @create: (data) ->
+      @xhr 'POST', @filter_path(data.param), @after_create, JSON.stringify data
+
   class window.User extends Model
     @persistence: '/users'
 
   class window.Post extends Model
-    @persistence: '/topics/id/posts'
-    @params: ['id']
+    @persistence: '/topics/topic_id/posts'
+    @params: ['topic_id']
 
     @after_create: (post) ->
       new PostView post

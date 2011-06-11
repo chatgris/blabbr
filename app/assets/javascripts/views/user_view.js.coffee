@@ -84,14 +84,13 @@
       # TODO: use promises or defer
       @selector.html @template(@topic)
       @update_title @topic.topic.title
-      new PostView(topic) for topic in @topic.posts
+      new PostView(post) for post in @topic.posts
       @paginate @selector.find('.pagination')
       new PostNewView @topic.topic
       @move_to @selector.get(0)
 
     insert_quote: (e)->
       if $(e.target).is('p, ul')
-        console.log e.currentTarget
         content = $(e.currentTarget).text()
         user = $(e.currentTarget).parents('article:first').find('.user').text()
         $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
@@ -112,8 +111,9 @@
       @selector.append @template(@topic)
 
   class window.PostView extends CommonView
-    constructor: (@post) ->
+    constructor: (@post, @topic) ->
       @selector = $('#posts')
+      @post.current = @post.creator_n == Blabbr.current_user.nickname
       do @yield
       do @hide_loading_notification
 
@@ -123,6 +123,18 @@
     yield: ->
       @selector.append @template(@post)
 
+  class window.PostEditView extends CommonView
+    constructor: (@post) ->
+      console.log @post
+      @selector = $("#p#{@post.pid}")
+      do @yield
+      do @hide_loading_notification
+
+    template: ->
+      ich.post_edit @post
+
+    yield: ->
+      @selector.find('.bubble').html @template()
 
   class window.TopicNewView extends CommonView
     constructor: ->

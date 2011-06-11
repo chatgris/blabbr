@@ -81,7 +81,7 @@ window.Blabbr = {}
       new TopicNewView
 
     @get 'topics/:id', ->
-      Topic.find @params.id, (topic)->
+      Topic.find @params, (topic)->
         new TopicView topic
         context.trigger 'subscribeToWS',  {id: topic.topic.tid}
 
@@ -92,13 +92,14 @@ window.Blabbr = {}
       Topic.get @path, (topics) ->
         new TopicsView topics
 
-    @get 'topics/:id/page/:page_id', ->
+    @get 'topics/:topic_id/page/:page_id', ->
       Topic.get @path, (topic) ->
         new TopicView topic
         context.trigger 'subscribeToWS',  {id: topic.topic.tid}
 
-    @get 'topics/:id/posts/:post_id/edit', ->
-      console.log 'TODO'
+    @get 'topics/:topic_id/posts/:id/edit', (e)->
+      Post.find @params, (post) ->
+        new PostEditView post, e
 
     @get 'smilies', ->
       Smiley.all (smilies)->
@@ -108,7 +109,7 @@ window.Blabbr = {}
       new SmileyView
 
     @get 'users/:id', ->
-      User.find @params.id, (user) ->
+      User.find @params, (user) ->
         new UserView user
 
     @get 'dashboard', ->
