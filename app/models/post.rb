@@ -37,10 +37,10 @@ class Post
 
   scope :for_creator, ->(creator) { where('creator_n' => creator)}
 
-  # TODO: don't send content twice
   def as_json(options={})
-    super(:only => [:state, :page, :creator_n, :creator_s, :created_at, :body],
-          :methods => [:pid, :path, :content])
+    super({:only => [:state, :page, :creator_n, :creator_s, :created_at],
+           :methods => [:pid, :path, :content]
+          }.merge(options))
   end
 
   protected
@@ -49,12 +49,16 @@ class Post
     topic_post_path(self.topic, self)
   end
 
+  def raw
+    body
+  end
+
   def pid
     self.id.to_s
   end
 
   def content
-    Textilize.new(self.body).to_html
+    Textilize.new(body).to_html
   end
 
   def ws_notify

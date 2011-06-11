@@ -11,6 +11,9 @@ class PostsController < ApplicationController
   end
 
   def edit
+    respond_to do |format|
+      format.json {render :json => @post.as_json({:methods => [:pid, :path, :raw]}), :status => 200}
+    end
   end
 
   def update

@@ -99,7 +99,7 @@ window.Blabbr = {}
         context.trigger 'subscribeToWS',  {id: topic.topic.tid}
 
     @get 'topics/:topic_id/posts/:id/edit', (e)->
-      Post.find @params, (post) ->
+      Post.get @path, (post) ->
         new PostEditView post, e
 
     @get 'smilies', ->
