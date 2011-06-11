@@ -1,8 +1,0 @@
-- if flash[:notice]
-  :javascript
-    $.blabbrNotify('success','#{flash[:notice]}');
-    $('#post_body').val('').focus();
-    $('#page-title').html('#{@topic.title}')
-- else
-  :javascript
-    $.blabbrNotify('fail','#{flash[:alert]}');

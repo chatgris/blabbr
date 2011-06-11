@@ -1,8 +1,0 @@
-= simple_form_for topic do |f|
-  = f.error_messages
-  %p
-    = f.input :title
-  = field_set_tag do
-    = f.simple_fields_for :posts do |fp|
-      = fp.input :body, :as => :text
-  = f.submit "Submit"

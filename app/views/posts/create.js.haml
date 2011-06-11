@@ -1,8 +1,0 @@
-- if flash[:notice]
-  = render :partial => 'posts/post', :object => @post, :locals => {:topic => @topic}
-  :javascript
-    $.blabbrNotify('success','#{flash[:notice]}');
-    $('#post_body').val('').focus();
-- else
-  :javascript
-    $.blabbrNotify('fail','#{flash[:alert]}');

@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => [:update, :create]
-  respond_to :html, :js, :json
+  respond_to :json
 
   def show
     @post = @topic.posts.find(params[:id])

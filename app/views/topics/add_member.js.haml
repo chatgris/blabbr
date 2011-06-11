@@ -1,7 +1,0 @@
-- if flash[:notice]
-  :javascript
-    $.blabbrNotify('success','#{flash[:notice]}');
-    $('#nickname').val('').focus();
-- else
-  :javascript
-    $.blabbrNotify('fail','#{flash[:alert]}');

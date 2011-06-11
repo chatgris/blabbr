@@ -7,7 +7,7 @@
 //= require sammy.nested_params
 //= require ICanHaz
 //= require domino
-//= require models/topic
-//= require views/user_view
+//= require models
+//= require views
 //= require blabbr
 //= require blabbr.notify

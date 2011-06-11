@@ -218,7 +218,7 @@
       super
 
     yield: ->
-      @selector.append '<section class="topics"></section>'
+      @selector.html '<section class="topics"></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
 
   class window.SmiliesView extends CommonView
