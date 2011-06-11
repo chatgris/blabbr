@@ -44,6 +44,7 @@ class TopicsController < ApplicationController
     else
       flash[:alert] = t('topics.create.fail')
     end
+    # TODO: custom responder
     respond_with(@topic, :location => topic_path(@topic)) do |format|
       format.json { render :json => { :topic => @topic, :posts => @posts }}
     end

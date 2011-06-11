@@ -39,7 +39,12 @@ class ApplicationController < ActionController::Base
   end
 
   def flash_to_headers
-    flash.discard if request.xhr?
+    if request.xhr?
+      [:notice, :alert].each do |msg|
+        response.headers["X-Message-#{msg.capitalize}"] = flash[msg]  unless flash[msg].blank?
+      end
+      flash.discard
+    end
   end
 
   def set_user_time_zone

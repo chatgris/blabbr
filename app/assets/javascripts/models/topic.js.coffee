@@ -7,6 +7,8 @@ class Model
       dataType: "json",
       data: data,
       complete: (xhr, textStatus) ->
+        $.blabbrNotify 'success', xhr.getResponseHeader('X-Message-Notice') if xhr.getResponseHeader('X-Message-Notice')
+        $.blabbrNotify 'fail', xhr.getResponseHeader('X-Message-Error') if xhr.getResponseHeader('X-Message-Error')
         callback $.parseJSON(xhr.responseText)
     }
     return
