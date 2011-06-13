@@ -106,12 +106,19 @@
     {{#current}}
     <a class="edit" href="{{path}}/edit">Edit</a>
     {{#published}}
-    <form accept-charset="UTF-8" action="{{path}}" class="simple_form post" method="delete">
+    <form accept-charset="UTF-8" action="{{path}}" class="simple_form post" method="post">
       <input name="utf8" type="hidden" value="✓">
       <input name="_method" type="hidden" value="delete">
-      <input id="post_submit" name="commit" type="submit" value="Delete" />
+      <input id="delete_submit" name="commit" type="submit" value="Delete" />
     </form>
     {{/published}}
+    {{#deleted}}
+    <form accept-charset="UTF-8" action="{{path}}/publish" class="simple_form post" method="post">
+      <input name="utf8" type="hidden" value="✓">
+      <input name="_method" type="hidden" value="put">
+      <input id="publish_submit" name="commit" type="submit" value="Publish" />
+    </form>
+    {{/deleted}}
     {{/current}}
     <time>
       {{created_at}}

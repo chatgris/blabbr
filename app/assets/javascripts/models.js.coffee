@@ -30,6 +30,9 @@
     @get: (path, callback)->
       @xhr 'GET', path, callback
 
+    @put: (path, data) ->
+      @xhr 'PUT', path, @after_update, JSON.stringify data
+
     @create: (data) ->
       @xhr 'POST', @filter_path(data), @after_create, JSON.stringify data
 
@@ -56,7 +59,7 @@
       new PostEditedView post
 
     @after_destroy: (post) ->
-      new PostDestroyView post
+      new PostEditedView post
 
   class window.Smiley extends Model
     @persistence: '/smilies'

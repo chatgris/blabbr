@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_filter :get_current_topic_for_member
-  before_filter :get_post_for_creator, :only => [:edit, :update, :destroy]
+  before_filter :get_post_for_creator, :only => [:edit, :update, :destroy, :publish]
   after_filter :reset_unread_posts, :only => [:show]
   after_filter :reset_cache, :only => [:update, :create]
   respond_to :json
@@ -40,6 +40,20 @@ class PostsController < ApplicationController
       flash[:alert] = t('posts.create.fail')
     end
     respond_with(@post, :location => page_topic_path(:id => @topic, :page => @topic.posts_count / PER_PAGE + 1, :anchor => @post.id.to_s))
+  end
+
+  def publish
+    if @post.publish!
+      flash[ :notice] = t('posts.publish.success')
+      respond_to do |format|
+        format.json {render :json => @post, :status => 200}
+      end
+    else
+      flash[:alert] = t('posts.publish.fail')
+      respond_to do |format|
+        format.json {render :json => @post.errors, :status => 422}
+      end
+    end
   end
 
   def destroy

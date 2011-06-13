@@ -162,6 +162,7 @@
       @selector = $('#posts')
       @post.current = @post.creator_n == Blabbr.current_user.nickname
       @post.published = @post.state == 'published'
+      @post.deleted = @post.state == 'deleted'
       super
 
     template: (post)->
@@ -170,21 +171,19 @@
     yield: ->
       @selector.append @template(@post)
 
-  class window.PostDestroyView extends CommonView
-    constructor: (@post) ->
-      @selector = $("#p#{@post.pid} .bubble")
-      super
-
-    yield: ->
-      @selector.html @post.content
-
   class window.PostEditedView extends CommonView
     constructor: (@post)->
-      @selector = $("#p#{@post.pid} .bubble")
+      @selector = $("#p#{@post.pid}")
+      @post.current = @post.creator_n == Blabbr.current_user.nickname
+      @post.published = @post.state == 'published'
+      @post.deleted = @post.state == 'deleted'
       super
 
+    template: (post)->
+      ich.post post
+
     yield: ->
-      @selector.html @post.content
+      @selector.replaceWith @template(@post)
 
   class window.PostEditView extends CommonView
     constructor: (@post) ->

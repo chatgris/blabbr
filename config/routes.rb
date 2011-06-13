@@ -25,7 +25,11 @@ Blabbr::Application.routes.draw do
       match '/topics/page/:page' => 'topics#index', :as => "page_topics"
 
       resources :topics do
-        resources :posts
+        resources :posts do
+          member do
+            put :publish
+          end
+        end
       end
 
       match 'dashboard' => 'users#edit', :as => :dashboard

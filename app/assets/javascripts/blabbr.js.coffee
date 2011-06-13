@@ -132,6 +132,10 @@ window.Blabbr = {}
       Post.update @params
       return
 
+    @put 'topics/:topic_id/posts/:id/publish', ->
+      Post.put @path, @params
+      return
+
     @del 'topics/:topic_id/posts/:id', ->
       Post.destroy @params
       return
