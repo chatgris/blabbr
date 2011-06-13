@@ -234,7 +234,9 @@
       $('#post_body').val($('#post_body').val() + code)
 
     yield: ->
-      @selector.html @template_item(smiley) for smiley in @smilies
+      @selector.html '<h3>Smilies</h3>'
+      content = (@template_item(smiley).get(0) for smiley in @smilies)
+      @selector.append content
 
     events: ->
       @selector.find('img').bind 'click', @insert_smiley
