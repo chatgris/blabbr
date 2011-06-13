@@ -133,7 +133,8 @@ window.Blabbr = {}
       return
 
     @del 'topics/:topic_id/posts/:id', ->
-      console.log 'TODO'
+      Post.destroy @params
+      return
 
   Blabbr.run = () ->
     $.getJSON '/users/current.json', (user) ->

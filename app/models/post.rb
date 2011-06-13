@@ -59,7 +59,7 @@ class Post
   end
 
   def content
-    Textilize.new(body).to_html
+    published? ? Textilize.new(body).to_html : I18n.t('posts.deleted')
   end
 
   def ws_notify

@@ -37,6 +37,10 @@
       path = "#{@filter_path(data)}/#{data.id}"
       @xhr 'PUT', path, @after_update, JSON.stringify data
 
+    @destroy: (data) ->
+      path = "#{@filter_path(data)}/#{data.id}"
+      @xhr 'DELETE', path, @after_destroy, JSON.stringify data
+
   class window.User extends Model
     @persistence: '/users'
 
@@ -50,6 +54,9 @@
 
     @after_update: (post)->
       new PostEditedView post
+
+    @after_destroy: (post) ->
+      new PostDestroyView post
 
   class window.Smiley extends Model
     @persistence: '/smilies'

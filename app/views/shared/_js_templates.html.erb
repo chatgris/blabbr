@@ -105,11 +105,13 @@
     </h4>
     {{#current}}
     <a class="edit" href="{{path}}/edit">Edit</a>
+    {{#published}}
     <form accept-charset="UTF-8" action="{{path}}" class="simple_form post" method="delete">
       <input name="utf8" type="hidden" value="✓">
       <input name="_method" type="hidden" value="delete">
       <input id="post_submit" name="commit" type="submit" value="Delete" />
     </form>
+    {{/published}}
     {{/current}}
     <time>
       {{created_at}}

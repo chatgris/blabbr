@@ -45,10 +45,15 @@ class PostsController < ApplicationController
   def destroy
     if @post.delete!
       flash[ :notice] = t('posts.destroy.success')
+      respond_to do |format|
+        format.json {render :json => @post, :status => 200}
+      end
     else
       flash[:alert] = t('posts.destroy.fail')
+      respond_to do |format|
+        format.json {render :json => @post.errors, :status => 422}
+      end
     end
-    respond_with(@post, :location => topics_path)
   end
 
   protected
