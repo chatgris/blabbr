@@ -1,7 +1,6 @@
 # encoding: utf-8
 class TopicsController < ApplicationController
-  before_filter :get_topic, :only => [:show, :edit, :update, :destroy, :add_member, :rm_member]
-  before_filter :get_smilies, :only => [:show, :create]
+  before_filter :get_topic, :only => [:show, :update, :destroy, :add_member, :rm_member]
   after_filter :reset_unread_posts, :only => [:show]
   respond_to :json
   authorize_resource
@@ -9,7 +8,7 @@ class TopicsController < ApplicationController
 
   def index
     @topics = Topic.by_subscribed_topic(current_user.nickname).desc(:posted_at).page current_page
-    respond_with(@topics) do |format|
+    respond_to do |format|
       format.json {render :json => {:topics => @topics,
                                     :current_page => current_page,
                                     :per_page => @topics.limit_value,
@@ -20,18 +19,11 @@ class TopicsController < ApplicationController
   def show
     @posts = @topic.posts.asc(:created_at).page current_page
     respond_to do |format|
-      format.html
       format.json { render :json => {:topic => @topic,
-                                     :posts => @posts,
                                      :current_page => current_page,
                                      :per_page => @posts.limit_value,
                                      :total_entries => @posts.total_count}}
     end
-  end
-
-  def new
-    @topic = Topic.new
-    @topic.posts.new
   end
 
   def create
@@ -45,12 +37,9 @@ class TopicsController < ApplicationController
       flash[:alert] = t('topics.create.fail')
     end
     # TODO: custom responder
-    respond_with(@topic, :location => topic_path(@topic)) do |format|
+    respond_to do |format|
       format.json { render :json => { :topic => @topic, :posts => @posts }}
     end
-  end
-
-  def edit
   end
 
   def update
@@ -76,26 +65,6 @@ class TopicsController < ApplicationController
       flash[:alert] = t('topics.delete.fail')
     end
     respond_with(@topic, :location => topics_path)
-  end
-
-  # Members
-  # TODO : remove
-  def add_member
-    if @topic.add_member(params[:nickname])
-      flash[:notice] = t('members.create.success', :name => params[:nickname])
-    else
-      flash[:alert] = t('members.create.fail')
-    end
-    respond_with(@topic, :location => topic_path(@topic))
-  end
-
-  def rm_member
-    if @topic.rm_member!(params[:nickname])
-      flash[:notice] = t('members.destroy.success', :name => params[:nickname])
-    else
-      flash[:alert] = t('members.destroy.fail')
-    end
-    respond_with(@topic, :location => topic_path(@topic))
   end
 
   protected

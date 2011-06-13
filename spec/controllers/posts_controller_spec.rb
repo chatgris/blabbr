@@ -24,7 +24,7 @@ describe PostsController do
         topic.should_receive(:posts).and_return(posts)
         posts.should_receive(:for_creator).and_return(posts)
         posts.should_receive(:find).with(one_post.id).and_return(one_post)
-        get :edit, :topic_id => topic.slug, :id => one_post.id
+        get :edit, :topic_id => topic.slug, :id => one_post.id, :format => :json
       end
 
       it 'should assigns topic' do
@@ -47,7 +47,7 @@ describe PostsController do
       context 'with valid params' do
         before :each do
           one_post.should_receive(:update_attributes).with({'updated' => 'post'}).and_return(true)
-          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}
+          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}, :format => :json
         end
 
         it 'should assigns topic' do
@@ -56,10 +56,6 @@ describe PostsController do
 
         it 'should assigns post' do
           assigns(:post).should == one_post
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
         end
 
         it 'should have a flash message' do
@@ -70,7 +66,7 @@ describe PostsController do
       context 'without valid params' do
         before :each do
           one_post.should_receive(:update_attributes).with({'updated' => 'post'}).and_return(false)
-          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}
+          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}, :format => :json
         end
 
         it 'should assigns topic' do
@@ -79,10 +75,6 @@ describe PostsController do
 
         it 'should assigns post' do
           assigns(:post).should == one_post
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
         end
 
         it 'should have a flash message' do
@@ -102,7 +94,7 @@ describe PostsController do
       context 'with valid params' do
         before :each do
           one_post.should_receive(:delete!).and_return(true)
-          delete :destroy, :topic_id => topic.id, :id => one_post.id
+          delete :destroy, :topic_id => topic.id, :id => one_post.id, :format => :json
         end
 
         it 'should assigns topic' do
@@ -111,10 +103,6 @@ describe PostsController do
 
         it 'should assigns post' do
           assigns(:post).should == one_post
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
         end
 
         it 'should have a flash message' do
@@ -125,7 +113,7 @@ describe PostsController do
       context 'without valid params' do
         before :each do
           one_post.should_receive(:delete!).and_return(false)
-          delete :destroy, :topic_id => topic.slug, :id => one_post.id
+          delete :destroy, :topic_id => topic.slug, :id => one_post.id, :format => :json
         end
 
         it 'should assigns topic' do
@@ -134,10 +122,6 @@ describe PostsController do
 
         it 'should assigns post' do
           assigns(:post).should == one_post
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
         end
 
         it 'should have a flash message' do
@@ -170,7 +154,7 @@ describe PostsController do
           topic.should_receive(:posts).and_return(posts)
           posts.should_receive(:find).with(one_post.id).and_return(one_post)
           topic.should_receive(:reset_unread)
-          get :show, :topic_id => topic.slug, :id => one_post.id
+          get :show, :topic_id => topic.slug, :id => one_post.id, :format => :json
         end
 
         it 'should be success' do
@@ -196,13 +180,7 @@ describe PostsController do
         context 'with valid params' do
           before :each do
             one_post.should_receive(:save).and_return(true)
-            post :create, :topic_id => topic.slug, :post => {'new' => 'post'}
-          end
-
-          it 'should be redirect' do
-            response.should redirect_to page_topic_path(:id => topic,
-                                                        :page => topic.posts_count / PER_PAGE + 1,
-                                                        :anchor => one_post.id.to_s)
+            post :create, :topic_id => topic.slug, :post => {'new' => 'post'}, :format => :json
           end
 
           it 'should assigns topic' do
@@ -221,13 +199,7 @@ describe PostsController do
         context 'withiout valid params' do
           before :each do
             one_post.should_receive(:save).and_return(false)
-            post :create, :topic_id => topic.slug, :post => {'new' => 'post'}
-          end
-
-          it 'should be redirect' do
-            response.should redirect_to page_topic_path(:id => topic,
-                                                        :page => topic.posts_count / PER_PAGE + 1,
-                                                        :anchor => one_post.id.to_s)
+            post :create, :topic_id => topic.slug, :post => {'new' => 'post'}, :format => :json
           end
 
           it 'should assigns topic' do
@@ -260,11 +232,7 @@ describe PostsController do
 
       describe 'GET edit' do
         before :each do
-          get :edit, :topic_id => topic.id, :id => one_post.id
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
+          get :edit, :topic_id => topic.id, :id => one_post.id, :format => :json
         end
 
         it 'should have a flash message' do
@@ -277,11 +245,7 @@ describe PostsController do
 
         before :each do
           one_post.should_not_receive(:update_attributes)
-          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
+          put :update, :topic_id => topic.id, :id => one_post.id, :post => {'updated' => 'post'}, :format => :json
         end
 
         it 'should have a flash message' do
@@ -293,11 +257,7 @@ describe PostsController do
       describe 'DELETE destroy' do
         before :each do
           one_post.should_not_receive(:delete!)
-          delete :destroy, :topic_id => topic.id, :id => one_post.id
-        end
-
-        it 'should redirect' do
-          response.should redirect_to(:back)
+          delete :destroy, :topic_id => topic.id, :id => one_post.id, :format => :json
         end
 
         it 'should have a flash message' do

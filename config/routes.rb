@@ -19,15 +19,13 @@ Blabbr::Application.routes.draw do
         end
       end
 
-      resources :smilies, :as => "smileys", :except => [:show]
+      resources :smilies, :as => "smileys", :except => [:show, :edit, :new]
 
       match '/topics/:id/page/:page' => 'topics#show', :as => "page_topic"
       match '/topics/page/:page' => 'topics#index', :as => "page_topics"
 
-      resources :topics do
+      resources :topics, :except => [:new, :edit] do
         resources :posts
-        put :add_member, :on => :member
-        put :rm_member, :on => :member
       end
 
       match 'dashboard' => 'users#edit', :as => :dashboard

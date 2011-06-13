@@ -48,8 +48,7 @@ class PostsController < ApplicationController
     else
       flash[:alert] = t('posts.destroy.fail')
     end
-    respond_with(@post, :location => :back)
-
+    respond_with(@post, :location => topics_path)
   end
 
   protected

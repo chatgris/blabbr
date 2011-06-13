@@ -9,6 +9,7 @@ def mock_topic(options = {}, stubs = {})
   mock.stub!(:last_user).and_return(Faker::Name.first_name)
   mock.stub!(:members).and_return([mock_member(nil, {:nickname => mock.creator})])
   mock.stub!(:posted_at).and_return(Time.now)
-
+  mock.stub!(:to_json).and_return(mock.as_json)
+  mock.stub!(:as_json).and_return({})
   mock
 end

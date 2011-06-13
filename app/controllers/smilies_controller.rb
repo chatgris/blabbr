@@ -1,17 +1,10 @@
 class SmiliesController < ApplicationController
-  before_filter :get_current_smiley_for_creator, :only => [:edit, :update, :destroy]
+  before_filter :get_current_smiley_for_creator, :only => [:update, :destroy]
   respond_to :json
 
   def index
     @smilies = Smiley.all
     respond_with @smilies
-  end
-
-  def edit
-  end
-
-  def new
-    @smiley = Smiley.new
   end
 
   def create
@@ -31,7 +24,7 @@ class SmiliesController < ApplicationController
     else
       flash[:alert] = t('smilies.update.fail')
     end
-    respond_with(@smiley, :location => :back)
+    respond_with(@smiley, :location => root_path)
   end
 
   def destroy

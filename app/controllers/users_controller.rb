@@ -1,15 +1,11 @@
 # encoding: utf-8
 class UsersController < ApplicationController
-  before_filter :edit_user, :only => ['edit', 'update']
   after_filter :reset_cache, :only => ['update']
   respond_to :json
 
   def autocomplete
     @users = User.only(:nickname).where(:nickname => /#{params[:q]}/i)
     respond_with @users.map(&:nickname)
-  end
-
-  def edit
   end
 
   def show
@@ -32,6 +28,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    @user = current_user
     if @user.update_attributes(params[:user])
       flash[:notice] = t('users.update.success')
     else
@@ -41,10 +38,6 @@ class UsersController < ApplicationController
   end
 
   protected
-
-  def edit_user
-    @user = current_user
-  end
 
   def reset_cache
     expire_fragment "topics-#{@user.id}"

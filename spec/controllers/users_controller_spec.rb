@@ -23,10 +23,6 @@ describe UsersController do
           assigns(:user).should == user
         end
 
-        it 'should be redirected' do
-          response.should redirect_to('/')
-        end
-
         it 'should have a notice' do
           flash[:notice].should == I18n.t('users.create.success')
         end
@@ -41,10 +37,6 @@ describe UsersController do
 
         it 'should assign user' do
           assigns(:user).should == user
-        end
-
-        it 'should be redirected' do
-          response.should redirect_to('/')
         end
 
         it 'should have a notice' do
@@ -65,7 +57,7 @@ describe UsersController do
       before :each do
         User.should_receive(:by_slug).with(user.slug).and_return(user)
         user.should_receive(:first).and_return(user)
-        get :show, :id => user.slug
+        get :show, :id => user.slug, :format => :json
       end
 
       it 'should be success' do
@@ -78,33 +70,15 @@ describe UsersController do
     end
 
     context 'when user is current_user' do
-      describe 'GET edit' do
-        before :each do
-          get :edit
-        end
-
-        it 'should assigns user' do
-          assigns(:user).should == user
-        end
-
-        it 'should be success' do
-          response.should be_success
-        end
-      end
-
       describe 'PUT update' do
         context 'with valid params' do
           before :each do
             user.should_receive(:update_attributes).with({'updated' => 'user'}).and_return(true)
-            put :update, :id => user.slug, :user => {'updated' => 'user'}
+            put :update, :id => user.slug, :user => {'updated' => 'user'}, :format => :json
           end
 
           it 'should assigns user' do
             assigns(:user).should == user
-          end
-
-          it 'should be redirect_to' do
-            response.should redirect_to(user_path(user.slug))
           end
 
           it 'should have a notice' do
@@ -115,15 +89,11 @@ describe UsersController do
         context 'without valid params' do
           before :each do
             user.should_receive(:update_attributes).with({'updated' => 'user'}).and_return(false)
-            put :update, :id => user.slug, :user => {'updated' => 'user'}
+            put :update, :id => user.slug, :user => {'updated' => 'user'}, :format => :json
           end
 
           it 'should assigns user' do
             assigns(:user).should == user
-          end
-
-          it 'should be redirect_to' do
-            response.should redirect_to(user_path(user.slug))
           end
 
           it 'should have a notice' do

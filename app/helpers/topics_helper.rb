@@ -1,6 +1,6 @@
 module TopicsHelper
   def textilize(text)
-    Textilize.new(text)
+    Textilize.new(text).to_html
   end
 
   def post_ratio(topic)

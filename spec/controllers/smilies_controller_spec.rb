@@ -14,21 +14,6 @@ describe SmiliesController do
       request.env["HTTP_REFERER"] = "http://localhost:3000/topics/test"
     end
 
-    describe 'GET new' do
-      before :each do
-        Smiley.should_receive(:new).and_return(smiley)
-        get :new
-      end
-
-      it 'should assign smiley' do
-        assigns(:smiley).should == smiley
-      end
-
-      it 'get new should be success' do
-        response.should be_success
-      end
-    end
-
     describe 'POST create' do
       before :each do
         Smiley.should_receive(:new).with({'new' => 'smiley'}).and_return(smiley)
@@ -38,11 +23,7 @@ describe SmiliesController do
       context 'with valid params' do
         before :each do
           smiley.should_receive(:save).and_return(true)
-          post :create, :smiley => {'new' => 'smiley'}
-        end
-
-        it 'should be redirect' do
-          response.should redirect_to root_path
+          post :create, :smiley => {'new' => 'smiley'}, :format => :json
         end
 
         it 'should assigns smiley' do
@@ -57,11 +38,7 @@ describe SmiliesController do
       context 'without valid params' do
         before :each do
           smiley.should_receive(:save).and_return(false)
-          post :create, :smiley => {'new' => 'smiley'}
-        end
-
-        it 'should be redirect' do
-          response.should redirect_to root_path
+          post :create, :smiley => {'new' => 'smiley'}, :format => :json
         end
 
         it 'should assigns smiley' do
@@ -77,7 +54,7 @@ describe SmiliesController do
     describe 'GET index' do
       before :each do
         Smiley.should_receive(:all).and_return(smilies)
-        get :index
+        get :index, :format => :json
       end
 
       it 'should assign smilies' do
@@ -86,24 +63,6 @@ describe SmiliesController do
 
       it 'get new should be success' do
         response.should be_success
-      end
-    end
-
-    describe 'GET edit' do
-      before :each do
-        Smiley.should_receive(:criteria).and_return(smiley)
-        smiley.should_receive(:for_ids).with(smiley.id).and_return(smiley)
-        smiley.should_receive(:by_nickname).with(user.nickname).and_return(smiley)
-        smiley.should_receive(:first).and_return(smiley)
-        get :edit, :id => smiley.id
-      end
-
-      it 'get new should be success' do
-        response.should be_success
-      end
-
-      it 'should assigns smiley' do
-        assigns(:smiley).should == smiley
       end
     end
 
@@ -118,11 +77,7 @@ describe SmiliesController do
       context 'with valid params' do
         before :each do
           smiley.should_receive(:update_attributes).with({'update' => 'smiley'}).and_return(true)
-          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}
-        end
-
-        it 'should be redirect' do
-          response.should redirect_to :back
+          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}, :format => :json
         end
 
         it 'should assigns topic' do
@@ -137,11 +92,7 @@ describe SmiliesController do
       context 'without valid params' do
         before :each do
           smiley.should_receive(:update_attributes).with({'update' => 'smiley'}).and_return(false)
-          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}
-        end
-
-        it 'should be redirect' do
-          response.should redirect_to :back
+          put :update, :id => smiley.id, :smiley => {'update' => 'smiley'}, :format => :json
         end
 
         it 'should assigns topic' do
@@ -168,11 +119,7 @@ describe SmiliesController do
 
         before :each do
           smiley.should_receive(:destroy).and_return(true)
-          delete :destroy, :id => smiley.id
-        end
-
-        it 'redirect to back' do
-          response.should redirect_to root_path
+          delete :destroy, :id => smiley.id, :format => :json
         end
 
         it 'should have a notice message' do
@@ -185,11 +132,7 @@ describe SmiliesController do
 
         before :each do
           smiley.should_receive(:destroy).and_return(false)
-          delete :destroy, :id => smiley.id
-        end
-
-        it 'redirect to back' do
-          response.should redirect_to root_path
+          delete :destroy, :id => smiley.id, :format => :json
         end
 
         it 'should have a notice message' do

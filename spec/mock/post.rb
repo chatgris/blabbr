@@ -8,6 +8,7 @@ def mock_post(options = {}, stubs = {})
   mock.stub!(:created_at).and_return(Time.now)
   mock.stub!(:state).and_return('published')
   mock.stub!(:page).and_return(1)
-
+  mock.stub!(:to_json).and_return(mock.as_json)
+  mock.stub!(:as_json).and_return({})
   mock
 end
