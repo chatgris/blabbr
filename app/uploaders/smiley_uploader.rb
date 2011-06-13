@@ -1,5 +1,14 @@
 class SmileyUploader < CarrierWave::Uploader::Base
 
+  process :get_dimensions
+
+  def get_dimensions
+    if @file
+      img = MiniMagick::Image.open(@file.file)
+      {:height => img[:height], :width => img[:width]}
+    end
+  end
+
   def store_dir
     'smilies'
   end

@@ -4,6 +4,7 @@ describe Smiley do
 
   describe 'fields' do
     it { should have_fields(:added_by, :code).of_type(String) }
+    it { should have_fields(:width, :height).of_type(Integer) }
   end
 
   describe 'validation' do
