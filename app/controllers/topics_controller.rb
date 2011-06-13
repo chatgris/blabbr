@@ -20,6 +20,7 @@ class TopicsController < ApplicationController
     @posts = @topic.posts.asc(:created_at).page current_page
     respond_to do |format|
       format.json { render :json => {:topic => @topic,
+                                     :posts => @posts,
                                      :current_page => current_page,
                                      :per_page => @posts.limit_value,
                                      :total_entries => @posts.total_count}}
@@ -44,7 +45,7 @@ class TopicsController < ApplicationController
 
   def update
     # TODO : update members
-    #@topic.update_members
+    @topic.update_members params[:topic].delete('members_list')
     if @topic.update_attributes(params[:topic])
       flash[:notice] = t('topics.update.success')
       respond_to do |format|

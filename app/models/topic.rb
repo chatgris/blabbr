@@ -56,6 +56,21 @@ class Topic
     end
   end
 
+  def update_members(members_list)
+    new_member = members_list.split(',')
+    old_member = []
+    members.each do |member|
+      if new_member.include? member.nickname
+        new_member.delete member.nickname
+      else
+        self.rm_member! member.nickname
+      end
+    end
+    new_member.each do |member|
+      self.add_member member
+    end
+  end
+
   def new_attachment(nickname, attachment)
     attachments.create(:nickname => nickname, :attachment => attachment)
   end
