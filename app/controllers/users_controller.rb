@@ -13,7 +13,9 @@ class UsersController < ApplicationController
   end
 
   def current
-    respond_with(current_user)
+    respond_to do |format|
+      format.json {render :json => current_user.as_json({:only => [:nickname, :posts_count, :time_zone, :audio, :email, :slug]}), :status => 200}
+    end
   end
 
   def create
@@ -31,10 +33,15 @@ class UsersController < ApplicationController
     @user = current_user
     if @user.update_attributes(params[:user])
       flash[:notice] = t('users.update.success')
+      respond_to do |format|
+        format.json {render :json => @user.as_json({:only => [:nickname, :posts_count, :time_zone, :audio, :email, :slug]}), :status => 200}
+      end
     else
       flash[:alert] = t('users.update.fail')
+      respond_to do |format|
+        format.json {render :json => @user.errors, :status => 422}
+      end
     end
-    respond_with(@user, :location => user_path(@user.slug))
   end
 
   protected

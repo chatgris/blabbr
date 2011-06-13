@@ -114,7 +114,7 @@ window.Blabbr = {}
         new UserView user
 
     @get 'dashboard', ->
-      console.log 'TODO'
+      new UserEditView
 
     @post 'topics', (e)->
       Topic.create @params

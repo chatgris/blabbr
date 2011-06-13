@@ -26,7 +26,7 @@ class User
 
   index :nickname
 
-  attr_accessible :nickname, :email, :password, :password_confirmation, :locale, :note, :time_zone, :avatar
+  attr_accessible :nickname, :email, :password, :password_confirmation, :locale, :note, :time_zone, :avatar, :audio
 
   validates :nickname, :presence => true, :uniqueness => true, :length => { :maximum => 40 }
   validates :email, :presence => true, :uniqueness => true, :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
@@ -34,8 +34,9 @@ class User
   scope :by_nickname, ->(nickname) { where(:nickname => nickname)}
 
   def as_json(options={})
-    super(:only => [:nickname, :posts_count, :time_zone, :audio, :slug],
-          :methods => [:avatar_path, :path])
+    options ||= {} #wtf
+    super({:only => [:nickname, :posts_count, :time_zone, :audio, :slug],
+          :methods => [:avatar_path, :path]}.merge(options))
   end
 
   protected
