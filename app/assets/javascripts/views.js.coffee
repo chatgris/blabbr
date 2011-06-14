@@ -27,7 +27,7 @@
 
     member: (members)->
       member = (member for member in members when member.nickname == Blabbr.current_user.nickname)
-      member[0].hash = 'new_post' if member[0].unread == 0
+      member[0].hash = if member[0].unread == 0 then 'new_post' else "p#{member[0].hash}"
       member[0]
 
     events: ->
