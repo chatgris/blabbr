@@ -210,6 +210,9 @@
     template: ->
       ich.post_edit @post
 
+    events: ->
+      @selector.find('textarea').bind 'focus', @expand_text_area
+
     yield: ->
       @selector.find('.bubble').html @template()
 
