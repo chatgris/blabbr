@@ -65,6 +65,8 @@ window.Blabbr = {}
         channel.bind 'index', (post) ->
           if $('aside .topics').length > 0
             context.redirect 'topics'
+          else
+            $.blabbrNotify 'success', 'New message !!!'
 
     # routes
     #
