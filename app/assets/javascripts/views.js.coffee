@@ -166,7 +166,6 @@
       ich.post_new topic
 
     expand_text_area: (e)->
-      console.log e
       $(e.currentTarget).css('height', '100px')
 
     events: ->
