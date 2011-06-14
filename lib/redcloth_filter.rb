@@ -1,7 +1,5 @@
 class Textilize
-  include ActionView::Helpers::TextHelper
-  include ActionView::Helpers::TagHelper
-  include ActionView::Helpers::UrlHelper
+  include Rinku
 
   def initialize(text)
     @smilies = JSON.parse(Rails.cache.read('smilies_list')) || []
