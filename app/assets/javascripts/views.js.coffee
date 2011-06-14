@@ -48,7 +48,7 @@
         accept: 'application/json',
         autoclear: true,
         progress: (event, completed, loaded, total) ->
-          $(this).siblings('meter:first').attr('value',(completed *100).toFixed(2))
+          $(this).find('meter:first').attr('value',(completed *100).toFixed(2))
         , complete: (event, responseText, status) ->
           if status is 201
             $.blabbrNotify 'success', 'Smiley added !'
