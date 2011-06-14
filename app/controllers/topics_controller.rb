@@ -34,13 +34,22 @@ class TopicsController < ApplicationController
     if @topic.save
       flash[:notice] = t('topics.create.success')
       @posts = @topic.posts.page
+      respond_to do |format|
+        format.json { render :json => {:topic => @topic,
+                                       :posts => @posts,
+                                       :current_page => current_page,
+                                       :per_page => @posts.limit_value,
+                                       :total_entries => @posts.total_count},
+                              :status => 201}
+      end
     else
       flash[:alert] = t('topics.create.fail')
+      respond_to do |format|
+        format.json { render :json => @topic.errors,
+                             :status => 422}
+      end
     end
     # TODO: custom responder
-    respond_to do |format|
-      format.json { render :json => { :topic => @topic, :posts => @posts }}
-    end
   end
 
   def update
