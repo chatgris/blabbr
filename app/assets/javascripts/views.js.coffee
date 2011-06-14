@@ -236,7 +236,8 @@
     yield: ->
       @selector.html @template()
       @selector.find('#members_list').tagsInput {
-          defaultText: 'add a member'
+          defaultText: 'add a member',
+          unique: true,
           autocomplete_url:'/users/autocomplete.json',
           autocomplete: {json: true}
       }
