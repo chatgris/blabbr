@@ -1,8 +1,8 @@
 en:
-  locale: language
-  email: email
-  nickname: nickname
-  timezone: timezone
+  locale: Language
+  email: Email
+  nickname: Nickname
+  timezone: Timezone
   subscriber: "Subscriber"
   home: "Home"
   preferences: "Preferences"
@@ -12,3 +12,21 @@ en:
   member:
     not_find: "User not find"
     add_success: "Add %{name} to join this topic"
+  topics:
+    new: "New Topic"
+    edit: "Topic edit"
+    destroy: "Destroy"
+    label: "Topics"
+  posts:
+    title: "Post"
+    edit: "Post edit"
+    delete: "Unpublish"
+    create:
+      success: "Post successfully"
+      error: "Message en erreur"
+  smilies:
+    new: "New Smiley"
+    title: "Smilies"
+  gritter:
+    success: "Succes !!"
+    fail: "Fail !!"
