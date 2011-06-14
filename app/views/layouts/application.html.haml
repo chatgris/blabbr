@@ -6,20 +6,8 @@
     %link{ :rel => "shortcut icon", :href => "/favicon.ico", :type => "image/x-icon"}
     = stylesheet_link_tag 'style'
     = csrf_meta_tag
-    -# TODO : fix include_tags
-    %script{:src => "/assets/application.js", :type => "text/javascript"}
+    = javascript_include_tag "application"
     = raw hoptoad_javascript_notifier
-    %script{:type => "text/html",:id  => "topic_item"}
-      %article
-        %p.unread
-          %mark
-            {{#member}}<a {{#unread}}class="new"{{/unread}} href="{{path}}/page/{{page}}\#{{hash}}">{{unread}}</a>{{/member}}
-        %header
-          %h3
-            <a href="{{path}}">{{title}}</a>
-          %h4
-            by {{last_user}} le {{posted_at}}
-        %hr
     = render 'shared/js_templates'
   %body
     %header#top

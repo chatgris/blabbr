@@ -1,3 +1,15 @@
+<script id="topic_item" type="text/html">
+  <article>
+    <p class="unread">
+      <mark>{{#member}}<a {{#unread}}class="new"{{/unread}} href="{{path}}/page/{{page}}#{{hash}}">{{unread}}</a>{{/member}}</mark>
+    </p>
+    <header>
+      <h3><a href="{{path}}">{{title}}</a></h3>
+      <h4>by {{last_user}} le {{posted_at}}</h4>
+    </header>
+    <hr />
+</script>
+
 <script id="topic_new" type="text/html">
   <form accept-charset="UTF-8" action="/topics" method="post">
   <input name="utf8" type="hidden" value="&#x2713;" />
