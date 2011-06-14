@@ -1,5 +1,4 @@
 class Textilize
-  #include Rinku
 
   def initialize(text)
     @smilies = JSON.parse(Rails.cache.read('smilies_list')) || []
@@ -13,7 +12,6 @@ class Textilize
   end
 
   def to_html
-    #auto_link(RedCloth.new(@text).to_html(:textile))
     RedCloth.new(@text).to_html(:textile)
   end
 end
