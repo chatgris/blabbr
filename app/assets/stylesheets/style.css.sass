@@ -40,6 +40,9 @@ section, article, header, footer, nav, aside, hgroup
 .right
   float: right
 
+.left
+  float: left
+
 .loading
   height: 23px
   width: 120px
@@ -130,8 +133,8 @@ section, article, header, footer, nav, aside, hgroup
 #contents
   width: 650px
   +border-curve(white)
-  padding: 0 10px
-  margin: 0 0 0 10px
+  padding: 0 10px 10px 10px
+  margin: 0 0 70px 10px
   position: relative
   top: 48px
   z-index: 10
@@ -159,6 +162,15 @@ section, article, header, footer, nav, aside, hgroup
     overflow: visible
     width: 310px
     padding: 0 5px
+    h2
+      text-shadow: $gray unquote("1px 1px 0")
+      color: $orange
+      float: right
+      font-size: 16px
+      margin: -13px 0 0 0
+    li
+      margin: 0 0 .5em .5em
+      list-style-position: inside
 
     input[type=text], input[type=file], input[type=email]
       width: 310px
@@ -221,7 +233,7 @@ section, article, header, footer, nav, aside, hgroup
     .outer
       font-size: 10px
 
-h2
+#page-title
   font-size: 22px
   width: 680px
   text-align: right
@@ -293,6 +305,16 @@ blockquote
     &:hover
       text-decoration: none
 
+.help
+  width: 300px
+  li
+    display: inline
+    list-style: none
+
+#new_post
+  border-top: $beige unquote("solid 1px")
+  padding: 0.5em 0 0 0
+
 fieldset
   padding: 1em 0
   border: 0
@@ -306,8 +328,8 @@ input[type=email], input[type=text], input[type=file], textarea
   height: 18px
 
 textarea
-  width: 540px
-  height: 10em
+  width: 638px
+  height: 2em
   font-size: 11px
   padding: 5px
   margin: 0 0 1em 0
@@ -321,11 +343,11 @@ input[type=text]:focus, textarea:focus, input[type=password]:focus
   -moz-webkit-shadow: $gray unquote("0 1px 3px"), $gray unquote("0 -1px 3px")
 
 input[type=submit]
-  padding: 0 0.3em 0 0
+  padding: 0 .3em
   font: 10px / 1.6em Helvetica, Arial, sans-serif
   text-shadow: 1px 1px 0 white
   color: #444444
-  background: transparent
+  +border-curve(#eecc99)
   font-weight: bold
   border: 0
   cursor: pointer

@@ -11,6 +11,7 @@
 </script>
 
 <script id="topic_new" type="text/html">
+  <h2>New topic</h2>
   <form accept-charset="UTF-8" action="/topics" method="post">
   <input name="utf8" type="hidden" value="&#x2713;" />
   <fieldset>
@@ -26,6 +27,7 @@
 </script>
 
 <script id="topic_edit" type="text/html">
+  <h2>{{title}}</h2>
   <form accept-charset="UTF-8" action="{{path}}" method="post">
     <input name="_method" type="hidden" value="put">
     <input name="utf8" type="hidden" value="&#x2713;" />
@@ -66,20 +68,46 @@
 <script id="post_new" type="text/html">
   <form accept-charset="UTF-8" action="{{path}}/posts" method="post">
     <input name="utf8" type="hidden" value="✓">
-    <label for="post_body">Title</label>
+    <label for="post_body">Comment</label>
     <textarea cols="40" id="post_body" name="post[body]" rows="20"></textarea>
-    <p>
-    <input name="commit" type="submit" value="save">
-    </p>
+    <input class="right" name="commit" type="submit" value="Save">
+    <ul class="left help">
+      <li><a href="/smilies">Smilies</a></li>
+      <li> - </li>
+      <li><a href="{{path}}/posts/textile">Markup</a></li>
+  </ul>
+    <hr />
   </form>
-  <a href="/smilies">Smilies</a>
+</script>
+
+<script id="textile" type="text/html">
+  <h2>Markup</h2>
+  <ul>
+    <li>*bold text*</li>
+    <li>_italic text_</li>
+    <li>*_bold italic text_*</li>
+    <li>-strikethrough text-</li>
+    <li>*-bold strikethrough text-*</li>
+    <li>*_-bold italic strikethrough text-_*</li>
+    <li>+underlined text+</li>
+    <li>*+bold underlined text+*</li>
+    <li>_+italic underlined text+_</li>
+    <li>*_+bold italic underlined text+_*</li>
+    <li>*_-+bold italic strikethrough underlined text+-_*</li>
+    <li>* bulleted list</li>
+    <li>* bulleted list</li>
+    <li>** 2-level</li>
+    <li>"Link to Wikipedia":http://www.wikipedia.org</li>
+    <li>!http://commons.wikimedia.org/wiki/Special:Filepath/Wikipedia-logo-en.png!</li>
+    <li>Brand ^TM^</li>
+  </ul>
 </script>
 
 <script id="post_edit" type="text/html">
   <form accept-charset="UTF-8" action="{{path}}" method="post">
     <input name="utf8" type="hidden" value="✓">
     <input name="_method" type="hidden" value="put">
-    <label for="post_body">Title</label>
+    <label for="post_body">Comment</label>
     <textarea cols="40" id="post_body" name="post[body]" rows="20">{{raw}}</textarea>
     <p>
     <input name="commit" type="submit" value="save">
@@ -93,6 +121,7 @@
 </script>
 
 <script id="smiley_new" type="text/html">
+  <h2>New smiley</h2>
   <form accept-charset="UTF-8" action="/smilies" enctype="multipart/form-data" method="post">
     <fieldset>
       <dl class="errors"></dl>
@@ -147,6 +176,7 @@
 </script>
 
 <script type="text/html" id="user_edit">
+  <h2>Account</h2>
   <form accept-charset="UTF-8" action="{{path}}" enctype="multipart/form-data" id="user-edit" method="post">
     <fieldset>
       <input name="utf8" type="hidden" value="✓">

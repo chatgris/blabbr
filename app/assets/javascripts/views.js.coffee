@@ -146,6 +146,17 @@
     events: ->
       @selector.find('.bubble p, .bubble ul').bind 'click', @insert_quote
 
+  class window.TextileView extends CommonView
+    constructor: ->
+      @selector = $('.aside aside')
+      super
+
+    template: ->
+      ich.textile
+
+    yield: ->
+      @selector.html @template
+
   class window.PostNewView extends CommonView
     constructor: (@topic)->
       @selector = $('#new_post')
@@ -153,6 +164,13 @@
 
     template: (topic)->
       ich.post_new topic
+
+    expand_text_area: (e)->
+      console.log e
+      $(e.currentTarget).css('height', '100px')
+
+    events: ->
+      @selector.find('textarea').bind 'focus', @expand_text_area
 
     yield: ->
       @selector.append @template(@topic)
@@ -255,7 +273,7 @@
       super
 
     yield: ->
-      @selector.html '<section class="topics"></section>'
+      @selector.html '<section class="topics"><h2>Topics</h2></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
 
   class window.SmiliesView extends CommonView
@@ -271,7 +289,7 @@
       $('#post_body').val($('#post_body').val() + code)
 
     yield: ->
-      @selector.html '<h3>Smilies</h3>'
+      @selector.html '<h2>Smilies</h2>'
       content = (@template_item(smiley).get(0) for smiley in @smilies)
       @selector.append content
 

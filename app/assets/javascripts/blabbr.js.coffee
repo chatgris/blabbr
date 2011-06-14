@@ -102,6 +102,9 @@ window.Blabbr = {}
       Post.get @path, (post) ->
         new PostEditView post, e
 
+    @get 'topics/:topic_id/posts/textile', (e)->
+      new TextileView
+
     @get 'smilies', ->
       Smiley.all (smilies)->
         new SmiliesView smilies
