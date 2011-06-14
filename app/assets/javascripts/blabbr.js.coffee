@@ -55,14 +55,14 @@ window.Blabbr = {}
     @bind 'subscribeToWS', (e, data) ->
       context = @
       id = data.id
+      Blabbr.topic_id = id
       unless pusher.channels.channels[id]
         channel = pusher.subscribe id
-        Blabbr.topic_id = id
         channel.bind 'new-post', (post) ->
-          if post.creator_n != Blabbr.current_user.nickname && id != Blabbr.topic_id
+          if post.creator_n != Blabbr.current_user.nickname && post.tid == Blabbr.topic_id
             new PostView post
             context.trigger 'notify'
-        channel.bind 'index', (data) ->
+        channel.bind 'index', (post) ->
           if $('aside .topics').length > 0
             context.redirect 'topics'
 
