@@ -15,6 +15,9 @@
       selector.addClass('anchor')
       $('html,body').animate({scrollTop: selector.offset().top},'slow')
 
+    expand_text_area: (e)->
+      $(e.currentTarget).css('height', '100px')
+
     show_errors: (selector, errors)->
       selector.html('')
       selector.append "<dt>#{key} :</dt><dd>#{error[0]}</dd>" for key, error of errors
@@ -165,9 +168,6 @@
     template: (topic)->
       ich.post_new topic
 
-    expand_text_area: (e)->
-      $(e.currentTarget).css('height', '100px')
-
     events: ->
       @selector.find('textarea').bind 'focus', @expand_text_area
 
@@ -220,6 +220,9 @@
 
     template: ->
       ich.topic_new
+
+    events: ->
+      @selector.find('textarea').bind 'focus', @expand_text_area
 
     yield: ->
       @selector.html @template
