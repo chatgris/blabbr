@@ -53,7 +53,7 @@
 
     @after_create: (post) ->
       new PostView post
-      $('#new_post textarea').text('')
+      $('#new_post form')[0].reset()
 
     @after_update: (post)->
       new PostEditedView post
