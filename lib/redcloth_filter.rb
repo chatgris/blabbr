@@ -1,4 +1,7 @@
 class Textilize
+  include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::UrlHelper
 
   def initialize(text)
     @smilies = JSON.parse(Rails.cache.read('smilies_list')) || []
@@ -12,7 +15,7 @@ class Textilize
   end
 
   def to_html
-    RedCloth.new(@text).to_html(:textile)
+    auto_link(RedCloth.new(@text).to_html(:textile))
   end
 end
 
