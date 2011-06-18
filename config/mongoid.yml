@@ -11,4 +11,4 @@ test:
   database: blabbr_test
 
 production:
-  uri: <%= ENV['MONGOHQ_URL'] %>
+  uri: <%= ENV['MONGO_URL'] %>
