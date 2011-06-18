@@ -51,4 +51,5 @@ end
 
 group :production do
   gem 'therubyracer-heroku', '0.8.1.pre3'
+  gem 'rpm_contrib',      '~>2.1.1'
 end
