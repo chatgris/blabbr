@@ -21,8 +21,8 @@
     </p>
     <label class="text required" for="topic_posts_attributes_0_body"><abbr title="required">*</abbr> Body</label>
     <textarea class="text required" cols="40" id="topic_posts_0_body" name="topic[posts][0][body]" required="required" rows="20"></textarea></div>
+    <input name="commit" class="add" type="submit" value="Submit" />
   </fieldset>
-  <input name="commit" type="submit" value="Submit" />
   </form>
 </script>
 
@@ -38,7 +38,7 @@
       </p>
       <input name="topic[members_list]" id="members_list" value="{{members_list}}" />
     </fieldset>
-    <input name="commit" type="submit" value="Submit" />
+    <input name="commit" class="button_edit" type="submit" value="Submit" />
   </form>
 </script>
 
@@ -70,11 +70,10 @@
     <input name="utf8" type="hidden" value="✓">
     <label for="post_body">Comment</label>
     <textarea cols="40" id="post_body" name="post[body]" rows="20"></textarea>
-    <input class="right" name="commit" type="submit" value="Save">
+    <input class="right add" name="commit" type="submit" value="Save">
     <ul class="left help">
-      <li><a href="/smilies">Smilies</a></li>
-      <li> - </li>
-      <li><a href="{{path}}/posts/textile">Markup</a></li>
+      <li><a class="smilies" href="/smilies">Smilies</a></li>
+      <li><a class="markup" href="{{path}}/posts/textile">Markup</a></li>
   </ul>
     <hr />
   </form>
@@ -110,7 +109,7 @@
     <label for="post_body">Comment</label>
     <textarea cols="40" id="post_body" name="post[body]" rows="20">{{raw}}</textarea>
     <p>
-    <input name="commit" type="submit" value="save">
+    <input name="commit" class="button_edit" type="submit" value="save">
     </p>
   </form>
   <a href="/smilies">Smilies</a>
@@ -131,8 +130,9 @@
       <input id="smiley_code" name="smiley[code]" size="30" type="text">
       <label for="smiley_image">Image</label>
       <input id="smiley_image" name="smiley[image]" type="file">
-      <input name="commit" type="submit" value="save">
-      <meter max="100" value="0" id="status"></meter>
+      <label>Progress</label>
+      <progress max="100" value="0" id="status"></progress>
+      <input name="commit" type="submit" value="save" class="add">
     </fieldset>
   </form>
 </script>
@@ -150,7 +150,7 @@
     <form accept-charset="UTF-8" action="{{path}}" class="simple_form post" method="post">
       <input name="utf8" type="hidden" value="✓">
       <input name="_method" type="hidden" value="delete">
-      <input id="delete_submit" name="commit" type="submit" value="Delete" />
+      <input id="delete_submit" class="destroy" name="commit" type="submit" value="Delete" />
     </form>
     {{/published}}
     {{#deleted}}
@@ -338,7 +338,7 @@
       </select>
       <label class="file optional" for="user_avatar"> Avatar</label>
       <input class="file optional" id="user_avatar" name="user[avatar]" type="file">
-      <input class="button" id="user_submit" name="commit" type="submit" value="Update User">
+      <input id="user_submit" class="button_edit" name="commit" type="submit" value="Update User">
       <meter max="100" value="0" id="status"></meter>
     </fieldset>
   </form>

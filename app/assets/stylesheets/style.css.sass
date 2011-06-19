@@ -144,13 +144,15 @@ section, article, header, footer, nav, aside, hgroup
   top: 80px
   p
     position: absolute
-    width: 310px
+    width: 293px
     left: 680px
-    padding: 5px
+    padding: 5px 5px 5px 22px
   .success
     +border-curve-right($green)
+    background: $green url(/stylesheets/images/info.png) no-repeat 4px center
   .fail
     +border-curve-right($red)
+    background: $red url(/stylesheets/images/error.png) no-repeat 4px center
 
 .aside
   position: fixed
@@ -174,6 +176,8 @@ section, article, header, footer, nav, aside, hgroup
 
     input[type=text], input[type=file], input[type=email]
       width: 310px
+    input[type=submit]
+      display: block
     textarea
       width: 300px
     .topics
@@ -184,7 +188,11 @@ section, article, header, footer, nav, aside, hgroup
           width: 30px
         header
           width: 270px
-
+progress
+  display: block
+  margin: 0 0 .5em 0
+  width: 100%
+  +border-curve(white)
 .topics
   list-style: none
   font-size: 12px
@@ -274,23 +282,41 @@ blockquote
     margin: 0.2em 0 0.4em 0
     line-height: 1.4em
     font-size: 11px
-  .edit
-    display: inline-block
-    line-height: 18px
-    text-shadow: 1px 1px 0 white
   .simple_form
     display: inline
     border: 0
   input[type=submit], .edit
     margin: 0 0 0 0.5em
-    padding: 0 .5em
     +border-curve($beige)
+  .edit
+    display: inline-block
+    line-height: 18px
+    text-shadow: 1px 1px 0 white
+    padding: 0 0.6em 0 22px
+    background: $beige url(/stylesheets/images/comment_edit.png) no-repeat 4px center
+  .add
+    background: $beige url(/stylesheets/images/comment_add.png) no-repeat 4px center
+  input[type=submit].destroy
+    background: $beige url(/stylesheets/images/comment_delete.png) no-repeat 4px center
   time
     color: #888888
     float: right
     font-size: 10px
     font-style: italic
     margin: 0
+.help
+  li
+    margin: 0 .5em 0 0
+  a
+    +border-curve($beige)
+    display: inline-block
+    line-height: 18px
+    padding: 0 0.6em 0 22px
+    text-shadow: 1px 1px 0 white
+  .smilies
+    background: $beige url(/stylesheets/images/star.png) no-repeat 4px center
+  .markup
+    background: $beige url(/stylesheets/images/markup.png) no-repeat 4px center
 .post.anchor
   border-top: $orange unquote("solid 3px")
 .bubble
@@ -343,7 +369,7 @@ input[type=text]:focus, textarea:focus, input[type=password]:focus
   -moz-webkit-shadow: $gray unquote("0 1px 3px"), $gray unquote("0 -1px 3px")
 
 input[type=submit]
-  padding: 0 .3em
+  padding: 0 .6em 0 22px
   font: 10px / 1.6em Helvetica, Arial, sans-serif
   text-shadow: 1px 1px 0 white
   color: #444444
@@ -359,6 +385,12 @@ input[type=submit]
     top: 2px
     left: 2px
 
+input[type=submit].button_edit
+  background: $beige url(/stylesheets/images/disc.png) no-repeat 4px center
+input[type=submit].add
+  background: $beige url(/stylesheets/images/new.png) no-repeat 4px center
+input[type=submit].button_edit
+  background: $beige url(/stylesheets/images/disc.png) no-repeat 4px center
 input[type="submit"]::-moz-focus-inner
   border: none
 

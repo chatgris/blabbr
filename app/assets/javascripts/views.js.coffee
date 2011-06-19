@@ -51,11 +51,12 @@
         accept: 'application/json',
         autoclear: true,
         progress: (event, completed, loaded, total) ->
-          $(this).find('meter:first').attr('value',(completed *100).toFixed(2))
+          $(this).find('progress:first').attr('value',(completed *100).toFixed(2))
         , complete: (event, responseText, status) ->
           if status is 201
             $.blabbrNotify 'success', 'Smiley added !'
             context.selector.find('.errors').html ''
+            $(this).find('progress:first').attr('value',0)
           else if status is 422
             context.show_errors context.selector.find('.errors'), $.parseJSON(responseText)
       }
