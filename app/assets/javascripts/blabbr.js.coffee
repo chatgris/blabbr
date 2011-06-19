@@ -158,6 +158,11 @@ window.Blabbr = {}
     $('html').mouseover ->
       Blabbr.is_active = true
 
+    # global error callback
+    $("#notify").ajaxError ->
+      $.blabbrNotify 'fail', 'Oups, something went wrong'
+      $('.loading').hide()
+
     # add csrf protection on ajax request
     $.ajaxPrefilter (options, originalOptions, xhr)->
       token = $('meta[name="csrf-token"]').attr('content')
