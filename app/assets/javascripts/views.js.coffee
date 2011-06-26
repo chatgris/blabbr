@@ -84,18 +84,19 @@
 
     yield: ->
       @selector.html @template()
-      @selector.find("option[value=#{@user.time_zone}]").attr('selected', 'selected')
+      @selector.find("option[value=\"#{@user.time_zone}\"]").attr('selected', 'selected')
       @selector.find(":radio[value=#{@user.audio}]").attr('checked', 'checked')
       context = @
       @selector.find('form').sexyPost {
         accept: 'application/json',
         autoclear: true,
         progress: (event, completed, loaded, total) ->
-          $(this).find('meter:first').attr('value',(completed *100).toFixed(2))
+          $(this).find('progress:first').attr('value',(completed *100).toFixed(2))
         , complete: (event, responseText, status) ->
           if status is 200
             $.blabbrNotify 'success', 'Account updated !'
             context.selector.html ''
+            $(this).find('progress:first').attr('value',0)
             Blabbr.current_user = $.parseJSON(responseText)
           else if status is 422
             context.show_errors context.selector.find('.errors'), $.parseJSON(responseText)
