@@ -269,6 +269,18 @@ blockquote
       &:hover
         text-decoration: underline
 
+#quote
+  width: 16px
+  height: 16px
+  clear: right
+  display: block
+  position: relative
+  top: 0
+  left: 516px
+  background: url(/stylesheets/images/post.png) no-repeat 0 center
+  &:hover
+    cursor: pointer
+    background: url(/stylesheets/images/new.png) no-repeat 0 center
 .post
   margin: 0 0 1.5em 0
   border-top: $beige unquote("solid 1px")
@@ -278,10 +290,15 @@ blockquote
     margin: 0 0 0.5em 0
     width: 90px
     line-height: 1em
-  p
-    margin: 0.2em 0 0.4em 0
-    line-height: 1.4em
-    font-size: 11px
+  p, ul
+    margin: 0.2em 0 1em 0
+    line-height: 1.8em
+    padding: .3em
+    font-size: 12px
+    &:hover
+      +border-curve($background)
+  li
+    list-style-position: inside
   .simple_form
     display: inline
     border: 0

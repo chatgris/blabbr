@@ -141,14 +141,6 @@
       new PostNewView @topic.topic
       @move_to @selector.get(0)
 
-    insert_quote: (e)->
-      if $(e.target).is('p, ul')
-        content = $(e.currentTarget).text()
-        user = $(e.currentTarget).parents('article:first').find('.user').text()
-        $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
-
-    events: ->
-      @selector.find('.bubble p, .bubble ul').bind 'click', @insert_quote
 
   class window.TextileView extends CommonView
     constructor: ->
@@ -186,6 +178,22 @@
     template: (post)->
       ich.post post
 
+    quoter: (e)->
+      $(e.currentTarget).append('<span id="quote"></span>')
+
+    unquoter: (e)->
+      $(e.currentTarget).find("#quote").remove()
+
+    insert_quote: (e)->
+      if $(e.target).is('#quote')
+        content = $(e.currentTarget).text()
+        user = $(e.currentTarget).parents('article:first').find('.user').text()
+        $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
+
+    events: ->
+      @selector.find('.bubble p, .bubble ul').bind 'mouseenter', @quoter
+      @selector.find('.bubble p, .bubble ul').bind 'mouseleave', @unquoter
+      @selector.find('.bubble p, .bubble ul').bind 'click', @insert_quote
     yield: ->
       @selector.append @template(@post)
 
