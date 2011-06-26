@@ -106,6 +106,7 @@ describe TopicsController do
       before :each do
         Topic.should_receive(:by_slug).with(topic.slug).and_return(topic)
         topic.should_receive(:first).and_return(topic)
+        topic.should_receive(:update_members).and_return(topic)
       end
 
       context 'with valid params' do

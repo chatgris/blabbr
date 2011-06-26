@@ -12,6 +12,7 @@ def mock_user(options = {}, stubs = {})
   mock.stub!(:avatar_url).and_return('/user.avatar.jpg')
   mock.stub!(:avatar_cache).and_return('/user.avatar.jpg')
   mock.stub!(:to_json).and_return(mock.as_json)
+  mock.stub!(:as_json).and_return({})
 
   mock
 end

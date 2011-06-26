@@ -53,7 +53,6 @@ class TopicsController < ApplicationController
   end
 
   def update
-    # TODO : update members
     @topic.update_members params[:topic].delete('members_list')
     if @topic.update_attributes(params[:topic])
       flash[:notice] = t('topics.update.success')
