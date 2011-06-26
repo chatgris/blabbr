@@ -170,6 +170,7 @@
   class window.PostView extends CommonView
     constructor: (@post, @topic) ->
       @selector = $('#posts')
+      @post_id = "'#p#{@post.pid}'"
       @post.current = @post.creator_n == Blabbr.current_user.nickname
       @post.published = @post.state == 'published'
       @post.deleted = @post.state == 'deleted'
@@ -191,9 +192,10 @@
         $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
 
     events: ->
-      @selector.find('.bubble p, .bubble ul').bind 'mouseenter', @quoter
-      @selector.find('.bubble p, .bubble ul').bind 'mouseleave', @unquoter
-      @selector.find('.bubble p, .bubble ul').bind 'click', @insert_quote
+      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'mouseenter', @quoter
+      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'mouseleave', @unquoter
+      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'click', @insert_quote
+
     yield: ->
       @selector.append @template(@post)
 
