@@ -92,6 +92,7 @@ class PostsController < ApplicationController
 
   def reset_cache
     expire_action(:controller => 'topics', :action => 'show', :id => @topic.slug, :page => @post.page, :format => params['format'])
+    expire_action(:controller => 'topics', :action => 'show', :id => @topic.slug, :format => params['format']) if @post.page == 1
   end
 
 end
