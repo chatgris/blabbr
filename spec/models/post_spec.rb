@@ -16,7 +16,7 @@ describe Post do
     it { should validate_length_of(:body) }
   end
 
-  context "Setup : topic, user, and cretor created" do
+  context "Setup : topic, user, and creator created" do
 
     let(:creator) { Factory :creator}
     let(:member) { Factory :user}
@@ -119,7 +119,6 @@ describe Post do
           }.should change(topic, :last_user).from(creator.nickname).to(member.nickname)
         end
 
-
         it "should have increment posts_count when a new post is added by user" do
           lambda {
             new_post.save
@@ -135,7 +134,7 @@ describe Post do
         it "shouldn't increment unread count when a post is added by the same user" do
           lambda {
             new_post.save
-          }.should_not change(topic.members[1], :unread)
+          }.should change(topic.members[1], :unread).to(0)
         end
 
         it "should increment unread count when a post is added" do
@@ -147,8 +146,8 @@ describe Post do
         it "should reset unread post" do
           new_post.save
           lambda {
-            topic.reset_unread(member.nickname)
-          }.should change(topic.members[1], :unread).by(-1)
+            topic.reset_unread(creator.nickname)
+          }.should change(topic.members[0], :unread).by(-1)
         end
 
         it "should add post_id to member" do

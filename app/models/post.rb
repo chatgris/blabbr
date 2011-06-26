@@ -91,6 +91,12 @@ class Post
     self.creator.inc(:posts_count, 1)
   end
 
+  # Doing a lot of stuff here :
+  # * update unread posts count
+  # * update first unread id
+  # * update posts count
+  # * set unread to 0 for post creator
+  #
   def update_topic_infos
     if self.new_topic.nil?
       t = self.topic
@@ -99,9 +105,14 @@ class Post
           member.post_id = self.id
           member.page = @page
         end
-        member.nickname == self.creator.nickname ? member.posts_count += 1 : member.unread += 1
+        if member.nickname == self.creator_n
+          member.posts_count += 1
+          member.unread = 0
+        else
+          member.unread += 1
+        end
       end
-      t.last_user = self.creator.nickname
+      t.last_user = self.creator_n
       t.posted_at = Time.now.utc
       t.posts_count += 1
       t.save
