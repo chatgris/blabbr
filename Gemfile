@@ -18,7 +18,6 @@ gem 'mongoid',              '~>2.0.2'
 gem 'pusher',               '~>0.8.0'
 gem 'rails',                '~>3.1.0.rc2'
 gem 'rails_autolink',       '~>1.0.2'
-gem 'rinku'
 gem 'rake',                 '~>0.9.1'
 gem 'RedCloth',             '~>4.2.7'
 gem 'redis-store',          '~>1.0.0.beta4'
@@ -35,11 +34,9 @@ group :test, :development do
 end
 
 group :test do
-  gem 'capybara'
   gem 'factory_girl_rails', '~>1.0'
   gem 'faker',              '~>0.9.5'
   gem 'mongoid-rspec',      '~>1.4.2'
-  gem 'steak'
 end
 
 group :development do
