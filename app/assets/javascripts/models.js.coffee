@@ -54,6 +54,7 @@
     @after_create: (post) ->
       new PostView post
       $('#new_post form')[0].reset()
+      $('#new_post textarea')[0].focus()
 
     @after_update: (post)->
       new PostEditedView post
