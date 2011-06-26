@@ -155,7 +155,7 @@ window.Blabbr = {}
     $.blabbrNotify 'success', notice.text() if notice.text()
     notice.remove()
 
-    $('html').mouseover ->
+    $('html').mouseenter ->
       Blabbr.is_active = true
 
     # global error callback
