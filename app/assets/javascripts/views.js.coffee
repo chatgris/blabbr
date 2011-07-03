@@ -223,11 +223,9 @@
     template: ->
       ich.post_edit @post
 
-    events: ->
-      @selector.find('textarea').bind 'focus', @expand_text_area
-
     yield: ->
       @selector.find('.bubble').html @template()
+      @selector.find('textarea').css 'height', '100px'
 
   class window.TopicNewView extends CommonView
     constructor: ->
