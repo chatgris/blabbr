@@ -191,6 +191,7 @@
         content = $(e.currentTarget).text()
         user = $(e.currentTarget).parents('article:first').find('.user').text()
         $('#post_body').val($('#post_body').val() + "bq..:" + user + " " + content + " \n\np. ")
+        $('#new_post textarea').css('height', '100px')
 
     events: ->
       @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'mouseenter', @quoter
