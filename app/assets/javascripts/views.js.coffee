@@ -290,6 +290,14 @@
     constructor: ->
       super
 
+    reset_unread: (e)->
+      $(e.currentTarget).closest('article').find('mark a')
+                        .removeClass('new')
+                        .html('0')
+
+    events: ->
+      @selector.find('a').bind 'click', @reset_unread
+
     yield: ->
       @selector.html '<section class="topics"><h2>Topics</h2></section>'
       @selector.find('section').append @template_item(topic) for topic in @topics.topics
