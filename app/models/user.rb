@@ -42,7 +42,7 @@ class User
   protected
 
   def avatar_path
-    self.avatar.url
+    "#{self.avatar.url}?#{self.updated_at.to_i.to_s}"
   end
 
   def path

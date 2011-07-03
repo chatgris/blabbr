@@ -19,7 +19,7 @@ module LinkHelper
 
   def link_to_avatar_thumb(user)
     slug = user.respond_to?(:slug) ? user.slug : user
-    link_to image_tag("/uploads/avatars/thumb_#{slug}.png"), user_path(user)
+    link_to image_tag("/uploads/avatars/thumb_#{slug}.png?#{user.updated_at.to_i.to_s}"), user_path(user)
   end
 
   def link_to_edit_post(post, topic)
