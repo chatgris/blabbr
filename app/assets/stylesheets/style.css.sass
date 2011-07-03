@@ -290,8 +290,6 @@ blockquote
     line-height: 1.8em
     padding: .3em
     font-size: 12px
-    &:hover
-      +border-curve($background)
   li
     list-style-position: inside
   .simple_form
@@ -342,6 +340,9 @@ blockquote
       text-decoration: none
   textarea
     width: 540px
+  >p, >ul
+    &:hover
+      +border-curve($background)
 
 .help
   width: 300px

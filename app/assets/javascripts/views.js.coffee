@@ -194,9 +194,9 @@
         $('#new_post textarea').css('height', '100px')
 
     events: ->
-      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'mouseenter', @quoter
-      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'mouseleave', @unquoter
-      @selector.find("#{@post_id} .bubble p, #{@post_id} .bubble ul").bind 'click', @insert_quote
+      @selector.find("#{@post_id} .bubble > p, #{@post_id} .bubble > ul").bind 'mouseenter', @quoter
+      @selector.find("#{@post_id} .bubble > p, #{@post_id} .bubble > ul").bind 'mouseleave', @unquoter
+      @selector.find("#{@post_id} .bubble > p, #{@post_id} .bubble > ul").bind 'click', @insert_quote
 
     yield: ->
       @selector.append @template(@post)
