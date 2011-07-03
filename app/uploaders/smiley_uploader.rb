@@ -2,7 +2,7 @@ class SmileyUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   process :get_dimensions
-  process :resize_to_limit => [100, 100]
+  process :resize_to_limit => [200, 200]
 
   def get_dimensions
     if @file
