@@ -175,6 +175,7 @@
       @post.current = @post.creator_n == Blabbr.current_user.nickname
       @post.published = @post.state == 'published'
       @post.deleted = @post.state == 'deleted'
+      @post.created_at = new Date(@post.created_at).toDateString()
       super
 
     template: (post)->
