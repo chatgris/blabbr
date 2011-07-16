@@ -35,8 +35,8 @@ class User
 
   def as_json(options={})
     options ||= {} #wtf
-    super({:only => [:nickname, :posts_count, :time_zone, :audio, :slug],
-          :methods => [:avatar_path, :path]}.merge(options))
+    super({:only => [:nickname, :posts_count, :audio, :timezone, :slug],
+          :methods => [:avatar_path, :path, :tz]}.merge(options))
   end
 
   protected
@@ -47,6 +47,17 @@ class User
 
   def path
     user_path(self)
+  end
+
+  # Formatting tz for crappy js
+  def tz
+    tz = ActiveSupport::TimeZone.new(self.time_zone).formatted_offset
+    if tz.include?('-')
+      tz.gsub!('-', '+')
+    elsif tz.include?('+')
+      tz.gsub!('+', '-')
+    end
+    tz.sub(':', '')
   end
 
 end
