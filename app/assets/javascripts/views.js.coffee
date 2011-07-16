@@ -29,6 +29,19 @@
     get_token: ->
       $('meta[name="csrf-token"]').attr('content')
 
+    leading_zero: (integer)->
+      if integer < 10 then "0" + integer else integer
+
+    format_date: (date)->
+      d = new Date(date)
+      day = @leading_zero(d.getDay() + 1)
+      month = @leading_zero(d.getMonth() + 1)
+      year = d.getFullYear()
+      hours = @leading_zero(d.getHours() + 1)
+      minutes = @leading_zero(d.getMinutes() + 1)
+      secondes = @leading_zero(d.getSeconds() + 1)
+      "#{day}/#{month}/#{year}, #{hours}:#{minutes}:#{secondes}"
+
     member: (members)->
       member = (member for member in members when member.nickname is Blabbr.current_user.nickname)
       member[0].hash = if member[0].unread is 0 then 'new_post' else "p#{member[0].hash}"
@@ -176,7 +189,7 @@
       @post.current = @post.creator_n is Blabbr.current_user.nickname
       @post.published = @post.state is 'published'
       @post.deleted = @post.state is 'deleted'
-      @post.created_at = new Date(@post.created_at).toDateString()
+      @post.created_at = @format_date(@post.created_at)
       super
 
     template: (post)->
@@ -270,6 +283,7 @@
 
     template_item: (topic)->
       topic.member = @member(topic.members)
+      topic.posted_at = @format_date(topic.posted_at)
       ich.topic_item topic
 
     paginate: (selector)->
