@@ -40,7 +40,7 @@ class Post
   def as_json(options = {})
     options ||= {} #wtf
     super({:only => [:state, :page, :creator_n, :creator_s, :created_at],
-           :methods => [:pid, :tid, :path, :content]
+           :methods => [:pid, :tid, :path, :content, :tts]
           }.merge(options))
   end
 
@@ -52,6 +52,10 @@ class Post
 
   def tid
     topic.id
+  end
+
+  def tts
+    topic.updated_at.to_i.to_s
   end
 
   def raw
