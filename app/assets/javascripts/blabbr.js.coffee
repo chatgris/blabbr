@@ -23,7 +23,6 @@ window.Blabbr = {}
       $("#contents").append '<p class="loading"></p>'
 
     @bind 'notify', ->
-      context.title = $('title').text()
       context.trigger 'lostFocus'
       context.trigger 'blinkTitle', 1
       if Blabbr.current_user.audio?
@@ -35,16 +34,16 @@ window.Blabbr = {}
     @bind 'blinkTitle', (e, state) ->
       unless Blabbr.is_active
         if state == 1
-          document.title = "[new!] - #{context.title}"
+          document.title = "[new!] - #{Blabbr.title}"
           state = 0
         else
-          document.title = context.title
+          document.title = Blabbr.title
           state = 1
         setTimeout ->
           context.trigger 'blinkTitle', state
         , 1600
       else
-        document.title = context.title
+        document.title = Blabbr.title
 
     @bind 'audioNotification', ->
       $('body').append '<audio id="player" src="/sound.mp3" autoplay />'

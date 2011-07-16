@@ -7,7 +7,8 @@
 
     update_title: (title) ->
       $("#page-title").html title
-      document.title = "Blabbr - #{title}"
+      Blabbr.title = "Blabbr - #{title}"
+      document.title = Blabbr.title
 
     move_to: (hash) ->
       hash = window.location.hash || hash
