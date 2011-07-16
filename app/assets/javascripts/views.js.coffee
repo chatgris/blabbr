@@ -30,8 +30,8 @@
       $('meta[name="csrf-token"]').attr('content')
 
     member: (members)->
-      member = (member for member in members when member.nickname == Blabbr.current_user.nickname)
-      member[0].hash = if member[0].unread == 0 then 'new_post' else "p#{member[0].hash}"
+      member = (member for member in members when member.nickname is Blabbr.current_user.nickname)
+      member[0].hash = if member[0].unread is 0 then 'new_post' else "p#{member[0].hash}"
       member[0]
 
     events: ->
@@ -110,7 +110,7 @@
 
     template: ->
       @topic.member_posts_count = @member(@topic.members).posts_count
-      @topic.is_creator = @topic.creator == Blabbr.current_user.nickname
+      @topic.is_creator = @topic.creator is Blabbr.current_user.nickname
       ich.topic_info @topic
 
     yield: ->
@@ -173,9 +173,9 @@
     constructor: (@post, @topic) ->
       @selector = $('#posts')
       @post_id = "'#p#{@post.pid}'"
-      @post.current = @post.creator_n == Blabbr.current_user.nickname
-      @post.published = @post.state == 'published'
-      @post.deleted = @post.state == 'deleted'
+      @post.current = @post.creator_n is Blabbr.current_user.nickname
+      @post.published = @post.state is 'published'
+      @post.deleted = @post.state is 'deleted'
       @post.created_at = new Date(@post.created_at).toDateString()
       super
 
@@ -206,9 +206,9 @@
   class window.PostEditedView extends CommonView
     constructor: (@post)->
       @selector = $("#p#{@post.pid}")
-      @post.current = @post.creator_n == Blabbr.current_user.nickname
-      @post.published = @post.state == 'published'
-      @post.deleted = @post.state == 'deleted'
+      @post.current = @post.creator_n is Blabbr.current_user.nickname
+      @post.published = @post.state is 'published'
+      @post.deleted = @post.state is 'deleted'
       super
 
     template: (post)->

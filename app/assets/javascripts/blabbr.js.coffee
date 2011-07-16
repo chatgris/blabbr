@@ -25,7 +25,7 @@ window.Blabbr = {}
     @bind 'notify', ->
       context.trigger 'lostFocus'
       context.trigger 'blinkTitle', 1
-      if Blabbr.current_user.audio?
+      if Blabbr.current_user.audio is true
         @trigger 'audioNotification'
 
     @bind 'lostFocus', ->
@@ -33,7 +33,7 @@ window.Blabbr = {}
 
     @bind 'blinkTitle', (e, state) ->
       unless Blabbr.is_active
-        if state == 1
+        if state is 1
           document.title = "[new!] - #{Blabbr.title}"
           state = 0
         else
@@ -58,7 +58,7 @@ window.Blabbr = {}
       unless pusher.channels.channels[id]
         channel = pusher.subscribe id
         channel.bind 'new-post', (post) ->
-          if post.creator_n != Blabbr.current_user.nickname && post.tid == Blabbr.topic_id
+          if post.creator_n isnt Blabbr.current_user.nickname && post.tid is Blabbr.topic_id
             new PostView post
             context.trigger 'notify'
         channel.bind 'index', (post) ->
