@@ -218,6 +218,7 @@
       @post.published = @post.state is 'published'
       @post.deleted = @post.state is 'deleted'
       @post.created_at = @format_date(@post.created_at)
+      @post.content = @post.content.replace("@#{Blabbr.current_user.nickname}", "<mark> @#{Blabbr.current_user.nickname}</mark>")
       super
 
     template: (post)->
