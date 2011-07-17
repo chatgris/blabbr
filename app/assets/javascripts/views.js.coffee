@@ -224,6 +224,7 @@
       @post.current = @post.creator_n is Blabbr.current_user.nickname
       @post.published = @post.state is 'published'
       @post.deleted = @post.state is 'deleted'
+      @post.created_at = @format_date(@post.created_at)
       super
 
     template: (post)->
