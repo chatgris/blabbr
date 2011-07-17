@@ -71,7 +71,7 @@ section, article, header, footer, nav, aside, hgroup
     vertical-align: top
 
 #user_info
-  +border-curve-bottom(#eecc99)
+  +border-curve-bottom($beige)
   padding: 0.5em 0.8em
   li
     padding: 0.2em 0 0 0
@@ -88,7 +88,7 @@ section, article, header, footer, nav, aside, hgroup
     a
       padding: 0
   li + li
-    border-left: 1px solid #eeddcc
+    border-left: 1px solid $beige
 
 .topic-list, .topic-info
   margin: 5px 0
@@ -98,7 +98,7 @@ section, article, header, footer, nav, aside, hgroup
   li
     display: inline-block
     margin: 0 0 0 0.4em
-    +border-curve(#eecc99)
+    +border-curve($beige)
     font-weight: bold
     text-transform: lowercase
     text-shadow: 1px 1px 0 white
@@ -386,7 +386,7 @@ input[type=submit]
   font: 10px / 1.6em Helvetica, Arial, sans-serif
   text-shadow: 1px 1px 0 white
   color: #444444
-  +border-curve(#eecc99)
+  +border-curve($beige)
   font-weight: bold
   border: 0
   cursor: pointer
@@ -425,7 +425,7 @@ input[type="submit"]::-moz-focus-inner
   height: 100px
   overflow-y: auto
   span.tag
-    +border-curve(#eecc99)
+    +border-curve($beige)
     display: block
     float: left
     padding: 5px
@@ -451,3 +451,7 @@ input[type="submit"]::-moz-focus-inner
   clear: both
   width: 100%
   height: 0px
+mark
+  background: transparent
+  font-weight: bold
+  font-style: italic
