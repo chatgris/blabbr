@@ -33,16 +33,8 @@
       if integer < 10 then "0" + integer else integer
 
     format_date: (date)->
-      d = new Date("#{date} GMT #{Blabbr.current_user.tz}")
-      time = d.getTime() + (d.getTimezoneOffset() * 60000)
-      d = new Date(time)
-      day = @leading_zero(d.getDate())
-      month = @leading_zero(d.getMonth() + 1)
-      year = d.getFullYear()
-      hours = @leading_zero(d.getHours())
-      minutes = @leading_zero(d.getMinutes())
-      secondes = @leading_zero(d.getSeconds())
-      "#{day}/#{month}/#{year}, #{hours}:#{minutes}:#{secondes}"
+      d = new Date(new Date(date).getTime() + (Blabbr.current_user.tz * 60000))
+      dateFormat(d, 'dd/mm/yy, HH:MM:ss', true)
 
     member: (members)->
       member = (member for member in members when member.nickname is Blabbr.current_user.nickname)

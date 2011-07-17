@@ -2,6 +2,7 @@
 //= require jquery.autocomplete
 //= require jquery.sexypost
 //= require jquery.tagsinput
+//= require date.format
 //= require pusher
 //= require sammy
 //= require sammy.nested_params

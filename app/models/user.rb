@@ -51,13 +51,7 @@ class User
 
   # Formatting tz for crappy js
   def tz
-    tz = ActiveSupport::TimeZone.new(self.time_zone).formatted_offset
-    if tz.include?('-')
-      tz.gsub!('-', '+')
-    elsif tz.include?('+')
-      tz.gsub!('+', '-')
-    end
-    tz.sub(':', '')
+    ActiveSupport::TimeZone.new(self.time_zone).utc_offset / 60
   end
 
 end
