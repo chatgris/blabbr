@@ -10,6 +10,7 @@ require 'factory_girl'
 
 Mongoid.configure do |config|
   config.master = Mongo::Connection.new.db('blabbr_core_spec')
+  config.identity_map_enabled = true
 end
 
 RSpec.configure do |config|
