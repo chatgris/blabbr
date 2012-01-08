@@ -6,8 +6,9 @@ module BlabbrCore
 
     # Fields
     #
-    field :email,    type: String
-    field :nickname, type: String
+    field :email,       type: String
+    field :nickname,    type: String
+    field :posts_count, type: Integer, default: 0
 
     # Relations
     #
