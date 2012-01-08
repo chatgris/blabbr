@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mongoid-rspec"
   s.add_development_dependency "factory_girl"
   s.add_development_dependency "autotest-standalone"
+  s.add_development_dependency "faker"
 end

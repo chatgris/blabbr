@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
 
 require 'blabbr_core'
 require 'mongoid-rspec'
+require 'faker'
 require 'factory_girl'
 
 Mongoid.configure do |config|
