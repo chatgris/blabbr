@@ -18,5 +18,17 @@ module BlabbrCore
     validates :body, presence: true, uniqueness: true, length: { in: 0..10000 }
     validates :author, presence: true
     validates :topic, presence: true
+
+    # StateMachine
+    #
+    state_machine :state, :initial => :published do
+      event :publish do
+        transition unpublished: :published
+      end
+
+      event :unpublish do
+        transition published: :unpublished
+      end
+    end
   end
 end

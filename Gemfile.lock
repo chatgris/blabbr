@@ -4,6 +4,7 @@ PATH
     blabbr_core (0.0.1)
       bson_ext (~> 1.5)
       mongoid (~> 2.4)
+      state_machine
 
 GEM
   remote: http://rubygems.org/
@@ -49,6 +50,7 @@ GEM
     rspec-instafail (0.1.9)
     rspec-mocks (2.8.0)
     ruby-progressbar (0.0.10)
+    state_machine (1.1.1)
     tzinfo (0.3.31)
 
 PLATFORMS

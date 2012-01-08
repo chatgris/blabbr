@@ -24,4 +24,30 @@ describe BlabbrCore::Post do
     end
   end
 
+  describe 'state_machine' do
+    describe 'intial state' do
+      it 'should be published be default' do
+        post.should be_published
+      end
+    end
+
+    describe 'unpublish' do
+      it 'should unpublish a post' do
+        post.unpublish.should be_true
+        post.reload.should be_unpublished
+        post.reload.should_not be_published
+      end
+    end
+
+    describe 'publish' do
+      before { post.unpublish }
+
+      it 'should publish a post' do
+        post.should be_unpublished
+        post.publish.should be_true
+        post.should be_published
+      end
+    end
+  end
+
 end
