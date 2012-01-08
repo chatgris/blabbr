@@ -23,5 +23,5 @@ describe BlabbrCore::Post do
       post.should be_valid
     end
   end
-end
 
+end
