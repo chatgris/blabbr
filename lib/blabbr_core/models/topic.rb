@@ -3,6 +3,7 @@ module BlabbrCore
   class Topic
     include Mongoid::Document
     include Mongoid::Timestamps
+    include BlabbrCore::Limace
 
     # Fields
     #
@@ -21,6 +22,10 @@ module BlabbrCore
     # Callbacks
     #
     before_create :add_author_in_members
+
+    # Limace
+    #
+    limace :title
 
     private
 

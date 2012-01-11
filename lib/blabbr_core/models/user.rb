@@ -3,6 +3,7 @@ module BlabbrCore
   class User
     include Mongoid::Document
     include Mongoid::Timestamps::Created
+    include BlabbrCore::Limace
 
     # Fields
     #
@@ -19,5 +20,8 @@ module BlabbrCore
     validates :email,    presence: true, uniqueness: true
     validates :nickname, presence: true, uniqueness: true, length: { in: 8..42 }
 
+    # Limace
+    #
+    limace :nickname
   end
 end

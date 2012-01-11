@@ -3,6 +3,7 @@ require 'spec_helper'
 
 describe BlabbrCore::Topic do
   let(:topic) { Factory :topic }
+
   describe 'Fields' do
     it { should have_fields(:title) }
   end
@@ -27,4 +28,5 @@ describe BlabbrCore::Topic do
       topic.members.first.user.should eq topic.author
     end
   end
+
 end
