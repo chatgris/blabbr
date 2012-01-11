@@ -8,6 +8,7 @@ describe BlabbrCore::Topic do
 
   describe 'Relations' do
     it { should belong_to(:author).of_type(BlabbrCore::User) }
+    it { should embed_many(:members) }
   end
 
   describe 'validations' do

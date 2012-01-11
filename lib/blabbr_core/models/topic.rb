@@ -10,7 +10,8 @@ module BlabbrCore
 
     # Relations
     #
-    belongs_to :author, class_name: 'BlabbrCore::User'
+    belongs_to  :author,  class_name: 'BlabbrCore::User'
+    embeds_many :members, class_name: 'BlabbrCore::Member'
 
     # Validations
     #
