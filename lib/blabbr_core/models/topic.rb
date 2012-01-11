@@ -13,6 +13,7 @@ module BlabbrCore
     #
     belongs_to  :author,  class_name: 'BlabbrCore::User'
     embeds_many :members, class_name: 'BlabbrCore::Member'
+    has_many    :posts,   class_name: 'BlabbrCore::Post'
 
     # Validations
     #

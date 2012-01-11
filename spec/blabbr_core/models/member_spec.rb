@@ -4,6 +4,7 @@ require 'spec_helper'
 describe BlabbrCore::Member do
   describe 'Fields' do
     it { should have_fields(:unread, :posts_count).of_type(Integer) }
+    it { should have_fields(:post_id).of_type(String) }
   end
 
   describe 'Relations' do

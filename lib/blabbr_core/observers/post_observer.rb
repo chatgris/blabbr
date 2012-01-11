@@ -5,7 +5,7 @@ module BlabbrCore
 
     def after_create(resource)
       inc_user_posts_count(resource)
-      inc_member_posts_count(resource)
+      update_topic_members(resource)
     end
 
     private
@@ -14,8 +14,18 @@ module BlabbrCore
       resource.author.inc(:posts_count, 1)
     end
 
-    def inc_member_posts_count(resource)
-      resource.topic.members.where(user_id: resource.author.id.to_s).one.inc(:posts_count, 1)
+    def update_topic_members(resource)
+      resource.topic.members.each do |member|
+        if member.unread == 0
+          member.post_id = resource.id.to_s
+        end
+        if member.user_id == resource.author_id
+          member.posts_count += 1
+        else
+          member.unread += 1
+        end
+      end
+      resource.topic.save
     end
   end
 end
