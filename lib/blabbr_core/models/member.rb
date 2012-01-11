@@ -19,6 +19,15 @@ module BlabbrCore
     #
     before_validation :set_defaults
 
+    def reset_unread
+      self.unread = 0
+    end
+
+    def reset_unread!
+      self.reset_unread
+      self.save
+    end
+
     private
 
     def set_defaults
