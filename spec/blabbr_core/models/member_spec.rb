@@ -5,7 +5,7 @@ describe BlabbrCore::Member do
   let(:topic) { Factory :topic }
 
   describe 'Fields' do
-    it { should have_fields(:unread, :posts_count).of_type(Integer) }
+    it { should have_fields(:unread_count, :posts_count).of_type(Integer) }
     it { should have_fields(:post_id).of_type(String) }
   end
 
@@ -20,25 +20,25 @@ describe BlabbrCore::Member do
     end
   end
 
-  describe 'reset_unread' do
-    it 'should set unread to 0, without save' do
+  describe 'reset_unread_count' do
+    it 'should set unread_count to 0, without save' do
       member = topic.members.first
-      member.unread = 42
+      member.unread_count = 42
       member.save.should be_true
-      member.unread.should eq 42
-      member.reset_unread
-      member.unread.should eq 0
-      member.reload.unread.should_not eq 0
+      member.unread_count.should eq 42
+      member.reset_unread_count
+      member.unread_count.should eq 0
+      member.reload.unread_count.should_not eq 0
     end
 
-    it 'should set unread to 0, with save' do
+    it 'should set unread_count to 0, with save' do
       member = topic.members.first
-      member.unread = 42
+      member.unread_count = 42
       member.save.should be_true
-      member.unread.should eq 42
-      member.reset_unread!
-      member.unread.should eq 0
-      member.reload.unread.should eq 0
+      member.unread_count.should eq 42
+      member.reset_unread_count!
+      member.unread_count.should eq 0
+      member.reload.unread_count.should eq 0
     end
   end
 end

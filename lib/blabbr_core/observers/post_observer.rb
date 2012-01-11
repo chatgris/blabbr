@@ -16,13 +16,13 @@ module BlabbrCore
 
     def update_topic_members(resource)
       resource.topic.members.each do |member|
-        if member.unread == 0
+        if member.unread_count == 0
           member.post_id = resource.id.to_s
         end
         if member.user_id == resource.author_id
           member.posts_count += 1
         else
-          member.unread += 1
+          member.unread_count += 1
         end
       end
       resource.topic.save

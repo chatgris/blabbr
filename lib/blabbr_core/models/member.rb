@@ -6,9 +6,9 @@ module BlabbrCore
 
     # Fields
     #
-    field :unread,      type: Integer, default: 0
-    field :posts_count, type: Integer, default: 0
-    field :post_id,     type: String
+    field :unread_count,   type: Integer, default: 0
+    field :posts_count,    type: Integer, default: 0
+    field :post_id,        type: String
 
     # Relations
     #
@@ -19,12 +19,12 @@ module BlabbrCore
     #
     before_validation :set_defaults
 
-    def reset_unread
-      self.unread = 0
+    def reset_unread_count
+      self.unread_count = 0
     end
 
-    def reset_unread!
-      self.reset_unread
+    def reset_unread_count!
+      self.reset_unread_count
       self.save
     end
 
@@ -32,7 +32,7 @@ module BlabbrCore
 
     def set_defaults
       if self.topic && self.new_record? && self.user != self.topic.author
-        self.unread   = self.topic.posts.count
+        self.unread_count   = self.topic.posts.count
         self.post_id  = self.topic.posts.last.id.to_s
       end
     end

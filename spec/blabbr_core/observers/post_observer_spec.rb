@@ -27,15 +27,15 @@ describe BlabbrCore::PostObserver do
         post.topic.members.first.posts_count.should eq 2
       end
 
-      it 'should increment members unread for this topic' do
-        post.topic.members.last.unread.should eq 2
+      it 'should increment members unread_count for this topic' do
+        post.topic.members.last.unread_count.should eq 2
       end
 
       it 'should not increment other members posts_count' do
         post.topic.reload.members.last.posts_count.should eq 0
       end
 
-      it 'should set post_id for member with 0 unread posts' do
+      it 'should set post_id for member with 0 unread_count posts' do
         post.topic.reload.members.last.post_id.should eq post.topic.posts.first.id.to_s
       end
     end
