@@ -17,5 +17,15 @@ module BlabbrCore
     #
     validates :title, presence: true, uniqueness: true, length: { in: 8..42 }
     validates :author, presence: true
+
+    # Callbacks
+    #
+    before_create :add_author_in_members
+
+    private
+
+    def add_author_in_members
+      self.members.build(user: self.author)
+    end
   end
 end

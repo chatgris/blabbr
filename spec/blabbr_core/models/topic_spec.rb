@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Topic do
+  let(:topic) { Factory :topic }
   describe 'Fields' do
     it { should have_fields(:title) }
   end
@@ -17,7 +18,13 @@ describe BlabbrCore::Topic do
     it { should validate_length_of(:title).within(8..42) }
 
     it 'should have a valid factory' do
-      Factory(:topic).should be_valid
+      topic.should be_valid
+    end
+  end
+
+  describe 'callbacks' do
+    it 'should add author in members at creation' do
+      topic.members.first.user.should eq topic.author
     end
   end
 end
