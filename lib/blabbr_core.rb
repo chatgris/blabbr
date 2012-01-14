@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'mongoid'
 require 'state_machine'
+require 'mongoid_fromage'
 
 module BlabbrCore
 end

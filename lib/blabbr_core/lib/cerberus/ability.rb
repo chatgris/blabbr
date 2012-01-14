@@ -24,9 +24,9 @@ module BlabbrCore
         if @user
           if klass == User
             if method == :update
-              resource == user
+              resource == user || user.admin?
             elsif method == :create
-              false
+              user.admin?
             else
               true
             end

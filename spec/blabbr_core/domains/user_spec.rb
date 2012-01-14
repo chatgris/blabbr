@@ -4,6 +4,7 @@ require 'spec_helper'
 describe BlabbrCore::User do
   let(:current_user) { Factory :user }
   let(:user)         { Factory :user }
+  let(:admin)        { Factory :admin }
 
   context 'with a current_user' do
     before do
@@ -28,6 +29,30 @@ describe BlabbrCore::User do
       lambda {
         BlabbrCore::User.new(user).create(nickname: 'test user')
       }.should raise_error
+    end
+  end
+
+  context 'with an admin' do
+    before do
+      user
+      current_user
+    end
+
+    it 'it should find all user' do
+      BlabbrCore::User.new(admin).all.to_a.should eq [user, current_user, admin]
+    end
+
+    it 'should find a specific user' do
+      BlabbrCore::User.new(admin).find(user.limace).should eq user
+    end
+
+    it 'should be able to update other user' do
+      BlabbrCore::User.new(admin).update(current_user.limace, nickname: 'test user').should be_true
+      current_user.reload.nickname.should eq 'test user'
+    end
+
+    it 'should be able to create a user' do
+      BlabbrCore::User.new(admin).create(nickname: 'test user', email: 'email@mail.com').should be_true
     end
   end
 
