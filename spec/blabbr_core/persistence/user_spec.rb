@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe BlabbrCore::User do
+describe BlabbrCore::Persistence::User do
   let(:user) { Factory :user }
 
   describe 'Fields' do

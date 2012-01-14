@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe BlabbrCore::Topic do
+describe BlabbrCore::Persistence::Topic do
   let(:topic) { Factory :topic }
 
   describe 'Fields' do
@@ -9,7 +9,7 @@ describe BlabbrCore::Topic do
   end
 
   describe 'Relations' do
-    it { should belong_to(:author).of_type(BlabbrCore::User) }
+    it { should belong_to(:author).of_type(BlabbrCore::Persistence::User) }
     it { should embed_many(:members) }
     it { should have_many(:posts) }
   end

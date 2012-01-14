@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe BlabbrCore::Member do
+describe BlabbrCore::Persistence::Member do
   let(:topic) { Factory :topic }
 
   describe 'Fields' do
@@ -11,7 +11,7 @@ describe BlabbrCore::Member do
 
   describe 'Relations' do
     it { should be_embedded_in(:topic) }
-    it { should belong_to(:user).of_type(BlabbrCore::User) }
+    it { should belong_to(:user).of_type(BlabbrCore::Persistence::User) }
   end
 
   describe 'validations' do

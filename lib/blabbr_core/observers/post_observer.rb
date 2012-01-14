@@ -1,7 +1,7 @@
 # encoding: utf-8
 module BlabbrCore
   class PostObserver < Mongoid::Observer
-    observe BlabbrCore::Post
+    observe BlabbrCore::Persistence::Post
 
     def after_create(resource)
       inc_user_posts_count(resource)

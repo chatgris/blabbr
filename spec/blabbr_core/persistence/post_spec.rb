@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe BlabbrCore::Post do
+describe BlabbrCore::Persistence::Post do
   let(:post) { Factory :post }
 
   describe 'Fields' do
