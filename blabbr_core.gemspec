@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency "mongoid",       "~>2.4"
   s.add_dependency "bson_ext",      "~>1.5"
   s.add_dependency "state_machine"
+  s.add_dependency "fromage"
   s.add_development_dependency "rspec",         "~>2.8"
   s.add_development_dependency "fuubar"
   s.add_development_dependency "mongoid-rspec"

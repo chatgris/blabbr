@@ -4,6 +4,7 @@ module BlabbrCore
     class User
       include Mongoid::Document
       include Mongoid::Timestamps::Created
+      include Mongoid::Fromage
       include BlabbrCore::Limace
 
       # Fields
@@ -24,6 +25,10 @@ module BlabbrCore
       # Limace
       #
       limace :nickname
+
+      # Roles
+      #
+      fromages :admin
     end
   end
 end

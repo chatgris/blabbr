@@ -3,6 +3,7 @@ PATH
   specs:
     blabbr_core (0.0.1)
       bson_ext (~> 1.5)
+      fromage
       mongoid (~> 2.4)
       state_machine
 
@@ -25,6 +26,7 @@ GEM
       activesupport
     faker (1.0.1)
       i18n (~> 0.4)
+    fromage (0.0.2)
     fuubar (0.0.6)
       rspec (~> 2.0)
       rspec-instafail (~> 0.1.8)
