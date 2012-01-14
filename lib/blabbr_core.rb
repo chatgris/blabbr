@@ -6,7 +6,7 @@ module BlabbrCore
 end
 
 # Libs
-Dir[File.dirname(__FILE__) + "/blabbr_core/lib/*.rb"].each {|file| require file }
+Dir[File.dirname(__FILE__) + "/blabbr_core/lib/**/*.rb"].each {|file| require file }
 
 # Mongoid model
 Dir[File.dirname(__FILE__) + "/blabbr_core/persistence/*.rb"].each {|file| require file }
