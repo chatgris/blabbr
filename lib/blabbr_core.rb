@@ -1,4 +1,11 @@
 # encoding: utf-8
+#
+# Bundler should take care of require but :
+# https://github.com/carlhuda/bundler/issues/1096
+#
+# require "rubygems"
+# require "bundler/setup"
+# Bundler.require(:default)
 require 'mongoid'
 require 'state_machine'
 require 'mongoid_fromage'

@@ -20,6 +20,8 @@ module BlabbrCore
 
       # Über and ugly basic rules for resource abilities check.
       #
+      # @return [ Boolean ]
+      #
       def valid?
         if @user
           if klass == User

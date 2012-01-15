@@ -15,6 +15,9 @@ module BlabbrCore
 
     # Return a collection from User.
     #
+    # @example
+    #   BlabbrCore::User.new(current_user).all
+    #
     # @return [ Array ]
     #
     def all
@@ -23,6 +26,9 @@ module BlabbrCore
     end
 
     # Return a resource from User.
+    #
+    # @example
+    #   BlabbrCore::User.new(current_user).find('my-user')
     #
     # @return [ BlabbrCore::Persistence::User ]
     #
