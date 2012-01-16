@@ -34,7 +34,7 @@ module BlabbrCore
       def set_defaults
         if self.topic && self.new_record? && self.user != self.topic.author
           self.unread_count   = self.topic.posts.count
-          self.post_id  = self.topic.posts.last.id.to_s
+          self.post_id  = self.topic.posts.last.id.to_s if self.topic.posts.last
         end
       end
     end

@@ -26,12 +26,21 @@ module BlabbrCore
         if @user
           if klass == User
             if method == :update
-              resource == user || user.admin?
+              return resource == user || user.admin?
             elsif method == :create
-              user.admin?
+              return user.admin?
             else
-              true
+              return true
             end
+          end
+          if klass == Topic
+            if user.admin?
+              return true
+            end
+            if resource
+              return resource.members.where(user_id: user.id).exists?
+            end
+            return true
           end
         else
           false
