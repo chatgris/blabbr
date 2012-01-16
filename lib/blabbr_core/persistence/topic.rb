@@ -29,6 +29,10 @@ module BlabbrCore
       #
       limace :title
 
+      # Scopes
+      #
+      scope :with_member, lambda {|member| where('members.user_id' => member.id)}
+
       private
 
       def add_author_in_members

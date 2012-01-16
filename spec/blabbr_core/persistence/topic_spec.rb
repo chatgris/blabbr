@@ -3,6 +3,7 @@ require 'spec_helper'
 
 describe BlabbrCore::Persistence::Topic do
   let(:topic) { Factory :topic }
+  let(:user)  { Factory :user }
 
   describe 'Fields' do
     it { should have_fields(:title) }
@@ -27,6 +28,20 @@ describe BlabbrCore::Persistence::Topic do
   describe 'callbacks' do
     it 'should add author in members at creation' do
       topic.members.first.user.should eq topic.author
+    end
+  end
+
+  describe 'scopes' do
+    describe 'with_member' do
+      it 'should have resutls' do
+        BlabbrCore::Persistence::Topic.with_member(topic.author).to_a.
+          should eq [topic]
+      end
+
+      it 'should not have resutls' do
+        BlabbrCore::Persistence::Topic.with_member(user).to_a.
+          should_not be_any
+      end
     end
   end
 
