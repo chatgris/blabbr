@@ -42,6 +42,15 @@ module BlabbrCore
             end
             return true
           end
+          if klass == Post
+            if user.admin?
+              return true
+            end
+            if resource
+              return resource.topic.members.where(user_id: user.id).exists?
+            end
+            return true
+          end
         else
           false
         end
