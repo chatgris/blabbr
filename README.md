@@ -8,6 +8,12 @@ Not usable for now.
 
 Very early.
 
+## TODO
+
+  * carrierwave
+  * specs on cerberus
+  * delete on resource
+
 ## Copyright
 
 MIT. See LICENSE for further details.
