@@ -5,7 +5,7 @@ module BlabbrCore
   module Domain
     # Create a new instance of klass.
     #
-    # @param [ BlabbrCore::Persistence::klass ] current user
+    # @param [ BlabbrCore::Persistence::User ] current user
     #
     def initialize(user = nil)
       @current_user = user
