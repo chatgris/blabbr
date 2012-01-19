@@ -50,7 +50,7 @@ describe BlabbrCore::Topic do
 
     it 'should not find a specific topic' do
       lambda {
-      BlabbrCore::Topic.new(user).find(topic.limace)
+        BlabbrCore::Topic.new(user).find(topic.limace)
       }.should raise_error
     end
   end
