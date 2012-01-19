@@ -10,22 +10,22 @@ describe BlabbrCore::Post do
 
   context 'with a current_user' do
     it 'it should find all posts' do
-      BlabbrCore::Post.new(current_user).all.to_a.should eq [post]
+      BlabbrCore::Post.new(current_user, topic).all.to_a.should eq [post]
     end
 
     it 'should find a specific post' do
-      BlabbrCore::Post.new(current_user).find(post.id.to_s).should eq post
+      BlabbrCore::Post.new(current_user, topic).find(post.id.to_s).should eq post
     end
 
   end
 
   context 'with an admin' do
     it 'it should find all posts' do
-      BlabbrCore::Post.new(admin).all.to_a.should eq [post]
+      BlabbrCore::Post.new(admin, topic).all.to_a.should eq [post]
     end
 
     it 'should find a specific post' do
-      BlabbrCore::Post.new(admin).find(post.id.to_s).should eq post
+      BlabbrCore::Post.new(admin, topic).find(post.id.to_s).should eq post
     end
 
   end
@@ -36,22 +36,22 @@ describe BlabbrCore::Post do
     end
 
     it 'it should find all posts' do
-      BlabbrCore::Post.new(user).all.to_a.should eq [post]
+      BlabbrCore::Post.new(user, topic).all.to_a.should eq [post]
     end
 
     it 'should find a specific post' do
-      BlabbrCore::Post.new(user).find(post.id.to_s).should eq post
+      BlabbrCore::Post.new(user, topic).find(post.id.to_s).should eq post
     end
   end
 
   context 'with a user' do
     it 'it should find all posts' do
-      BlabbrCore::Post.new(user).all.to_a.should be_any
+      BlabbrCore::Post.new(user, topic).all.to_a.should be_any
     end
 
     it 'should not find a specific post' do
       lambda {
-      BlabbrCore::Post.new(user).find(post.id.to_s)
+      BlabbrCore::Post.new(user, topic).find(post.id.to_s)
       }.should raise_error
     end
   end
