@@ -11,6 +11,8 @@ module BlabbrCore
       # @param [ Class ]
       # @param [ Object ] object on which method is performed
       #
+      # @since 0.0.1
+      #
       def initialize(user, method, klass, resource)
         @user = user
         @method = method
@@ -21,6 +23,8 @@ module BlabbrCore
       # Über and ugly basic rules for resource abilities check.
       #
       # @return [ Boolean ]
+      #
+      # @since 0.0.1
       #
       def valid?
         if @user

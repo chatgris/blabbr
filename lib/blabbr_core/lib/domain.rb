@@ -7,6 +7,8 @@ module BlabbrCore
     #
     # @param [ BlabbrCore::Persistence::User ] current user
     #
+    # @since 0.0.1
+    #
     def initialize(user = nil)
       @current_user = user
     end
@@ -17,6 +19,8 @@ module BlabbrCore
     #   BlabbrCore::klass.new(current_user).all
     #
     # @return [ Array ]
+    #
+    # @since 0.0.1
     #
     def all
       guard! :all
@@ -30,6 +34,8 @@ module BlabbrCore
     #
     # @return [ BlabbrCore::Persistence::klass ]
     #
+    # @since 0.0.1
+    #
     def find(limace)
       guard! :find, resource(limace)
       resource(limace)
@@ -42,6 +48,8 @@ module BlabbrCore
     #
     # @return [ Boolean ]
     #
+    # @since 0.0.1
+    #
     def update(limace, params)
       guard! :update, resource(limace)
       resource(limace).update_attributes(params)
@@ -53,6 +61,8 @@ module BlabbrCore
     #   BlabbrCore::klass.new(current_user).create(params)
     #
     # @return [ Boolean ]
+    #
+    # @since 0.0.1
     #
     def create(params)
       guard! :create
@@ -76,6 +86,5 @@ module BlabbrCore
     def klass
       "BlabbrCore::Persistence::#{self.class.to_s.demodulize}".constantize
     end
-
   end
 end

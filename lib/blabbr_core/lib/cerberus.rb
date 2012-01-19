@@ -18,6 +18,8 @@ module BlabbrCore
       #
       # @return [ Boolean ]
       #
+      # @since 0.0.1
+      #
       def guard(method, resource = nil)
         BlabbrCore::Cerberus::Ability.new(current_user, method, self.class, resource).valid?
       end
@@ -25,6 +27,8 @@ module BlabbrCore
       # Raise an error if current_user is not authorized
       #
       # @return [ BlabbrCore::Cerberus::Error ]
+      #
+      # @since 0.0.1
       #
       def guard!(method, resource = nil)
         raise Error, 'Not authorized' unless guard(method, resource)

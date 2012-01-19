@@ -18,6 +18,8 @@ module BlabbrCore
       #
       # @param [ Symbol ]
       #
+      # @since 0.0.1
+      #
       def limace(field)
         self.limace_field = field
       end
