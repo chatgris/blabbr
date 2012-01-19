@@ -2,16 +2,11 @@
 require 'spec_helper'
 
 describe BlabbrCore::User do
-  let(:current_user) { Factory :user }
-  let(:user)         { Factory :user }
-  let(:admin)        { Factory :admin }
+  let!(:user)         { Factory :user }
+  let!(:current_user) { Factory :user }
+  let(:admin)         { Factory :admin }
 
   context 'with a current_user' do
-    before do
-      user
-      current_user
-    end
-
     it 'it should find all user' do
       BlabbrCore::User.new(current_user).all.to_a.should eq [user, current_user]
     end
@@ -33,11 +28,6 @@ describe BlabbrCore::User do
   end
 
   context 'with an admin' do
-    before do
-      user
-      current_user
-    end
-
     it 'it should find all user' do
       BlabbrCore::User.new(admin).all.to_a.should eq [user, current_user, admin]
     end
@@ -57,11 +47,6 @@ describe BlabbrCore::User do
   end
 
   context 'with a user' do
-    before do
-      user
-      current_user
-    end
-
     it 'it should find all user' do
       BlabbrCore::User.new(user).all.to_a.should eq [user, current_user]
     end
@@ -84,11 +69,6 @@ describe BlabbrCore::User do
   end
 
   context 'without a user' do
-    before do
-      user
-      current_user
-    end
-
     it 'it should find all user' do
       lambda {BlabbrCore::User.new.all}.should raise_error
     end
