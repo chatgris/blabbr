@@ -54,8 +54,9 @@ module BlabbrCore
       # @since 0.0.1
       #
       def create(params)
+        resource_for_creation(params)
         guard!
-        resource_for_creation(params).save
+        resource_for_creation.save
       end
 
       private
@@ -64,7 +65,7 @@ module BlabbrCore
         @resource ||= klass.by_limace(limace).one || klass.new
       end
 
-      def resource_for_creation(params)
+      def resource_for_creation(params = {})
         @resource_for_creation ||= klass.new(params)
       end
 

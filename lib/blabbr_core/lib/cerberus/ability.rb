@@ -50,7 +50,7 @@ module BlabbrCore
             if user.admin? || resource.author == user
               return true
             end
-            if method.to_sym == :find && resource
+            if [:find, :create].include?(method) && resource
               return resource.topic.members.where(user_id: user.id).exists?
             end
             return false

@@ -26,7 +26,7 @@ module BlabbrCore
     #
     # @since 0.0.1
     #
-    def initialize(user = nil, topic, id)
+    def initialize(user, topic, id = nil)
       @topic = topic
       super(user, id)
     end
@@ -34,7 +34,20 @@ module BlabbrCore
     private
 
     def resource(id = nil)
-      @resource ||= @topic.posts.find(id)
+      @resource ||=
+        id.present? ? @topic.posts.find(id) : klass.new
     end
+
+    def resource_for_creation(params = {})
+      if @resource_for_creation
+        @resource_for_creation
+      else
+        @resource = klass.new(params)
+        @resource.author = current_user
+        @resource.topic = @topic
+        @resource_for_creation = @resource
+      end
+    end
+
   end # Post
 end # BlabbrCore

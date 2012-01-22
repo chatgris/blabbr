@@ -17,6 +17,10 @@ describe BlabbrCore::Post do
       BlabbrCore::Post.new(current_user, topic, post.id.to_s).find.should eq post
     end
 
+    it 'should ba able to create a post' do
+      domain_post.create(body: 'New post').should be_true
+    end
+
     it 'should be published by default' do
       domain_post.should be_published
     end
