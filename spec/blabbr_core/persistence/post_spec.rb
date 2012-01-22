@@ -5,7 +5,8 @@ describe BlabbrCore::Persistence::Post do
   let(:post) { Factory :post }
 
   describe 'Fields' do
-    it { should have_fields(:body) }
+    it { should have_fields(:body).of_type(String) }
+    it { should have_fields(:state).of_type(Symbol) }
   end
 
   describe 'Relations' do
@@ -21,32 +22,6 @@ describe BlabbrCore::Persistence::Post do
 
     it 'should have a valid factory' do
       post.should be_valid
-    end
-  end
-
-  describe 'state_machine' do
-    describe 'intial state' do
-      it 'should be published be default' do
-        post.should be_published
-      end
-    end
-
-    describe 'unpublish' do
-      it 'should unpublish a post' do
-        post.unpublish.should be_true
-        post.reload.should be_unpublished
-        post.reload.should_not be_published
-      end
-    end
-
-    describe 'publish' do
-      before { post.unpublish }
-
-      it 'should publish a post' do
-        post.should be_unpublished
-        post.publish.should be_true
-        post.should be_published
-      end
     end
   end
 

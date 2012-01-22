@@ -20,8 +20,8 @@ module BlabbrCore
       #
       # @since 0.0.1
       #
-      def guard(method, resource = nil)
-        BlabbrCore::Cerberus::Ability.new(current_user, method, self.class, resource).valid?
+      def guard
+        BlabbrCore::Cerberus::Ability.new(current_user, method_caller, self.class, @resource).valid?
       end
 
       # Raise an error if current_user is not authorized
@@ -30,8 +30,18 @@ module BlabbrCore
       #
       # @since 0.0.1
       #
-      def guard!(method, resource = nil)
-        raise Error, 'Not authorized' unless guard(method, resource)
+      def guard!
+        raise Error, 'Not authorized' unless guard
+      end
+
+      private
+
+      # Guess what method call guard
+      #
+      # @return [ String ]
+      #
+      def method_caller
+        @method_caller ||= caller[2][/`([^']*)'/, 1]
       end
     end # InstanceMethods
   end # Cerberus

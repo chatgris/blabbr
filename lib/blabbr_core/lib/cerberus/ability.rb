@@ -15,12 +15,12 @@ module BlabbrCore
       #
       def initialize(user, method, klass, resource)
         @user = user
-        @method = method
+        @method = method.to_sym
         @klass = klass
         @resource = resource
       end
 
-      # Über and ugly basic rules for resource abilities check.
+      # Über ugly basic rules for resource abilities check.
       #
       # @return [ Boolean ]
       #
@@ -31,10 +31,10 @@ module BlabbrCore
           if klass == User
             if method == :update
               return resource == user || user.admin?
-            elsif method == :create
-              return user.admin?
-            else
+            elsif method == :find
               return true
+            else
+              return user.admin?
             end
           end
           if klass == Topic
@@ -47,12 +47,15 @@ module BlabbrCore
             return true
           end
           if klass == Post
-            if user.admin?
+            if user.admin? || resource.author == user
               return true
             end
-            if resource
+            if method.to_sym == :find && resource
               return resource.topic.members.where(user_id: user.id).exists?
             end
+            return false
+          end
+          if [TopicsCollection, UsersCollection, PostsCollection].include?(klass)
             return true
           end
         else

@@ -7,7 +7,7 @@
 # require "bundler/setup"
 # Bundler.require(:default)
 require 'mongoid'
-require 'state_machine'
+require 'simple_states'
 require 'mongoid_fromage'
 
 module BlabbrCore

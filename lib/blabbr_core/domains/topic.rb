@@ -6,13 +6,6 @@ module BlabbrCore
   #
   class Topic
     include BlabbrCore::Cerberus
-    include BlabbrCore::Domain
-
-    private
-
-    def collection
-      @collection ||= current_user.admin? ? super :
-        BlabbrCore::Persistence::Topic.with_member(current_user).all
-    end
+    include BlabbrCore::Domain::Resource
   end # Topic
 end # BlabbrCore

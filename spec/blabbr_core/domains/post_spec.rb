@@ -9,58 +9,93 @@ describe BlabbrCore::Post do
   let(:admin)        { Factory :admin }
 
   context 'with a current_user' do
-    it 'it should find all posts' do
-      BlabbrCore::Post.new(current_user, topic).all.to_a.should eq [post]
-    end
+    let(:domain_post) {
+      BlabbrCore::Post.new(current_user, topic, post.id.to_s)
+    }
 
     it 'should find a specific post' do
-      BlabbrCore::Post.new(current_user, topic).find(post.id.to_s).should eq post
+      BlabbrCore::Post.new(current_user, topic, post.id.to_s).find.should eq post
+    end
+
+    it 'should be published by default' do
+      domain_post.should be_published
+    end
+
+    it 'should be able to published post' do
+      domain_post.published
+      domain_post.should be_published
+    end
+
+    it 'should be able to unpublished! post' do
+      domain_post.unpublished!
+      domain_post.should be_unpublished
     end
 
   end
 
   context 'with an admin' do
-    it 'it should find all posts' do
-      BlabbrCore::Post.new(admin, topic).all.to_a.should eq [post]
-    end
+    let(:domain_post) {
+      BlabbrCore::Post.new(admin, topic, post.id.to_s)
+    }
 
     it 'should find a specific post' do
-      BlabbrCore::Post.new(admin, topic).find(post.id.to_s).should eq post
+      BlabbrCore::Post.new(admin, topic, post.id.to_s).find.should eq post
     end
 
+    it 'should be published by default' do
+      domain_post.should be_published
+    end
+
+    it 'should be able to published post' do
+      domain_post.published
+      domain_post.should be_published
+    end
+
+    it 'should be able to unpublished! post' do
+      domain_post.unpublished!
+      domain_post.should be_unpublished
+    end
   end
 
   context 'with a member' do
+    let(:domain_post) {
+      BlabbrCore::Post.new(user, topic, post.id.to_s)
+    }
+
     before do
       topic.members.create(user: user)
     end
 
-    it 'it should find all posts' do
-      BlabbrCore::Post.new(user, topic).all.to_a.should eq [post]
+    it 'should find a specific post' do
+      BlabbrCore::Post.new(user, topic, post.id.to_s).find.should eq post
     end
 
-    it 'should find a specific post' do
-      BlabbrCore::Post.new(user, topic).find(post.id.to_s).should eq post
+    it 'should be published by default' do
+      domain_post.should be_published
+    end
+
+    it 'should not be able to published other user posts' do
+      lambda {
+        domain_post.published
+      }.should raise_error
+    end
+
+    it 'should not be able to unpublished! other user posts' do
+      lambda {
+        domain_post.unpublished!
+      }.should raise_error
     end
   end
 
   context 'with a user' do
-    it 'it should find all posts' do
-      BlabbrCore::Post.new(user, topic).all.to_a.should be_any
-    end
-
     it 'should not find a specific post' do
       lambda {
-      BlabbrCore::Post.new(user, topic).find(post.id.to_s)
+        BlabbrCore::Post.new(user, topic, post.id.to_s).find
       }.should raise_error
     end
   end
 
   context 'without a user' do
-    it 'it should raise on :all' do
-      lambda {BlabbrCore::Post.new.all}.should raise_error
-    end
-
     it 'it should raise on :find' do
       lambda {BlabbrCore::Post.new.find(post.id.to_s)}.should raise_error
     end

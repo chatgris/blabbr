@@ -12,6 +12,7 @@ module BlabbrCore
       field :email,       type: String
       field :nickname,    type: String
       field :posts_count, type: Integer, default: 0
+      field :state,       type: Symbol,  default: :inactive
 
       # Relations
       #
@@ -20,7 +21,7 @@ module BlabbrCore
       # Validations
       #
       validates :email,    presence: true, uniqueness: true
-      validates :nickname, presence: true, uniqueness: true, length: { in: 8..42 }
+      validates :nickname, presence: true, uniqueness: true, length: { in: 4..42 }
 
       # Limace
       #

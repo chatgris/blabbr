@@ -23,7 +23,7 @@ describe BlabbrCore::Persistence::User do
     it { should validate_presence_of(:email) }
     it { should validate_uniqueness_of(:email) }
     it { should validate_presence_of(:nickname) }
-    it { should validate_length_of(:nickname).within(8..42) }
+    it { should validate_length_of(:nickname).within(4..42) }
     it { should validate_uniqueness_of(:nickname) }
 
     it 'should have a valid factory' do
