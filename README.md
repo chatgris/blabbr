@@ -11,7 +11,6 @@ Very early.
 ## TODO
 
   * carrierwave
-  * specs on cerberus
   * delete on resource
 
 ## Copyright

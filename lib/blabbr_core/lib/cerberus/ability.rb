@@ -42,9 +42,13 @@ module BlabbrCore
               return true
             end
             if resource
+              if method == :update
+                return resource.author == user
+              end
               return resource.members.where(user_id: user.id).exists?
             end
-            return true
+            return true if method == :create
+            return false
           end
           if klass == Post
             if user.admin? || resource.author == user
