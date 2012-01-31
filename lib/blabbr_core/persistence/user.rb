@@ -31,6 +31,10 @@ module BlabbrCore
       #
       fromages :admin
 
+      # Uploader
+      #
+      mount_uploader :avatar, BlabbrCore::AvatarUploader
+
       # Scopes
       #
       scope :page, Proc.new {|num| limit(10).offset(10 * ([num.to_i, 1].max - 1))}

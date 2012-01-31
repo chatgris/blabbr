@@ -9,12 +9,16 @@
 require 'mongoid'
 require 'simple_states'
 require 'mongoid_fromage'
+require 'carrierwave/mongoid'
 
 module BlabbrCore
 end
 
 # Libs
 Dir[File.dirname(__FILE__) + "/blabbr_core/lib/**/*.rb"].each {|file| require file }
+
+# Uploaders
+Dir[File.dirname(__FILE__) + "/blabbr_core/uploaders/*.rb"].each {|file| require file }
 
 # Mongoid model
 Dir[File.dirname(__FILE__) + "/blabbr_core/persistence/*.rb"].each {|file| require file }
