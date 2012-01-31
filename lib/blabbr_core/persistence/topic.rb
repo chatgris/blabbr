@@ -32,6 +32,7 @@ module BlabbrCore
       # Scopes
       #
       scope :with_member, lambda {|member| where('members.user_id' => member.id)}
+      scope :page, Proc.new {|num| limit(10).offset(10 * ([num.to_i, 1].max - 1))}
 
       private
 

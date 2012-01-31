@@ -45,4 +45,13 @@ describe BlabbrCore::Persistence::Topic do
     end
   end
 
+  describe 'pagination' do
+    let!(:topic1) { Factory :topic }
+    let!(:topic2) { Factory :topic, title: 'Topic 2...' }
+
+    it 'should be paginable' do
+      described_class.page.should eq [topic1, topic2]
+    end
+  end
+
 end

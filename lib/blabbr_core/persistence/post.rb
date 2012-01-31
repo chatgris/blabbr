@@ -20,6 +20,10 @@ module BlabbrCore
       validates :body, presence: true, uniqueness: true, length: { in: 0..10000 }
       validates :author, presence: true
       validates :topic, presence: true
+
+      # Scopes
+      #
+      scope :page, Proc.new {|num| limit(50).offset(50 * ([num.to_i, 1].max - 1))}
     end
   end
 end

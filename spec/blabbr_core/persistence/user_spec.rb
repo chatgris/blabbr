@@ -30,4 +30,13 @@ describe BlabbrCore::Persistence::User do
       user.should be_valid
     end
   end
+
+  describe 'pagination' do
+    let!(:user1) { Factory :user }
+    let!(:user2) { Factory :user }
+
+    it 'should be paginable' do
+      described_class.page.should eq [user1, user2]
+    end
+  end
 end
