@@ -9,7 +9,6 @@
 require 'mongoid'
 require 'simple_states'
 require 'mongoid_fromage'
-require 'carrierwave/mongoid'
 
 module BlabbrCore
 end
