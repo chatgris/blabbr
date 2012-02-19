@@ -13,14 +13,6 @@ Mongoid.configure do |config|
   config.identity_map_enabled = true
 end
 
-CarrierWave.configure do |config|
-  config.storage = :grid_fs
-  config.grid_fs_connection = Mongoid.database
-  config.grid_fs_access_url = "/"
-  #config.delete_cache_id_after_storage = false
-  #config.grid_fs_delete_old = true
-end
-
 RSpec.configure do |config|
   # Factories
   Dir[File.dirname(__FILE__) + "/factories/**/*.rb"].each {|file| require file }
@@ -30,8 +22,4 @@ RSpec.configure do |config|
   config.after :each do
     Mongoid.master.collections.reject { |c| c.name =~ /^system\./ }.each(&:drop)
   end
-end
-
-def image_path
-  File.open(File.dirname(__FILE__) + '/default.jpg')
 end
