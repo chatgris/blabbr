@@ -26,13 +26,11 @@ module BlabbrCore
 
     end # ClassMethods
 
-    module InstanceMethods
-      private
+    private
 
-      def set_limace
-        content = self.send(self.class.limace_field)
-        self.limace = content.parameterize.blank? ? content : content.parameterize
-      end
-    end # InstanceMethods
+    def set_limace
+      content = self.send(self.class.limace_field)
+      self.limace = content.parameterize.blank? ? content : content.parameterize
+    end
   end # Limace
 end # BlabbrCore

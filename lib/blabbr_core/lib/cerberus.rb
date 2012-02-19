@@ -11,38 +11,36 @@ module BlabbrCore
       attr_reader :current_user
     end
 
-    module InstanceMethods
-      protected
+    protected
 
-      # Check current abilities.
-      #
-      # @return [ Boolean ]
-      #
-      # @since 0.0.1
-      #
-      def guard
-        BlabbrCore::Cerberus::Ability.new(current_user, method_caller, self.class, @resource).valid?
-      end
+    # Check current abilities.
+    #
+    # @return [ Boolean ]
+    #
+    # @since 0.0.1
+    #
+    def guard
+      BlabbrCore::Cerberus::Ability.new(current_user, method_caller, self.class, @resource).valid?
+    end
 
-      # Raise an error if current_user is not authorized
-      #
-      # @return [ BlabbrCore::Cerberus::Error ]
-      #
-      # @since 0.0.1
-      #
-      def guard!
-        raise Error, 'Not authorized' unless guard
-      end
+    # Raise an error if current_user is not authorized
+    #
+    # @return [ BlabbrCore::Cerberus::Error ]
+    #
+    # @since 0.0.1
+    #
+    def guard!
+      raise Error, 'Not authorized' unless guard
+    end
 
-      private
+    private
 
-      # Guess what method call guard
-      #
-      # @return [ String ]
-      #
-      def method_caller
-        @method_caller ||= caller[2][/`([^']*)'/, 1]
-      end
-    end # InstanceMethods
+    # Guess what method call guard
+    #
+    # @return [ String ]
+    #
+    def method_caller
+      @method_caller ||= caller[2][/`([^']*)'/, 1]
+    end
   end # Cerberus
 end # BlabbrCore
