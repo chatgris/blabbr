@@ -13,7 +13,17 @@ module BlabbrCore
     self.initial_state = :inactive
 
     # Transitions
-    event :activate,   to: :active, before: :guard!
-    event :ban,        to: :banned, before: :guard!
+    event :activate,   to: :active, before: :guard_activate!
+    event :ban,        to: :banned, before: :guard_ban!
+
+    private
+
+    def guard_activate!
+      guard! :activate
+    end
+
+    def guard_ban!
+      guard! :ban
+    end
   end # User
 end # BlabbrCore

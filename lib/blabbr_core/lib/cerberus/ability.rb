@@ -2,6 +2,7 @@
 module BlabbrCore
   module Cerberus
     class Ability
+      include BlabbrCore::Cerberus::Can
       attr_reader :user, :resource, :klass, :method
 
       # New ability object.
@@ -18,6 +19,7 @@ module BlabbrCore
         @method = method.to_sym
         @klass = klass
         @resource = resource
+        @cans = {}
       end
 
       # Über ugly basic rules for resource abilities check.
@@ -27,43 +29,14 @@ module BlabbrCore
       # @since 0.0.1
       #
       def valid?
-        if @user
-          if klass == User
-            if method == :update
-              return resource == user || user.admin?
-            elsif method == :find
-              return true
-            else
-              return user.admin?
+        if cans[klass]
+          cans[klass].each do |ary|
+            return true if ary == method
+            if ary.is_a?(Hash) && ary[method].present?
+              return ary[method].call resource
             end
           end
-          if klass == Topic
-            if user.admin?
-              return true
-            end
-            if resource
-              if method == :update
-                return resource.author == user
-              end
-              return resource.members.where(user_id: user.id).exists?
-            end
-            return true if method == :create
-            return false
-          end
-          if klass == Post
-            if user.admin? || resource.author == user
-              return true
-            end
-            if [:find, :create].include?(method) && resource
-              return resource.topic.members.where(user_id: user.id).exists?
-            end
-            return false
-          end
-          if [TopicsCollection, UsersCollection, PostsCollection].include?(klass)
-            return true
-          end
-        else
-          false
+          return false
         end
       end
     end # Ability

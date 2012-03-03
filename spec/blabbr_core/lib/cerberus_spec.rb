@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Cerberus do
-  let(:ability)      { BlabbrCore::Cerberus::Ability }
+  let(:ability)      { BlabbrCore::Ability }
   let(:user)         { double }
   let(:current_user) { Factory :user }
   let(:topic)        { Factory :topic, author: current_user }
