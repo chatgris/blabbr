@@ -16,6 +16,10 @@ module BlabbrCore
     event :activate,   to: :active, before: :guard_activate!
     event :ban,        to: :banned, before: :guard_ban!
 
+    def authenticate(nickname, password)
+      klass.where(nickname: nickname).one.try(:authenticate, password)
+    end
+
     private
 
     def guard_activate!

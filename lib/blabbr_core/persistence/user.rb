@@ -6,13 +6,16 @@ module BlabbrCore
       include Mongoid::Timestamps::Created
       include Mongoid::Fromage
       include BlabbrCore::Limace
+      include ActiveModel::SecurePassword
+      has_secure_password
 
       # Fields
       #
-      field :email,       type: String
-      field :nickname,    type: String
-      field :posts_count, type: Integer, default: 0
-      field :state,       type: Symbol,  default: :inactive
+      field :email,           type: String
+      field :nickname,        type: String
+      field :posts_count,     type: Integer, default: 0
+      field :state,           type: Symbol,  default: :inactive
+      field :password_digest, type: String
 
       # Relations
       #
