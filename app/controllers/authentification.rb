@@ -1,8 +1,10 @@
 # encoding: utf-8
 class Authentification < Sinatra::Base
+  set :views, settings.root + '/../views'
   helpers AuthentificationHelpers
-  Warden::Manager.serialize_into_session{|user| user}
-  Warden::Manager.serialize_from_session{|id| id }
+
+  Warden::Manager.serialize_into_session{|user| user.id.to_s }
+  Warden::Manager.serialize_from_session{|id| BlabbrCore::Persistence::User.find(id) }
 
   Warden::Manager.before_failure do |env,opts|
     env['REQUEST_METHOD'] = "POST"
@@ -10,12 +12,11 @@ class Authentification < Sinatra::Base
 
   Warden::Strategies.add(:password) do
     def valid?
-      params['user'] && params["user"]['login']
+      params['user'] && params["user"]['nickname']
     end
 
     def authenticate!
-      if params['user'] && params['user']['login'] == 'me' && params['user']['password'] == 'password'
-        user = {login: 'me'}
+      if user = BlabbrCore::User.new.authenticate(params['user']['nickname'], params['user']['password'])
         success!(user)
       else
         fail!("Could not log in")
