@@ -1,1 +1,4 @@
-<%= Time.now.to_s %>
+<form action="/logout" method="post">
+  <input name="commit" type="submit" value="Sign out" />
+</form>
+<p>Welcome back <%= current_user[:login] %>.</p>
