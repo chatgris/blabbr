@@ -1,1 +1,0 @@
-Stateflow.persistence = :mongoid
