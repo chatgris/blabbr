@@ -1,15 +1,4 @@
 GIT
-  remote: git://github.com/chatgris/blabbr_core.git
-  revision: 1ed15d53fbd07af19ba5f2d81729da18f9ddb973
-  specs:
-    blabbr_core (0.0.1)
-      bcrypt-ruby
-      bson_ext (~> 1.5)
-      fromage
-      mongoid (~> 2.4)
-      simple_states (~> 0.0.11)
-
-GIT
   remote: git://github.com/sinatra/sinatra.git
   revision: 0bf6b92cedd86df89068b3c0b1b0f58ad28287eb
   specs:
@@ -27,14 +16,24 @@ GEM
     activesupport (3.2.3)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    autotest-standalone (4.5.9)
     bcrypt-ruby (3.0.1)
     bson (1.6.2)
     bson_ext (1.6.2)
       bson (~> 1.6.2)
     builder (3.0.0)
     daemons (1.1.8)
+    diff-lcs (1.1.3)
     eventmachine (0.12.10)
+    factory_girl (3.1.0)
+      activesupport (>= 3.0.0)
+    faker (1.0.1)
+      i18n (~> 0.4)
     fromage (0.0.3)
+    fuubar (1.0.0)
+      rspec (~> 2.0)
+      rspec-instafail (~> 0.2.0)
+      ruby-progressbar (~> 0.0.10)
     hashr (0.0.20)
     i18n (0.6.0)
     mongo (1.6.2)
@@ -43,10 +42,23 @@ GEM
       activemodel (~> 3.1)
       mongo (~> 1.3)
       tzinfo (~> 0.3.22)
+    mongoid-rspec (1.4.4)
+      mongoid (~> 2.0)
+      rspec (~> 2)
     multi_json (1.2.0)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
+    rspec (2.9.0)
+      rspec-core (~> 2.9.0)
+      rspec-expectations (~> 2.9.0)
+      rspec-mocks (~> 2.9.0)
+    rspec-core (2.9.0)
+    rspec-expectations (2.9.1)
+      diff-lcs (~> 1.1.3)
+    rspec-instafail (0.2.4)
+    rspec-mocks (2.9.0)
+    ruby-progressbar (0.0.10)
     simple_states (0.0.11)
       activesupport
       hashr (~> 0.0.10)
@@ -63,7 +75,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  blabbr_core!
+  autotest-standalone
+  bcrypt-ruby
+  bson_ext (~> 1.5)
+  factory_girl
+  faker
+  fromage
+  fuubar
+  mongoid (~> 2.4)
+  mongoid-rspec
+  rspec (~> 2.8)
+  simple_states (~> 0.0.11)
   sinatra!
   thin
   warden

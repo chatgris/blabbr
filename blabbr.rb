@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'sinatra/base'
-require 'blabbr_core'
 
 Mongoid.configure do |config|
   config.master = Mongo::Connection.new.db('blabbr_dev')
@@ -8,6 +7,7 @@ Mongoid.configure do |config|
 end
 
 # App
+require_relative 'lib/blabbr_core'
 Dir[File.dirname(__FILE__) + "/**/*.rb"].each {|file| require file }
 
 class Blabbr < Sinatra::Base
