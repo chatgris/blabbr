@@ -8,13 +8,12 @@ Mongoid.configure do |config|
 end
 
 # App
-Dir[File.dirname(__FILE__) + "/app/**/*.rb"].each {|file| require file }
+Dir[File.dirname(__FILE__) + "/**/*.rb"].each {|file| require file }
 
 class Blabbr < Sinatra::Base
   use Authentification
   helpers AuthentificationHelpers
   set :server, :thin
-  set :views, settings.root + '/app/views'
 
   get '/' do
     erb current_user.nil? ? :login : :index
