@@ -15,6 +15,7 @@ gem 'alphasights-sinatra-sprockets',
   git: "git@github.com:chatgris/sinatra-sprockets.git",
   branch: 'require',
   require: 'sinatra/sprockets'
+gem 'sucreries'
 
 group :test do
   gem "rspec",         "~>2.8"
