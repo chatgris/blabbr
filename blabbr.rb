@@ -13,10 +13,11 @@ require_relative 'lib/blabbr_core'
 Dir[File.dirname(__FILE__) + "/**/*.rb"].each {|file| require file }
 
 class Blabbr < Sinatra::Base
-  use Authentification
   helpers AuthentificationHelpers
   helpers Sinatra::Sprockets::Helpers
+  use Authentification
   set :server, :thin
+  connections = Connections.new
 
   Sinatra::Sprockets.configure do |config|
     config.app = self
@@ -33,8 +34,15 @@ class Blabbr < Sinatra::Base
     end
   end
 
+  get '/events', provides: 'text/event-stream' do
+    if current_user
+      stream(:keep_open) {|connection| connections.join(current_user, connection) }
+    end
+  end
+
   get '/' do
     erb current_user.nil? ? :login : :index
   end
+
 
 end

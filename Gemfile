@@ -10,6 +10,7 @@ gem "bson_ext",      "~>1.5"
 gem "simple_states", "~> 0.0.11"
 gem "fromage"
 gem "uglifier"
+gem "coffee-script"
 gem "bcrypt-ruby"
 gem 'alphasights-sinatra-sprockets',
   git: "git@github.com:chatgris/sinatra-sprockets.git",

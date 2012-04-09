@@ -2,6 +2,7 @@
 class Authentification < Sinatra::Base
   set :views, settings.root + '/../views'
   helpers AuthentificationHelpers
+  helpers Sinatra::Sprockets::Helpers
 
   Warden::Manager.serialize_into_session{|user| user.id.to_s }
   Warden::Manager.serialize_from_session{|id| BlabbrCore::Persistence::User.find(id) }
