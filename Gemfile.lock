@@ -7,6 +7,14 @@ GIT
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
 
+GIT
+  remote: git@github.com:chatgris/sinatra-sprockets.git
+  revision: ee1fa097d87d44b56fd0dee1051917cf7167d3e8
+  branch: require
+  specs:
+    alphasights-sinatra-sprockets (0.1.0)
+      sprockets (~> 2.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -25,6 +33,8 @@ GEM
     daemons (1.1.8)
     diff-lcs (1.1.3)
     eventmachine (0.12.10)
+    execjs (1.3.0)
+      multi_json (~> 1.0)
     factory_girl (3.1.0)
       activesupport (>= 3.0.0)
     faker (1.0.1)
@@ -35,6 +45,7 @@ GEM
       rspec-instafail (~> 0.2.0)
       ruby-progressbar (~> 0.0.10)
     hashr (0.0.20)
+    hike (1.2.1)
     i18n (0.6.0)
     mongo (1.6.2)
       bson (~> 1.6.2)
@@ -62,12 +73,20 @@ GEM
     simple_states (0.0.11)
       activesupport
       hashr (~> 0.0.10)
+    sprockets (2.4.0)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
     thin (1.3.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     tilt (1.3.3)
     tzinfo (0.3.33)
+    uglifier (1.2.4)
+      execjs (>= 0.3.0)
+      multi_json (>= 1.0.2)
     warden (1.1.1)
       rack (>= 1.0)
 
@@ -75,6 +94,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  alphasights-sinatra-sprockets!
   autotest-standalone
   bcrypt-ruby
   bson_ext (~> 1.5)
@@ -88,4 +108,5 @@ DEPENDENCIES
   simple_states (~> 0.0.11)
   sinatra!
   thin
+  uglifier
   warden
