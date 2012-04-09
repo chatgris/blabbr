@@ -74,7 +74,7 @@ describe BlabbrCore::User do
     end
 
     it 'should be able to create a user' do
-      BlabbrCore::User.new(admin).create(nickname: 'test user', email: 'email@mail.com').should be_true
+      BlabbrCore::User.new(admin).create(nickname: 'test user', email: 'email@mail.com', password: 'password').should be_true
     end
   end
 
