@@ -4,9 +4,9 @@ require 'spec_helper'
 describe BlabbrCore::Cerberus do
   let(:ability)      { BlabbrCore::Ability }
   let(:user)         { double }
-  let(:current_user) { Factory :user }
-  let(:topic)        { Factory :topic, author: current_user }
-  let(:post)         { Factory :post, topic: topic, author: current_user }
+  let(:current_user) { FactoryGirl.create :user }
+  let(:topic)        { FactoryGirl.create :topic, author: current_user }
+  let(:post)         { FactoryGirl.create :post, topic: topic, author: current_user }
 
   [BlabbrCore::UsersCollection, BlabbrCore::PostsCollection, BlabbrCore::TopicsCollection].each do |klass|
     describe klass do
@@ -79,7 +79,7 @@ describe BlabbrCore::Cerberus do
     end
 
     context 'member' do
-      let(:user) { Factory :user }
+      let(:user) { FactoryGirl.create :user }
 
       before do
         topic.members.create(user: user)
@@ -145,7 +145,7 @@ describe BlabbrCore::Cerberus do
     end
 
     context 'member' do
-      let(:user) { Factory :user }
+      let(:user) { FactoryGirl.create :user }
 
       before do
         topic.members.create(user: user)

@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Persistence::User do
-  let(:user) { Factory :user }
+  let(:user) { FactoryGirl.create :user }
 
   describe 'Fields' do
     it { should have_fields(:email, :nickname).of_type(String) }
@@ -32,8 +32,8 @@ describe BlabbrCore::Persistence::User do
   end
 
   describe 'pagination' do
-    let!(:user1) { Factory :user }
-    let!(:user2) { Factory :user }
+    let!(:user1) { FactoryGirl.create :user }
+    let!(:user2) { FactoryGirl.create :user }
 
     it 'should be paginable' do
       described_class.page.should eq [user1, user2]

@@ -2,11 +2,11 @@
 require 'spec_helper'
 
 describe BlabbrCore::PostsCollection do
-  let(:current_user) { Factory :user }
-  let(:topic)        { Factory :topic, author: current_user }
-  let!(:post)        { Factory :post, author: current_user, topic: topic }
-  let(:user)         { Factory :user }
-  let(:admin)        { Factory :admin }
+  let(:current_user) { FactoryGirl.create :user }
+  let(:topic)        { FactoryGirl.create :topic, author: current_user }
+  let!(:post)        { FactoryGirl.create :post, author: current_user, topic: topic }
+  let(:user)         { FactoryGirl.create :user }
+  let(:admin)        { FactoryGirl.create :admin }
 
   context 'with a current_user' do
     it 'it should find all posts' do

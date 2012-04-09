@@ -2,8 +2,8 @@
 require 'spec_helper'
 
 describe BlabbrCore::Persistence::Topic do
-  let(:topic) { Factory :topic }
-  let(:user)  { Factory :user }
+  let(:topic) { FactoryGirl.create :topic }
+  let(:user)  { FactoryGirl.create :user }
 
   describe 'Fields' do
     it { should have_fields(:title) }
@@ -46,8 +46,8 @@ describe BlabbrCore::Persistence::Topic do
   end
 
   describe 'pagination' do
-    let!(:topic1) { Factory :topic }
-    let!(:topic2) { Factory :topic, title: 'Topic 2...' }
+    let!(:topic1) { FactoryGirl.create :topic }
+    let!(:topic2) { FactoryGirl.create :topic, title: 'Topic 2...' }
 
     it 'should be paginable' do
       described_class.page.should eq [topic1, topic2]

@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Persistence::Post do
-  let(:post) { Factory :post }
+  let(:post) { FactoryGirl.create :post }
 
   describe 'Fields' do
     it { should have_fields(:body).of_type(String) }

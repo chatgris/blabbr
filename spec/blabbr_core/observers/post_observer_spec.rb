@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::PostObserver do
-  let(:post) { Factory :post }
+  let(:post) { FactoryGirl.create :post }
 
   describe 'after_create observer' do
 
@@ -18,9 +18,9 @@ describe BlabbrCore::PostObserver do
     describe 'update_topic_members' do
       before do
         topic = post.topic
-        topic.members.create(user: Factory(:user))
+        topic.members.create(user: FactoryGirl.create(:user))
         topic.save
-        Factory(:post, author: post.author, body: 'blabla', topic: post.topic)
+        FactoryGirl.create(:post, author: post.author, body: 'blabla', topic: post.topic)
       end
 
       it 'should increment members posts_count for this topic' do

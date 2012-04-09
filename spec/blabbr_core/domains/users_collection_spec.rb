@@ -2,9 +2,9 @@
 require 'spec_helper'
 
 describe BlabbrCore::UsersCollection do
-  let!(:user)         { Factory :user }
-  let!(:current_user) { Factory :user }
-  let(:admin)         { Factory :admin }
+  let!(:user)         { FactoryGirl.create :user }
+  let!(:current_user) { FactoryGirl.create :user }
+  let(:admin)         { FactoryGirl.create :admin }
 
   context 'with a current_user' do
     it 'it should find all user' do

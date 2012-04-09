@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Limace do
-  let(:topic) { Factory :topic }
+  let(:topic) { FactoryGirl.create :topic }
 
   describe 'limace creation' do
     context 'on creation' do
@@ -11,7 +11,7 @@ describe BlabbrCore::Limace do
       end
 
       it 'should fallback on title when parameterize is nil' do
-        topic = Factory :topic, title: 'でも、でも。。。'
+        topic = FactoryGirl.create :topic, title: 'でも、でも。。。'
         topic.reload.limace.should eq topic.title
       end
     end

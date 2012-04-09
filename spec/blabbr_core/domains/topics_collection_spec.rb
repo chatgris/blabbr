@@ -2,10 +2,10 @@
 require 'spec_helper'
 
 describe BlabbrCore::TopicsCollection do
-  let(:current_user) { Factory :user }
-  let!(:topic)       { Factory :topic, author: current_user }
-  let(:user)         { Factory :user }
-  let(:admin)        { Factory :admin }
+  let(:current_user) { FactoryGirl.create :user }
+  let!(:topic)       { FactoryGirl.create :topic, author: current_user }
+  let(:user)         { FactoryGirl.create :user }
+  let(:admin)        { FactoryGirl.create :admin }
 
   context 'with a current_user' do
     it 'it should find all topics' do

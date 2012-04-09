@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BlabbrCore::Persistence::Member do
-  let(:topic) { Factory :topic }
+  let(:topic) { FactoryGirl.create :topic }
 
   describe 'Fields' do
     it { should have_fields(:unread_count, :posts_count).of_type(Integer) }
@@ -16,7 +16,7 @@ describe BlabbrCore::Persistence::Member do
 
   describe 'validations' do
     it 'should have a valid factory' do
-      Factory.build(:member).should be_valid
+      FactoryGirl.build(:member).should be_valid
     end
   end
 

@@ -2,7 +2,7 @@
 FactoryGirl.define do
   factory :post, class: BlabbrCore::Persistence::Post do
     body  'My brand new post'
-    topic  { Factory :topic }
+    topic  { FactoryGirl.create :topic }
     author { topic.author }
   end
 end
