@@ -2,7 +2,7 @@
 
 module Blabbr
   class Home < Sinatra::Base
-    Mongoid.load!("config/mongoid.yml")
+    Mongoid.load!("config/mongoid.yml", Sinatra::Base.environment)
     helpers AuthentificationHelpers
     helpers Sinatra::Sprockets::Helpers
     use Authentification

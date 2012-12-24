@@ -17,7 +17,8 @@ module BlabbrCore
     event :ban,        to: :banned, before: :guard_ban!
 
     def authenticate(nickname, password)
-      klass.where(nickname: nickname).one.try(:authenticate, password)
+      BlabbrCore::Persistence::User.where(nickname: nickname).one.
+        try(:authenticate, password)
     end
 
     private
