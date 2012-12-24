@@ -1,12 +1,11 @@
 # encoding: utf-8
 source :rubygems
 
-gem 'sinatra', git: 'git://github.com/sinatra/sinatra.git'
+gem 'sinatra'
 gem 'warden'
 gem 'thin'
 
-gem "mongoid",       "~>2.4"
-gem "bson_ext",      "~>1.5"
+gem "mongoid",       "~>3.0.15"
 gem "simple_states", "~> 0.0.11"
 gem "fromage"
 gem "uglifier"

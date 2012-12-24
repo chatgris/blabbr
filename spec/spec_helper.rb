@@ -3,15 +3,14 @@
 path = File.expand_path(File.dirname(__FILE__) + '/../lib/')
 $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
 
+ENV['RACK_ENV'] = 'test'
+
 require 'blabbr_core'
 require 'mongoid-rspec'
 require 'faker'
 require 'factory_girl'
 
-Mongoid.configure do |config|
-  config.master = Mongo::Connection.new.db('blabbr_core_spec')
-  config.identity_map_enabled = true
-end
+Mongoid.load!("config/mongoid.yml", :test)
 
 RSpec.configure do |config|
   # Factories
@@ -19,7 +18,13 @@ RSpec.configure do |config|
 
   config.include Mongoid::Matchers
 
-  config.after :each do
-    Mongoid.master.collections.reject { |c| c.name =~ /^system\./ }.each(&:drop)
+  config.before :each do
+    Mongoid.purge!
+    Mongoid::IdentityMap.clear
+  end
+
+  config.after :suite do
+    Mongoid.purge!
+    Mongoid::IdentityMap.clear
   end
 end
