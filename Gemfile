@@ -7,6 +7,7 @@ gem 'thin'
 
 gem "mongoid",       "~>3.0.15"
 gem "simple_states", "~> 0.0.11"
+gem "barristan"
 gem "fromage"
 gem "uglifier"
 gem "coffee-script"

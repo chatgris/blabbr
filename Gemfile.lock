@@ -16,6 +16,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     autotest-standalone (4.5.9)
+    barristan (0.0.1)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
     coffee-script (2.2.0)
@@ -97,6 +98,7 @@ PLATFORMS
 DEPENDENCIES
   alphasights-sinatra-sprockets!
   autotest-standalone
+  barristan
   bcrypt-ruby
   coffee-script
   factory_girl
