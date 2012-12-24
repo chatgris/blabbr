@@ -1,4 +1,4 @@
-source = new EventSource('/events')
+source = new EventSource('/realtime')
 
 source.addEventListener 'open', (event) ->
   console.log 'connected'
