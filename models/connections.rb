@@ -1,21 +1,7 @@
 # encoding: utf-8
-class MessageFormatter
+class MessageFormatter < String
   def initialize(message, options)
-    @message = message
-    @event = options[:event]
-    @out = []
-  end
-
-  def to_s
-    @out << "event:#{@event}" if @event
-    @out << format(:data, @message)
-    @out.join("\n")
-  end
-
-  private
-
-  def format(key, value)
-    "#{key}: #{value}\n\n"
+    super "event:#{options[:event]}\ndata: #{message}\n\n"
   end
 end
 
@@ -47,7 +33,7 @@ class Connections
   def join(user, connection)
     broadcast "#{user.nickname} joins", event: :join
     self[user.id.to_s] = connection
-    send(user, "Hello #{user.nickname}", event: :join)
+    notify(user, "Hello #{user.nickname}", event: :join)
   end
 
   def leave(id)
@@ -55,7 +41,7 @@ class Connections
     broadcast "#{id} left", event: :leave
   end
 
-  def send(user, message, options = {})
+  def notify(user, message, options = {})
     if self[user.id.to_s]
       self[user.id.to_s] << MessageFormatter.new(message, options).to_s
     end
