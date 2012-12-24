@@ -6,7 +6,7 @@ gem 'warden'
 gem 'thin'
 
 gem "mongoid",       "~>3.0.15"
-gem "simple_states", "~> 0.0.11"
+gem "simple_states"
 gem "barristan"
 gem "fromage"
 gem "uglifier"
@@ -19,7 +19,7 @@ gem 'alphasights-sinatra-sprockets',
 gem 'sucreries'
 
 group :test do
-  gem "rspec",         "~>2.8"
+  gem "rspec"
   gem "fuubar"
   gem "mongoid-rspec"
   gem "factory_girl"
