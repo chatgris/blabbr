@@ -16,7 +16,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     autotest-standalone (4.5.11)
-    barristan (0.0.2)
+    barristan (0.0.3)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
     coffee-script (2.2.0)
