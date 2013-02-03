@@ -4,18 +4,27 @@ class Textilize
   include ActionView::Helpers::UrlHelper
 
   def initialize(text)
-    @smilies = JSON.parse(Rails.cache.read('smilies_list')) || []
     @text = smilize(text)
   end
 
   def smilize(text)
-    @smilies.inject(text) do |text, smiley|
-      text.gsub(":#{smiley.code}:", "!#{smiley.path}?#{smiley.ts}(#{smiley.code})!")
+    smilies.inject(text) do |text, smiley|
+      text.gsub(":#{smiley['code']}:", "!#{smiley['path']}?#{smiley['ts']}(#{smiley['code']})!")
     end
   end
 
   def to_html
     auto_link(RedCloth.new(@text).to_html(:textile))
+  end
+
+  private
+
+  def smilies
+    @smilies ||= cached.nil? ? [] : JSON.parse(cached)
+  end
+
+  def cached
+    @cached ||= Rails.cache.read('smilies_list')
   end
 end
 
