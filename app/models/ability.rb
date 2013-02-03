@@ -14,7 +14,7 @@ class Ability
     can [:read, :create], [Post] do |post|
       post.topic.members.map(&:nickname).include? user.nickname
     end
-    can [:update, :destroy], [Post], do |post|
+    can [:update, :destroy], [Post] do |post|
       post.creator_n == user.nickname
     end
 
