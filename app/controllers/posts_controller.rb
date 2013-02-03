@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PostsController < ApplicationController
   before_filter :get_current_topic_for_member
   before_filter :get_post_for_creator, :only => [:edit, :update, :destroy, :publish]

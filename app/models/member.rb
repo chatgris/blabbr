@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Member
   include Mongoid::Document
   include Mongoid::Slug

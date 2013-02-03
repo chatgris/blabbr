@@ -1,3 +1,4 @@
+# encoding: utf-8
 module LinkHelper
 
   def link_to_unread(topic)

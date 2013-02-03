@@ -1,3 +1,4 @@
+# encoding: utf-8
 class SmiliesController < ApplicationController
   before_filter :get_current_smiley_for_creator, :only => [:update, :destroy]
   respond_to :json

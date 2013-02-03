@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AttachmentUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 

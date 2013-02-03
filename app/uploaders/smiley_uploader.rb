@@ -1,3 +1,4 @@
+# encoding: utf-8
 class SmileyUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 

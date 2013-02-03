@@ -1,3 +1,4 @@
+# encoding: utf-8
 Mongoid.load!(Rails.root.join('config', 'mongoid.yml'))
 CarrierWave.configure do |config|
   config.storage = :grid_fs

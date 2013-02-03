@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'mongo'
 
 class GridfsController < ActionController::Metal

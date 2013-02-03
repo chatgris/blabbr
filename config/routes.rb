@@ -1,3 +1,4 @@
+# encoding: utf-8
 class JsonConstraint
   def matches?(request)
     request.format.json?

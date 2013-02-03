@@ -1,3 +1,4 @@
+# encoding: utf-8
 Factory.define :user do |u|
   u.nickname                  "One user"
   u.email                     "mail@email.com"

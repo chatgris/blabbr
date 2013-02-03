@@ -1,3 +1,4 @@
+# encoding: utf-8
 source :rubygems
 
 gem 'bson',                 '~>1.3'
@@ -44,6 +45,7 @@ group :development do
   gem 'nokogiri',           '~>1.4.3.1'
   gem 'rbbcode',            '~>0.1.8'
   gem 'thin'
+  gem 'mo'
 end
 
 group :production do

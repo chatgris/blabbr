@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Textilize
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper

@@ -1,3 +1,4 @@
+# encoding: utf-8
 module TopicsHelper
   def textilize(text)
     Textilize.new(text).to_html

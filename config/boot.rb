@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Use Bundler (preferred)
 begin
   require File.expand_path('../../.bundle/environment', __FILE__)
