@@ -46,6 +46,7 @@ group :development do
   gem 'rbbcode',            '~>0.1.8'
   gem 'thin'
   gem 'mo'
+  gem 'heroku'
 end
 
 group :production do
